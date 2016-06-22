@@ -2630,6 +2630,13 @@ object SparkContext extends Logging {
         }
         (backend, scheduler)
 
+      case JARVIS_REGEX(sparkUrl) =>
+        logInfo("Choosing jarvis scheduler backend.")
+        val scheduler = new TaskSchedulerImpl(sc)
+        val backend = new JarvisSchedulerBackend(scheduler,sc,sparkUrl)
+        scheduler.initialize(backend)
+        (backend, scheduler)
+
       case "yarn-standalone" | "yarn-cluster" =>
         if (master == "yarn-standalone") {
           logWarning(
@@ -2726,6 +2733,8 @@ private object SparkMasterRegex {
   val MESOS_REGEX = """(mesos|zk)://.*""".r
   // Regular expression for connection to Simr cluster
   val SIMR_REGEX = """simr://(.*)""".r
+  // Regular expression for jarvis managed cluster
+  val JARVIS_REGEX = """jarvis://(.*)""".r
 }
 
 /**
