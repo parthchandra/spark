@@ -35,7 +35,7 @@
   </repositories>
   <dependencies>
     <dependency> <!-- Spark dependency -->
-      <groupId>org.apache.spark</groupId>
+      <groupId>com.apple.pie.spark</groupId>
       <artifactId>spark-core_${scala.binary.version}</artifactId>
       <version>${spark.version}</version>
     </dependency>
