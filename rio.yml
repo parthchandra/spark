@@ -1,0 +1,20 @@
+schemaVersion: 2.0
+
+users:
+  - vishwa
+  - paramasi
+
+notificationRecipients:
+  - vishwa@apple.com
+  - thiru@apple.com
+
+builds:
+  - branchName: pie-spark-1.5.2
+    timeout: 35
+    machine:
+      java:
+        version: 1.8
+      env:
+        CODE_VERSION: 1.5.0.3
+    build:
+      template: maven:v2:lib:release
