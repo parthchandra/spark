@@ -14,6 +14,8 @@ builds:
     machine:
       java:
         version: 1.8
+      maven:
+        version: 3.3
     build:
       template: maven:v2:lib:release
 
