@@ -32,6 +32,7 @@
   <name>Spark Project YARN Shuffle Service</name>
   <url>http://spark.apache.org/</url>
   <properties>
+    <project.type>library</project.type>
     <sbt.project.name>network-yarn</sbt.project.name>
     <!-- Make sure all Hadoop dependencies are provided to avoid repackaging. -->
     <hadoop.deps.scope>provided</hadoop.deps.scope>

@@ -19,7 +19,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-
+  <parent>
+    <groupId>com.apple.cie.rio</groupId>
+    <artifactId>maven-parent-pom</artifactId>
+    <version>0.3.7</version>
+  </parent>
   <groupId>com.apple.pie.spark</groupId>
   <artifactId>spark-parent_2.11</artifactId>
   <version>1.5.2-pie1.0</version>
@@ -317,6 +321,11 @@
     </pluginRepository>
   </pluginRepositories>
   <dependencies>
+        <dependency>
+            <groupId>com.apple.cie.rio</groupId>
+            <artifactId>rio-foundation</artifactId>
+            <version>LATEST</version>
+        </dependency>
     <!--
       This is a dummy dependency that is used along with the shading plug-in
       to create effective poms on publishing (see SPARK-3812).
@@ -2313,6 +2322,7 @@
             <artifactId>maven-javadoc-plugin</artifactId>
             <configuration>
               <additionalparam>-Xdoclint:all -Xdoclint:-missing</additionalparam>
+              <failOnError>false</failOnError>
             </configuration>
           </plugin>
         </plugins>
@@ -2424,6 +2434,7 @@
       <properties>
         <scala.version>2.11.7</scala.version>
         <scala.binary.version>2.11</scala.binary.version>
+        <jline.version>2.11.0-M3</jline.version>
       </properties>
     </profile>
 

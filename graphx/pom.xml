@@ -28,6 +28,7 @@
   <groupId>com.apple.pie.spark</groupId>
   <artifactId>spark-graphx_2.11</artifactId>
   <properties>
+    <project.type>library</project.type>
     <sbt.project.name>graphx</sbt.project.name>
   </properties>
   <packaging>jar</packaging>

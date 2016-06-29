@@ -28,6 +28,7 @@
   <groupId>com.apple.pie.spark</groupId>
   <artifactId>spark-bagel_2.11</artifactId>
   <properties>
+    <project.type>library</project.type>
     <sbt.project.name>bagel</sbt.project.name>
   </properties>
   <packaging>jar</packaging>

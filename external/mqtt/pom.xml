@@ -28,6 +28,7 @@
   <groupId>com.apple.pie.spark</groupId>
   <artifactId>spark-streaming-mqtt_2.11</artifactId>
   <properties>
+    <project.type>library</project.type>
     <sbt.project.name>streaming-mqtt</sbt.project.name>
   </properties>
   <packaging>jar</packaging>
