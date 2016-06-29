@@ -32,6 +32,7 @@
   <url>http://spark.apache.org/</url>
 
   <properties>
+    <project.type>library</project.type>
     <sbt.project.name>streaming-kafka-assembly</sbt.project.name>
   </properties>
 
