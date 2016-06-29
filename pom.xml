@@ -321,11 +321,11 @@
     </pluginRepository>
   </pluginRepositories>
   <dependencies>
-        <dependency>
-            <groupId>com.apple.cie.rio</groupId>
-            <artifactId>rio-foundation</artifactId>
-            <version>LATEST</version>
-        </dependency>
+    <dependency>
+      <groupId>com.apple.cie.rio</groupId>
+      <artifactId>rio-foundation</artifactId>
+      <version>LATEST</version>
+    </dependency>
     <!--
       This is a dummy dependency that is used along with the shading plug-in
       to create effective poms on publishing (see SPARK-3812).
