@@ -46,7 +46,7 @@
     </dependency>
     <dependency>
       <groupId>com.twitter</groupId>
-      <artifactId>chill_${scala.binary.version}</artifactId>
+      <artifactId>chill_${scalaBinaryVersion}</artifactId>
     </dependency>
     <dependency>
       <groupId>com.twitter</groupId>
@@ -58,22 +58,22 @@
     </dependency>
     <dependency>
       <groupId>com.apple.pie.spark</groupId>
-      <artifactId>spark-launcher_${scala.binary.version}</artifactId>
+      <artifactId>spark-launcher_${scalaBinaryVersion}</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>com.apple.pie.spark</groupId>
-      <artifactId>spark-network-common_${scala.binary.version}</artifactId>
+      <artifactId>spark-network-common_${scalaBinaryVersion}</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>com.apple.pie.spark</groupId>
-      <artifactId>spark-network-shuffle_${scala.binary.version}</artifactId>
+      <artifactId>spark-network-shuffle_${scalaBinaryVersion}</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>com.apple.pie.spark</groupId>
-      <artifactId>spark-unsafe_${scala.binary.version}</artifactId>
+      <artifactId>spark-unsafe_${scalaBinaryVersion}</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
@@ -184,15 +184,15 @@
     </dependency>
     <dependency>
       <groupId>${akka.group}</groupId>
-      <artifactId>akka-remote_${scala.binary.version}</artifactId>
+      <artifactId>akka-remote_${scalaBinaryVersion}</artifactId>
     </dependency>
     <dependency>
       <groupId>${akka.group}</groupId>
-      <artifactId>akka-slf4j_${scala.binary.version}</artifactId>
+      <artifactId>akka-slf4j_${scalaBinaryVersion}</artifactId>
     </dependency>
     <dependency>
       <groupId>${akka.group}</groupId>
-      <artifactId>akka-testkit_${scala.binary.version}</artifactId>
+      <artifactId>akka-testkit_${scalaBinaryVersion}</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -201,7 +201,7 @@
     </dependency>
     <dependency>
       <groupId>org.json4s</groupId>
-      <artifactId>json4s-jackson_${scala.binary.version}</artifactId>
+      <artifactId>json4s-jackson_${scalaBinaryVersion}</artifactId>
       <version>3.2.10</version>
     </dependency>
     <dependency>
@@ -247,7 +247,7 @@
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.module</groupId>
-      <artifactId>jackson-module-scala_${scala.binary.version}</artifactId>
+      <artifactId>jackson-module-scala_${scalaBinaryVersion}</artifactId>
     </dependency>
     <dependency>
       <groupId>org.apache.derby</groupId>
@@ -321,7 +321,7 @@
     </dependency>
     <dependency>
       <groupId>org.scalacheck</groupId>
-      <artifactId>scalacheck_${scala.binary.version}</artifactId>
+      <artifactId>scalacheck_${scalaBinaryVersion}</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -370,8 +370,8 @@
     </dependency>    
   </dependencies>
   <build>
-    <outputDirectory>target/scala-${scala.binary.version}/classes</outputDirectory>
-    <testOutputDirectory>target/scala-${scala.binary.version}/test-classes</testOutputDirectory>
+    <outputDirectory>target/scala-${scalaBinaryVersion}/classes</outputDirectory>
+    <testOutputDirectory>target/scala-${scalaBinaryVersion}/test-classes</testOutputDirectory>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

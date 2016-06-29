@@ -40,7 +40,7 @@
   <dependencies>
     <dependency>
       <groupId>com.apple.pie.spark</groupId>
-      <artifactId>spark-streaming-flume_${scala.binary.version}</artifactId>
+      <artifactId>spark-streaming-flume_${scalaBinaryVersion}</artifactId>
       <version>${project.version}</version>
       <exclusions>
         <exclusion>
@@ -55,7 +55,7 @@
     </dependency>
     <dependency>
       <groupId>com.apple.pie.spark</groupId>
-      <artifactId>spark-streaming_${scala.binary.version}</artifactId>
+      <artifactId>spark-streaming_${scalaBinaryVersion}</artifactId>
       <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>
@@ -108,8 +108,8 @@
   </dependencies>
 
   <build>
-    <outputDirectory>target/scala-${scala.binary.version}/classes</outputDirectory>
-    <testOutputDirectory>target/scala-${scala.binary.version}/test-classes</testOutputDirectory>
+    <outputDirectory>target/scala-${scalaBinaryVersion}/classes</outputDirectory>
+    <testOutputDirectory>target/scala-${scalaBinaryVersion}/test-classes</testOutputDirectory>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

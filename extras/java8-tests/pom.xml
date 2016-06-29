@@ -37,24 +37,24 @@
   <dependencies>
     <dependency>
       <groupId>com.apple.pie.spark</groupId>
-      <artifactId>spark-core_${scala.binary.version}</artifactId>
+      <artifactId>spark-core_${scalaBinaryVersion}</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>com.apple.pie.spark</groupId>
-      <artifactId>spark-core_${scala.binary.version}</artifactId>
+      <artifactId>spark-core_${scalaBinaryVersion}</artifactId>
       <version>${project.version}</version>
       <type>test-jar</type>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.apple.pie.spark</groupId>
-      <artifactId>spark-streaming_${scala.binary.version}</artifactId>
+      <artifactId>spark-streaming_${scalaBinaryVersion}</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>com.apple.pie.spark</groupId>
-      <artifactId>spark-streaming_${scala.binary.version}</artifactId>
+      <artifactId>spark-streaming_${scalaBinaryVersion}</artifactId>
       <version>${project.version}</version>
       <type>test-jar</type>
       <scope>test</scope>

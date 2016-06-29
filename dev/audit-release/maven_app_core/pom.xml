@@ -39,7 +39,7 @@
   <dependencies>
     <dependency> <!-- Spark dependency -->
       <groupId>com.apple.pie.spark</groupId>
-      <artifactId>spark-core_${scala.binary.version}</artifactId>
+      <artifactId>spark-core_${scalaBinaryVersion}</artifactId>
       <version>${spark.version}</version>
     </dependency>
   </dependencies>

@@ -42,7 +42,7 @@
     <!-- Core dependencies -->
     <dependency>
       <groupId>com.apple.pie.spark</groupId>
-      <artifactId>spark-network-shuffle_${scala.binary.version}</artifactId>
+      <artifactId>spark-network-shuffle_${scalaBinaryVersion}</artifactId>
       <version>${project.version}</version>
     </dependency>
 
@@ -54,15 +54,15 @@
   </dependencies>
 
   <build>
-    <outputDirectory>target/scala-${scala.binary.version}/classes</outputDirectory>
-    <testOutputDirectory>target/scala-${scala.binary.version}/test-classes</testOutputDirectory>
+    <outputDirectory>target/scala-${scalaBinaryVersion}/classes</outputDirectory>
+    <testOutputDirectory>target/scala-${scalaBinaryVersion}/test-classes</testOutputDirectory>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
         <configuration>
           <shadedArtifactAttached>false</shadedArtifactAttached>
-          <outputFile>${project.build.directory}/scala-${scala.binary.version}/spark-${project.version}-yarn-shuffle.jar</outputFile>
+          <outputFile>${project.build.directory}/scala-${scalaBinaryVersion}/spark-${project.version}-yarn-shuffle.jar</outputFile>
           <artifactSet>
             <includes>
               <include>*:*</include>
