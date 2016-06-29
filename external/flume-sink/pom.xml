@@ -93,8 +93,8 @@
     </dependency>
   </dependencies>
   <build>
-    <outputDirectory>target/scala-${scala.binary.version}/classes</outputDirectory>
-    <testOutputDirectory>target/scala-${scala.binary.version}/test-classes</testOutputDirectory>
+    <outputDirectory>target/scala-${scalaBinaryVersion}/classes</outputDirectory>
+    <testOutputDirectory>target/scala-${scalaBinaryVersion}/test-classes</testOutputDirectory>
     <plugins>
       <plugin>
         <groupId>org.apache.avro</groupId>
@@ -102,7 +102,7 @@
         <version>${avro.version}</version>
         <configuration>
           <!-- Generate the output in the same directory as the sbt-avro-plugin -->
-          <outputDirectory>${project.basedir}/target/scala-${scala.binary.version}/src_managed/main/compiled_avro</outputDirectory>
+          <outputDirectory>${project.basedir}/target/scala-${scalaBinaryVersion}/src_managed/main/compiled_avro</outputDirectory>
         </configuration>
         <executions>
           <execution>

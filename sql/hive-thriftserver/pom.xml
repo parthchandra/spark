@@ -39,12 +39,12 @@
   <dependencies>
     <dependency>
       <groupId>com.apple.pie.spark</groupId>
-      <artifactId>spark-hive_${scala.binary.version}</artifactId>
+      <artifactId>spark-hive_${scalaBinaryVersion}</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>com.apple.pie.spark</groupId>
-      <artifactId>spark-core_${scala.binary.version}</artifactId>
+      <artifactId>spark-core_${scalaBinaryVersion}</artifactId>
       <version>${project.version}</version>
       <type>test-jar</type>
       <scope>test</scope>
@@ -89,15 +89,15 @@
     </dependency>
     <dependency>
       <groupId>com.apple.pie.spark</groupId>
-      <artifactId>spark-sql_${scala.binary.version}</artifactId>
+      <artifactId>spark-sql_${scalaBinaryVersion}</artifactId>
       <type>test-jar</type>
       <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
   <build>
-    <outputDirectory>target/scala-${scala.binary.version}/classes</outputDirectory>
-    <testOutputDirectory>target/scala-${scala.binary.version}/test-classes</testOutputDirectory>
+    <outputDirectory>target/scala-${scalaBinaryVersion}/classes</outputDirectory>
+    <testOutputDirectory>target/scala-${scalaBinaryVersion}/test-classes</testOutputDirectory>
     <plugins>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>

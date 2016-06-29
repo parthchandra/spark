@@ -73,7 +73,7 @@
     </dependency>
     <dependency>
       <groupId>org.scalacheck</groupId>
-      <artifactId>scalacheck_${scala.binary.version}</artifactId>
+      <artifactId>scalacheck_${scalaBinaryVersion}</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -83,8 +83,8 @@
     </dependency>
   </dependencies>
   <build>
-    <outputDirectory>target/scala-${scala.binary.version}/classes</outputDirectory>
-    <testOutputDirectory>target/scala-${scala.binary.version}/test-classes</testOutputDirectory>
+    <outputDirectory>target/scala-${scalaBinaryVersion}/classes</outputDirectory>
+    <testOutputDirectory>target/scala-${scalaBinaryVersion}/test-classes</testOutputDirectory>
     <pluginManagement>
       <plugins>
         <plugin>
