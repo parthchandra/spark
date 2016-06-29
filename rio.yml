@@ -18,8 +18,9 @@ builds:
         version: maven-3.3
     build:
       template: maven:v2:lib:release
-    env:
-      skipTests: true
-      scala.version: 2.11.7
-      scala.binary.version: 2.11
-      hadoop.version: 2.6.0-mr1-cdh5.6.0 
+    machine:
+      env:
+        skipTests: true
+        scala.version: 2.11.7
+        scala.binary.version: 2.11
+        hadoop.version: 2.6.0-mr1-cdh5.6.0 
