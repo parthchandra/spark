@@ -18,4 +18,8 @@ builds:
         version: maven-3.3
     build:
       template: maven:v2:lib:release
-
+    env:
+      skipTests: true
+      testParam1: true
+      testParam2: false
+      testParam3: 'string'
