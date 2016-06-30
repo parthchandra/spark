@@ -2444,10 +2444,10 @@
           <activeByDefault>true</activeByDefault>
        </activation>
        <properties>
-         <scala.version>2.11.7</scala.version>
-         <scala.binary.version>2.11</scala.binary.version>
+         <scalaVersion>2.11.7</scalaVersion>
+         <scalaBinaryVersion>2.11</scalaBinaryVersion>
          <jline.version>2.11.0-M3</jline.version>
-         <hadoop.version>2.6.0-mr1-cdh5.6.0</hadoop.version>
+         <hadoopVersion>2.6.0-mr1-cdh5.6.0</hadoopVersion>
        </properties>
     </profile>
 
