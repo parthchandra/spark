@@ -11,14 +11,15 @@ notificationRecipients:
 builds:
   - branchName: pie-spark-1.5.2
     timeout: 35
+    junitReports: false
     machine:
       java:
         version: 1.8
       maven:
         version: maven-3.3
       env:
-        MAVEN_OPTS: "-DskipTests=true -DscalaVersion=2.11.7 -DscalaBinaryVersion=2.11 -DhadoopVersion=2.6.0-mr1-cdh5.6.0"
+        MAVEN_OPTS: "-DskipTests=true -Dscala.version=2.11.7 -Dscala.binary.version=2.11 -Dhadoop.version=2.6.0-mr1-cdh5.6.0"
         skipTests: true
         skipFunctionalTest: true
     build:
-      template: maven:v2:lib:snapshot
+      template: maven:v2:lib:release
