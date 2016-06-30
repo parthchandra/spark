@@ -36,12 +36,12 @@
   <dependencies>
     <dependency>
       <groupId>com.apple.pie.spark</groupId>
-      <artifactId>spark-core_${scalaBinaryVersion}</artifactId>
+      <artifactId>spark-core_${scala.binary.version}</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>com.apple.pie.spark</groupId>
-      <artifactId>spark-core_${scalaBinaryVersion}</artifactId>
+      <artifactId>spark-core_${scala.binary.version}</artifactId>
       <version>${project.version}</version>
       <type>test-jar</type>
       <scope>test</scope>
@@ -156,8 +156,8 @@
   </dependencies>
 
   <build>
-    <outputDirectory>target/scala-${scalaBinaryVersion}/classes</outputDirectory>
-    <testOutputDirectory>target/scala-${scalaBinaryVersion}/test-classes</testOutputDirectory>
+    <outputDirectory>target/scala-${scala.binary.version}/classes</outputDirectory>
+    <testOutputDirectory>target/scala-${scala.binary.version}/test-classes</testOutputDirectory>
   </build>
 
 </project>

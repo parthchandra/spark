@@ -125,9 +125,9 @@
     <mesos.classifier>shaded-protobuf</mesos.classifier>
     <slf4j.version>1.7.10</slf4j.version>
     <log4j.version>1.2.17</log4j.version>
-    <hadoopVersion>2.2.0</hadoopVersion>
+    <hadoop.version>2.2.0</hadoop.version>
     <protobuf.version>2.5.0</protobuf.version>
-    <yarn.version>${hadoopVersion}</yarn.version>
+    <yarn.version>${hadoop.version}</yarn.version>
     <hbase.version>0.98.7-hadoop2</hbase.version>
     <hbase.artifact>hbase</hbase.artifact>
     <flume.version>1.6.0</flume.version>
@@ -158,9 +158,9 @@
     <!--  commons-httpclient/commons-httpclient-->
     <httpclient.classic.version>3.1</httpclient.classic.version>
     <commons.math3.version>3.4.1</commons.math3.version>
-    <scalaVersion>2.10.4</scalaVersion>
-    <scalaBinaryVersion>2.11</scalaBinaryVersion>
-    <jline.version>${scalaVersion}</jline.version>
+    <scala.version>2.10.4</scala.version>
+    <scala.binary.version>2.11</scala.binary.version>
+    <jline.version>${scala.version}</jline.version>
     <jline.groupid>org.scala-lang</jline.groupid>
     <codehaus.jackson.version>1.9.13</codehaus.jackson.version>
     <fasterxml.jackson.version>2.4.4</fasterxml.jackson.version>
@@ -341,7 +341,7 @@
     -->
     <dependency>
       <groupId>org.scalatest</groupId>
-      <artifactId>scalatest_${scalaBinaryVersion}</artifactId>
+      <artifactId>scalatest_${scala.binary.version}</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -349,7 +349,7 @@
     <dependencies>
       <dependency>
         <groupId>com.twitter</groupId>
-        <artifactId>chill_${scalaBinaryVersion}</artifactId>
+        <artifactId>chill_${scala.binary.version}</artifactId>
         <version>${chill.version}</version>
         <exclusions>
           <exclusion>
@@ -569,32 +569,32 @@
       </dependency>
       <dependency>
         <groupId>${akka.group}</groupId>
-        <artifactId>akka-actor_${scalaBinaryVersion}</artifactId>
+        <artifactId>akka-actor_${scala.binary.version}</artifactId>
         <version>${akka.version}</version>
       </dependency>
       <dependency>
         <groupId>${akka.group}</groupId>
-        <artifactId>akka-remote_${scalaBinaryVersion}</artifactId>
+        <artifactId>akka-remote_${scala.binary.version}</artifactId>
         <version>${akka.version}</version>
       </dependency>
       <dependency>
         <groupId>${akka.group}</groupId>
-        <artifactId>akka-slf4j_${scalaBinaryVersion}</artifactId>
+        <artifactId>akka-slf4j_${scala.binary.version}</artifactId>
         <version>${akka.version}</version>
       </dependency>
       <dependency>
         <groupId>${akka.group}</groupId>
-        <artifactId>akka-testkit_${scalaBinaryVersion}</artifactId>
+        <artifactId>akka-testkit_${scala.binary.version}</artifactId>
         <version>${akka.version}</version>
       </dependency>
       <dependency>
         <groupId>${akka.group}</groupId>
-        <artifactId>akka-zeromq_${scalaBinaryVersion}</artifactId>
+        <artifactId>akka-zeromq_${scala.binary.version}</artifactId>
         <version>${akka.version}</version>
         <exclusions>
           <exclusion>
             <groupId>${akka.group}</groupId>
-            <artifactId>akka-actor_${scalaBinaryVersion}</artifactId>
+            <artifactId>akka-actor_${scala.binary.version}</artifactId>
           </exclusion>
         </exclusions>
       </dependency>
@@ -664,7 +664,7 @@
            15.0, which causes runtime incompatibility issues. -->
       <dependency>
         <groupId>com.fasterxml.jackson.module</groupId>
-        <artifactId>jackson-module-scala_${scalaBinaryVersion}</artifactId>
+        <artifactId>jackson-module-scala_${scala.binary.version}</artifactId>
         <version>${fasterxml.jackson.version}</version>
         <exclusions>
           <exclusion>
@@ -699,31 +699,31 @@
       <dependency>
         <groupId>org.scala-lang</groupId>
         <artifactId>scala-compiler</artifactId>
-        <version>${scalaVersion}</version>
+        <version>${scala.version}</version>
       </dependency>
       <dependency>
         <groupId>org.scala-lang</groupId>
         <artifactId>scala-reflect</artifactId>
-        <version>${scalaVersion}</version>
+        <version>${scala.version}</version>
       </dependency>
       <dependency>
         <groupId>org.scala-lang</groupId>
         <artifactId>scala-library</artifactId>
-        <version>${scalaVersion}</version>
+        <version>${scala.version}</version>
       </dependency>
       <dependency>
         <groupId>org.scala-lang</groupId>
         <artifactId>scala-actors</artifactId>
-        <version>${scalaVersion}</version>
+        <version>${scala.version}</version>
       </dependency>
       <dependency>
         <groupId>org.scala-lang</groupId>
         <artifactId>scalap</artifactId>
-        <version>${scalaVersion}</version>
+        <version>${scala.version}</version>
       </dependency>
       <dependency>
         <groupId>org.scalatest</groupId>
-        <artifactId>scalatest_${scalaBinaryVersion}</artifactId>
+        <artifactId>scalatest_${scala.binary.version}</artifactId>
         <version>2.2.1</version>
         <scope>test</scope>
       </dependency>
@@ -735,7 +735,7 @@
       </dependency>
       <dependency>
         <groupId>org.scalacheck</groupId>
-        <artifactId>scalacheck_${scalaBinaryVersion}</artifactId>
+        <artifactId>scalacheck_${scala.binary.version}</artifactId>
         <version>1.11.3</version>
         <scope>test</scope>
       </dependency>
@@ -794,7 +794,7 @@
       <dependency>
         <groupId>org.apache.hadoop</groupId>
         <artifactId>hadoop-client</artifactId>
-        <version>${hadoopVersion}</version>
+        <version>${hadoop.version}</version>
         <scope>${hadoop.deps.scope}</scope>
         <exclusions>
           <exclusion>
@@ -1832,7 +1832,7 @@
             </execution>
           </executions>
           <configuration>
-            <scalaVersion>${scalaVersion}</scalaVersion>
+            <scala.version>${scala.version}</scala.version>
             <recompileMode>incremental</recompileMode>
             <useZincServer>true</useZincServer>
             <args>
@@ -2338,7 +2338,7 @@
     <profile>
       <id>hadoop-1</id>
       <properties>
-        <hadoopVersion>1.2.1</hadoopVersion>
+        <hadoop.version>1.2.1</hadoop.version>
         <protobuf.version>2.4.1</protobuf.version>
         <hbase.version>0.98.7-hadoop1</hbase.version>
         <avro.mapred.classifier>hadoop1</avro.mapred.classifier>
@@ -2356,7 +2356,7 @@
     <profile>
       <id>hadoop-2.3</id>
       <properties>
-        <hadoopVersion>2.3.0</hadoopVersion>
+        <hadoop.version>2.3.0</hadoop.version>
         <jets3t.version>0.9.3</jets3t.version>
       </properties>
     </profile>
@@ -2364,7 +2364,7 @@
     <profile>
       <id>hadoop-2.4</id>
       <properties>
-        <hadoopVersion>2.4.0</hadoopVersion>
+        <hadoop.version>2.4.0</hadoop.version>
         <jets3t.version>0.9.3</jets3t.version>
       </properties>
     </profile>
@@ -2372,7 +2372,7 @@
     <profile>
       <id>hadoop-2.6</id>
       <properties>
-        <hadoopVersion>2.6.0</hadoopVersion>
+        <hadoop.version>2.6.0</hadoop.version>
         <jets3t.version>0.9.3</jets3t.version>
         <zookeeper.version>3.4.6</zookeeper.version>
         <curator.version>2.6.0</curator.version>
@@ -2400,9 +2400,9 @@
         <property><name>scala-2.10</name></property>
       </activation>
       <properties>
-        <scalaVersion>2.10.4</scalaVersion>
-        <scalaBinaryVersion>2.10</scalaBinaryVersion>
-        <jline.version>${scalaVersion}</jline.version>
+        <scala.version>2.10.4</scala.version>
+        <scala.binary.version>2.10</scala.binary.version>
+        <jline.version>${scala.version}</jline.version>
         <jline.groupid>org.scala-lang</jline.groupid>
       </properties>
       <dependencyManagement>
@@ -2432,8 +2432,8 @@
         <property><name>scala-2.11</name></property>
       </activation>
       <properties>
-        <scalaVersion>2.11.7</scalaVersion>
-        <scalaBinaryVersion>2.11</scalaBinaryVersion>
+        <scala.version>2.11.7</scala.version>
+        <scala.binary.version>2.11</scala.binary.version>
         <jline.version>2.11.0-M3</jline.version>
       </properties>
     </profile>
@@ -2444,10 +2444,10 @@
           <activeByDefault>true</activeByDefault>
        </activation>
        <properties>
-         <scalaVersion>2.11.7</scalaVersion>
-         <scalaBinaryVersion>2.11</scalaBinaryVersion>
+         <scala.version>2.11.7</scala.version>
+         <scala.binary.version>2.11</scala.binary.version>
          <jline.version>2.11.0-M3</jline.version>
-         <hadoopVersion>2.6.0-mr1-cdh5.6.0</hadoopVersion>
+         <hadoop.version>2.6.0-mr1-cdh5.6.0</hadoop.version>
        </properties>
     </profile>
 

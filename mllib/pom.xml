@@ -38,29 +38,29 @@
   <dependencies>
     <dependency>
       <groupId>com.apple.pie.spark</groupId>
-      <artifactId>spark-core_${scalaBinaryVersion}</artifactId>
+      <artifactId>spark-core_${scala.binary.version}</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>com.apple.pie.spark</groupId>
-      <artifactId>spark-core_${scalaBinaryVersion}</artifactId>
+      <artifactId>spark-core_${scala.binary.version}</artifactId>
       <version>${project.version}</version>
       <type>test-jar</type>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.apple.pie.spark</groupId>
-      <artifactId>spark-streaming_${scalaBinaryVersion}</artifactId>
+      <artifactId>spark-streaming_${scala.binary.version}</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>com.apple.pie.spark</groupId>
-      <artifactId>spark-sql_${scalaBinaryVersion}</artifactId>
+      <artifactId>spark-sql_${scala.binary.version}</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>com.apple.pie.spark</groupId>
-      <artifactId>spark-graphx_${scalaBinaryVersion}</artifactId>
+      <artifactId>spark-graphx_${scala.binary.version}</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
@@ -71,7 +71,7 @@
     </dependency>
     <dependency>
       <groupId>org.scalanlp</groupId>
-      <artifactId>breeze_${scalaBinaryVersion}</artifactId>
+      <artifactId>breeze_${scala.binary.version}</artifactId>
       <version>0.11.2</version>
       <exclusions>
         <!-- This is included as a compile-scoped dependency by jtransforms, which is
@@ -92,7 +92,7 @@
     </dependency>
     <dependency>
       <groupId>org.scalacheck</groupId>
-      <artifactId>scalacheck_${scalaBinaryVersion}</artifactId>
+      <artifactId>scalacheck_${scala.binary.version}</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -112,7 +112,7 @@
     </dependency>
     <dependency>
       <groupId>com.apple.pie.spark</groupId>
-      <artifactId>spark-streaming_${scalaBinaryVersion}</artifactId>
+      <artifactId>spark-streaming_${scala.binary.version}</artifactId>
       <version>${project.version}</version>
       <type>test-jar</type>
       <scope>test</scope>
@@ -147,7 +147,7 @@
     </profile>
   </profiles>
   <build>
-    <outputDirectory>target/scala-${scalaBinaryVersion}/classes</outputDirectory>
-    <testOutputDirectory>target/scala-${scalaBinaryVersion}/test-classes</testOutputDirectory>
+    <outputDirectory>target/scala-${scala.binary.version}/classes</outputDirectory>
+    <testOutputDirectory>target/scala-${scala.binary.version}/test-classes</testOutputDirectory>
   </build>
 </project>

@@ -44,24 +44,24 @@
 
     <dependency>
       <groupId>com.apple.pie.spark</groupId>
-      <artifactId>spark-core_${scalaBinaryVersion}</artifactId>
+      <artifactId>spark-core_${scala.binary.version}</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>com.apple.pie.spark</groupId>
-      <artifactId>spark-core_${scalaBinaryVersion}</artifactId>
+      <artifactId>spark-core_${scala.binary.version}</artifactId>
       <version>${project.version}</version>
       <type>test-jar</type>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.apple.pie.spark</groupId>
-      <artifactId>spark-unsafe_${scalaBinaryVersion}</artifactId>
+      <artifactId>spark-unsafe_${scala.binary.version}</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.scalacheck</groupId>
-      <artifactId>scalacheck_${scalaBinaryVersion}</artifactId>
+      <artifactId>scalacheck_${scala.binary.version}</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -70,8 +70,8 @@
     </dependency>
   </dependencies>
   <build>
-    <outputDirectory>target/scala-${scalaBinaryVersion}/classes</outputDirectory>
-    <testOutputDirectory>target/scala-${scalaBinaryVersion}/test-classes</testOutputDirectory>
+    <outputDirectory>target/scala-${scala.binary.version}/classes</outputDirectory>
+    <testOutputDirectory>target/scala-${scala.binary.version}/test-classes</testOutputDirectory>
     <plugins>
       <!--
            This plugin forces the generation of jar containing catalyst test classes,
