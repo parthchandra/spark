@@ -21,4 +21,4 @@ builds:
         skipTests: true
         skipFunctionalTest: true
     build:
-      template: maven:v2:lib:release
+      template: maven:v2:lib:snapshot
