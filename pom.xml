@@ -86,6 +86,7 @@
   </mailingLists>
 
   <modules>
+<!-- 
     <module>core</module>
     <module>bagel</module>
     <module>graphx</module>
@@ -106,11 +107,14 @@
     <module>external/mqtt</module>
     <module>external/mqtt-assembly</module>
     <module>external/zeromq</module>
+ -->
     <!--module>examples</module-->
     <module>repl</module>
     <module>launcher</module>
+<!-- 
     <module>external/kafka</module>
     <module>external/kafka-assembly</module>
+ -->
   </modules>
 
   <properties>
