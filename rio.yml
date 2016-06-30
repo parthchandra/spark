@@ -10,7 +10,7 @@ notificationRecipients:
  
 builds:
   - branchName: pie-spark-1.5.2
-    timeout: 35
+    timeout: 50
     machine:
       java:
         version: 1.8
