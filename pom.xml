@@ -2429,26 +2429,13 @@
     <profile>
       <id>scala-2.11</id>
       <activation>
-        <property><name>scala-2.11</name></property>
+        <property><name>!scala-2.10</name></property>
       </activation>
       <properties>
         <scala.version>2.11.7</scala.version>
         <scala.binary.version>2.11</scala.binary.version>
         <jline.version>2.11.0-M3</jline.version>
       </properties>
-    </profile>
-
-    <profile>
-      <id>pie-scala-2.11</id>
-      <activation>
-          <activeByDefault>true</activeByDefault>
-       </activation>
-       <properties>
-         <scala.version>2.11.7</scala.version>
-         <scala.binary.version>2.11</scala.binary.version>
-         <jline.version>2.11.0-M3</jline.version>
-         <hadoop.version>2.6.0-mr1-cdh5.6.0</hadoop.version>
-       </properties>
     </profile>
 
     <!--
