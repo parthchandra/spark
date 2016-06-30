@@ -16,8 +16,7 @@ builds:
         version: 1.8
       maven:
         version: maven-3.3
-    build:
-      template: maven:v2:lib:release
-    machine:
       env:
         MAVEN_OPTS: "-DskipTests=true -DscalaVersion=2.11.7 -DscalaBinaryVersion=2.11 -DhadoopVersion=2.6.0-mr1-cdh5.6.0"
+    build:
+      template: maven:v2:lib:release
