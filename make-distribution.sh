@@ -28,6 +28,8 @@ set -o pipefail
 set -e
 set -x
 
+export PATH=$PATH:$JAVA_HOME/bin
+
 # Figure out where the Spark framework is installed
 SPARK_HOME="$(cd "`dirname "$0"`"; pwd)"
 DISTDIR="$SPARK_HOME/dist"
