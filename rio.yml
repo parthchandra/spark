@@ -7,7 +7,7 @@ users:
 notificationRecipients:
   - vishwa@apple.com
   - thiru@apple.com
- 
+
 builds:
   - branchName: pie-spark-1.5.2
     timeout: 50
@@ -25,3 +25,22 @@ builds:
     publish:
       reports:
         junit: false
+
+  - branchName: pie-spark-1.5.2
+    timeout: 50
+    machine:
+      java:
+        version: 1.8
+      maven:
+        version: maven-3.3
+      env:
+    build:
+      template: freestyle:v1:release
+      steps:
+        - ./make-distribution.sh --tgz --skip-java-test -DskipTests=true -Dscala.version=2.11.7 -Dscala.binary.version=2.11 -Dhadoop.version=2.6.0-mr1-cdh5.6.0
+    publish: 
+      archives:
+        targetPath: com/apple/pie/spark/distribution/2.11/1.5.2-pie1.0/
+    finally:
+      tag:
+        expression: "1.5.2-pie1.0"
