@@ -35,9 +35,16 @@ SPARK_HOME="$(cd "`dirname "$0"`"; pwd)"
 DISTDIR="$SPARK_HOME/dist"
 
 SPARK_TACHYON=false
+# add --with-jdk option
+INCLUDE_JDK=true
 TACHYON_VERSION="0.7.1"
+JDK_VERSION="8u92"
 TACHYON_TGZ="tachyon-${TACHYON_VERSION}-bin.tar.gz"
 TACHYON_URL="https://github.com/amplab/tachyon/releases/download/v${TACHYON_VERSION}/${TACHYON_TGZ}"
+
+JDK_DIR="jdk1.8.0_92"
+JDK_TAR_GZ="jdk-${JDK_VERSION}-linux-x64.tar.gz"
+JDK_URL="https://artifacts.geo.apple.com/artifactory/tools/java-se-jdk/jdk8-linux-x64/${JDK_TAR_GZ}"
 
 MAKE_TGZ=false
 NAME=none
@@ -256,6 +263,12 @@ if [ "$SPARK_TACHYON" == "true" ]; then
 
   popd > /dev/null
   rm -rf "$TMPD"
+fi
+
+if [ "$INCLUDE_JDK" == "true" ]; then
+  curl -O "$JDK_URL"
+  tar xzf "$JDK_TAR_GZ"
+  mv "$JDK_DIR" "$DISTDIR/.jdk"
 fi
 
 if [ "$MAKE_TGZ" == "true" ]; then
