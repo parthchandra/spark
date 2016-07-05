@@ -268,7 +268,7 @@ fi
 if [ "$INCLUDE_JDK" == "true" ]; then
   curl -O "$JDK_URL"
   tar xzf "$JDK_TAR_GZ"
-  mv "$JDK_DIR" "$DISTDIR/.jdk"
+  mv "$JDK_DIR" "$DISTDIR/jdk"
 fi
 
 if [ "$MAKE_TGZ" == "true" ]; then

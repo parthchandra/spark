@@ -34,6 +34,9 @@ else
   fi
 fi
 
+# TODO fix this to be moved to spark-tools
+RUNNER="$SPARK_HOME/jdk/bin/java"
+
 # Find assembly jar
 SPARK_ASSEMBLY_JAR=
 if [ -f "$SPARK_HOME/RELEASE" ]; then
