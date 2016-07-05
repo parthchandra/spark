@@ -267,4 +267,5 @@ if [ "$MAKE_TGZ" == "true" ]; then
   rm -rf "$TARDIR"
   mkdir -p .dist/
   mv "spark-$VERSION-bin-$NAME.tgz" .dist/
+  touch .dist/.application
 fi
