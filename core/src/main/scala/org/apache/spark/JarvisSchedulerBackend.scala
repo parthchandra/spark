@@ -64,12 +64,15 @@ class JarvisSchedulerBackend(scheduler: TaskSchedulerImpl, sc: SparkContext, jar
     val environment = environmentInfo.getVariablesList.asScala
         .map{ v => (v.getName, v.getValue) }.toMap + ("SPARK_LOCAL_DIRS" -> "spark-temp")
 
-    val commandString = commandInfo.getValue
-
-    val commands = environment ++ Seq(commandString)
+    def commandString: String = {
+      val builder = new StringBuilder()
+      environment.foreach(p => builder.append("export " + p._1 + "=" + p._2 + ";"))
+      builder.append(commandInfo.getValue)
+      builder.toString
+    }
 
     var job = JarvisJobInfo.builder
-      .withCommand(commands.mkString("; "))
+      .withCommand(commandString)
       .withCpus(numCores)
       .withMemory(sparkMesosScheduler.calculateTotalMemory(sc))
       .withUris(uris.toList)
