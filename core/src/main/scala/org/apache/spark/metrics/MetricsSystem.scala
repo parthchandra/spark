@@ -187,6 +187,8 @@ private[spark] class MetricsSystem private (
       val classPath = kv._2.getProperty("class")
       if (null != classPath) {
         try {
+          kv._2.setProperty("spark.app.name",
+            conf.getOption("spark.app.name").getOrElse("NA"))
           val sink = Utils.classForName(classPath)
             .getConstructor(classOf[Properties], classOf[MetricRegistry], classOf[SecurityManager])
             .newInstance(kv._2, registry, securityMgr)
