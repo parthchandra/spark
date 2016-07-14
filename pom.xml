@@ -26,7 +26,7 @@
   </parent>
   <groupId>com.apple.pie.spark</groupId>
   <artifactId>spark-parent_2.11</artifactId>
-  <version>1.5.2-pie1.0.1</version>
+  <version>1.5.2-pie1.0.2</version>
   <packaging>pom</packaging>
   <name>Spark Project Parent POM</name>
   <url>http://spark.apache.org/</url>
@@ -2381,6 +2381,9 @@
 
     <profile>
       <id>yarn</id>
+      <activation>
+        <property><name>yarn</name></property>
+      </activation>
       <modules>
         <module>yarn</module>
         <module>network/yarn</module>
@@ -2389,6 +2392,9 @@
 
     <profile>
       <id>hive-thriftserver</id>
+      <activation>
+        <property><name>hive-thriftserver</name></property>
+      </activation>
       <modules>
         <module>sql/hive-thriftserver</module>
       </modules>
