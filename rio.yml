@@ -15,7 +15,7 @@ machine:
     version: maven-3.3
 
 builds:
-    branchName: pie-spark-1.5.2
+  - branchName: pie-spark-1.5.2
     timeout: 90
     machine:
       env:
@@ -24,10 +24,8 @@ builds:
         skipFunctionalTest: true
     build:
       template: maven:v2:lib:prb
-      steps:
-        ls -la
     trigger:
-      gitPush:true
+      gitPush: true
     publish:
       reports:
         junit: false
@@ -45,8 +43,8 @@ builds:
     build:
       template: maven:v2:lib:snapshot
     trigger:
-      gitPush:false
-      scm:'@hourly'
+      gitPush: false
+      scm: '@hourly'
     publish:
       reports:
         junit: false
@@ -64,7 +62,7 @@ builds:
     build:
       template: maven:v2:lib:release
     trigger:
-      gitPush:false
+      gitPush: false
     publish:
       reports:
         junit: false
@@ -81,7 +79,7 @@ builds:
       steps:
         - ./make-distribution.sh --tgz --skip-java-test -DskipTests=true -Dscala-2.11=enabled -Dhive-thriftserver=enabled -Dscala.version=2.11.7 -Dscala.binary.version=2.11 -Dhadoop.version=2.6.0-mr1-cdh5.6.0
     trigger:
-      gitPush:false
+      gitPush: false
     publish: 
       archives:
         targetPath: com/apple/pie/spark/distribution/2.11/1.5.2-pie1.0.2/
