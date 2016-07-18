@@ -43,6 +43,7 @@ builds:
         skipFunctionalTest: true
     build:
       template: maven:v2:lib:snapshot
+      steps: ["ls -la", "pwd", "./dev/change-version-to-2.11.sh"]
     trigger:
       gitPush: false
       scm: '@hourly'
