@@ -24,6 +24,7 @@ builds:
         skipFunctionalTest: true
     build:
       template: maven:v2:lib:prb
+      steps: ["ls -la"]
     trigger:
       gitPush: true
     publish:
