@@ -19,14 +19,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
+  <groupId>com.apple.pie.spark</groupId>
+  <artifactId>spark-parent_2.11</artifactId>
+  <version>1.5.2-pie1.0.2</version>
   <parent>
     <groupId>com.apple.cie.rio</groupId>
     <artifactId>maven-parent-pom</artifactId>
     <version>0.3.7</version>
   </parent>
-  <groupId>com.apple.pie.spark</groupId>
-  <artifactId>spark-parent_2.11</artifactId>
-  <version>1.5.2-pie1.0.2</version>
   <packaging>pom</packaging>
   <name>Spark Project Parent POM</name>
   <url>http://spark.apache.org/</url>
