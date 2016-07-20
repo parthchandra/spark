@@ -10,40 +10,34 @@ notificationRecipients:
 
 machine:
   java:
-    version: 1.7
+    version: 1.8
   maven:
     version: maven-3.3
 
 builds:
-  - branchName: pie-spark-1.5.2
-    timeout: 90
-    machine:
-      env:
-        MAVEN_OPTS: "-Xmx3g -DskipTests=true -Dscala-2.11=enabled -Dhive-thriftserver=enabled -Dscala.version=2.11.7 -Dscala.binary.version=2.11 -Dhadoop.version=2.6.0-mr1-cdh5.6.0"
-        skipTests: true
-        skipFunctionalTest: true
-    build:
-      template: maven:v2:lib:prb
-      steps: ["ls -la"]
-    trigger:
-      gitPush: true
-    publish:
-      reports:
-        junit: false
-    finally:
-      tag:
-        enabled: false
+#  - name: pie-spark-2.10_1.5.2-prb
+#    branchName: pie-spark-1.5.2
+#    timeout: 90
+#    build:
+#      template: freestyle:v1:prb
+#      steps: 
+#        - ./rio-maven-custom-build.sh --scala 2.10 --hadoop "2.6.0-mr1-cdh5.6.0" --maven-opts "-Xmx4g -XX:MaxPermSize=1g -XX:ReservedCodeCacheSize=1g"
+#    trigger:
+#      gitPush: true
+#    publish:
+#      reports:
+#        junit: false
+#    finally:
+#      tag:
+#        enabled: false
 
-  - branchName: pie-spark-1.5.2
+  - name: pie-spark-2.10_1.5.2-snapshot
+    branchName: pie-spark-1.5.2
     timeout: 90
-    machine:
-      env:
-        MAVEN_OPTS: "-Xmx3g -DskipTests=true -Dscala-2.11=enabled -Dhive-thriftserver=enabled -Dscala.version=2.11.7 -Dscala.binary.version=2.11 -Dhadoop.version=2.6.0-mr1-cdh5.6.0"
-        skipTests: true
-        skipFunctionalTest: true
     build:
-      template: maven:v2:lib:snapshot
-      steps: ["ls -la", "pwd", "./dev/change-version-to-2.11.sh"]
+      template: freestyle:v1:snapshot
+      steps: 
+        - ./rio-maven-custom-build.sh --scala 2.10 --hadoop "2.6.0-mr1-cdh5.6.0" --snapshot --maven-opts "-Xmx4g -XX:MaxPermSize=1g -XX:ReservedCodeCacheSize=1g"
     trigger:
       gitPush: false
       scm: '@hourly'
@@ -52,17 +46,13 @@ builds:
         junit: false
     finally:
       tag:
-        expression: "snapshots/$CODE_VERSION-$RIO_BUILD_NUMBER"
+        expression: "snapshots_2.10/$CODE_VERSION-$RIO_BUILD_NUMBER"
 
-  - branchName: pie-spark-1.5.2
+  - name: pie-spark-2.10_1.5.2-release
+    branchName: pie-spark-1.5.2
     timeout: 90
-    machine:
-      env:
-        MAVEN_OPTS: "-Xmx3g -DskipTests=true -Dscala-2.11=enabled -Dhive-thriftserver=enabled -Dscala.version=2.11.7 -Dscala.binary.version=2.11 -Dhadoop.version=2.6.0-mr1-cdh5.6.0"
-        skipTests: true
-        skipFunctionalTest: true
     build:
-      template: maven:v2:lib:release
+      template: freestyle:v1:release
     trigger:
       gitPush: false
     publish:
@@ -70,9 +60,10 @@ builds:
         junit: false
     finally:
       tag:
-        expression: "releases/$CODE_VERSION"
+        expression: "releases_2.10/$CODE_VERSION"
 
-  - branchName: pie-spark-1.5.2
+  - name: pie-spark-2.11_1.5.2-slug
+    branchName: pie-spark-1.5.2
     timeout: 90
     machine:
       env:
