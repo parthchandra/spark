@@ -117,7 +117,7 @@ if [ ! $(command -v "$MVN") ] ; then
 fi
 
 ##Scala Version Validation
-if  [[ $SKIP_TEST_PACKAGE == "true" ]] && [[ $SKIP_TESTS != "false" ]] ; then
+if  [[ $SKIP_TEST_PACKAGE == "true" ]] && [[ $SKIP_TESTS == "false" ]] ; then
     echo -e "Contradicting parameters. Only one of the two options, --do-not-skip-tests and --skip-test-package should be provided"
     exit -1;
 fi
