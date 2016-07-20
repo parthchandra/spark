@@ -125,7 +125,7 @@ fi
 cd "$SPARK_HOME"
 
 ##Set MAVEN_OPTS
-export MAVEN_OPTS="${ADDITIONAL_MAVEN_OPTS} -DskipTests=${SKIP_TESTS} -Dscala-${SCALA_VERSION}=enabled -Dhive-thriftserver=enabled ${HADOOP_VERSION_D_PARAM}"
+export MAVEN_OPTS="${ADDITIONAL_MAVEN_OPTS} ${SKIP_TEST_PACKAGE_D_PARAM} -DskipTests=${SKIP_TESTS} -Dscala-${SCALA_VERSION}=enabled -Dhive-thriftserver=enabled ${HADOOP_VERSION_D_PARAM}"
 
 echo -e "MAVEN_OPTS exported: ${MAVEN_OPTS}"
 
