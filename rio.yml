@@ -15,23 +15,6 @@ machine:
     version: maven-3.3
 
 builds:
-  - name: pie-spark-1.5.2-prb
-    branchName: pie-spark-1.5.2
-    timeout: 90
-    build:
-      template: freestyle:v1:prb
-      steps: 
-        - ./rio-maven-custom-build.sh --scala 2.10 --hadoop "2.6.0-mr1-cdh5.6.0" --skip-test-package --maven-opts "-Xmx4g -XX:MaxPermSize=1g -XX:ReservedCodeCacheSize=1g"
-        - ./rio-maven-custom-build.sh --scala 2.11 --hadoop "2.6.0-mr1-cdh5.6.0" --skip-test-package --maven-opts "-Xmx4g -XX:MaxPermSize=1g -XX:ReservedCodeCacheSize=1g"
-    trigger:
-      gitPush: false
-    publish:
-      reports:
-        junit: false
-    finally:
-      tag:
-        enabled: false
-
   - name: pie-spark-2.10_1.5.2-snapshot
     branchName: pie-spark-1.5.2
     timeout: 90
@@ -73,7 +56,7 @@ builds:
     build:
       template: freestyle:v1:snapshot
       steps: 
-        - ./rio-maven-custom-build.sh --scala 2.11 --hadoop "2.6.0-mr1-cdh5.6.0" --skip-test-package --snapshot --maven-opts "-Xmx4g -XX:MaxPermSize=1g -XX:ReservedCodeCacheSize=1g"
+        - ./rio-maven-custom-build.sh --scala 2.11 --hadoop "2.6.0-mr1-cdh5.6.0" --snapshot --maven-opts "-Xmx4g -XX:MaxPermSize=1g -XX:ReservedCodeCacheSize=1g"
     trigger:
       gitPush: false
       scm: '@hourly'
@@ -91,7 +74,7 @@ builds:
     build:
       template: freestyle:v1:release
       steps: 
-        - ./rio-maven-custom-build.sh --scala 2.11 --hadoop "2.6.0-mr1-cdh5.6.0" --skip-test-package --release --maven-opts "-Xmx4g -XX:MaxPermSize=1g -XX:ReservedCodeCacheSize=1g"
+        - ./rio-maven-custom-build.sh --scala 2.11 --hadoop "2.6.0-mr1-cdh5.6.0" --release --maven-opts "-Xmx4g -XX:MaxPermSize=1g -XX:ReservedCodeCacheSize=1g"
     trigger:
       gitPush: false
     publish:
