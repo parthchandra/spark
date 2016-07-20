@@ -55,6 +55,8 @@ builds:
     timeout: 90
     build:
       template: freestyle:v1:release
+      steps: 
+        - ./rio-maven-custom-build.sh --scala 2.10 --hadoop "2.6.0-mr1-cdh5.6.0" --skip-test-package --release --maven-opts "-Xmx4g -XX:MaxPermSize=1g -XX:ReservedCodeCacheSize=1g"
     trigger:
       gitPush: false
     publish:
@@ -88,6 +90,8 @@ builds:
     timeout: 90
     build:
       template: freestyle:v1:release
+      steps: 
+        - ./rio-maven-custom-build.sh --scala 2.11 --hadoop "2.6.0-mr1-cdh5.6.0" --skip-test-package --release --maven-opts "-Xmx4g -XX:MaxPermSize=1g -XX:ReservedCodeCacheSize=1g"
     trigger:
       gitPush: false
     publish:
