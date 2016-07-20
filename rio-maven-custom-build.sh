@@ -159,7 +159,7 @@ POM_SPARK_HIVE=$("$MVN" help:evaluate -Dexpression=project.activeProfiles -pl sq
 ##Maven Command Executions
 execute_command "$MVN" com.apple.cie.rio:rio-maven-plugin:create-marker -DskipTests "$@"
 if [ $IS_RELEASE -eq 1 ] ; then
-	execute_command "$MVN" com.apple.cie.rio:rio-maven-plugin:remove-snapshot versions:set "$@"
+	execute_command "$MVN" com.apple.cie.rio:rio-maven-plugin:remove-snapshot org.codehaus.mojo:versions-maven-plugin:set "$@"
 fi
 execute_command "$MVN" clean package -DskipTests "$@"
 if [ $IS_DEPLOY -eq 1 ] ; then
