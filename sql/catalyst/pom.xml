@@ -21,13 +21,13 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.apple.pie.spark</groupId>
-    <artifactId>spark-parent_2.11</artifactId>
+    <artifactId>spark-parent_2.10</artifactId>
     <version>1.5.2-pie1.0.3-SNAPSHOT</version>
     <relativePath>../../pom.xml</relativePath>
   </parent>
 
   <groupId>com.apple.pie.spark</groupId>
-  <artifactId>spark-catalyst_2.11</artifactId>
+  <artifactId>spark-catalyst_2.10</artifactId>
   <packaging>jar</packaging>
   <name>Spark Project Catalyst</name>
   <url>http://spark.apache.org/</url>
@@ -107,7 +107,7 @@
     <profile>
       <id>scala-2.10</id>
       <activation>
-        <property><name>scala-2.10</name></property>
+        <property><name>!scala-2.11</name></property>
       </activation>
     </profile>
   </profiles>
