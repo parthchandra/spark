@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -eu -o pipefail
+set -eux -o pipefail
 
 export PATH=$PATH:$JAVA_HOME/bin
 
@@ -125,7 +125,7 @@ POM_SCALA_VERSION=$("$MVN" help:evaluate -Dexpression=scala.binary.version $@ 2>
     | tail -n 1)
 
 ##Scala Version Validation
-if  [[ $POM_SCALA_VERSION -ne $SCALA_VERSION ]] || [[ $POM_PROJECT_ARTIFACT_ID != *$SCALA_VERSION ]] ; then
+if  [[ $POM_SCALA_VERSION != $SCALA_VERSION ]] || [[ $POM_PROJECT_ARTIFACT_ID != *$SCALA_VERSION ]] ; then
     echo -e "Scala version from the POM file does not match with the input. This command may have some problems. ./dev/change-scala-version.sh $SCALA_VERSION $@"
     exit -1;
 fi
@@ -146,10 +146,9 @@ execute_command "$MVN" com.apple.cie.rio:rio-maven-plugin:create-marker -DskipTe
 if [ $IS_RELEASE -eq 1 ] ; then
 	execute_command "$MVN" com.apple.cie.rio:rio-maven-plugin:remove-snapshot versions:set "$@"
 fi
+execute_command "$MVN" clean package -DskipTests "$@"
 if [ $IS_DEPLOY -eq 1 ] ; then
-	execute_command "$MVN" clean package deploy -DaltDeploymentRepository=central::default::https://artifacts.geo.apple.com/artifactory/pie-${REPO}-local -DskipTests "$@"
-else
-	execute_command "$MVN" clean package -DskipTests "$@"
+	execute_command "$MVN" deploy -DaltDeploymentRepository=central::default::https://artifacts.geo.apple.com/artifactory/pie-${REPO}-local -DskipTests "$@"
 fi
 
 echo -e "Build Successful"

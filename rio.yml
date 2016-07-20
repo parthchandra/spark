@@ -15,21 +15,21 @@ machine:
     version: maven-3.3
 
 builds:
-#  - name: pie-spark-2.10_1.5.2-prb
-#    branchName: pie-spark-1.5.2
-#    timeout: 90
-#    build:
-#      template: freestyle:v1:prb
-#      steps: 
-#        - ./rio-maven-custom-build.sh --scala 2.10 --hadoop "2.6.0-mr1-cdh5.6.0" --maven-opts "-Xmx4g -XX:MaxPermSize=1g -XX:ReservedCodeCacheSize=1g"
-#    trigger:
-#      gitPush: true
-#    publish:
-#      reports:
-#        junit: false
-#    finally:
-#      tag:
-#        enabled: false
+  - name: pie-spark-2.10_1.5.2-prb
+    branchName: pie-spark-1.5.2
+    timeout: 90
+    build:
+      template: freestyle:v1:prb
+      steps: 
+        - ./rio-maven-custom-build.sh --scala 2.10 --hadoop "2.6.0-mr1-cdh5.6.0" --maven-opts "-Xmx4g -XX:MaxPermSize=1g -XX:ReservedCodeCacheSize=1g"
+    trigger:
+      gitPush: true
+    publish:
+      reports:
+        junit: false
+    finally:
+      tag:
+        enabled: false
 
   - name: pie-spark-2.10_1.5.2-snapshot
     branchName: pie-spark-1.5.2
