@@ -15,15 +15,16 @@ machine:
     version: maven-3.3
 
 builds:
-  - name: pie-spark-2.10_1.5.2-prb
+  - name: pie-spark-1.5.2-prb
     branchName: pie-spark-1.5.2
     timeout: 90
     build:
       template: freestyle:v1:prb
       steps: 
         - ./rio-maven-custom-build.sh --scala 2.10 --hadoop "2.6.0-mr1-cdh5.6.0" --skip-test-package --maven-opts "-Xmx4g -XX:MaxPermSize=1g -XX:ReservedCodeCacheSize=1g"
+        - ./rio-maven-custom-build.sh --scala 2.11 --hadoop "2.6.0-mr1-cdh5.6.0" --skip-test-package --maven-opts "-Xmx4g -XX:MaxPermSize=1g -XX:ReservedCodeCacheSize=1g"
     trigger:
-      gitPush: true
+      gitPush: false
     publish:
       reports:
         junit: false
@@ -46,6 +47,7 @@ builds:
         junit: false
     finally:
       tag:
+        enabled: true
         expression: "snapshots_2.10/$CODE_VERSION-$RIO_BUILD_NUMBER"
 
   - name: pie-spark-2.10_1.5.2-release
@@ -60,6 +62,7 @@ builds:
         junit: false
     finally:
       tag:
+        enabled: true
         expression: "releases_2.10/$CODE_VERSION"
 
   - name: pie-spark-2.11_1.5.2-slug
@@ -78,4 +81,5 @@ builds:
         targetPath: com/apple/pie/spark/distribution/2.11/1.5.2-pie1.0.2/
     finally:
       tag:
-        expression: "slug/$CODE_VERSION"
+        enabled: true
+        expression: "slug_2.11/$CODE_VERSION"
