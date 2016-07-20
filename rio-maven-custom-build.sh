@@ -37,6 +37,8 @@ IS_DEPLOY=0
 IS_RELEASE=0
 ADDITIONAL_MAVEN_OPTS=""
 SKIP_TESTS="true"
+SKIP_TEST_PACKAGE="false"
+SKIP_TEST_PACKAGE_D_PARAM=""
 HADOOP_VERSION=""
 HADOOP_VERSION_D_PARAM=""
 # Parse arguments
@@ -57,6 +59,11 @@ while (( "$#" )); do
       ;;
     --do-not-skip-tests)
       SKIP_TESTS="false"
+      ;;
+    --skip-test-package)
+      SKIP_TESTS="true"
+      SKIP_TEST_PACKAGE="true"
+      SKIP_TEST_PACKAGE_D_PARAM="-Dmaven.test.skip=${SKIP_TEST_PACKAGE}"
       ;;
     --snapshot)
       REPO="snapshot"
@@ -81,6 +88,8 @@ echo -e "  IS_DEPLOY=[${IS_DEPLOY}]"
 echo -e "  IS_RELEASE=[${IS_RELEASE}]"
 echo -e "  ADDITIONAL_MAVEN_OPTS=[${ADDITIONAL_MAVEN_OPTS}]"
 echo -e "  SKIP_TESTS=[${SKIP_TESTS}]"
+echo -e "  SKIP_TEST_PACKAGE=[${SKIP_TEST_PACKAGE}]"
+echo -e "  SKIP_TEST_PACKAGE_D_PARAM=[${SKIP_TEST_PACKAGE_D_PARAM}]"
 echo -e "  HADOOP_VERSION=[${HADOOP_VERSION}]"
 echo -e "  HADOOP_VERSION_D_PARAM=[${HADOOP_VERSION_D_PARAM}]"
 echo -e "====================================="
@@ -104,6 +113,12 @@ fi
 if [ ! $(command -v "$MVN") ] ; then
     echo -e "Could not locate Maven command: '$MVN'."
     echo -e "Specify the Maven command with the --mvn flag"
+    exit -1;
+fi
+
+##Scala Version Validation
+if  [[ $SKIP_TEST_PACKAGE == "true" ]] && [[ $SKIP_TESTS == "false" ]] ; then
+    echo -e "Contradicting parameters. Only one of the two options, --do-not-skip-tests and --skip-test-package should be provided"
     exit -1;
 fi
 
