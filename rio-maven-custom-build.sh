@@ -37,6 +37,7 @@ IS_DEPLOY=0
 IS_RELEASE=0
 ADDITIONAL_MAVEN_OPTS=""
 SKIP_TESTS="true"
+SKIP_TESTS_D_PARAM="-DskipTests=true"
 SKIP_TEST_PACKAGE="false"
 SKIP_TEST_PACKAGE_D_PARAM=""
 HADOOP_VERSION=""
@@ -59,9 +60,11 @@ while (( "$#" )); do
       ;;
     --do-not-skip-tests)
       SKIP_TESTS="false"
+      SKIP_TESTS_D_PARAM=""
       ;;
     --skip-test-package)
       SKIP_TESTS="true"
+      SKIP_TESTS_D_PARAM="-DskipTests=true"
       SKIP_TEST_PACKAGE="true"
       SKIP_TEST_PACKAGE_D_PARAM="-Dmaven.test.skip=${SKIP_TEST_PACKAGE}"
       ;;
@@ -88,6 +91,7 @@ echo -e "  IS_DEPLOY=[${IS_DEPLOY}]"
 echo -e "  IS_RELEASE=[${IS_RELEASE}]"
 echo -e "  ADDITIONAL_MAVEN_OPTS=[${ADDITIONAL_MAVEN_OPTS}]"
 echo -e "  SKIP_TESTS=[${SKIP_TESTS}]"
+echo -e "  SKIP_TESTS_D_PARAM=[${SKIP_TESTS_D_PARAM}]"
 echo -e "  SKIP_TEST_PACKAGE=[${SKIP_TEST_PACKAGE}]"
 echo -e "  SKIP_TEST_PACKAGE_D_PARAM=[${SKIP_TEST_PACKAGE_D_PARAM}]"
 echo -e "  HADOOP_VERSION=[${HADOOP_VERSION}]"
@@ -125,7 +129,7 @@ fi
 cd "$SPARK_HOME"
 
 ##Set MAVEN_OPTS
-export MAVEN_OPTS="${ADDITIONAL_MAVEN_OPTS} ${SKIP_TEST_PACKAGE_D_PARAM} -DskipTests=${SKIP_TESTS} -Dscala-${SCALA_VERSION}=enabled -Dhive-thriftserver=enabled ${HADOOP_VERSION_D_PARAM}"
+export MAVEN_OPTS="${ADDITIONAL_MAVEN_OPTS} ${SKIP_TEST_PACKAGE_D_PARAM} $SKIP_TESTS_D_PARAM -Dscala-${SCALA_VERSION}=enabled -Dhive-thriftserver=enabled ${HADOOP_VERSION_D_PARAM}"
 
 echo -e "MAVEN_OPTS exported: ${MAVEN_OPTS}"
 
@@ -157,13 +161,13 @@ POM_SPARK_HIVE=$("$MVN" help:evaluate -Dexpression=project.activeProfiles -pl sq
 
 
 ##Maven Command Executions
-execute_command "$MVN" com.apple.cie.rio:rio-maven-plugin:create-marker -DskipTests "$@"
+execute_command "$MVN" com.apple.cie.rio:rio-maven-plugin:create-marker "$SKIP_TESTS_D_PARAM" "$@"
 if [ $IS_RELEASE -eq 1 ] ; then
 	execute_command "$MVN" com.apple.cie.rio:rio-maven-plugin:remove-snapshot org.codehaus.mojo:versions-maven-plugin:set "$@"
 fi
-execute_command "$MVN" clean package install -DskipTests "$@"
+execute_command "$MVN" clean package install "$SKIP_TESTS_D_PARAM" "$@"
 if [ $IS_DEPLOY -eq 1 ] ; then
-	execute_command "$MVN" deploy -DaltDeploymentRepository=central::default::https://artifacts.geo.apple.com/artifactory/pie-${REPO}-local -DskipTests "$@"
+	execute_command "$MVN" deploy -DaltDeploymentRepository=central::default::https://artifacts.geo.apple.com/artifactory/pie-${REPO}-local "$SKIP_TESTS_D_PARAM" "$@"
 fi
 
 echo -e "Build Successful"
