@@ -42,6 +42,8 @@ SKIP_TEST_PACKAGE="false"
 SKIP_TEST_PACKAGE_D_PARAM=""
 HADOOP_VERSION=""
 HADOOP_VERSION_D_PARAM=""
+IS_DRY_RUN=0
+LOCAL_REPO_DIR="/tmp/mvn-local-repo/local-release"
 # Parse arguments
 while (( "$#" )); do
   case $1 in
@@ -76,6 +78,9 @@ while (( "$#" )); do
       REPO="release"
       IS_DEPLOY=1
       IS_RELEASE=1
+      ;;
+    --dryrun)
+      IS_DRY_RUN=1
       ;;
     *)
       exit_with_usage
@@ -129,7 +134,7 @@ fi
 cd "$SPARK_HOME"
 
 ##Set MAVEN_OPTS
-export MAVEN_OPTS="${ADDITIONAL_MAVEN_OPTS} ${SKIP_TEST_PACKAGE_D_PARAM} $SKIP_TESTS_D_PARAM -Dscala-${SCALA_VERSION}=enabled -Dhive-thriftserver=enabled ${HADOOP_VERSION_D_PARAM}"
+export MAVEN_OPTS="${ADDITIONAL_MAVEN_OPTS} ${SKIP_TEST_PACKAGE_D_PARAM} $SKIP_TESTS_D_PARAM -Dscala-${SCALA_VERSION}=enabled -Dhive-thriftserver=enabled ${HADOOP_VERSION_D_PARAM} -DdeployAtEnd=true -DinstallAtEnd=true"
 
 echo -e "MAVEN_OPTS exported: ${MAVEN_OPTS}"
 
@@ -165,9 +170,18 @@ execute_command "$MVN" com.apple.cie.rio:rio-maven-plugin:create-marker "$SKIP_T
 if [ $IS_RELEASE -eq 1 ] ; then
 	execute_command "$MVN" com.apple.cie.rio:rio-maven-plugin:remove-snapshot org.codehaus.mojo:versions-maven-plugin:set "$@"
 fi
-execute_command "$MVN" clean package install "$SKIP_TESTS_D_PARAM" "$@"
+
+REPO_URL="central::default::https://artifacts.geo.apple.com/artifactory/pie-${REPO}-local"
+
+if [ $IS_DRY_RUN -eq 1 ] ; then
+	mkdir -p "${LOCAL_REPO_DIR}"
+	REPO_URL="local-release::default::file://${LOCAL_REPO_DIR}"
+fi
+
 if [ $IS_DEPLOY -eq 1 ] ; then
-	execute_command "$MVN" deploy -DaltDeploymentRepository=central::default::https://artifacts.geo.apple.com/artifactory/pie-${REPO}-local "$SKIP_TESTS_D_PARAM" "$@"
+	execute_command "$MVN" clean package install deploy -DaltDeploymentRepository="${REPO_URL}" "$SKIP_TESTS_D_PARAM" "$@"
+else
+	execute_command "$MVN" clean package install "$SKIP_TESTS_D_PARAM" "$@"
 fi
 
 echo -e "Build Successful"
