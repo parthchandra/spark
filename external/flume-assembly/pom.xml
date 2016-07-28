@@ -19,13 +19,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.apache.spark</groupId>
+    <groupId>com.apple.pie.spark</groupId>
     <artifactId>spark-parent_2.10</artifactId>
-    <version>1.6.2</version>
+    <version>1.6.2-pie1.0.0-SNAPSHOT</version>
     <relativePath>../../pom.xml</relativePath>
   </parent>
 
-  <groupId>org.apache.spark</groupId>
+  <groupId>com.apple.pie.spark</groupId>
   <artifactId>spark-streaming-flume-assembly_2.10</artifactId>
   <packaging>jar</packaging>
   <name>Spark Project External Flume Assembly</name>
@@ -33,12 +33,13 @@
 
   <properties>
     <hadoop.deps.scope>provided</hadoop.deps.scope>
+    <project.type>library</project.type>
     <sbt.project.name>streaming-flume-assembly</sbt.project.name>
   </properties>
 
   <dependencies>
     <dependency>
-      <groupId>org.apache.spark</groupId>
+      <groupId>com.apple.pie.spark</groupId>
       <artifactId>spark-streaming-flume_${scala.binary.version}</artifactId>
       <version>${project.version}</version>
       <exclusions>
@@ -53,7 +54,7 @@
       </exclusions>
     </dependency>
     <dependency>
-      <groupId>org.apache.spark</groupId>
+      <groupId>com.apple.pie.spark</groupId>
       <artifactId>spark-streaming_${scala.binary.version}</artifactId>
       <version>${project.version}</version>
       <scope>provided</scope>

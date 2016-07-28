@@ -20,18 +20,19 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.apache.spark</groupId>
+    <groupId>com.apple.pie.spark</groupId>
     <artifactId>spark-parent_2.10</artifactId>
-    <version>1.6.2</version>
+    <version>1.6.2-pie1.0.0-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <groupId>org.apache.spark</groupId>
+  <groupId>com.apple.pie.spark</groupId>
   <artifactId>spark-unsafe_2.10</artifactId>
   <packaging>jar</packaging>
   <name>Spark Project Unsafe</name>
   <url>http://spark.apache.org/</url>
   <properties>
+    <project.type>library</project.type>
     <sbt.project.name>unsafe</sbt.project.name>
   </properties>
 
@@ -60,7 +61,7 @@
 
     <!-- Test dependencies -->
     <dependency>
-      <groupId>org.apache.spark</groupId>
+      <groupId>com.apple.pie.spark</groupId>
       <artifactId>spark-test-tags_${scala.binary.version}</artifactId>
     </dependency>
     <dependency>
