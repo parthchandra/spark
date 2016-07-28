@@ -186,6 +186,7 @@ private[spark] class MetricsSystem private (
     sinkConfigs.foreach { kv =>
       val classPath = kv._2.getProperty("class")
       if (null != classPath) {
+        kv._2.setProperty("spark.app.name", conf.getOption("spark.app.name").getOrElse("NA"))
         try {
           val sink = Utils.classForName(classPath)
             .getConstructor(classOf[Properties], classOf[MetricRegistry], classOf[SecurityManager])
