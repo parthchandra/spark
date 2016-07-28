@@ -87,6 +87,25 @@ builds:
         enabled: true
         expression: "releases_2.11/$CODE_VERSION"
 
+  - name: pie-spark-2.10_1.5.2-slug
+    branchName: pie-spark-1.5.2
+    timeout: 90
+    machine:
+      env:
+    build:
+      template: freestyle:v1:slug
+      steps:
+        - ./make-distribution.sh --tgz --skip-java-test -DskipTests=true -Dscala-2.10=enabled -Dhive-thriftserver=enabled -Dscala.version=2.10 -Dscala.binary.version=2.10 -Dhadoop.version=2.6.0-mr1-cdh5.6.0
+    trigger:
+      gitPush: false
+    publish:
+      archives:
+        targetPath: com/apple/pie/spark/distribution/2.10/1.5.2-pie1.0.2/
+    finally:
+      tag:
+        enabled: true
+        expression: "slug_2.10/$CODE_VERSION"
+
   - name: pie-spark-2.11_1.5.2-slug
     branchName: pie-spark-1.5.2
     timeout: 90
@@ -95,6 +114,7 @@ builds:
     build:
       template: freestyle:v1:slug
       steps:
+        - ./dev/change-scala-version.sh 2.11
         - ./make-distribution.sh --tgz --skip-java-test -DskipTests=true -Dscala-2.11=enabled -Dhive-thriftserver=enabled -Dscala.version=2.11.7 -Dscala.binary.version=2.11 -Dhadoop.version=2.6.0-mr1-cdh5.6.0
     trigger:
       gitPush: false
@@ -175,3 +195,42 @@ builds:
       tag:
         enabled: true
         expression: "releases_2.11/$CODE_VERSION"
+
+  - name: pie-spark-2.10_1.6.2-slug
+    branchName: pie-spark-1.6.2
+    timeout: 90
+    machine:
+      env:
+    build:
+      template: freestyle:v1:slug
+      steps:
+        - ./make-distribution.sh --tgz --skip-java-test -DskipTests=true -Dscala-2.10=enabled -Dhive-thriftserver=enabled -Dscala.version=2.10 -Dscala.binary.version=2.10 -Dhadoop.version=2.6.0-mr1-cdh5.6.0
+    trigger:
+      gitPush: false
+    publish:
+      archives:
+        targetPath: com/apple/pie/spark/distribution/2.10/1.6.2-pie1.0.0/
+    finally:
+      tag:
+        enabled: true
+        expression: "slug_2.10/$CODE_VERSION"
+
+  - name: pie-spark-2.11_1.6.2-slug
+    branchName: pie-spark-1.6.2
+    timeout: 90
+    machine:
+      env:
+    build:
+      template: freestyle:v1:slug
+      steps:
+        - ./dev/change-scala-version.sh 2.11
+        - ./make-distribution.sh --tgz --skip-java-test -DskipTests=true -Dscala-2.11=enabled -Dhive-thriftserver=enabled -Dscala.version=2.11.7 -Dscala.binary.version=2.11 -Dhadoop.version=2.6.0-mr1-cdh5.6.0
+    trigger:
+      gitPush: false
+    publish:
+      archives:
+        targetPath: com/apple/pie/spark/distribution/2.11/1.6.2-pie1.0.0/
+    finally:
+      tag:
+        enabled: true
+        expression: "slug_2.11/$CODE_VERSION"
