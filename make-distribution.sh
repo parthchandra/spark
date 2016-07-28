@@ -28,14 +28,23 @@ set -o pipefail
 set -e
 set -x
 
+export PATH=$PATH:$JAVA_HOME/bin
+
 # Figure out where the Spark framework is installed
 SPARK_HOME="$(cd "`dirname "$0"`"; pwd)"
 DISTDIR="$SPARK_HOME/dist"
 
 SPARK_TACHYON=false
-TACHYON_VERSION="0.8.2"
+# add --with-jdk option
+INCLUDE_JDK=true
+TACHYON_VERSION="0.7.1"
+JDK_VERSION="8u92"
 TACHYON_TGZ="tachyon-${TACHYON_VERSION}-bin.tar.gz"
-TACHYON_URL="http://tachyon-project.org/downloads/files/${TACHYON_VERSION}/${TACHYON_TGZ}"
+TACHYON_URL="https://github.com/amplab/tachyon/releases/download/v${TACHYON_VERSION}/${TACHYON_TGZ}"
+
+JDK_DIR="jdk1.8.0_92"
+JDK_TAR_GZ="jdk-${JDK_VERSION}-linux-x64.tar.gz"
+JDK_URL="https://artifacts.geo.apple.com/artifactory/tools/java-se-jdk/jdk8-linux-x64/${JDK_TAR_GZ}"
 
 MAKE_TGZ=false
 NAME=none
@@ -121,7 +130,7 @@ if [ $(command -v git) ]; then
 fi
 
 
-if [ ! "$(command -v "$MVN")" ] ; then
+if [ ! $(command -v "$MVN") ] ; then
     echo -e "Could not locate Maven command: '$MVN'."
     echo -e "Specify the Maven command with the --mvn flag"
     exit -1;
@@ -148,7 +157,7 @@ fi
 echo "Spark version is $VERSION"
 
 if [ "$MAKE_TGZ" == "true" ]; then
-  echo "Making spark-$VERSION-bin-$NAME.tgz"
+  echo "Making spark-$VERSION-bin-$NAME.tar.gz"
 else
   echo "Making distribution for Spark $VERSION in $DISTDIR..."
 fi
@@ -162,7 +171,7 @@ fi
 # Build uber fat JAR
 cd "$SPARK_HOME"
 
-export MAVEN_OPTS="${MAVEN_OPTS:--Xmx2g -XX:MaxPermSize=512M -XX:ReservedCodeCacheSize=512m}"
+export MAVEN_OPTS="-Xmx2g -XX:MaxPermSize=512M -XX:ReservedCodeCacheSize=512m"
 
 # Store the command as an array because $MVN variable might have spaces in it.
 # Normal quoting tricks don't work.
@@ -183,14 +192,14 @@ echo "Build flags: $@" >> "$DISTDIR/RELEASE"
 
 # Copy jars
 cp "$SPARK_HOME"/assembly/target/scala*/*assembly*hadoop*.jar "$DISTDIR/lib/"
-cp "$SPARK_HOME"/examples/target/scala*/spark-examples*.jar "$DISTDIR/lib/"
+# cp "$SPARK_HOME"/examples/target/scala*/spark-examples*.jar "$DISTDIR/lib/"
 # This will fail if the -Pyarn profile is not provided
 # In this case, silence the error and ignore the return code of this command
 cp "$SPARK_HOME"/network/yarn/target/scala*/spark-*-yarn-shuffle.jar "$DISTDIR/lib/" &> /dev/null || :
 
 # Copy example sources (needed for python and SQL)
-mkdir -p "$DISTDIR/examples/src/main"
-cp -r "$SPARK_HOME"/examples/src/main "$DISTDIR/examples/src/"
+#mkdir -p "$DISTDIR/examples/src/main"
+#cp -r "$SPARK_HOME"/examples/src/main "$DISTDIR/examples/src/"
 
 if [ "$SPARK_HIVE" == "1" ]; then
   cp "$SPARK_HOME"/lib_managed/jars/datanucleus*.jar "$DISTDIR/lib/"
@@ -220,7 +229,6 @@ cp -r "$SPARK_HOME/ec2" "$DISTDIR"
 if [ -d "$SPARK_HOME"/R/lib/SparkR ]; then
   mkdir -p "$DISTDIR"/R/lib
   cp -r "$SPARK_HOME/R/lib/SparkR" "$DISTDIR"/R/lib
-  cp "$SPARK_HOME/R/lib/sparkr.zip" "$DISTDIR"/R/lib
 fi
 
 # Download and copy in tachyon, if requested
@@ -241,10 +249,10 @@ if [ "$SPARK_TACHYON" == "true" ]; then
   fi
 
   tar xzf "${TACHYON_TGZ}"
-  cp "tachyon-${TACHYON_VERSION}/assembly/target/tachyon-assemblies-${TACHYON_VERSION}-jar-with-dependencies.jar" "$DISTDIR/lib"
+  cp "tachyon-${TACHYON_VERSION}/core/target/tachyon-${TACHYON_VERSION}-jar-with-dependencies.jar" "$DISTDIR/lib"
   mkdir -p "$DISTDIR/tachyon/src/main/java/tachyon/web"
   cp -r "tachyon-${TACHYON_VERSION}"/{bin,conf,libexec} "$DISTDIR/tachyon"
-  cp -r "tachyon-${TACHYON_VERSION}"/servers/src/main/java/tachyon/web "$DISTDIR/tachyon/src/main/java/tachyon/web"
+  cp -r "tachyon-${TACHYON_VERSION}"/core/src/main/java/tachyon/web "$DISTDIR/tachyon/src/main/java/tachyon/web"
 
   if [[ `uname -a` == Darwin* ]]; then
     # need to run sed differently on osx
@@ -257,11 +265,20 @@ if [ "$SPARK_TACHYON" == "true" ]; then
   rm -rf "$TMPD"
 fi
 
+if [ "$INCLUDE_JDK" == "true" ]; then
+  curl -O "$JDK_URL"
+  tar xzf "$JDK_TAR_GZ"
+  mv "$JDK_DIR" "$DISTDIR/jdk"
+fi
+
 if [ "$MAKE_TGZ" == "true" ]; then
   TARDIR_NAME=spark-$VERSION-bin-$NAME
   TARDIR="$SPARK_HOME/$TARDIR_NAME"
   rm -rf "$TARDIR"
   cp -r "$DISTDIR" "$TARDIR"
-  tar czf "spark-$VERSION-bin-$NAME.tgz" -C "$SPARK_HOME" "$TARDIR_NAME"
+  tar czf "spark-$VERSION-bin-$NAME.tar.gz" -C "$SPARK_HOME" "$TARDIR_NAME"
   rm -rf "$TARDIR"
+  mkdir -p .dist/
+  mv "spark-$VERSION-bin-$NAME.tar.gz" .dist/
+  touch .dist/.application
 fi

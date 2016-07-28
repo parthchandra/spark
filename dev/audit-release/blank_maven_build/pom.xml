@@ -23,6 +23,9 @@
   <name>Spark Release Auditor</name>
   <packaging>jar</packaging>
   <version>1.0</version>
+  <properties>
+    <project.type>library</project.type>
+  </properties>
   <repositories>
     <repository>
       <id>Spray.cc repository</id>
