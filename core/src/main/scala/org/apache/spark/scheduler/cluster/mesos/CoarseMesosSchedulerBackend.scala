@@ -185,7 +185,7 @@ private[spark] class CoarseMesosSchedulerBackend(
       val basename = uri.get.split('/').last.split('.').head
       val executorId = sparkExecutorId(offer.getSlaveId.getValue, taskId.toString)
       command.setValue(
-        s"cd /app/$basename*; $prefixEnv " +
+        s"cd app/$basename*; $prefixEnv " +
          "./bin/spark-class org.apache.spark.executor.CoarseGrainedExecutorBackend" +
         s" --driver-url $driverURL" +
         s" --executor-id $executorId" +

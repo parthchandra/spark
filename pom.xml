@@ -19,14 +19,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
+  <groupId>com.apple.pie.spark</groupId>
+  <artifactId>spark-parent_2.10</artifactId>
+  <version>1.5.2-pie1.0.3-SNAPSHOT</version>
   <parent>
     <groupId>com.apple.cie.rio</groupId>
     <artifactId>maven-parent-pom</artifactId>
     <version>0.3.7</version>
   </parent>
-  <groupId>com.apple.pie.spark</groupId>
-  <artifactId>spark-parent_2.11</artifactId>
-  <version>1.5.2-pie1.0.1</version>
   <packaging>pom</packaging>
   <name>Spark Project Parent POM</name>
   <url>http://spark.apache.org/</url>
@@ -159,7 +159,7 @@
     <httpclient.classic.version>3.1</httpclient.classic.version>
     <commons.math3.version>3.4.1</commons.math3.version>
     <scala.version>2.10.4</scala.version>
-    <scala.binary.version>2.11</scala.binary.version>
+    <scala.binary.version>2.10</scala.binary.version>
     <jline.version>${scala.version}</jline.version>
     <jline.groupid>org.scala-lang</jline.groupid>
     <codehaus.jackson.version>1.9.13</codehaus.jackson.version>
@@ -1832,7 +1832,7 @@
             </execution>
           </executions>
           <configuration>
-            <scala.version>${scala.version}</scala.version>
+            <scalaVersion>${scala.version}</scalaVersion>
             <recompileMode>incremental</recompileMode>
             <useZincServer>true</useZincServer>
             <args>
@@ -2381,6 +2381,9 @@
 
     <profile>
       <id>yarn</id>
+      <activation>
+        <property><name>yarn</name></property>
+      </activation>
       <modules>
         <module>yarn</module>
         <module>network/yarn</module>
@@ -2389,6 +2392,9 @@
 
     <profile>
       <id>hive-thriftserver</id>
+      <activation>
+        <property><name>hive-thriftserver</name></property>
+      </activation>
       <modules>
         <module>sql/hive-thriftserver</module>
       </modules>
@@ -2397,7 +2403,7 @@
     <profile>
       <id>scala-2.10</id>
       <activation>
-        <property><name>scala-2.10</name></property>
+        <property><name>!scala-2.11</name></property>
       </activation>
       <properties>
         <scala.version>2.10.4</scala.version>
@@ -2429,14 +2435,12 @@
     <profile>
       <id>scala-2.11</id>
       <activation>
-        <property><name>!scala-2.10</name></property>
+        <property><name>scala-2.11</name></property>
       </activation>
       <properties>
         <scala.version>2.11.7</scala.version>
         <scala.binary.version>2.11</scala.binary.version>
         <jline.version>2.11.0-M3</jline.version>
-        <hadoop.version>2.6.0-mr1-cdh5.6.0</hadoop.version>
-        <skipTests>true</skipTests>
       </properties>
     </profile>
 
