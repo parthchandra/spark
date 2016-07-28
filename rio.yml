@@ -132,7 +132,7 @@ builds:
     build:
       template: freestyle:v1:snapshot
       steps:
-        - ./rio-maven-custom-build.sh --scala 2.10 --hadoop "2.6.0-mr1-cdh5.6.0" --snapshot --maven-opts "-Xmx4g -XX:MaxPermSize=1g -XX:ReservedCodeCacheSize=1g"
+        - ./rio-maven-custom-build.sh --scala 2.10 --hadoop "2.6.0-mr1-cdh5.4.2" --snapshot --maven-opts "-Xmx4g -XX:MaxPermSize=1g -XX:ReservedCodeCacheSize=1g"
     trigger:
       gitPush: false
       scm: '@hourly'
@@ -150,7 +150,7 @@ builds:
     build:
       template: freestyle:v1:release
       steps:
-        - ./rio-maven-custom-build.sh --scala 2.10 --hadoop "2.6.0-mr1-cdh5.6.0" --release --maven-opts "-Xmx4g -XX:MaxPermSize=1g -XX:ReservedCodeCacheSize=1g"
+        - ./rio-maven-custom-build.sh --scala 2.10 --hadoop "2.6.0-mr1-cdh5.4.2" --release --maven-opts "-Xmx4g -XX:MaxPermSize=1g -XX:ReservedCodeCacheSize=1g"
     trigger:
       gitPush: false
     publish:
@@ -167,7 +167,7 @@ builds:
     build:
       template: freestyle:v1:snapshot
       steps:
-        - ./rio-maven-custom-build.sh --scala 2.11 --hadoop "2.6.0-mr1-cdh5.6.0" --snapshot --maven-opts "-Xmx4g -XX:MaxPermSize=1g -XX:ReservedCodeCacheSize=1g"
+        - ./rio-maven-custom-build.sh --scala 2.11 --hadoop "2.6.0-mr1-cdh5.4.2" --snapshot --maven-opts "-Xmx4g -XX:MaxPermSize=1g -XX:ReservedCodeCacheSize=1g"
     trigger:
       gitPush: false
       scm: '@hourly'
@@ -185,7 +185,7 @@ builds:
     build:
       template: freestyle:v1:release
       steps:
-        - ./rio-maven-custom-build.sh --scala 2.11 --hadoop "2.6.0-mr1-cdh5.6.0" --release --maven-opts "-Xmx4g -XX:MaxPermSize=1g -XX:ReservedCodeCacheSize=1g"
+        - ./rio-maven-custom-build.sh --scala 2.11 --hadoop "2.6.0-mr1-cdh5.4.2" --release --maven-opts "-Xmx4g -XX:MaxPermSize=1g -XX:ReservedCodeCacheSize=1g"
     trigger:
       gitPush: false
     publish:
@@ -204,7 +204,7 @@ builds:
     build:
       template: freestyle:v1:slug
       steps:
-        - ./make-distribution.sh --tgz --skip-java-test -DskipTests=true -Dscala-2.10=enabled -Dhive-thriftserver=enabled -Dscala.version=2.10.5 -Dscala.binary.version=2.10 -Dhadoop.version=2.6.0-mr1-cdh5.6.0
+        - ./make-distribution.sh --tgz --skip-java-test -DskipTests=true -Dscala-2.10=enabled -Dhive-thriftserver=enabled -Dscala.version=2.10.5 -Dscala.binary.version=2.10 -Dhadoop.version=2.6.0-mr1-cdh5.4.2
     trigger:
       gitPush: false
     publish:
@@ -224,7 +224,7 @@ builds:
       template: freestyle:v1:slug
       steps:
         - ./dev/change-scala-version.sh 2.11
-        - ./make-distribution.sh --tgz --skip-java-test -DskipTests=true -Dscala-2.11=enabled -Dhive-thriftserver=enabled -Dscala.version=2.11.7 -Dscala.binary.version=2.11 -Dhadoop.version=2.6.0-mr1-cdh5.6.0
+        - ./make-distribution.sh --tgz --skip-java-test -DskipTests=true -Dscala-2.11=enabled -Dhive-thriftserver=enabled -Dscala.version=2.11.7 -Dscala.binary.version=2.11 -Dhadoop.version=2.6.0-mr1-cdh5.4.2
     trigger:
       gitPush: false
     publish:
