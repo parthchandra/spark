@@ -95,7 +95,7 @@ builds:
     build:
       template: freestyle:v1:slug
       steps:
-        - ./make-distribution.sh --tgz --skip-java-test -DskipTests=true -Dscala-2.10=enabled -Dhive-thriftserver=enabled -Dscala.version=2.10 -Dscala.binary.version=2.10 -Dhadoop.version=2.6.0-mr1-cdh5.6.0
+        - ./make-distribution.sh --tgz --skip-java-test -DskipTests=true -Dscala-2.10=enabled -Dhive-thriftserver=enabled -Dscala.version=2.10.4 -Dscala.binary.version=2.10 -Dhadoop.version=2.6.0-mr1-cdh5.6.0
     trigger:
       gitPush: false
     publish:
@@ -204,7 +204,7 @@ builds:
     build:
       template: freestyle:v1:slug
       steps:
-        - ./make-distribution.sh --tgz --skip-java-test -DskipTests=true -Dscala-2.10=enabled -Dhive-thriftserver=enabled -Dscala.version=2.10 -Dscala.binary.version=2.10 -Dhadoop.version=2.6.0-mr1-cdh5.6.0
+        - ./make-distribution.sh --tgz --skip-java-test -DskipTests=true -Dscala-2.10=enabled -Dhive-thriftserver=enabled -Dscala.version=2.10.5 -Dscala.binary.version=2.10 -Dhadoop.version=2.6.0-mr1-cdh5.6.0
     trigger:
       gitPush: false
     publish:
