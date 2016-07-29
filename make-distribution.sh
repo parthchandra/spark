@@ -150,7 +150,7 @@ fi
 echo "Spark version is $VERSION"
 
 if [ "$MAKE_TGZ" == "true" ]; then
-  echo "Making spark-$VERSION-bin-$NAME.tgz"
+  echo "Making spark-$VERSION-bin-$NAME-$SCALA_VERSION.tgz"
 else
   echo "Making distribution for Spark $VERSION in $DISTDIR..."
 fi
@@ -259,12 +259,12 @@ if [ "$SPARK_TACHYON" == "true" ]; then
 fi
 
 if [ "$MAKE_TGZ" == "true" ]; then
-  TARDIR_NAME=spark-$VERSION-bin-$NAME
+  TARDIR_NAME=spark-$VERSION-bin-$NAME-$SCALA_VERSION
   TARDIR="$SPARK_HOME/$TARDIR_NAME"
   rm -rf "$TARDIR"
   cp -r "$DISTDIR" "$TARDIR"
-  tar czf "spark-$VERSION-bin-$NAME.tgz" -C "$SPARK_HOME" "$TARDIR_NAME"
+  tar czf "spark-$VERSION-bin-$NAME-$SCALA_VERSION.tgz" -C "$SPARK_HOME" "$TARDIR_NAME"
   rm -rf "$TARDIR"
   mkdir -p .dist/
-  mv "spark-$VERSION-bin-$NAME.tgz" .dist/
+  mv "spark-$VERSION-bin-$NAME-$SCALA_VERSION.tgz" .dist/
 fi

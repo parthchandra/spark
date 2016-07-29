@@ -135,7 +135,6 @@ builds:
         - ./rio-maven-custom-build.sh --scala 2.10 --hadoop "2.6.0-cdh5.4.2" --snapshot --maven-opts "-Xmx4g -XX:MaxPermSize=1g -XX:ReservedCodeCacheSize=1g"
     trigger:
       gitPush: false
-      scm: '@hourly'
     publish:
       reports:
         junit: false
@@ -155,7 +154,7 @@ builds:
       gitPush: false
     publish:
       archives:
-        targetPath: com/apple/pie/spark/distribution/2.10/1.6.2-pie1.0.0-SNAPSHOT/
+        targetPath: com/apple/pie/spark/1.6.2-pie1.0.0-SNAPSHOT-bin-2.6.0-cdh5.4.2-2.10/
     finally:
       tag:
         enabled: true
@@ -170,7 +169,6 @@ builds:
         - ./rio-maven-custom-build.sh --scala 2.11 --hadoop "2.6.0-cdh5.4.2" --snapshot --maven-opts "-Xmx4g -XX:MaxPermSize=1g -XX:ReservedCodeCacheSize=1g"
     trigger:
       gitPush: false
-      scm: '@hourly'
     publish:
       reports:
         junit: false
@@ -191,7 +189,7 @@ builds:
       gitPush: false
     publish:
       archives:
-        targetPath: com/apple/pie/spark/distribution/2.11/1.6.2-pie1.0.0-SNAPSHOT/
+        targetPath: com/apple/pie/spark/1.6.2-pie1.0.0-SNAPSHOT-bin-2.6.0-cdh5.4.2-2.11/
     finally:
       tag:
         enabled: true
