@@ -35,16 +35,9 @@ SPARK_HOME="$(cd "`dirname "$0"`"; pwd)"
 DISTDIR="$SPARK_HOME/dist"
 
 SPARK_TACHYON=false
-# add --with-jdk option
-INCLUDE_JDK=true
 TACHYON_VERSION="0.7.1"
-JDK_VERSION="8u92"
 TACHYON_TGZ="tachyon-${TACHYON_VERSION}-bin.tar.gz"
 TACHYON_URL="https://github.com/amplab/tachyon/releases/download/v${TACHYON_VERSION}/${TACHYON_TGZ}"
-
-JDK_DIR="jdk1.8.0_92"
-JDK_TAR_GZ="jdk-${JDK_VERSION}-linux-x64.tar.gz"
-JDK_URL="https://artifacts.geo.apple.com/artifactory/tools/java-se-jdk/jdk8-linux-x64/${JDK_TAR_GZ}"
 
 MAKE_TGZ=false
 NAME=none
@@ -157,7 +150,7 @@ fi
 echo "Spark version is $VERSION"
 
 if [ "$MAKE_TGZ" == "true" ]; then
-  echo "Making spark-$VERSION-bin-$NAME.tar.gz"
+  echo "Making spark-$VERSION-bin-$NAME.tgz"
 else
   echo "Making distribution for Spark $VERSION in $DISTDIR..."
 fi
@@ -265,20 +258,13 @@ if [ "$SPARK_TACHYON" == "true" ]; then
   rm -rf "$TMPD"
 fi
 
-if [ "$INCLUDE_JDK" == "true" ]; then
-  curl -O "$JDK_URL"
-  tar xzf "$JDK_TAR_GZ"
-  mv "$JDK_DIR" "$DISTDIR/jdk"
-fi
-
 if [ "$MAKE_TGZ" == "true" ]; then
   TARDIR_NAME=spark-$VERSION-bin-$NAME
   TARDIR="$SPARK_HOME/$TARDIR_NAME"
   rm -rf "$TARDIR"
   cp -r "$DISTDIR" "$TARDIR"
-  tar czf "spark-$VERSION-bin-$NAME.tar.gz" -C "$SPARK_HOME" "$TARDIR_NAME"
+  tar czf "spark-$VERSION-bin-$NAME.tgz" -C "$SPARK_HOME" "$TARDIR_NAME"
   rm -rf "$TARDIR"
   mkdir -p .dist/
-  mv "spark-$VERSION-bin-$NAME.tar.gz" .dist/
-  touch .dist/.application
+  mv "spark-$VERSION-bin-$NAME.tgz" .dist/
 fi
