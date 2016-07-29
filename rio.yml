@@ -155,7 +155,7 @@ builds:
       gitPush: false
     publish:
       archives:
-        targetPath: com/apple/pie/spark/distribution/2.10/1.6.2-pie1.0/
+        targetPath: com/apple/pie/spark/distribution/2.10/1.6.2-pie1.0.0-SNAPSHOT/
     finally:
       tag:
         enabled: true
@@ -185,12 +185,13 @@ builds:
     build:
       template: freestyle:v1:release
       steps:
+        - ./dev/change-scala-version.sh 2.11
         - ./make-distribution.sh --tgz --skip-java-test -DskipTests=true -Dscala.version=2.11.7 -Dscala.binary.version=2.11 -Dhadoop.version=2.6.0-cdh5.4.2
     trigger:
       gitPush: false
     publish:
       archives:
-        targetPath: com/apple/pie/spark/distribution/2.11/1.6.2-pie1.0/
+        targetPath: com/apple/pie/spark/distribution/2.11/1.6.2-pie1.0.0-SNAPSHOT/
     finally:
       tag:
         enabled: true
