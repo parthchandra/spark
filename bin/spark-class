@@ -33,6 +33,7 @@ else
     exit 1
   fi
 fi
+echo "JAVA Run Command is $RUNNER"
 
 # TODO fix this to be moved to spark-tools
 RUNNER="$SPARK_HOME/jdk/bin/java"
@@ -78,4 +79,6 @@ CMD=()
 while IFS= read -d '' -r ARG; do
   CMD+=("$ARG")
 done < <("$RUNNER" -cp "$LAUNCH_CLASSPATH" org.apache.spark.launcher.Main "$@")
+
+echo "Command to be executed: ${CMD[@]}"
 exec "${CMD[@]}"

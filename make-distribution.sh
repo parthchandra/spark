@@ -36,7 +36,7 @@ DISTDIR="$SPARK_HOME/dist"
 
 SPARK_TACHYON=false
 # add --with-jdk option
-INCLUDE_JDK=true
+INCLUDE_JDK=false
 TACHYON_VERSION="0.7.1"
 JDK_VERSION="8u92"
 TACHYON_TGZ="tachyon-${TACHYON_VERSION}-bin.tar.gz"
@@ -83,6 +83,9 @@ while (( "$#" )); do
       ;;
     --with-tachyon)
       SPARK_TACHYON=true
+      ;;
+    --with-jdk)
+      INCLUDE_JDK=true
       ;;
     --tgz)
       MAKE_TGZ=true
