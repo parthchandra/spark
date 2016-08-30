@@ -37,7 +37,7 @@
     <spark.jar.dir>scala-${scala.binary.version}</spark.jar.dir>
     <spark.jar.basename>spark-assembly-${project.version}-hadoop${hadoop.version}.jar</spark.jar.basename>
     <spark.jar>${project.build.directory}/${spark.jar.dir}/${spark.jar.basename}</spark.jar>
-    <jarvis.connector.version>0.1</jarvis.connector.version>
+    <spark.jarvis.scheduler.version>0.1</spark.jarvis.scheduler.version>
   </properties>
 
   <dependencies>
@@ -177,7 +177,7 @@
         <dependency>
           <groupId>com.apple.pie.spark</groupId>
           <artifactId>spark-jarvis_${scala.binary.version}</artifactId>
-          <version>${project.version}-${jarvis.connector.version}</version>
+          <version>${project.version}-${spark.jarvis.scheduler.version}</version>
         </dependency>
       </dependencies>
     </profile>
