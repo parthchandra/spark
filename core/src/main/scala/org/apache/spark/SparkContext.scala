@@ -2653,6 +2653,33 @@ object SparkContext extends Logging {
         }
         (backend, scheduler)
 
+      case JARVIS_REGEX(sparkUrl) =>
+        logInfo("Jarvis is chosen.")
+
+        val scheduler = try {
+          val clazz = Utils.classForName("org.apache.spark.JarvisClusterScheduler")
+          val cons = clazz.getConstructor(classOf[SparkContext])
+          cons.newInstance(sc).asInstanceOf[TaskSchedulerImpl]
+        } catch {
+          // TODO: Enumerate the exact reasons why it can fail
+          // But irrespective of it, it means we cannot proceed !
+          case e: Exception => {
+            throw new SparkException("JARVIS mode not available ?", e)
+          }
+        }
+        val backend = try {
+          val clazz =
+            Utils.classForName("org.apache.spark.JarvisSchedulerBackend")
+          val cons = clazz.getConstructor(classOf[TaskSchedulerImpl], classOf[SparkContext], classOf[String])
+          cons.newInstance(scheduler, sc, sparkUrl).asInstanceOf[CoarseGrainedSchedulerBackend]
+        } catch {
+          case e: Exception => {
+            throw new SparkException("JARVIS mode not available ?", e)
+          }
+        }
+        scheduler.initialize(backend)
+        (backend, scheduler)
+
       case "yarn-standalone" | "yarn-cluster" =>
         if (master == "yarn-standalone") {
           logWarning(
@@ -2753,6 +2780,8 @@ private object SparkMasterRegex {
   val MESOS_REGEX = """mesos://(.*)""".r
   // Regular expression for connection to Simr cluster
   val SIMR_REGEX = """simr://(.*)""".r
+  // Regular expression for jarvis managed cluster
+  val JARVIS_REGEX = """jarvis://(.*)""".r
 }
 
 /**
