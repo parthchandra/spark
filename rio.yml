@@ -101,6 +101,8 @@ builds:
     publish:
       archives:
         targetPath: com/apple/pie/spark/distribution/2.10/1.5.2-pie1.0.2/
+      slug:
+        release: true
     finally:
       tag:
         enabled: true
@@ -121,6 +123,8 @@ builds:
     publish: 
       archives:
         targetPath: com/apple/pie/spark/distribution/2.11/1.5.2-pie1.0.2/
+      slug:
+        release: true
     finally:
       tag:
         enabled: true
@@ -210,6 +214,8 @@ builds:
     publish:
       archives:
         targetPath: com/apple/pie/spark/distribution/2.10/1.6.2-pie1.0.0/
+      slug:
+        release: true
     finally:
       tag:
         enabled: true
@@ -230,6 +236,8 @@ builds:
     publish:
       archives:
         targetPath: com/apple/pie/spark/distribution/2.11/1.6.2-pie1.0.0/
+      slug:
+        release: true
     finally:
       tag:
         enabled: true

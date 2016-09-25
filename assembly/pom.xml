@@ -21,7 +21,7 @@
   <parent>
     <groupId>com.apple.pie.spark</groupId>
     <artifactId>spark-parent_2.10</artifactId>
-    <version>1.5.2-pie1.0.3-SNAPSHOT</version>
+    <version>1.5.2-pie1.0.4</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
@@ -29,15 +29,10 @@
   <artifactId>spark-assembly_2.10</artifactId>
   <name>Spark Project Assembly</name>
   <url>http://spark.apache.org/</url>
-  <packaging>pom</packaging>
 
   <properties>
     <project.type>library</project.type>
     <sbt.project.name>assembly</sbt.project.name>
-    <spark.jar.dir>scala-${scala.binary.version}</spark.jar.dir>
-    <spark.jar.basename>spark-assembly-${project.version}-hadoop${hadoop.version}.jar</spark.jar.basename>
-    <spark.jar>${project.build.directory}/${spark.jar.dir}/${spark.jar.basename}</spark.jar>
-    <spark.jarvis.scheduler.version>0.1</spark.jarvis.scheduler.version>
   </properties>
 
   <dependencies>
@@ -80,20 +75,6 @@
 
   <build>
     <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-deploy-plugin</artifactId>
-        <configuration>
-          <skip>true</skip>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-install-plugin</artifactId>
-        <configuration>
-          <skip>true</skip>
-        </configuration>
-      </plugin>
         <!-- zip pyspark archives to run python application on yarn mode -->
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -168,20 +149,6 @@
   </build>
 
   <profiles>
-    <profile>
-      <id>jarvis</id>
-      <activation>
-        <property><name>jarvis</name></property>
-      </activation>
-      <dependencies>
-        <dependency>
-          <groupId>com.apple.pie.spark</groupId>
-          <artifactId>spark-jarvis_${scala.binary.version}</artifactId>
-          <version>${project.version}-${spark.jarvis.scheduler.version}</version>
-        </dependency>
-      </dependencies>
-    </profile>
-
     <profile>
       <id>yarn</id>
       <dependencies>
