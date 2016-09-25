@@ -142,6 +142,8 @@ echo -e "MAVEN_OPTS exported: ${MAVEN_OPTS}"
 execute_command "./dev/change-scala-version.sh" $SCALA_VERSION "$@"
 
 ##Get POM Variables
+$("$MVN" help:evaluate -Dexpression=project.artifactId -X $@)
+
 POM_PROJECT_ARTIFACT_ID=$("$MVN" help:evaluate -Dexpression=project.artifactId $@ 2>/dev/null | grep -v "INFO" | tail -n 1)
 POM_PROJECT_VERSION=$("$MVN" help:evaluate -Dexpression=project.version $@ 2>/dev/null | grep -v "INFO" | tail -n 1)
 POM_SCALA_VERSION=$("$MVN" help:evaluate -Dexpression=scala.binary.version $@ 2>/dev/null\
