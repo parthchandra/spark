@@ -86,9 +86,12 @@ private[spark] class ExecutorAllocationManager(
   import ExecutorAllocationManager._
 
   // Lower and upper bounds on the number of executors.
-  private val minNumExecutors = conf.getInt("spark.dynamicAllocation.minExecutors", 0)
-  private val maxNumExecutors = conf.getInt("spark.dynamicAllocation.maxExecutors",
+  private var minNumExecutors = conf.getInt("spark.dynamicAllocation.minExecutors", 0)
+  private var maxNumExecutors = conf.getInt("spark.dynamicAllocation.maxExecutors",
     Integer.MAX_VALUE)
+
+  private var pinMinNumExecutors: Boolean = false
+  private var pinMaxNumExecutors: Boolean = false
 
   // How long there must be backlogged tasks for before an addition is triggered (seconds)
   private val schedulerBacklogTimeoutS = conf.getTimeAsSeconds(
@@ -238,6 +241,103 @@ private[spark] class ExecutorAllocationManager(
   def stop(): Unit = {
     executor.shutdown()
     executor.awaitTermination(10, TimeUnit.SECONDS)
+  }
+
+  /**
+    * @return cores in use
+    */
+  def getCurrentResourceUsage(): Int = {
+    return conf.getInt("spark.executor.cores", 1) * executorIds.size
+  }
+
+  /**
+    * Set the lower bound of executors. This would throw an Exception if the lower bound is pinned.
+    * @param minNumExecutors New lower bound of executors.
+    */
+  def setMinNumExecutors(minNumExecutors: Int): Unit = synchronized {
+    if (pinMinNumExecutors) {
+      throw new SparkException(s"Cannot set minNumExecutor, " +
+        s"it has been pinned to ${this.minNumExecutors}")
+    }
+    this.minNumExecutors = minNumExecutors
+    validateSettings()
+  }
+
+  /**
+    * Get current lower bound of executors
+    * @return minNumExecutors
+    */
+  def getMinNumExecutors: Int = synchronized {
+    minNumExecutors
+  }
+
+  /**
+    * Set the upper bound of executors. This would throw an Exception if the upper bound is pinned.
+    * @param maxNumExecutors New upper bound of executors.
+    */
+  def setMaxNumExecutors(maxNumExecutors: Int): Unit = synchronized {
+    if (pinMaxNumExecutors) {
+      throw new SparkException(s"Cannot set maxNumExecutor, " +
+        s"it has been pinned to ${this.maxNumExecutors}")
+    }
+    this.maxNumExecutors = maxNumExecutors
+    validateSettings()
+  }
+
+  /**
+    * Get current upper bound of executors
+    * @return maxNumExecutors
+    */
+  def getMaxNumExecutors: Int = synchronized {
+    maxNumExecutors
+  }
+
+  /**
+    * Pin the lower bound of executor numbers. This would throw an exception if the lower bound is pinned to another number.
+    * @param minNumExecutors the pinned value.
+    */
+  def pinMinNumExecutors(minNumExecutors: Int): Unit = synchronized {
+    if (this.pinMinNumExecutors && this.minNumExecutors != minNumExecutors) {
+      throw new SparkException(s"Cannot set minNumExecutor, " +
+        s"it has been pinned to ${this.minNumExecutors}")
+    }
+    this.minNumExecutors = minNumExecutors
+    validateSettings()
+    this.pinMinNumExecutors = true
+  }
+
+  /**
+    * Pin the upper bound of executor numbers. This would throw an exception if the upper bound is pinned to another number.
+    * @param maxNumExecutors the pinned value.
+    */
+  def pinMaxNumExecutors(maxNumExecutors: Int): Unit = synchronized {
+    if (this.pinMaxNumExecutors && this.maxNumExecutors != maxNumExecutors) {
+      throw new SparkException(s"Cannot set maxNumExecutor, " +
+        s"it has been pinned to ${this.maxNumExecutors}")
+    }
+    this.maxNumExecutors = maxNumExecutors
+    validateSettings()
+    this.pinMaxNumExecutors = true
+  }
+
+  /**
+    * Force remove a number of executors. Idle executors should be killed first.
+    * @param numExecutorsToRemove
+    * @return number of executors killed
+    */
+  def removeExecutors(numExecutorsToRemove: Int): Boolean = synchronized {
+    if (executorIds.size - numExecutorsToRemove < minNumExecutors) {
+      logError(s"Cannot kill $numExecutorsToRemove, as only ${executorIds.size} are alive, " +
+        s"and the lower bound has been set to $minNumExecutors")
+    }
+    removeTimes.retain { case (executorId, expireTime) =>
+      val expired = now >= expireTime
+      if (expired) {
+        initializing = false
+        removeExecutor(executorId)
+      }
+      !expired
+    }
   }
 
   /**
