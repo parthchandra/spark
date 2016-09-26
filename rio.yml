@@ -30,10 +30,6 @@ builds:
     publish:
       reports:
         junit: false
-    finally:
-      tag:
-        enabled: true
-        expression: "snapshots_2.10/$CODE_VERSION-$RIO_BUILD_NUMBER"
 
   - name: pie-spark-2.10_1.5.2-release
     branchName: pie-spark-1.5.2
@@ -65,10 +61,6 @@ builds:
     publish:
       reports:
         junit: false
-    finally:
-      tag:
-        enabled: true
-        expression: "snapshots_2.11/$CODE_VERSION-$RIO_BUILD_NUMBER"
 
   - name: pie-spark-2.11_1.5.2-release
     branchName: pie-spark-1.5.2
