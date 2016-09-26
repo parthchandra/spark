@@ -29,10 +29,14 @@
   <artifactId>spark-assembly_2.10</artifactId>
   <name>Spark Project Assembly</name>
   <url>http://spark.apache.org/</url>
+  <packaging>pom</packaging>
 
   <properties>
     <project.type>library</project.type>
     <sbt.project.name>assembly</sbt.project.name>
+    <spark.jar.dir>scala-${scala.binary.version}</spark.jar.dir>
+    <spark.jar.basename>spark-assembly-${project.version}-hadoop${hadoop.version}.jar</spark.jar.basename>
+    <spark.jar>${project.build.directory}/${spark.jar.dir}/${spark.jar.basename}</spark.jar>
   </properties>
 
   <dependencies>
@@ -75,6 +79,20 @@
 
   <build>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-install-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
         <!-- zip pyspark archives to run python application on yarn mode -->
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
