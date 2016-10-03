@@ -20,6 +20,7 @@ package org.apache.spark
 import java.util.concurrent.TimeUnit
 
 import scala.collection.mutable
+import scala.util.control.Breaks._
 import scala.util.control.ControlThrowable
 
 import com.codahale.metrics.{Gauge, MetricRegistry}
@@ -329,14 +330,31 @@ private[spark] class ExecutorAllocationManager(
     if (executorIds.size - numExecutorsToRemove < minNumExecutors) {
       logError(s"Cannot kill $numExecutorsToRemove, as only ${executorIds.size} are alive, " +
         s"and the lower bound has been set to $minNumExecutors")
-    }
-    removeTimes.retain { case (executorId, expireTime) =>
-      val expired = now >= expireTime
-      if (expired) {
-        initializing = false
-        removeExecutor(executorId)
+      false
+    } else {
+      val now = clock.getTimeMillis
+      var executorRemoved = 0
+      val executors = removeTimes.retain { case (executorId, expireTime) =>
+        val expired = now >= expireTime
+        if (expired) {
+          initializing = false
+          if (removeExecutor(executorId)) executorRemoved += 1
+        }
+        !expired
       }
-      !expired
+      breakable {
+        for (id <- executorIds) {
+          if (executorRemoved >= numExecutorsToRemove) {
+            break
+          }
+          if (!executorsPendingToRemove.contains(id)) {
+            if (removeExecutor(id)) executorRemoved += 1
+          }
+        }
+      }
+      logInfo(s"Asked to remove $numExecutorsToRemove executors, " +
+        s"actually removed $executorRemoved.")
+      executorRemoved >= numExecutorsToRemove
     }
   }
 

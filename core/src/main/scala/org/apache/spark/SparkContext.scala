@@ -241,6 +241,7 @@ class SparkContext(config: SparkConf) extends Logging with ExecutorAllocationCli
   private var _jars: Seq[String] = _
   private var _files: Seq[String] = _
   private var _shutdownHookRef: AnyRef = _
+  private var _dynamicAllocationEnabled: Boolean = false
 
   /* ------------------------------------------------------------------------------------- *
    | Accessors and public fields. These provide access to the internal state of the        |
@@ -554,13 +555,13 @@ class SparkContext(config: SparkConf) extends Logging with ExecutorAllocationCli
       }
 
     // Optionally scale number of executors dynamically based on workload. Exposed for testing.
-    val dynamicAllocationEnabled = Utils.isDynamicAllocationEnabled(_conf)
-    if (!dynamicAllocationEnabled && _conf.getBoolean("spark.dynamicAllocation.enabled", false)) {
+    _dynamicAllocationEnabled = Utils.isDynamicAllocationEnabled(_conf)
+    if (!_dynamicAllocationEnabled && _conf.getBoolean("spark.dynamicAllocation.enabled", false)) {
       logWarning("Dynamic Allocation and num executors both set, thus dynamic allocation disabled.")
     }
 
     _executorAllocationManager =
-      if (dynamicAllocationEnabled) {
+      if (_dynamicAllocationEnabled) {
         Some(new ExecutorAllocationManager(this, listenerBus, _conf))
       } else {
         None
@@ -1451,20 +1452,20 @@ class SparkContext(config: SparkConf) extends Logging with ExecutorAllocationCli
   }
 
   def getMinNumExecutors(): Int = {
-    if (dynamicAllocationEnabled) {
+    if (_dynamicAllocationEnabled) {
       executorAllocationManager.get.getMinNumExecutors
     } else 0
   }
 
 
   def getMaxNumExecutors(): Int = {
-    if (dynamicAllocationEnabled) {
+    if (_dynamicAllocationEnabled) {
       executorAllocationManager.get.getMaxNumExecutors
     } else Int.MaxValue
   }
 
   def pinMinNumExecutors(minNumExecutors: Int): Unit = {
-    if (dynamicAllocationEnabled) {
+    if (_dynamicAllocationEnabled) {
       executorAllocationManager.get.pinMinNumExecutors(minNumExecutors)
     } else {
       logError("Set min number of executors requires dynamical allocation to be enabled.")
@@ -1472,7 +1473,7 @@ class SparkContext(config: SparkConf) extends Logging with ExecutorAllocationCli
   }
 
   def pinMaxNumExecutors(maxNumExecutors: Int): Unit = {
-    if (dynamicAllocationEnabled) {
+    if (_dynamicAllocationEnabled) {
       executorAllocationManager.get.pinMaxNumExecutors(maxNumExecutors)
     } else {
       logError("Set max number of executors requires dynamical allocation to be enabled.")
@@ -1480,7 +1481,7 @@ class SparkContext(config: SparkConf) extends Logging with ExecutorAllocationCli
   }
 
   def setMinNumExecutors(minNumExecutors: Int): Unit = {
-    if (dynamicAllocationEnabled) {
+    if (_dynamicAllocationEnabled) {
       executorAllocationManager.get.setMinNumExecutors(minNumExecutors)
     } else {
       logError("Set min number of executors requires dynamical allocation to be enabled.")
@@ -1488,7 +1489,7 @@ class SparkContext(config: SparkConf) extends Logging with ExecutorAllocationCli
   }
 
   def setMaxNumExecutors(maxNumExecutors: Int): Unit = {
-    if (dynamicAllocationEnabled) {
+    if (_dynamicAllocationEnabled) {
       executorAllocationManager.get.setMaxNumExecutors(maxNumExecutors)
     } else {
       logError("Set max number of executors requires dynamical allocation to be enabled.")
