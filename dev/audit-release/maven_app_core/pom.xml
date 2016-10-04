@@ -21,6 +21,9 @@
   <artifactId>spark-audit</artifactId>
   <modelVersion>4.0.0</modelVersion>
   <name>Simple Project</name>
+  <properties>
+    <project.type>library</project.type>
+  </properties>
   <packaging>jar</packaging>
   <version>1.0</version>
   <repositories>

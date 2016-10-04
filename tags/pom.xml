@@ -22,7 +22,7 @@
   <parent>
     <groupId>com.apple.pie.spark</groupId>
     <artifactId>spark-parent_2.10</artifactId>
-    <version>1.6.0-pie1.0.0</version>
+    <version>1.6.0-pie1.0.0-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
@@ -32,6 +32,7 @@
   <name>Spark Project Test Tags</name>
   <url>http://spark.apache.org/</url>
   <properties>
+    <project.type>library</project.type>
     <sbt.project.name>test-tags</sbt.project.name>
   </properties>
 
