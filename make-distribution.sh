@@ -153,10 +153,11 @@ if [ "$NAME" == "none" ]; then
   NAME=$SPARK_HADOOP_VERSION
 fi
 
+SPARK_DISTRIBUTION_FILE_NAME="spark-$VERSION-bin-$NAME.tar.gz"
 echo "Spark version is $VERSION"
 
 if [ "$MAKE_TGZ" == "true" ]; then
-  echo "Making spark-$VERSION-bin-$NAME.tar.gz"
+  echo "Making $SPARK_DISTRIBUTION_FILE_NAME"
 else
   echo "Making distribution for Spark $VERSION in $DISTDIR..."
 fi
@@ -274,8 +275,8 @@ if [ "$MAKE_TGZ" == "true" ]; then
   TARDIR="$SPARK_HOME/$TARDIR_NAME"
   rm -rf "$TARDIR"
   cp -r "$DISTDIR" "$TARDIR"
-  tar czf "spark-$VERSION-bin-$NAME.tar.gz" -C "$SPARK_HOME" "$TARDIR_NAME"
+  tar czf "$SPARK_DISTRIBUTION_FILE_NAME" -C "$SPARK_HOME" "$TARDIR_NAME"
   rm -rf "$TARDIR"
   mkdir -p "$SPARK_HOME/.dist/local-repo/com/apple/pie/spark/spark-distribution_$SCALA_VERSION/$VERSION"
-  mv "spark-$VERSION-bin-$NAME.tar.gz" "$SPARK_HOME/.dist/local-repo/com/apple/pie/spark/spark-distribution_$SCALA_VERSION/$VERSION/spark-$VERSION-bin-$NAME.tar.gz"
+  mv "$SPARK_DISTRIBUTION_FILE_NAME" "$SPARK_HOME/.dist/local-repo/com/apple/pie/spark/spark-distribution_$SCALA_VERSION/$VERSION/$SPARK_DISTRIBUTION_FILE_NAME"
 fi
