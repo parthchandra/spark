@@ -35,9 +35,12 @@ SPARK_HOME="$(cd "`dirname "$0"`"; pwd)"
 DISTDIR="$SPARK_HOME/dist"
 
 SPARK_TACHYON=false
+# add --with-jdk option
+INCLUDE_JDK=false
 TACHYON_VERSION="0.7.1"
 TACHYON_TGZ="tachyon-${TACHYON_VERSION}-bin.tar.gz"
 TACHYON_URL="https://github.com/amplab/tachyon/releases/download/v${TACHYON_VERSION}/${TACHYON_TGZ}"
+USE_EXISTING_BUILD=false
 
 MAKE_TGZ=false
 NAME=none
@@ -76,6 +79,9 @@ while (( "$#" )); do
       ;;
     --with-tachyon)
       SPARK_TACHYON=true
+      ;;
+    --use-existing-build)
+      USE_EXISTING_BUILD=true
       ;;
     --tgz)
       MAKE_TGZ=true
@@ -150,7 +156,7 @@ fi
 echo "Spark version is $VERSION"
 
 if [ "$MAKE_TGZ" == "true" ]; then
-  echo "Making spark-$VERSION-bin-$NAME-$SCALA_VERSION.tgz"
+  echo "Making spark-$VERSION-bin-$NAME.tar.gz"
 else
   echo "Making distribution for Spark $VERSION in $DISTDIR..."
 fi
@@ -166,16 +172,21 @@ cd "$SPARK_HOME"
 
 export MAVEN_OPTS="-Xmx2g -XX:MaxPermSize=512M -XX:ReservedCodeCacheSize=512m"
 
-# Store the command as an array because $MVN variable might have spaces in it.
-# Normal quoting tricks don't work.
-# See: http://mywiki.wooledge.org/BashFAQ/050
-BUILD_COMMAND=("$MVN" clean package -DskipTests $@)
 
-# Actually build the jar
-echo -e "\nBuilding with..."
-echo -e "\$ ${BUILD_COMMAND[@]}\n"
+if [ "$USE_EXISTING_BUILD" == "false" ]; then
+	# Store the command as an array because $MVN variable might have spaces in it.
+	# Normal quoting tricks don't work.
+	# See: http://mywiki.wooledge.org/BashFAQ/050
+	BUILD_COMMAND=("$MVN" clean package -DskipTests $@)
 
-"${BUILD_COMMAND[@]}"
+	# Actually build the jar
+	echo -e "\nBuilding with..."
+	echo -e "\$ ${BUILD_COMMAND[@]}\n"
+
+	"${BUILD_COMMAND[@]}"
+else
+  echo "Using existing build!"
+fi
 
 # Make directories
 rm -rf "$DISTDIR"
@@ -212,7 +223,7 @@ cp -r "$SPARK_HOME/data" "$DISTDIR"
 
 # Copy other things
 mkdir "$DISTDIR"/conf
-cp "$SPARK_HOME"/conf/*.template "$DISTDIR"/conf
+cp "$SPARK_HOME"/conf/* "$DISTDIR"/conf
 cp "$SPARK_HOME/README.md" "$DISTDIR"
 cp -r "$SPARK_HOME/bin" "$DISTDIR"
 cp -r "$SPARK_HOME/python" "$DISTDIR"
@@ -259,12 +270,12 @@ if [ "$SPARK_TACHYON" == "true" ]; then
 fi
 
 if [ "$MAKE_TGZ" == "true" ]; then
-  TARDIR_NAME=spark-$VERSION-bin-$NAME-$SCALA_VERSION
+  TARDIR_NAME=spark-$VERSION-bin-$NAME
   TARDIR="$SPARK_HOME/$TARDIR_NAME"
   rm -rf "$TARDIR"
   cp -r "$DISTDIR" "$TARDIR"
-  tar czf "spark-$VERSION-bin-$NAME-$SCALA_VERSION.tgz" -C "$SPARK_HOME" "$TARDIR_NAME"
+  tar czf "spark-$VERSION-bin-$NAME.tar.gz" -C "$SPARK_HOME" "$TARDIR_NAME"
   rm -rf "$TARDIR"
-  mkdir -p .dist/
-  mv "spark-$VERSION-bin-$NAME-$SCALA_VERSION.tgz" .dist/
+  mkdir -p "$SPARK_HOME/.dist/local-repo/com/apple/pie/spark/spark-distribution_$SCALA_VERSION/$VERSION"
+  mv "spark-$VERSION-bin-$NAME.tar.gz" "$SPARK_HOME/.dist/local-repo/com/apple/pie/spark/spark-distribution_$SCALA_VERSION/$VERSION/spark-$VERSION-bin-$NAME.tar.gz"
 fi

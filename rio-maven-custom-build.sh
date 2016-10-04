@@ -26,14 +26,12 @@ function execute_command () {
 
   # Actually build the jar
   echo -e "\nExecuting: ${COMMAND_WITH_ARGS[@]}"
-
+  
   "${COMMAND_WITH_ARGS[@]}"
-}
+}  
 
 ##Initialise all variables
 SCALA_VERSION="2.11"
-REPO="snapshot"
-IS_DEPLOY=0
 IS_RELEASE=0
 ADDITIONAL_MAVEN_OPTS=""
 SKIP_TESTS="true"
@@ -42,8 +40,7 @@ SKIP_TEST_PACKAGE="false"
 SKIP_TEST_PACKAGE_D_PARAM=""
 HADOOP_VERSION=""
 HADOOP_VERSION_D_PARAM=""
-IS_DRY_RUN=0
-LOCAL_REPO_DIR="/tmp/mvn-local-repo/local-release"
+LOCAL_REPO_DIR="$SPARK_HOME/.dist/local-repo"
 # Parse arguments
 while (( "$#" )); do
   case $1 in
@@ -71,16 +68,10 @@ while (( "$#" )); do
       SKIP_TEST_PACKAGE_D_PARAM="-Dmaven.test.skip=${SKIP_TEST_PACKAGE}"
       ;;
     --snapshot)
-      REPO="snapshot"
-      IS_DEPLOY=1
+      IS_RELEASE=0
       ;;
     --release)
-      REPO="release"
-      IS_DEPLOY=1
       IS_RELEASE=1
-      ;;
-    --dryrun)
-      IS_DRY_RUN=1
       ;;
     *)
       exit_with_usage
@@ -91,8 +82,6 @@ done
 echo -e "Variables initialised for this build:"
 echo -e "====================================="
 echo -e "  SCALA_VERSION=[${SCALA_VERSION}]"
-echo -e "  REPO=[${REPO}]"
-echo -e "  IS_DEPLOY=[${IS_DEPLOY}]"
 echo -e "  IS_RELEASE=[${IS_RELEASE}]"
 echo -e "  ADDITIONAL_MAVEN_OPTS=[${ADDITIONAL_MAVEN_OPTS}]"
 echo -e "  SKIP_TESTS=[${SKIP_TESTS}]"
@@ -142,6 +131,7 @@ echo -e "MAVEN_OPTS exported: ${MAVEN_OPTS}"
 execute_command "./dev/change-scala-version.sh" $SCALA_VERSION "$@"
 
 ##Get POM Variables
+
 POM_PROJECT_ARTIFACT_ID=$("$MVN" help:evaluate -Dexpression=project.artifactId $@ 2>/dev/null | grep -v "INFO" | tail -n 1)
 POM_PROJECT_VERSION=$("$MVN" help:evaluate -Dexpression=project.version $@ 2>/dev/null | grep -v "INFO" | tail -n 1)
 POM_SCALA_VERSION=$("$MVN" help:evaluate -Dexpression=scala.binary.version $@ 2>/dev/null\
@@ -171,17 +161,9 @@ if [ $IS_RELEASE -eq 1 ] ; then
 	execute_command "$MVN" com.apple.cie.rio:rio-maven-plugin:remove-snapshot org.codehaus.mojo:versions-maven-plugin:set "$@"
 fi
 
-REPO_URL="central::default::https://artifacts.geo.apple.com/artifactory/pie-${REPO}-local"
+mkdir -p "${LOCAL_REPO_DIR}"
+REPO_URL="local-release::default::file://${LOCAL_REPO_DIR}"
 
-if [ $IS_DRY_RUN -eq 1 ] ; then
-	mkdir -p "${LOCAL_REPO_DIR}"
-	REPO_URL="local-release::default::file://${LOCAL_REPO_DIR}"
-fi
-
-if [ $IS_DEPLOY -eq 1 ] ; then
-	execute_command "$MVN" clean package install deploy -DaltDeploymentRepository="${REPO_URL}" "$SKIP_TESTS_D_PARAM" "$@"
-else
-	execute_command "$MVN" clean package install "$SKIP_TESTS_D_PARAM" "$@"
-fi
+execute_command "$MVN" package deploy -DaltDeploymentRepository="${REPO_URL}" "$SKIP_TESTS_D_PARAM" "$@"
 
 echo -e "Build Successful"
