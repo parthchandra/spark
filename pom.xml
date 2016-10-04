@@ -2472,7 +2472,7 @@
     <profile>
       <id>yarn</id>
       <activation>
-        <property><name>yarn</name></property>
+        <property><name>yarn</name></property>
       </activation>
       <modules>
         <module>yarn</module>
@@ -2483,7 +2483,7 @@
     <profile>
       <id>hive-thriftserver</id>
       <activation>
-          <property><name>hive-thriftserver</name></property>
+        <property><name>hive-thriftserver</name></property>
       </activation>
       <modules>
         <module>sql/hive-thriftserver</module>
