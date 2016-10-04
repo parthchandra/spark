@@ -19,13 +19,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.apache.spark</groupId>
+    <groupId>com.apple.pie.spark</groupId>
     <artifactId>spark-parent_2.10</artifactId>
-    <version>1.6.0</version>
+    <version>1.6.0-pie1.0.0</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <groupId>org.apache.spark</groupId>
+  <groupId>com.apple.pie.spark</groupId>
   <artifactId>spark-core_2.10</artifactId>
   <properties>
     <sbt.project.name>core</sbt.project.name>
@@ -60,22 +60,22 @@
       <artifactId>hadoop-client</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.apache.spark</groupId>
+      <groupId>com.apple.pie.spark</groupId>
       <artifactId>spark-launcher_${scala.binary.version}</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.apache.spark</groupId>
+      <groupId>com.apple.pie.spark</groupId>
       <artifactId>spark-network-common_${scala.binary.version}</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.apache.spark</groupId>
+      <groupId>com.apple.pie.spark</groupId>
       <artifactId>spark-network-shuffle_${scala.binary.version}</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.apache.spark</groupId>
+      <groupId>com.apple.pie.spark</groupId>
       <artifactId>spark-unsafe_${scala.binary.version}</artifactId>
       <version>${project.version}</version>
     </dependency>
@@ -353,7 +353,7 @@
       <version>0.9</version>
     </dependency>
     <dependency>
-      <groupId>org.apache.spark</groupId>
+      <groupId>com.apple.pie.spark</groupId>
       <artifactId>spark-test-tags_${scala.binary.version}</artifactId>
     </dependency>
   </dependencies>

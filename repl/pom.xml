@@ -19,13 +19,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.apache.spark</groupId>
+    <groupId>com.apple.pie.spark</groupId>
     <artifactId>spark-parent_2.10</artifactId>
-    <version>1.6.0</version>
+    <version>1.6.0-pie1.0.0</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <groupId>org.apache.spark</groupId>
+  <groupId>com.apple.pie.spark</groupId>
   <artifactId>spark-repl_2.10</artifactId>
   <packaging>jar</packaging>
   <name>Spark Project REPL</name>
@@ -39,31 +39,31 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.apache.spark</groupId>
+      <groupId>com.apple.pie.spark</groupId>
       <artifactId>spark-core_${scala.binary.version}</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.apache.spark</groupId>
+      <groupId>com.apple.pie.spark</groupId>
       <artifactId>spark-core_${scala.binary.version}</artifactId>
       <version>${project.version}</version>
       <type>test-jar</type>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.apache.spark</groupId>
+      <groupId>com.apple.pie.spark</groupId>
       <artifactId>spark-bagel_${scala.binary.version}</artifactId>
       <version>${project.version}</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>org.apache.spark</groupId>
+      <groupId>com.apple.pie.spark</groupId>
       <artifactId>spark-mllib_${scala.binary.version}</artifactId>
       <version>${project.version}</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>org.apache.spark</groupId>
+      <groupId>com.apple.pie.spark</groupId>
       <artifactId>spark-sql_${scala.binary.version}</artifactId>
       <version>${project.version}</version>
     </dependency>
@@ -92,7 +92,7 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.apache.spark</groupId>
+      <groupId>com.apple.pie.spark</groupId>
       <artifactId>spark-test-tags_${scala.binary.version}</artifactId>
     </dependency>
     <dependency>
