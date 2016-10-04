@@ -21,7 +21,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.apple.pie.spark</groupId>
   <artifactId>spark-parent_2.10</artifactId>
-  <version>1.6.0-pie1.0.0</version>
+  <version>1.6.0-pie1.0.0-SNAPSHOT</version>
   <parent>
     <groupId>com.apple.cie.rio</groupId>
     <artifactId>maven-parent-pom</artifactId>
@@ -328,6 +328,11 @@
     </pluginRepository>
   </pluginRepositories>
   <dependencies>
+    <dependency>
+      <groupId>com.apple.cie.rio</groupId>
+      <artifactId>rio-foundation</artifactId>
+      <version>LATEST</version>
+    </dependency>
     <!--
       This is a dummy dependency that is used along with the shading plug-in
       to create effective poms on publishing (see SPARK-3812).
@@ -2266,7 +2271,7 @@
         <version>0.7.0</version>
         <configuration>
           <verbose>false</verbose>
-          <failOnViolation>true</failOnViolation>
+          <failOnViolation>false</failOnViolation>
           <includeTestSourceDirectory>false</includeTestSourceDirectory>
           <failOnWarning>false</failOnWarning>
           <sourceDirectory>${basedir}/src/main/scala</sourceDirectory>
@@ -2407,6 +2412,7 @@
             <artifactId>maven-javadoc-plugin</artifactId>
             <configuration>
               <additionalparam>-Xdoclint:all -Xdoclint:-missing</additionalparam>
+              <failOnError>false</failOnError>
             </configuration>
           </plugin>
         </plugins>
@@ -2465,6 +2471,9 @@
 
     <profile>
       <id>yarn</id>
+      <activation>
+        <property><name>yarn</name></property>
+      </activation>
       <modules>
         <module>yarn</module>
         <module>network/yarn</module>
@@ -2473,6 +2482,9 @@
 
     <profile>
       <id>hive-thriftserver</id>
+      <activation>
+          <property><name>hive-thriftserver</name></property>
+      </activation>
       <modules>
         <module>sql/hive-thriftserver</module>
       </modules>
