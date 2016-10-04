@@ -28,14 +28,19 @@ set -o pipefail
 set -e
 set -x
 
+export PATH=$PATH:$JAVA_HOME/bin
+
 # Figure out where the Spark framework is installed
 SPARK_HOME="$(cd "`dirname "$0"`"; pwd)"
 DISTDIR="$SPARK_HOME/dist"
 
 SPARK_TACHYON=false
+# add --with-jdk option
+INCLUDE_JDK=false
 TACHYON_VERSION="0.8.2"
 TACHYON_TGZ="tachyon-${TACHYON_VERSION}-bin.tar.gz"
 TACHYON_URL="http://tachyon-project.org/downloads/files/${TACHYON_VERSION}/${TACHYON_TGZ}"
+USE_EXISTING_BUILD=false
 
 MAKE_TGZ=false
 NAME=none
@@ -74,6 +79,9 @@ while (( "$#" )); do
       ;;
     --with-tachyon)
       SPARK_TACHYON=true
+      ;;
+    --use-existing-build)
+      USE_EXISTING_BUILD=true
       ;;
     --tgz)
       MAKE_TGZ=true
@@ -164,16 +172,20 @@ cd "$SPARK_HOME"
 
 export MAVEN_OPTS="-Xmx2g -XX:MaxPermSize=512M -XX:ReservedCodeCacheSize=512m"
 
-# Store the command as an array because $MVN variable might have spaces in it.
-# Normal quoting tricks don't work.
-# See: http://mywiki.wooledge.org/BashFAQ/050
-BUILD_COMMAND=("$MVN" clean package -DskipTests $@)
+if [ "$USE_EXISTING_BUILD" == "false" ]; then
+	# Store the command as an array because $MVN variable might have spaces in it.
+	# Normal quoting tricks don't work.
+	# See: http://mywiki.wooledge.org/BashFAQ/050
+	BUILD_COMMAND=("$MVN" clean package -DskipTests $@)
 
-# Actually build the jar
-echo -e "\nBuilding with..."
-echo -e "\$ ${BUILD_COMMAND[@]}\n"
+	# Actually build the jar
+	echo -e "\nBuilding with..."
+	echo -e "\$ ${BUILD_COMMAND[@]}\n"
 
-"${BUILD_COMMAND[@]}"
+	"${BUILD_COMMAND[@]}"
+else
+  echo "Using existing build!"
+fi
 
 # Make directories
 rm -rf "$DISTDIR"
@@ -183,14 +195,14 @@ echo "Build flags: $@" >> "$DISTDIR/RELEASE"
 
 # Copy jars
 cp "$SPARK_HOME"/assembly/target/scala*/*assembly*hadoop*.jar "$DISTDIR/lib/"
-cp "$SPARK_HOME"/examples/target/scala*/spark-examples*.jar "$DISTDIR/lib/"
+#cp "$SPARK_HOME"/examples/target/scala*/spark-examples*.jar "$DISTDIR/lib/"
 # This will fail if the -Pyarn profile is not provided
 # In this case, silence the error and ignore the return code of this command
 cp "$SPARK_HOME"/network/yarn/target/scala*/spark-*-yarn-shuffle.jar "$DISTDIR/lib/" &> /dev/null || :
 
 # Copy example sources (needed for python and SQL)
-mkdir -p "$DISTDIR/examples/src/main"
-cp -r "$SPARK_HOME"/examples/src/main "$DISTDIR/examples/src/"
+#mkdir -p "$DISTDIR/examples/src/main"
+#cp -r "$SPARK_HOME"/examples/src/main "$DISTDIR/examples/src/"
 
 if [ "$SPARK_HIVE" == "1" ]; then
   cp "$SPARK_HOME"/lib_managed/jars/datanucleus*.jar "$DISTDIR/lib/"
@@ -210,7 +222,7 @@ cp -r "$SPARK_HOME/data" "$DISTDIR"
 
 # Copy other things
 mkdir "$DISTDIR"/conf
-cp "$SPARK_HOME"/conf/*.template "$DISTDIR"/conf
+cp "$SPARK_HOME"/conf/* "$DISTDIR"/conf
 cp "$SPARK_HOME/README.md" "$DISTDIR"
 cp -r "$SPARK_HOME/bin" "$DISTDIR"
 cp -r "$SPARK_HOME/python" "$DISTDIR"
@@ -264,4 +276,6 @@ if [ "$MAKE_TGZ" == "true" ]; then
   cp -r "$DISTDIR" "$TARDIR"
   tar czf "spark-$VERSION-bin-$NAME.tgz" -C "$SPARK_HOME" "$TARDIR_NAME"
   rm -rf "$TARDIR"
+  mkdir -p "$SPARK_HOME/.dist/local-repo/com/apple/pie/spark/spark-distribution_$SCALA_VERSION/$VERSION"
+  mv "spark-$VERSION-bin-$NAME.tgz" "$SPARK_HOME/.dist/local-repo/com/apple/pie/spark/spark-distribution_$SCALA_VERSION/$VERSION/spark-$VERSION-bin-$NAME.tgz"
 fi

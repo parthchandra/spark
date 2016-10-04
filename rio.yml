@@ -1,0 +1,112 @@
+schemaVersion: 2.0
+
+users:
+  - vishwa
+  - paramasi
+  - zhou_jiang
+
+notificationRecipients:
+  - vishwa@apple.com
+  - thiru@apple.com
+  - zhou_jiang@apple.com
+
+machine:
+  java:
+    version: 1.8
+  maven:
+    version: maven-3.3
+
+builds:
+  - name: pie-spark-2.10_1.6.0-snapshot
+    branchName: pie-spark-1.6.0
+    timeout: 90
+    machine:
+      env:
+        SCALA_BINARY_VERSION: "2.10"
+        SCALA_VERSION: "2.10.4"
+        HADOOP_VERSION: "2.6.0-cdh5.7.0"
+    build:
+      template: freestyle:v1:snapshot
+      steps:
+        - ./rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --hadoop "$HADOOP_VERSION" --snapshot --maven-opts ""
+        - ./make-distribution.sh --tgz --use-existing-build --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION" -Dhadoop.version="$HADOOP_VERSION"
+    trigger:
+      gitPush: false
+      scm: '@hourly'
+    publish:
+      archives:
+        includePattern: .dist/local-repo/**/*.jar, .dist/local-repo/**/*.pom, .dist/local-repo/**/*.tgz, .dist/local-repo/**/*.gz
+      reports:
+        junit: false
+
+  - name: pie-spark-2.10_1.6.0-release
+    branchName: pie-spark-1.6.0
+    timeout: 90
+    machine:
+      env:
+        SCALA_BINARY_VERSION: "2.10"
+        SCALA_VERSION: "2.10.4"
+        HADOOP_VERSION: "2.6.0-cdh5.7.0"
+    build:
+      template: freestyle:v1:release
+      steps:
+        - ./rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --hadoop "$HADOOP_VERSION" --release --maven-opts ""
+        - ./make-distribution.sh --tgz --use-existing-build --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION" -Dhadoop.version="$HADOOP_VERSION"
+    trigger:
+      gitPush: false
+    publish:
+      archives:
+        includePattern: .dist/local-repo/**/*.jar, .dist/local-repo/**/*.pom, .dist/local-repo/**/*.tgz, .dist/local-repo/**/*.gz
+      reports:
+        junit: false
+    finally:
+      tag:
+        enabled: true
+        expression: "releases_2.10/$CODE_VERSION"
+
+  - name: pie-spark-2.11_1.6.0-snapshot
+    branchName: pie-spark-1.6.0
+    timeout: 90
+    machine:
+      env:
+        SCALA_BINARY_VERSION: "2.11"
+        SCALA_VERSION: "2.11.7"
+        HADOOP_VERSION: "2.6.0-cdh5.7.0"
+    build:
+      template: freestyle:v1:snapshot
+      steps:
+        - ./rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --hadoop "$HADOOP_VERSION" --snapshot --maven-opts ""
+        - ./make-distribution.sh --tgz --use-existing-build --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION" -Dhadoop.version="$HADOOP_VERSION"
+    trigger:
+      gitPush: false
+      scm: '@hourly'
+    publish:
+      archives:
+        includePattern: .dist/local-repo/**/*.jar, .dist/local-repo/**/*.pom, .dist/local-repo/**/*.tgz, .dist/local-repo/**/*.gz
+      reports:
+        junit: false
+
+  - name: pie-spark-2.11_1.6.0-release
+    branchName: pie-spark-1.6.0
+    timeout: 90
+    machine:
+      env:
+        SCALA_BINARY_VERSION: "2.11"
+        SCALA_VERSION: "2.11.7"
+        HADOOP_VERSION: "2.6.0-cdh5.7.0"
+    build:
+      template: freestyle:v1:release
+      steps:
+        - ./rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --hadoop "$HADOOP_VERSION" --release --maven-opts ""
+        - ./make-distribution.sh --tgz --use-existing-build --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION" -Dhadoop.version="$HADOOP_VERSION"
+    trigger:
+      gitPush: false
+    publish:
+      archives:
+        includePattern: .dist/local-repo/**/*.jar, .dist/local-repo/**/*.pom, .dist/local-repo/**/*.tgz, .dist/local-repo/**/*.gz
+      reports:
+        junit: false
+    finally:
+      tag:
+        enabled: true
+        expression: "releases_2.11/$CODE_VERSION"
