@@ -35,11 +35,9 @@ SPARK_HOME="$(cd "`dirname "$0"`"; pwd)"
 DISTDIR="$SPARK_HOME/dist"
 
 SPARK_TACHYON=false
-# add --with-jdk option
-INCLUDE_JDK=false
-TACHYON_VERSION="0.7.1"
+TACHYON_VERSION="0.8.2"
 TACHYON_TGZ="tachyon-${TACHYON_VERSION}-bin.tar.gz"
-TACHYON_URL="https://github.com/amplab/tachyon/releases/download/v${TACHYON_VERSION}/${TACHYON_TGZ}"
+TACHYON_URL="http://tachyon-project.org/downloads/files/${TACHYON_VERSION}/${TACHYON_TGZ}"
 USE_EXISTING_BUILD=false
 
 MAKE_TGZ=false
@@ -153,10 +151,11 @@ if [ "$NAME" == "none" ]; then
   NAME=$SPARK_HADOOP_VERSION
 fi
 
+SPARK_DISTRIBUTION_FILE_NAME="spark-$VERSION-bin-$NAME.tar.gz"
 echo "Spark version is $VERSION"
 
 if [ "$MAKE_TGZ" == "true" ]; then
-  echo "Making spark-$VERSION-bin-$NAME.tar.gz"
+  echo "Making $SPARK_DISTRIBUTION_FILE_NAME"
 else
   echo "Making distribution for Spark $VERSION in $DISTDIR..."
 fi
@@ -170,7 +169,7 @@ fi
 # Build uber fat JAR
 cd "$SPARK_HOME"
 
-export MAVEN_OPTS="-Xmx2g -XX:MaxPermSize=512M -XX:ReservedCodeCacheSize=512m"
+export MAVEN_OPTS="${MAVEN_OPTS:--Xmx2g -XX:MaxPermSize=512M -XX:ReservedCodeCacheSize=512m}"
 
 
 if [ "$USE_EXISTING_BUILD" == "false" ]; then
@@ -233,6 +232,7 @@ cp -r "$SPARK_HOME/ec2" "$DISTDIR"
 if [ -d "$SPARK_HOME"/R/lib/SparkR ]; then
   mkdir -p "$DISTDIR"/R/lib
   cp -r "$SPARK_HOME/R/lib/SparkR" "$DISTDIR"/R/lib
+  cp "$SPARK_HOME/R/lib/sparkr.zip" "$DISTDIR"/R/lib
 fi
 
 # Download and copy in tachyon, if requested
@@ -253,10 +253,10 @@ if [ "$SPARK_TACHYON" == "true" ]; then
   fi
 
   tar xzf "${TACHYON_TGZ}"
-  cp "tachyon-${TACHYON_VERSION}/core/target/tachyon-${TACHYON_VERSION}-jar-with-dependencies.jar" "$DISTDIR/lib"
+  cp "tachyon-${TACHYON_VERSION}/assembly/target/tachyon-assemblies-${TACHYON_VERSION}-jar-with-dependencies.jar" "$DISTDIR/lib"
   mkdir -p "$DISTDIR/tachyon/src/main/java/tachyon/web"
   cp -r "tachyon-${TACHYON_VERSION}"/{bin,conf,libexec} "$DISTDIR/tachyon"
-  cp -r "tachyon-${TACHYON_VERSION}"/core/src/main/java/tachyon/web "$DISTDIR/tachyon/src/main/java/tachyon/web"
+  cp -r "tachyon-${TACHYON_VERSION}"/servers/src/main/java/tachyon/web "$DISTDIR/tachyon/src/main/java/tachyon/web"
 
   if [[ `uname -a` == Darwin* ]]; then
     # need to run sed differently on osx
@@ -274,8 +274,8 @@ if [ "$MAKE_TGZ" == "true" ]; then
   TARDIR="$SPARK_HOME/$TARDIR_NAME"
   rm -rf "$TARDIR"
   cp -r "$DISTDIR" "$TARDIR"
-  tar czf "spark-$VERSION-bin-$NAME.tar.gz" -C "$SPARK_HOME" "$TARDIR_NAME"
+  tar czf "$SPARK_DISTRIBUTION_FILE_NAME" -C "$SPARK_HOME" "$TARDIR_NAME"
   rm -rf "$TARDIR"
   mkdir -p "$SPARK_HOME/.dist/local-repo/com/apple/pie/spark/spark-distribution_$SCALA_VERSION/$VERSION"
-  mv "spark-$VERSION-bin-$NAME.tar.gz" "$SPARK_HOME/.dist/local-repo/com/apple/pie/spark/spark-distribution_$SCALA_VERSION/$VERSION/spark-$VERSION-bin-$NAME.tar.gz"
+  mv "$SPARK_DISTRIBUTION_FILE_NAME" "$SPARK_HOME/.dist/local-repo/com/apple/pie/spark/spark-distribution_$SCALA_VERSION/$VERSION/$SPARK_DISTRIBUTION_FILE_NAME"
 fi

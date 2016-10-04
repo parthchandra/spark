@@ -35,7 +35,7 @@ builds:
       scm: '@hourly'
     publish:
       archives:
-        includePattern: .dist/local-repo/**/*.jar, .dist/local-repo/**/*.pom, .dist/local-repo/**/*.gz
+        includePattern: .dist/local-repo/**/*.jar, .dist/local-repo/**/*.pom, .dist/local-repo/**/*.tgz, .dist/local-repo/**/*.gz
       reports:
         junit: false
 
@@ -56,7 +56,7 @@ builds:
       gitPush: false
     publish:
       archives:
-        includePattern: .dist/local-repo/**/*.jar, .dist/local-repo/**/*.pom, .dist/local-repo/**/*.gz
+        includePattern: .dist/local-repo/**/*.jar, .dist/local-repo/**/*.pom, .dist/local-repo/**/*.tgz, .dist/local-repo/**/*.gz
       reports:
         junit: false
     finally:
@@ -82,7 +82,7 @@ builds:
       scm: '@hourly'
     publish:
       archives:
-        includePattern: .dist/local-repo/**/*.jar, .dist/local-repo/**/*.pom, .dist/local-repo/**/*.gz
+        includePattern: .dist/local-repo/**/*.jar, .dist/local-repo/**/*.pom, .dist/local-repo/**/*.tgz, .dist/local-repo/**/*.gz
       reports:
         junit: false
 
@@ -103,7 +103,7 @@ builds:
       gitPush: false
     publish:
       archives:
-        includePattern: .dist/local-repo/**/*.jar, .dist/local-repo/**/*.pom, .dist/local-repo/**/*.gz
+        includePattern: .dist/local-repo/**/*.jar, .dist/local-repo/**/*.pom, .dist/local-repo/**/*.tgz, .dist/local-repo/**/*.gz
       reports:
         junit: false
     finally:
