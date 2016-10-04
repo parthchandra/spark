@@ -1931,8 +1931,49 @@ private[spark] object Utils extends Logging {
   }
 
   /**
+    * Returns true if the port is available.
+    *
+    * @param tryPort
+    * @return true if the port is available to bind
+    */
+  def available(tryPort: Int): Boolean = {
+    var socket: ServerSocket = null
+
+    try {
+      socket = new ServerSocket()
+      socket.bind(new InetSocketAddress(tryPort))
+      true
+
+    } catch {
+      case e:Exception =>
+        throw e
+    } finally {
+      try {
+        if (socket != null)
+          socket.close()
+      } catch {
+        case e:Exception =>
+      }
+    }
+  }
+
+  /**
    * Attempt to start a service on the given port, or fail after a number of attempts.
    * Each subsequent attempt uses 1 + the port used in the previous attempt (unless the port is 0).
+   *
+   * if spark.global.port.range property is specified then all ports (spark-driver, spark-executor,
+   * ConnectionManager, HttpServer, UI) are allocated within the given range. If this property
+   * is not specified then it will behave in the usual way where it allows Akka to bind to any available
+   * port (0).
+   *
+   * spark.global.port.range needs to be specified in the format minPort:maxPort.
+   * example spark.global.port.range 5050:5100
+   *
+   * Note that one downside is that the maxRetries is set to (maxPort - minPort). so one can shoot
+   * in ones foot if maxPort and minPort differ by a large number. We could consider using
+   * spark.port.maxRetries property, however it is still not clean solution since there will be two
+   * properties that decide the fate of the port allocation.
+   *
    *
    * @param startPort The initial port to start the service on.
    * @param startService Function to start service on a given port.
@@ -1945,25 +1986,79 @@ private[spark] object Utils extends Logging {
       startPort: Int,
       startService: Int => (T, Int),
       conf: SparkConf,
-      serviceName: String = ""): (T, Int) = {
+      serviceName: String = "",
+      isPortAvailable: Int => Boolean = available): (T, Int) = {
+    val portRange = conf.get("spark.global.port.range", startPort.toString)
+    val ports = portRange.split(":", 2)
 
-    require(startPort == 0 || (1024 <= startPort && startPort < 65536),
-      "startPort should be between 1024 and 65535 (inclusive), or 0 for a random free port.")
+    /**
+      * If minPort and maxPort is specified
+      * then maxRetries = (maxPort - minPort)
+      */
+    val (minPort, maxPort, requestedPort, maxRetries) = if (ports.length == 2) {
+
+      val minPortInt = ports(0).toInt
+      val maxPortInt = ports(1).toInt
+      val computedRetries = maxPortInt - minPortInt
+
+      logInfo(s"Global port range specified as $portRange. " +
+        s"Attempting to start service $serviceName with minPort: $minPortInt, " +
+        s"maxPort: $maxPortInt and  computed-retries: $computedRetries")
+
+      // validations
+      require(minPortInt == 0 || (1024 <= minPortInt && minPortInt <= 65535),
+        s"Min port ${minPortInt} should be between 1024 and 65535 (inclusive)," +
+          " or 0 for a random free port.")
+
+      require((1024 <= maxPortInt && maxPortInt <= 65535),
+        s"Max port ${maxPortInt} should be between 1024 and 65535 (inclusive).")
+
+      require(minPortInt <= maxPortInt, s"Min port ${minPortInt} should be" +
+        s" less than the maximum ${maxPortInt}.")
+
+      // if the startPort (which is the requested port from service) is in the
+      // configured range then we can start by trying to use the requested port
+      if (startPort >= minPortInt && startPort <= maxPortInt) {
+        (minPortInt, maxPortInt, startPort, computedRetries)
+      }
+      else {
+        (minPortInt, maxPortInt, minPortInt, computedRetries)
+      }
+    } else {
+      require(startPort == 0 || (1024 <= startPort && startPort < 65536),
+        s"startPort ${startPort} should be between 1024 and 65535 (inclusive)," +
+          " or 0 for a random free port.")
+      (1024, 65535, startPort, portMaxRetries(conf))
+    }
+
 
     val serviceString = if (serviceName.isEmpty) "" else s" '$serviceName'"
-    val maxRetries = portMaxRetries(conf)
+
     for (offset <- 0 to maxRetries) {
-      // Do not increment port if startPort is 0, which is treated as a special port
-      val tryPort = if (startPort == 0) {
-        startPort
+
+      // if given port is 0, return a random port
+      // within range.
+      val tryPort = if (requestedPort == 0) {
+        requestedPort
       } else {
-        // If the new port wraps around, do not try a privilege port
-        ((startPort + offset - 1024) % (65536 - 1024)) + 1024
+        ((requestedPort + offset - minPort) % (maxPort + 1 - minPort)) + minPort
       }
       try {
-        val (service, port) = startService(tryPort)
-        logInfo(s"Successfully started service$serviceString on port $port.")
-        return (service, port)
+
+        // we need to check if the port is available
+        // since Akka doesn't bind to port right away
+        // and it needs to be given a unique available port.
+        //
+        // I think it is alright to check for availability for
+        // other services too.
+        //
+        // We can move this check to AkkaUtils if we see
+        // that its slowing down other services.
+        if (isPortAvailable(tryPort)) {
+          val (service, port) = startService(tryPort)
+          logInfo(s"Successfully started service$serviceString on port $port.")
+          return (service, port)
+        }
       } catch {
         case e: Exception if isBindCollision(e) =>
           if (offset >= maxRetries) {
@@ -1979,7 +2074,8 @@ private[spark] object Utils extends Logging {
       }
     }
     // Should never happen
-    throw new SparkException(s"Failed to start service$serviceString on port $startPort")
+    throw new SparkException(s"Failed to start service$serviceString on ports " +
+      s"between min($minPort) and max($maxPort)")
   }
 
   /**

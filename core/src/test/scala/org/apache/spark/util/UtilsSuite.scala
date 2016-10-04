@@ -745,4 +745,116 @@ class UtilsSuite extends SparkFunSuite with ResetSystemProperties with Logging {
     assert(Utils.decodeFileNameInURI(new URI("files:///abc")) === "abc")
     assert(Utils.decodeFileNameInURI(new URI("files:///abc%20xyz")) === "abc xyz")
   }
+
+  /**
+   * Testcases added for
+   * <rdar://problem/24806502> PIE SpaaS : Allow spark to take a range of ports for all services
+   */
+  test("startServiceOnPort - regression") {
+    val conf = new SparkConf()
+    conf.remove("spark.global.port.range")
+
+    intercept[IllegalArgumentException] {
+      Utils.startServiceOnPort(1023, (trialPort: Int) => { (null, trialPort) }, conf, "someService")
+    }
+    intercept[IllegalArgumentException] {
+      Utils.startServiceOnPort(65536, (trialPort: Int) => (null, trialPort), conf)
+    }
+
+    assert(Utils.startServiceOnPort(1024, (trialPort: Int) => (null, trialPort), conf)._2 === 1024)
+    assert(Utils.startServiceOnPort(65535, (trialPort: Int) => (null, trialPort), conf)._2 === 65535)
+
+    conf.set("spark.port.maxRetries", "3")
+    assert(Utils.startServiceOnPort(65534, (trialPort: Int) => {
+      if (trialPort == 1024) (null, trialPort)
+      else throw new BindException("Test Bind Failure");
+    }, conf)._2 === 1024)
+    intercept[BindException] {
+      Utils.startServiceOnPort(65532, (trialPort: Int) => {
+        if (trialPort == 1024) (null, trialPort)
+        else throw new BindException("Test Bind Failure");
+      }, conf)
+    }
+    intercept[IllegalStateException] {
+      Utils.startServiceOnPort(65531, (trialPort: Int) => {
+        throw new IllegalStateException("Test Non Bind Failure");
+      }, conf)
+    }
+  }
+
+  test("startServiceOnPort - ports range") {
+    val conf = new SparkConf()
+    conf.set("spark.global.port.range", "1:2")
+
+    intercept[IllegalArgumentException] {
+      Utils.startServiceOnPort(1023, (trialPort: Int) => { (null, trialPort) }, conf)
+    }
+    intercept[IllegalArgumentException] {
+      Utils.startServiceOnPort(1025, (trialPort: Int) => { (null, trialPort) }, conf)
+    }
+
+    conf.set("spark.global.port.range", "A:B")
+    intercept[NumberFormatException] {
+      Utils.startServiceOnPort(1027, (trialPort: Int) => { (null, trialPort) }, conf)
+    }
+    conf.set("spark.global.port.range", "A:")
+    intercept[NumberFormatException] {
+      Utils.startServiceOnPort(1027, (trialPort: Int) => { (null, trialPort) }, conf)
+    }
+    conf.set("spark.global.port.range", ":")
+    intercept[NumberFormatException] {
+      Utils.startServiceOnPort(1027, (trialPort: Int) => { (null, trialPort) }, conf)
+    }
+    conf.set("spark.global.port.range", "1050")
+    assert(Utils.startServiceOnPort(1027, (trialPort: Int) => { (null, trialPort) }, conf, isPortAvailable=(trialPort: Int) => true)._2 === 1027)
+
+    conf.set("spark.global.port.range", "ABC")
+    assert(Utils.startServiceOnPort(1027, (trialPort: Int) => { (null, trialPort) }, conf, isPortAvailable=(trialPort: Int) => true)._2 === 1027)
+
+    conf.set("spark.global.port.range", "1023:1025")
+    intercept[IllegalArgumentException] {
+      Utils.startServiceOnPort(1027, (trialPort: Int) => { (null, trialPort) }, conf)
+    }
+
+    conf.set("spark.global.port.range", "1024:65536")
+    intercept[IllegalArgumentException] {
+      Utils.startServiceOnPort(1027, (trialPort: Int) => { (null, trialPort) }, conf)
+    }
+
+    conf.set("spark.global.port.range", "1024:1025")
+    assert(Utils.startServiceOnPort(1027, (trialPort: Int) => { (null, trialPort) }, conf, isPortAvailable=(trialPort: Int) => true)._2 === 1024)
+
+    conf.set("spark.global.port.range", "1024:1050")
+    assert(Utils.startServiceOnPort(1027, (trialPort: Int) => { (null, trialPort) }, conf, isPortAvailable=(trialPort: Int) => true)._2 === 1027)
+
+    conf.set("spark.port.maxRetries", "3")
+    conf.set("spark.global.port.range", "1024:1050")
+    assert(Utils.startServiceOnPort(1049, (trialPort: Int) => { (null, trialPort) }, conf, isPortAvailable=
+      (trialPort: Int) => {
+        if (trialPort == 1025) true
+        else throw new BindException("Test Bind Failure")
+      })._2 === 1025)
+
+    assert(Utils.startServiceOnPort(1049, (trialPort: Int) => { (null, trialPort) }, conf, isPortAvailable=
+      (trialPort: Int) => {
+        if (trialPort == 1027) true
+        else throw new BindException("Test Bind Failure")
+      })._2 === 1027)
+
+    assert(Utils.startServiceOnPort(1049, (trialPort: Int) => { (null, trialPort) }, conf, isPortAvailable=
+      (trialPort: Int) => {
+        if (trialPort == 1048) true
+        else throw new BindException("Test Bind Failure")
+      })._2 === 1048)
+
+    intercept[BindException] {
+      Utils.startServiceOnPort(1049, (trialPort: Int) => { (null, trialPort) }, conf, isPortAvailable=
+        (trialPort: Int) => throw new BindException("Test Bind Failure"))
+    }
+
+    conf.set("spark.global.port.range", "1025:1023")
+    intercept[IllegalArgumentException] {
+      Utils.startServiceOnPort(1027, (trialPort: Int) => { (null, trialPort) }, conf)
+    }
+  }
 }
