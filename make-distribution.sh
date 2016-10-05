@@ -151,7 +151,15 @@ if [ "$NAME" == "none" ]; then
   NAME=$SPARK_HADOOP_VERSION
 fi
 
-SPARK_DISTRIBUTION_FILE_NAME="spark-$VERSION-bin-$NAME.tar.gz"
+if [[ "$VERSION" == *-SNAPSHOT ]]; then
+	TIMED_SNAPSHOT=`date -u +"%Y%m%d.%H%M%S"`
+	ARTIFACT_VERSION=`echo $VERSION | sed -e 's/-SNAPSHOT$/-'$TIMED_SNAPSHOT'-1/g'`
+	echo "Snapshot mapped to timed artifact version: $ARTIFACT_VERSION"
+else
+	ARTIFACT_VERSION="$VERSION"
+fi
+
+SPARK_DISTRIBUTION_FILE_NAME="spark-$ARTIFACT_VERSION-bin-$NAME.tar.gz"
 echo "Spark version is $VERSION"
 
 if [ "$MAKE_TGZ" == "true" ]; then
