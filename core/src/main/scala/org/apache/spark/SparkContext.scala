@@ -241,6 +241,7 @@ class SparkContext(config: SparkConf) extends Logging with ExecutorAllocationCli
   private var _jars: Seq[String] = _
   private var _files: Seq[String] = _
   private var _shutdownHookRef: AnyRef = _
+  private var _dynamicAllocationEnabled: Boolean = false
 
   /* ------------------------------------------------------------------------------------- *
    | Accessors and public fields. These provide access to the internal state of the        |
@@ -554,13 +555,13 @@ class SparkContext(config: SparkConf) extends Logging with ExecutorAllocationCli
       }
 
     // Optionally scale number of executors dynamically based on workload. Exposed for testing.
-    val dynamicAllocationEnabled = Utils.isDynamicAllocationEnabled(_conf)
-    if (!dynamicAllocationEnabled && _conf.getBoolean("spark.dynamicAllocation.enabled", false)) {
+    _dynamicAllocationEnabled = Utils.isDynamicAllocationEnabled(_conf)
+    if (!_dynamicAllocationEnabled && _conf.getBoolean("spark.dynamicAllocation.enabled", false)) {
       logWarning("Dynamic Allocation and num executors both set, thus dynamic allocation disabled.")
     }
 
     _executorAllocationManager =
-      if (dynamicAllocationEnabled) {
+      if (_dynamicAllocationEnabled) {
         Some(new ExecutorAllocationManager(this, listenerBus, _conf))
       } else {
         None
@@ -1440,6 +1441,78 @@ class SparkContext(config: SparkConf) extends Logging with ExecutorAllocationCli
       case _ =>
         logWarning("Requesting executors is only supported in coarse-grained mode")
         false
+    }
+  }
+
+  /**
+    * @return cores in use
+    */
+  def getCurrentResourceUsage(): Int = {
+    return conf.getInt("spark.executor.cores", 1) * getExecutorStorageStatus.length
+  }
+
+  def getMinNumExecutors(): Int = {
+    if (_dynamicAllocationEnabled) {
+      executorAllocationManager.get.getMinNumExecutors
+    } else 0
+  }
+
+
+  def getMaxNumExecutors(): Int = {
+    if (_dynamicAllocationEnabled) {
+      executorAllocationManager.get.getMaxNumExecutors
+    } else Int.MaxValue
+  }
+
+  def pinMinNumExecutors(minNumExecutors: Int): Unit = {
+    if (_dynamicAllocationEnabled) {
+      executorAllocationManager.get.pinMinNumExecutors(minNumExecutors)
+    } else {
+      logError("Set min number of executors requires dynamical allocation to be enabled.")
+    }
+  }
+
+  def pinMaxNumExecutors(maxNumExecutors: Int): Unit = {
+    if (_dynamicAllocationEnabled) {
+      executorAllocationManager.get.pinMaxNumExecutors(maxNumExecutors)
+    } else {
+      logError("Set max number of executors requires dynamical allocation to be enabled.")
+    }
+  }
+
+  def setMinNumExecutors(minNumExecutors: Int): Unit = {
+    if (_dynamicAllocationEnabled) {
+      executorAllocationManager.get.setMinNumExecutors(minNumExecutors)
+    } else {
+      logError("Set min number of executors requires dynamical allocation to be enabled.")
+    }
+  }
+
+  def setMaxNumExecutors(maxNumExecutors: Int): Unit = {
+    if (_dynamicAllocationEnabled) {
+      executorAllocationManager.get.setMaxNumExecutors(maxNumExecutors)
+    } else {
+      logError("Set max number of executors requires dynamical allocation to be enabled.")
+    }
+  }
+
+  /**
+    * :: DeveloperApi ::
+    * Force kill given number of executors. Idle executors would be killed first.
+    * @return whether the request is received.
+    */
+  def killExecutors(numExecutorsToKill: Int): Boolean = {
+    if (executorAllocationManager.isDefined) {
+      schedulerBackend match {
+        case b: JarvisSchedulerBackend =>
+          executorAllocationManager.get.removeExecutors(numExecutorsToKill)
+        case _ =>
+          logWarning("Force killing executors only supported in Jarvis mode")
+          false
+      }
+    } else {
+      logError("Force killing executors is only allowed when dynamic allocation is enabled.")
+      false
     }
   }
 
@@ -2653,6 +2726,33 @@ object SparkContext extends Logging {
         }
         (backend, scheduler)
 
+      case JARVIS_REGEX(sparkUrl) =>
+        logInfo("Jarvis is chosen.")
+
+        val scheduler = try {
+          val clazz = Utils.classForName("org.apache.spark.JarvisClusterScheduler")
+          val cons = clazz.getConstructor(classOf[SparkContext])
+          cons.newInstance(sc).asInstanceOf[TaskSchedulerImpl]
+        } catch {
+          // TODO: Enumerate the exact reasons why it can fail
+          // But irrespective of it, it means we cannot proceed !
+          case e: Exception => {
+            throw new SparkException("JARVIS mode not available ?", e)
+          }
+        }
+        val backend = try {
+          val clazz =
+            Utils.classForName("org.apache.spark.JarvisSchedulerBackend")
+          val cons = clazz.getConstructor(classOf[TaskSchedulerImpl], classOf[SparkContext], classOf[String])
+          cons.newInstance(scheduler, sc, sparkUrl).asInstanceOf[CoarseGrainedSchedulerBackend]
+        } catch {
+          case e: Exception => {
+            throw new SparkException("JARVIS mode not available ?", e)
+          }
+        }
+        scheduler.initialize(backend)
+        (backend, scheduler)
+
       case "yarn-standalone" | "yarn-cluster" =>
         if (master == "yarn-standalone") {
           logWarning(
@@ -2753,6 +2853,8 @@ private object SparkMasterRegex {
   val MESOS_REGEX = """mesos://(.*)""".r
   // Regular expression for connection to Simr cluster
   val SIMR_REGEX = """simr://(.*)""".r
+  // Regular expression for jarvis managed cluster
+  val JARVIS_REGEX = """jarvis://(.*)""".r
 }
 
 /**
