@@ -34,6 +34,7 @@ function execute_command () {
 SCALA_VERSION="2.11"
 IS_RELEASE=0
 ADDITIONAL_MAVEN_OPTS=""
+ADDITIONAL_MAVEN_PARAMS=""
 SKIP_TESTS="true"
 SKIP_TESTS_D_PARAM="-DskipTests=true"
 SKIP_TEST_PACKAGE="false"
@@ -51,6 +52,10 @@ while (( "$#" )); do
     --hadoop)
       HADOOP_VERSION="$2"
       HADOOP_VERSION_D_PARAM="-Dhadoop.version=${HADOOP_VERSION}"
+      shift
+      ;;
+    --maven-params)
+      ADDITIONAL_MAVEN_PARAMS="$2"
       shift
       ;;
     --maven-opts)
@@ -84,6 +89,7 @@ echo -e "====================================="
 echo -e "  SCALA_VERSION=[${SCALA_VERSION}]"
 echo -e "  IS_RELEASE=[${IS_RELEASE}]"
 echo -e "  ADDITIONAL_MAVEN_OPTS=[${ADDITIONAL_MAVEN_OPTS}]"
+echo -e "  ADDITIONAL_MAVEN_PARAMS=[${ADDITIONAL_MAVEN_PARAMS}]"
 echo -e "  SKIP_TESTS=[${SKIP_TESTS}]"
 echo -e "  SKIP_TESTS_D_PARAM=[${SKIP_TESTS_D_PARAM}]"
 echo -e "  SKIP_TEST_PACKAGE=[${SKIP_TEST_PACKAGE}]"
@@ -164,6 +170,6 @@ fi
 mkdir -p "${LOCAL_REPO_DIR}"
 REPO_URL="local-release::default::file://${LOCAL_REPO_DIR}"
 
-execute_command "$MVN" package deploy -DaltDeploymentRepository="${REPO_URL}" "$SKIP_TESTS_D_PARAM" "$@"
+execute_command "$MVN" package deploy -DaltDeploymentRepository="${REPO_URL}" "$SKIP_TESTS_D_PARAM" $ADDITIONAL_MAVEN_PARAMS "$@"
 
 echo -e "Build Successful"
