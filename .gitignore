@@ -79,3 +79,8 @@ sql/hive-thriftserver/test_warehouses
 # For R session data
 .RHistory
 .RData
+
+
+.dist/
+.library
+pom.xml.versionsBackup
