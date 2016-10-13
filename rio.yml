@@ -23,7 +23,7 @@ builds:
     machine:
       env:
         SCALA_BINARY_VERSION: "2.10"
-        SCALA_VERSION: "2.10.4"
+        SCALA_VERSION: "2.10.5"
         HADOOP_VERSION: "2.6.0-cdh5.7.0"
     build:
       template: freestyle:v1:snapshot
@@ -45,7 +45,7 @@ builds:
     machine:
       env:
         SCALA_BINARY_VERSION: "2.10"
-        SCALA_VERSION: "2.10.4"
+        SCALA_VERSION: "2.10.5"
         HADOOP_VERSION: "2.6.0-cdh5.7.0"
     build:
       template: freestyle:v1:release
