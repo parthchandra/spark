@@ -2743,7 +2743,9 @@ object SparkContext extends Logging {
         val backend = try {
           val clazz =
             Utils.classForName("org.apache.spark.JarvisSchedulerBackend")
-          val cons = clazz.getConstructor(classOf[TaskSchedulerImpl], classOf[SparkContext], classOf[String])
+          val cons = clazz.getConstructor(classOf[TaskSchedulerImpl],
+                                          classOf[SparkContext],
+                                          classOf[String])
           cons.newInstance(scheduler, sc, sparkUrl).asInstanceOf[CoarseGrainedSchedulerBackend]
         } catch {
           case e: Exception => {

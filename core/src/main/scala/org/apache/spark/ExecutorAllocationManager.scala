@@ -294,7 +294,8 @@ private[spark] class ExecutorAllocationManager(
   }
 
   /**
-    * Pin the lower bound of executor numbers. This would throw an exception if the lower bound is pinned to another number.
+    * Pin the lower bound of executor numbers.
+    * This would throw an exception if the lower bound is pinned to another number.
     * @param minNumExecutors the pinned value.
     */
   def pinMinNumExecutors(minNumExecutors: Int): Unit = synchronized {
@@ -308,7 +309,8 @@ private[spark] class ExecutorAllocationManager(
   }
 
   /**
-    * Pin the upper bound of executor numbers. This would throw an exception if the upper bound is pinned to another number.
+    * Pin the upper bound of executor numbers.
+    * This would throw an exception if the upper bound is pinned to another number.
     * @param maxNumExecutors the pinned value.
     */
   def pinMaxNumExecutors(maxNumExecutors: Int): Unit = synchronized {
