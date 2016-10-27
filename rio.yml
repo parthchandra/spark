@@ -1,15 +1,5 @@
 schemaVersion: 2.0
  
-users:
-  - vishwa
-  - paramasi
-  - zhou_jiang
- 
-notificationRecipients:
-  - vishwa@apple.com
-  - thiru@apple.com
-  - zhou_jiang@apple.com
-
 machine:
   java:
     version: 1.8
