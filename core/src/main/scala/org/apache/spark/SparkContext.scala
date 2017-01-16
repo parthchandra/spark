@@ -1500,7 +1500,6 @@ class SparkContext(config: SparkConf) extends Logging with ExecutorAllocationCli
     * :: DeveloperApi ::
     * Force kill given number of executors. Idle executors would be killed first.
     * @return whether the request is received.
-    */
   def killExecutors(numExecutorsToKill: Int): Boolean = {
     if (executorAllocationManager.isDefined) {
       schedulerBackend match {
@@ -1515,6 +1514,7 @@ class SparkContext(config: SparkConf) extends Logging with ExecutorAllocationCli
       false
     }
   }
+    */
 
   /**
    * :: DeveloperApi ::
