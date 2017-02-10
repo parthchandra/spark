@@ -284,6 +284,8 @@ if [ "$MAKE_TGZ" == "true" ]; then
   cp -r "$DISTDIR" "$TARDIR"
   tar czf "$SPARK_DISTRIBUTION_FILE_NAME" -C "$SPARK_HOME" "$TARDIR_NAME"
   rm -rf "$TARDIR"
-  mkdir -p "$SPARK_HOME/.dist/local-repo/com/apple/pie/spark/spark-distribution_$SCALA_VERSION/$VERSION"
-  mv "$SPARK_DISTRIBUTION_FILE_NAME" "$SPARK_HOME/.dist/local-repo/com/apple/pie/spark/spark-distribution_$SCALA_VERSION/$VERSION/$SPARK_DISTRIBUTION_FILE_NAME"
+  LOCAL_REPO_DIR="$SPARK_HOME/.dist/local-repo"
+  mkdir -p "${LOCAL_REPO_DIR}"
+  LOCAL_REPO="file://${LOCAL_REPO_DIR}"
+  "$MVN" deploy:deploy-file -DgroupId="com.apple.pie.spark" -DartifactId="spark-distribution_${SCALA_VERSION}" -Dversion="${VERSION}" -Dfile="${SPARK_DISTRIBUTION_FILE_NAME}" -Durl="${LOCAL_REPO}" -Dpackaging=tgz
 fi
