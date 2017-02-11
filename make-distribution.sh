@@ -155,8 +155,10 @@ if [[ "$VERSION" == *-SNAPSHOT ]]; then
 	TIMED_SNAPSHOT=`date -u +"%Y%m%d.%H%M%S"`
 	ARTIFACT_VERSION=`echo $VERSION | sed -e 's/-SNAPSHOT$/-'$TIMED_SNAPSHOT'-1/g'`
 	echo "Snapshot mapped to timed artifact version: $ARTIFACT_VERSION"
+	TGZ_VERSION=`echo $VERSION | sed -e 's/-SNAPSHOT$/-'$SPARK_HADOOP_VERSION'-SNAPSHOT/g'`
 else
 	ARTIFACT_VERSION="$VERSION"
+	TGZ_VERSION="${VERSION}"
 fi
 
 SPARK_DISTRIBUTION_FILE_NAME="spark-$ARTIFACT_VERSION-bin-$NAME.tar.gz"
@@ -284,6 +286,8 @@ if [ "$MAKE_TGZ" == "true" ]; then
   cp -r "$DISTDIR" "$TARDIR"
   tar czf "$SPARK_DISTRIBUTION_FILE_NAME" -C "$SPARK_HOME" "$TARDIR_NAME"
   rm -rf "$TARDIR"
-  mkdir -p "$SPARK_HOME/.dist/local-repo/com/apple/pie/spark/spark-distribution_$SCALA_VERSION/$VERSION"
-  mv "$SPARK_DISTRIBUTION_FILE_NAME" "$SPARK_HOME/.dist/local-repo/com/apple/pie/spark/spark-distribution_$SCALA_VERSION/$VERSION/$SPARK_DISTRIBUTION_FILE_NAME"
+  LOCAL_REPO_DIR="$SPARK_HOME/.dist/local-repo"
+  mkdir -p "${LOCAL_REPO_DIR}"
+  LOCAL_REPO="file://${LOCAL_REPO_DIR}"
+  "$MVN" deploy:deploy-file -DgroupId="com.apple.pie.spark" -DartifactId="spark-distribution_${SCALA_VERSION}" -Dversion="${TGZ_VERSION}" -Dfile="${SPARK_DISTRIBUTION_FILE_NAME}" -Durl="${LOCAL_REPO}" -Dpackaging=tgz
 fi
