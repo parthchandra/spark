@@ -248,6 +248,17 @@ private[spark] object JettyUtils extends Logging {
       errorHandler.setShowStacks(true)
       server.addBean(errorHandler)
       server.setHandler(collection)
+      /*
+       Quick fix to pass the requestHeaderSize to Jetty Server. Will need to find
+       an effective solution to exposing JettyServer outside (before starting it)
+       */
+      val requestHeaderSize = conf.getInt("spark.ui.requestHeaderSize", 524288)
+      val responseHeaderSize = conf.getInt("spark.ui.responseHeaderSize", 524288)
+      server.getConnectors.foreach(
+        c => {
+          c.setRequestHeaderSize(requestHeaderSize)
+          c.setResponseBufferSize(responseHeaderSize)
+        })
       try {
         server.start()
         (server, server.getConnectors.head.getLocalPort)
