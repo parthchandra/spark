@@ -2729,6 +2729,37 @@ object SparkContext extends Logging {
       case JARVIS_REGEX(sparkUrl) =>
         logInfo("Jarvis is chosen.")
 
+        val conf = sc.getConf
+
+        if (conf.get("spark.pie.event.log.enabled").equalsIgnoreCase("true")) {
+          logInfo("Event log enabled - PieJarvisScheduler is chosen.")
+          val scheduler = try {
+            val clazz = Utils.classForName("org.apache.spark.integration.PieJarvisClusterScheduler")
+            val cons = clazz.getConstructor(classOf[SparkContext])
+            cons.newInstance(sc).asInstanceOf[TaskSchedulerImpl]
+          } catch {
+            // TODO: Enumerate the exact reasons why it can fail
+            // But irrespective of it, it means we cannot proceed !
+            case e: Exception => {
+              throw new SparkException("JARVIS - event log mode not available ?", e)
+            }
+          }
+          val backend = try {
+            val clazz =
+              Utils.classForName("org.apache.spark.integration.PieJarvisSchedulerBackend")
+            val cons = clazz.getConstructor(classOf[TaskSchedulerImpl],
+              classOf[SparkContext],
+              classOf[String])
+            cons.newInstance(scheduler, sc, sparkUrl).asInstanceOf[CoarseGrainedSchedulerBackend]
+          } catch {
+            case e: Exception => {
+              throw new SparkException("JARVIS -event log mode not available ?", e)
+            }
+          }
+          scheduler.initialize(backend)
+          (backend, scheduler)
+        }
+
         val scheduler = try {
           val clazz = Utils.classForName("org.apache.spark.JarvisClusterScheduler")
           val cons = clazz.getConstructor(classOf[SparkContext])

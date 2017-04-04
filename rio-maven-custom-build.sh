@@ -177,4 +177,6 @@ if [ $IS_RELEASE -eq 0 ] ; then
 	find ./.dist/local-repo/com/apple/pie/spark/ -name "*.pom" -exec bash -c 'mv $0 $(echo "$0" | sed -E  "s/-[[:digit:]]+\.[[:digit:]]+-[[:digit:]]+\.pom/-SNAPSHOT.pom/" )' '{}' \;
 fi
 
+cp -R "${LOCAL_REPO_DIR}" "/Users/zhou_jiang/.m2/repository/"
+
 echo -e "Build Successful"
