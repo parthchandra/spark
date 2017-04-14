@@ -2757,34 +2757,34 @@ object SparkContext extends Logging {
             }
           }
           scheduler.initialize(backend)
+          return (backend, scheduler)
+        } else {
+          val scheduler = try {
+            val clazz = Utils.classForName("org.apache.spark.JarvisClusterScheduler")
+            val cons = clazz.getConstructor(classOf[SparkContext])
+            cons.newInstance(sc).asInstanceOf[TaskSchedulerImpl]
+          } catch {
+            // TODO: Enumerate the exact reasons why it can fail
+            // But irrespective of it, it means we cannot proceed !
+            case e: Exception => {
+              throw new SparkException("JARVIS mode not available ?", e)
+            }
+          }
+          val backend = try {
+            val clazz =
+              Utils.classForName("org.apache.spark.JarvisSchedulerBackend")
+            val cons = clazz.getConstructor(classOf[TaskSchedulerImpl],
+              classOf[SparkContext],
+              classOf[String])
+            cons.newInstance(scheduler, sc, sparkUrl).asInstanceOf[CoarseGrainedSchedulerBackend]
+          } catch {
+            case e: Exception => {
+              throw new SparkException("JARVIS mode not available ?", e)
+            }
+          }
+          scheduler.initialize(backend)
           (backend, scheduler)
         }
-
-        val scheduler = try {
-          val clazz = Utils.classForName("org.apache.spark.JarvisClusterScheduler")
-          val cons = clazz.getConstructor(classOf[SparkContext])
-          cons.newInstance(sc).asInstanceOf[TaskSchedulerImpl]
-        } catch {
-          // TODO: Enumerate the exact reasons why it can fail
-          // But irrespective of it, it means we cannot proceed !
-          case e: Exception => {
-            throw new SparkException("JARVIS mode not available ?", e)
-          }
-        }
-        val backend = try {
-          val clazz =
-            Utils.classForName("org.apache.spark.JarvisSchedulerBackend")
-          val cons = clazz.getConstructor(classOf[TaskSchedulerImpl],
-                                          classOf[SparkContext],
-                                          classOf[String])
-          cons.newInstance(scheduler, sc, sparkUrl).asInstanceOf[CoarseGrainedSchedulerBackend]
-        } catch {
-          case e: Exception => {
-            throw new SparkException("JARVIS mode not available ?", e)
-          }
-        }
-        scheduler.initialize(backend)
-        (backend, scheduler)
 
       case "yarn-standalone" | "yarn-cluster" =>
         if (master == "yarn-standalone") {
