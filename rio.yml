@@ -101,7 +101,7 @@ builds:
         enabled: true
         expression: "releases_2.11/$CODE_VERSION"
 
-  - name: pie-spark-2.11_1.6.2-snapshot
+  - name: pie-spark-2.11_1.6.2-driver2-snapshot
     branchName: pie-spark-1.6.2-driver2
     timeout: 90
     machine:
