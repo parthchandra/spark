@@ -50,7 +50,9 @@ private[netty] class HttpBasedFileServer(conf: SparkConf, securityManager: Secur
   }
 
   private def startFileServer(): HttpFileServer = {
-    val fileServerPort = conf.getInt("spark.fileserver.port", 0)
+
+    val fileServerPortSystemProp = System.getProperty("spark.fileserver.port", "0")
+    val fileServerPort = conf.getInt("spark.fileserver.port", fileServerPortSystemProp.toInt)
     val server = new HttpFileServer(conf, securityManager, fileServerPort)
     server.initialize()
     server

@@ -152,7 +152,10 @@ private[broadcast] object HttpBroadcast extends Logging {
 
   private def createServer(conf: SparkConf) {
     broadcastDir = Utils.createTempDir(Utils.getLocalDir(conf), "broadcast")
-    val broadcastPort = conf.getInt("spark.broadcast.port", 0)
+
+    val broadCastPortSystemProp = System.getProperty("spark.broadcast.port", "0")
+    val broadcastPort = conf.getInt("spark.broadcast.port", broadCastPortSystemProp.toInt)
+
     server =
       new HttpServer(conf, broadcastDir, securityManager, broadcastPort, "HTTP broadcast server")
     server.start()
