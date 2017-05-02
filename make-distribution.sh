@@ -200,11 +200,11 @@ echo "Spark $VERSION$GITREVSTRING built for Hadoop $SPARK_HADOOP_VERSION" > "$DI
 echo "Build flags: $@" >> "$DISTDIR/RELEASE"
 
 # Copy jars
-cp "$SPARK_HOME"/assembly/target/scala*/*assembly*hadoop*.jar "$DISTDIR/lib/"
+cp "$SPARK_HOME"/assembly/target/scala*/jars/*hadoop*.jar "$DISTDIR/lib/"
 # cp "$SPARK_HOME"/examples/target/scala*/spark-examples*.jar "$DISTDIR/lib/"
 # This will fail if the -Pyarn profile is not provided
 # In this case, silence the error and ignore the return code of this command
-cp "$SPARK_HOME"/network/yarn/target/scala*/spark-*-yarn-shuffle.jar "$DISTDIR/lib/" &> /dev/null || :
+cp "$SPARK_HOME"/network/yarn/target/scala*/jars/spark-*-yarn-shuffle.jar "$DISTDIR/lib/" &> /dev/null || :
 
 # Copy example sources (needed for python and SQL)
 #mkdir -p "$DISTDIR/examples/src/main"
@@ -233,7 +233,7 @@ cp "$SPARK_HOME/README.md" "$DISTDIR"
 cp -r "$SPARK_HOME/bin" "$DISTDIR"
 cp -r "$SPARK_HOME/python" "$DISTDIR"
 cp -r "$SPARK_HOME/sbin" "$DISTDIR"
-cp -r "$SPARK_HOME/ec2" "$DISTDIR"
+cp -r "$SPARK_HOME/ec2" "$DISTDIR" &> /dev/null
 # Copy SparkR if it exists
 if [ -d "$SPARK_HOME"/R/lib/SparkR ]; then
   mkdir -p "$DISTDIR"/R/lib
