@@ -633,6 +633,7 @@ private[netty] class NettyRpcHandler(
       // If the channel is closed before connecting, its remoteAddress will be null. In this case,
       // we can ignore it since we don't fire "Associated".
       // See java.net.Socket.getRemoteSocketAddress
+      logError("NettyRpcEnv.channelInactive() channel : " + client.getChannel)
     }
   }
 }
