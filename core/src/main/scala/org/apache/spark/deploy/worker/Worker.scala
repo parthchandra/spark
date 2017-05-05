@@ -98,6 +98,11 @@ private[deploy] class Worker(
     conf.getLong("spark.worker.cleanup.appDataTtl", 7 * 24 * 3600)
 
   private val testing: Boolean = sys.props.contains("spark.testing")
+
+  private val preferConfiguredMasterAddress =
+        conf.getBoolean("spark.worker.preferConfiguredMasterAddress", false)
+
+  private var masterAddressToConnect: Option[RpcAddress] = None
   private var master: Option[RpcEndpointRef] = None
   private var activeMasterUrl: String = ""
   private[worker] var activeMasterWebUiUrl : String = ""
@@ -196,10 +201,11 @@ private[deploy] class Worker(
     metricsSystem.getServletHandlers.foreach(webUi.attachHandler)
   }
 
-  private def changeMaster(masterRef: RpcEndpointRef, uiUrl: String) {
+  private def changeMaster(masterRef: RpcEndpointRef, uiUrl: String, masterAddress: RpcAddress) {
     // activeMasterUrl it's a valid Spark url since we receive it from master.
     activeMasterUrl = masterRef.address.toSparkURL
     activeMasterWebUiUrl = uiUrl
+    masterAddressToConnect = Some(masterAddress)
     master = Some(masterRef)
     connected = true
     if (conf.getBoolean("spark.ui.reverseProxy", false)) {
@@ -266,7 +272,9 @@ private[deploy] class Worker(
             if (registerMasterFutures != null) {
               registerMasterFutures.foreach(_.cancel(true))
             }
-            val masterAddress = masterRef.address
+            val masterAddress =
+              if (preferConfiguredMasterAddress) masterAddressToConnect.get else masterRef.address
+
             registerMasterFutures = Array(registerMasterThreadPool.submit(new Runnable {
               override def run(): Unit = {
                 try {
@@ -343,7 +351,7 @@ private[deploy] class Worker(
 
   private def registerWithMaster(masterEndpoint: RpcEndpointRef): Unit = {
     masterEndpoint.ask[RegisterWorkerResponse](RegisterWorker(
-      workerId, host, port, self, cores, memory, workerWebUiUrl))
+      workerId, host, port, self, cores, memory, workerWebUiUrl,masterEndpoint.address))
       .onComplete {
         // This is a very fast action so we can use "ThreadUtils.sameThread"
         case Success(msg) =>
@@ -358,10 +366,14 @@ private[deploy] class Worker(
 
   private def handleRegisterResponse(msg: RegisterWorkerResponse): Unit = synchronized {
     msg match {
-      case RegisteredWorker(masterRef, masterWebUiUrl) =>
-        logInfo("Successfully registered with master " + masterRef.address.toSparkURL)
+      case RegisteredWorker(masterRef, masterWebUiUrl, masterAddress) =>
+        if (preferConfiguredMasterAddress) {
+          logInfo("Successfully registered with master " + masterAddress.toSparkURL)
+        } else {
+          logInfo("Successfully registered with master " + masterRef.address.toSparkURL)
+        }
         registered = true
-        changeMaster(masterRef, masterWebUiUrl)
+        changeMaster(masterRef, masterWebUiUrl,masterAddress)
         forwordMessageScheduler.scheduleAtFixedRate(new Runnable {
           override def run(): Unit = Utils.tryLogNonFatalError {
             self.send(SendHeartbeat)
@@ -427,7 +439,7 @@ private[deploy] class Worker(
 
     case MasterChanged(masterRef, masterWebUiUrl) =>
       logInfo("Master has changed, new master is at " + masterRef.address.toSparkURL)
-      changeMaster(masterRef, masterWebUiUrl)
+      changeMaster(masterRef, masterWebUiUrl, masterRef.address)
 
       val execs = executors.values.
         map(e => new ExecutorDescription(e.appId, e.execId, e.cores, e.state))
@@ -563,7 +575,8 @@ private[deploy] class Worker(
       logWarning("onDisconnected() the current master address is " + master.get.address)
     }
 
-    if (master.exists(_.address == remoteAddress)) {
+    if (master.exists(_.address == remoteAddress) ||
+      masterAddressToConnect.exists(_ == remoteAddress)) {
       logInfo(s"$remoteAddress Disassociated !")
       masterDisconnected()
     }
