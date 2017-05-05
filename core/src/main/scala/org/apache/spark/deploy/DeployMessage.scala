@@ -84,7 +84,8 @@ private[deploy] object DeployMessages {
   case class RegisteredWorker(
                                master: RpcEndpointRef,
                                masterWebUiUrl: String,
-                               masterAddress: RpcAddress) extends DeployMessage with RegisterWorkerResponse
+                               masterAddress: RpcAddress)
+    extends DeployMessage with RegisterWorkerResponse
 
   case class RegisterWorkerFailed(message: String) extends DeployMessage with RegisterWorkerResponse
 
