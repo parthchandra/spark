@@ -200,7 +200,7 @@ echo "Spark $VERSION$GITREVSTRING built for Hadoop $SPARK_HADOOP_VERSION" > "$DI
 echo "Build flags: $@" >> "$DISTDIR/RELEASE"
 
 # Copy jars
-cp "$SPARK_HOME"/assembly/target/scala*/jars/*hadoop*.jar "$DISTDIR/jars/"
+cp "$SPARK_HOME"/assembly/target/scala*/jars/*.jar "$DISTDIR/jars/"
 # cp "$SPARK_HOME"/examples/target/scala*/spark-examples*.jar "$DISTDIR/jars/"
 # This will fail if the -Pyarn profile is not provided
 # In this case, silence the error and ignore the return code of this command
