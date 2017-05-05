@@ -556,6 +556,8 @@ private[deploy] class Worker(
   }
 
   override def onDisconnected(remoteAddress: RpcAddress): Unit = {
+
+    logWarning(s"onDisconnected invoked for $remoteAddress !")
     if (master.exists(_.address == remoteAddress)) {
       logInfo(s"$remoteAddress Disassociated !")
       masterDisconnected()
