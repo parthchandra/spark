@@ -195,23 +195,41 @@ fi
 
 # Make directories
 rm -rf "$DISTDIR"
-mkdir -p "$DISTDIR/lib"
+mkdir -p "$DISTDIR/jars"
 echo "Spark $VERSION$GITREVSTRING built for Hadoop $SPARK_HADOOP_VERSION" > "$DISTDIR/RELEASE"
 echo "Build flags: $@" >> "$DISTDIR/RELEASE"
 
 # Copy jars
-cp "$SPARK_HOME"/assembly/target/scala*/jars/*hadoop*.jar "$DISTDIR/lib/"
-# cp "$SPARK_HOME"/examples/target/scala*/spark-examples*.jar "$DISTDIR/lib/"
+cp "$SPARK_HOME"/assembly/target/scala*/jars/*hadoop*.jar "$DISTDIR/jars/"
+# cp "$SPARK_HOME"/examples/target/scala*/spark-examples*.jar "$DISTDIR/jars/"
 # This will fail if the -Pyarn profile is not provided
 # In this case, silence the error and ignore the return code of this command
-cp "$SPARK_HOME"/network/yarn/target/scala*/jars/spark-*-yarn-shuffle.jar "$DISTDIR/lib/" &> /dev/null || :
-
+#cp "$SPARK_HOME"/network/yarn/target/scala*/jars/spark-*-yarn-shuffle.jar "$DISTDIR/jars/" &> /dev/null || :
 # Copy example sources (needed for python and SQL)
 #mkdir -p "$DISTDIR/examples/src/main"
 #cp -r "$SPARK_HOME"/examples/src/main "$DISTDIR/examples/src/"
 
+# Only create the yarn directory if the yarn artifacts were build.
+if [ -f "$SPARK_HOME"/common/network-yarn/target/scala*/spark-*-yarn-shuffle.jar ]; then
+  mkdir "$DISTDIR"/yarn
+  cp "$SPARK_HOME"/common/network-yarn/target/scala*/spark-*-yarn-shuffle.jar "$DISTDIR/yarn"
+fi
+
+# Copy examples and dependencies
+mkdir -p "$DISTDIR/examples/jars"
+cp "$SPARK_HOME"/examples/target/scala*/jars/* "$DISTDIR/examples/jars"
+
+# Deduplicate jars that have already been packaged as part of the main Spark dependencies.
+for f in "$DISTDIR/examples/jars/"*; do
+  name=$(basename "$f")
+  if [ -f "$DISTDIR/jars/$name" ]; then
+    rm "$DISTDIR/examples/jars/$name"
+  fi
+done
+
+
 if [ "$SPARK_HIVE" == "1" ]; then
-  cp "$SPARK_HOME"/lib_managed/jars/datanucleus*.jar "$DISTDIR/lib/"
+  cp "$SPARK_HOME"/lib_managed/jars/datanucleus*.jar "$DISTDIR/jars/"
 fi
 
 # Copy license and ASF files
@@ -236,9 +254,9 @@ cp -r "$SPARK_HOME/sbin" "$DISTDIR"
 #cp -r "$SPARK_HOME/ec2" "$DISTDIR" 2> /dev/null
 # Copy SparkR if it exists
 if [ -d "$SPARK_HOME"/R/lib/SparkR ]; then
-  mkdir -p "$DISTDIR"/R/lib
-  cp -r "$SPARK_HOME/R/lib/SparkR" "$DISTDIR"/R/lib
-  cp "$SPARK_HOME/R/lib/sparkr.zip" "$DISTDIR"/R/lib
+  mkdir -p "$DISTDIR"/R/jars
+  cp -r "$SPARK_HOME/R/lib/SparkR" "$DISTDIR"/R/jars
+  cp "$SPARK_HOME/R/lib/sparkr.zip" "$DISTDIR"/R/jars
 fi
 # Download and copy in tachyon, if requested
 if [ "$SPARK_TACHYON" == "true" ]; then
@@ -258,7 +276,7 @@ if [ "$SPARK_TACHYON" == "true" ]; then
   fi
 
   tar xzf "${TACHYON_TGZ}"
-  cp "tachyon-${TACHYON_VERSION}/assembly/target/tachyon-assemblies-${TACHYON_VERSION}-jar-with-dependencies.jar" "$DISTDIR/lib"
+  cp "tachyon-${TACHYON_VERSION}/assembly/target/tachyon-assemblies-${TACHYON_VERSION}-jar-with-dependencies.jar" "$DISTDIR/jars"
   mkdir -p "$DISTDIR/tachyon/src/main/java/tachyon/web"
   cp -r "tachyon-${TACHYON_VERSION}"/{bin,conf,libexec} "$DISTDIR/tachyon"
   cp -r "tachyon-${TACHYON_VERSION}"/servers/src/main/java/tachyon/web "$DISTDIR/tachyon/src/main/java/tachyon/web"
