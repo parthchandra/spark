@@ -351,7 +351,14 @@ private[deploy] class Worker(
 
   private def registerWithMaster(masterEndpoint: RpcEndpointRef): Unit = {
     masterEndpoint.ask[RegisterWorkerResponse](RegisterWorker(
-      workerId, host, port, self, cores, memory, workerWebUiUrl, masterEndpoint.address))
+      workerId,
+      host,
+      port,
+      self,
+      cores,
+      memory,
+      workerWebUiUrl,
+      masterEndpoint.address))
       .onComplete {
         // This is a very fast action so we can use "ThreadUtils.sameThread"
         case Success(msg) =>
