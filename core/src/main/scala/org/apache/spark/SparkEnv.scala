@@ -259,6 +259,8 @@ object SparkEnv extends Logging {
         val actorSystemPort =
           if (port == 0 || rpcEnv.address == null) {
             port
+          } else if (conf.contains("spark.legacy.akka.port")) {
+            conf.get("spark.legacy.akka.port").toInt
           } else {
             rpcEnv.address.port + 1
           }
