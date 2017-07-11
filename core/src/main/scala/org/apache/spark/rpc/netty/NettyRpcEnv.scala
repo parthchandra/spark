@@ -594,8 +594,6 @@ private[netty] class NettyRpcHandler(
   override def exceptionCaught(cause: Throwable, client: TransportClient): Unit = {
     val addr = client.getChannel.remoteAddress().asInstanceOf[InetSocketAddress]
 
-    logWarning("channelInactive invoked. Address = " + addr, cause)
-
     if (addr != null) {
       val clientAddr = RpcAddress(addr.getHostString, addr.getPort)
       dispatcher.postToAll(RemoteProcessConnectionError(cause, clientAddr))
@@ -617,16 +615,12 @@ private[netty] class NettyRpcHandler(
     val addr = client.getChannel().remoteAddress().asInstanceOf[InetSocketAddress]
     assert(addr != null)
 
-    logWarning("channelActive invoked. Address = " + addr)
-
     val clientAddr = RpcAddress(addr.getHostString, addr.getPort)
     dispatcher.postToAll(RemoteProcessConnected(clientAddr))
   }
 
   override def channelInactive(client: TransportClient): Unit = {
     val addr = client.getChannel.remoteAddress().asInstanceOf[InetSocketAddress]
-
-    logWarning("channelInactive invoked. Address = " + addr)
 
     if (addr != null) {
       val clientAddr = RpcAddress(addr.getHostString, addr.getPort)
