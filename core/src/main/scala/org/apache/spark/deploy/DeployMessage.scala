@@ -24,7 +24,7 @@ import org.apache.spark.deploy.master.{ApplicationInfo, DriverInfo, WorkerInfo}
 import org.apache.spark.deploy.master.DriverState.DriverState
 import org.apache.spark.deploy.master.RecoveryState.MasterState
 import org.apache.spark.deploy.worker.{DriverRunner, ExecutorRunner}
-import org.apache.spark.rpc.RpcEndpointRef
+import org.apache.spark.rpc.{RpcAddress, RpcEndpointRef}
 import org.apache.spark.util.Utils
 
 private[deploy] sealed trait DeployMessage extends Serializable
@@ -41,7 +41,8 @@ private[deploy] object DeployMessages {
       worker: RpcEndpointRef,
       cores: Int,
       memory: Int,
-      workerWebUiUrl: String)
+      workerWebUiUrl: String,
+      masterAddress: RpcAddress)
     extends DeployMessage {
     Utils.checkHost(host, "Required hostname")
     assert (port > 0)
@@ -80,8 +81,11 @@ private[deploy] object DeployMessages {
 
   sealed trait RegisterWorkerResponse
 
-  case class RegisteredWorker(master: RpcEndpointRef, masterWebUiUrl: String) extends DeployMessage
-    with RegisterWorkerResponse
+  case class RegisteredWorker(
+                               master: RpcEndpointRef,
+                               masterWebUiUrl: String,
+                               masterAddress: RpcAddress)
+    extends DeployMessage with RegisterWorkerResponse
 
   case class RegisterWorkerFailed(message: String) extends DeployMessage with RegisterWorkerResponse
 

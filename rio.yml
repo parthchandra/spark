@@ -1,0 +1,219 @@
+schemaVersion: 2.0
+ 
+machine:
+  java:
+    version: 1.8
+  maven:
+    version: maven-3.3
+
+builds:
+  - name: pie-spark-2.10_1.6.2-snapshot
+    branchName: pie-spark-1.6.2
+    timeout: 90
+    machine: 
+      env: 
+        SCALA_BINARY_VERSION: "2.10"
+        SCALA_VERSION: "2.10.4"
+        HADOOP_VERSION: "2.6.0-mr1-cdh5.6.0"
+    build:
+      template: freestyle:v2:snapshot
+      steps: 
+        - ./rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --hadoop "$HADOOP_VERSION" --snapshot --maven-opts ""
+        - ./make-distribution.sh --tgz --use-existing-build --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION" -Dhadoop.version="$HADOOP_VERSION"
+    trigger:
+      gitPush: false
+      scm: '@hourly'
+    publish:
+      archives:
+        includePattern: .dist/local-repo/**/*.jar, .dist/local-repo/**/*.pom, .dist/local-repo/**/*.tgz, .dist/local-repo/**/*.gz
+      reports:
+        junit: false
+
+  - name: pie-spark-2.10_1.6.2-release
+    branchName: pie-spark-1.6.2
+    timeout: 90
+    machine: 
+      env: 
+        SCALA_BINARY_VERSION: "2.10"
+        SCALA_VERSION: "2.10.4"
+        HADOOP_VERSION: "2.6.0-mr1-cdh5.6.0"
+    build:
+      template: freestyle:v2:release
+      steps: 
+        - ./rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --hadoop "$HADOOP_VERSION" --release --maven-opts ""
+        - ./make-distribution.sh --tgz --use-existing-build --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION" -Dhadoop.version="$HADOOP_VERSION"
+    trigger:
+      gitPush: false
+    publish:
+      archives:
+        includePattern: .dist/local-repo/**/*.jar, .dist/local-repo/**/*.pom, .dist/local-repo/**/*.tgz, .dist/local-repo/**/*.gz
+      reports:
+        junit: false
+    finally:
+      tag:
+        enabled: true
+        expression: "releases_2.10/$CODE_VERSION"
+
+  - name: pie-spark-2.11_1.6.2-snapshot
+    branchName: pie-spark-1.6.2
+    timeout: 90
+    machine: 
+      env: 
+        SCALA_BINARY_VERSION: "2.11"
+        SCALA_VERSION: "2.11.7"
+        HADOOP_VERSION: "2.6.0-mr1-cdh5.6.0"
+    build:
+      template: freestyle:v2:snapshot
+      steps: 
+        - ./rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --hadoop "$HADOOP_VERSION" --snapshot --maven-opts ""
+        - ./make-distribution.sh --tgz --use-existing-build --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION" -Dhadoop.version="$HADOOP_VERSION"
+    trigger:
+      gitPush: false
+      scm: '@hourly'
+    publish:
+      archives:
+        includePattern: .dist/local-repo/**/*.jar, .dist/local-repo/**/*.pom, .dist/local-repo/**/*.tgz, .dist/local-repo/**/*.gz
+      reports:
+        junit: false
+
+  - name: pie-spark-2.11_1.6.2-release
+    branchName: pie-spark-1.6.2
+    timeout: 90
+    machine: 
+      env: 
+        SCALA_BINARY_VERSION: "2.11"
+        SCALA_VERSION: "2.11.7"
+        HADOOP_VERSION: "2.6.0-mr1-cdh5.6.0"
+    build:
+      template: freestyle:v2:release
+      steps: 
+        - ./rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --hadoop "$HADOOP_VERSION" --release --maven-opts ""
+        - ./make-distribution.sh --tgz --use-existing-build --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION" -Dhadoop.version="$HADOOP_VERSION"
+    trigger:
+      gitPush: false
+    publish:
+      archives:
+        includePattern: .dist/local-repo/**/*.jar, .dist/local-repo/**/*.pom, .dist/local-repo/**/*.tgz, .dist/local-repo/**/*.gz
+      reports:
+        junit: false
+    finally:
+      tag:
+        enabled: true
+        expression: "releases_2.11/$CODE_VERSION"
+
+  - name: pie-spark-2.11_2.1.0-rc5-release
+    branchName: pie-spark-2.1.0-rc5
+    timeout: 90
+    machine: 
+      env: 
+        SCALA_BINARY_VERSION: "2.11"
+        SCALA_VERSION: "2.11.7"
+        HADOOP_VERSION: "2.7"
+    build:
+      template: freestyle:v2:release
+      steps: 
+        - ./rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --hadoop "$HADOOP_VERSION" --release --maven-opts ""
+        - ./make-distribution.sh --tgz --use-existing-build --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION" -Dhadoop.version="$HADOOP_VERSION"
+    trigger:
+      gitPush: false
+    publish:
+      archives:
+        includePattern: .dist/local-repo/**/*.jar, .dist/local-repo/**/*.pom, .dist/local-repo/**/*.tgz, .dist/local-repo/**/*.gz
+      reports:
+        junit: false
+    finally:
+      tag:
+        enabled: false
+  - name: pie-spark-2.10_2.1.0-snapshot
+    branchName: pie-spark-2.1.0
+    timeout: 90
+    machine: 
+      env: 
+        SCALA_BINARY_VERSION: "2.10"
+        SCALA_VERSION: "2.10.6"
+        HADOOP_VERSION: "2.7"
+    build:
+      template: freestyle:v2:snapshot
+      steps: 
+        - ./rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --hadoop "$HADOOP_VERSION" --snapshot --maven-opts ""
+        - ./make-distribution.sh --tgz --use-existing-build --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION" -Dhadoop.version="$HADOOP_VERSION"
+    trigger:
+      gitPush: false
+      scm: '@hourly'
+    publish:
+      archives:
+        includePattern: .dist/local-repo/**/*.jar, .dist/local-repo/**/*.pom, .dist/local-repo/**/*.tgz, .dist/local-repo/**/*.gz
+      reports:
+        junit: false
+
+  - name: pie-spark-2.10_2.1.0-release
+    branchName: pie-spark-2.1.0
+    timeout: 90
+    machine: 
+      env: 
+        SCALA_BINARY_VERSION: "2.10"
+        SCALA_VERSION: "2.10.6"
+        HADOOP_VERSION: "2.7"
+    build:
+      template: freestyle:v2:release
+      steps: 
+        - ./rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --hadoop "$HADOOP_VERSION" --release --maven-opts ""
+        - ./make-distribution.sh --tgz --use-existing-build --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION" -Dhadoop.version="$HADOOP_VERSION"
+    trigger:
+      gitPush: false
+    publish:
+      archives:
+        includePattern: .dist/local-repo/**/*.jar, .dist/local-repo/**/*.pom, .dist/local-repo/**/*.tgz, .dist/local-repo/**/*.gz
+      reports:
+        junit: false
+    finally:
+      tag:
+        enabled: true
+        expression: "releases_2.10/$CODE_VERSION"
+
+  - name: pie-spark-2.11_2.1.0-snapshot
+    branchName: pie-spark-2.1.0
+    timeout: 90
+    machine: 
+      env: 
+        SCALA_BINARY_VERSION: "2.11"
+        SCALA_VERSION: "2.11.8"
+        HADOOP_VERSION: "2.7"
+    build:
+      template: freestyle:v2:snapshot
+      steps: 
+        - ./rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --hadoop "$HADOOP_VERSION" --snapshot --maven-opts ""
+        - ./make-distribution.sh --tgz --use-existing-build --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION" -Dhadoop.version="$HADOOP_VERSION"
+    trigger:
+      gitPush: false
+      scm: '@hourly'
+    publish:
+      archives:
+        includePattern: .dist/local-repo/**/*.jar, .dist/local-repo/**/*.pom, .dist/local-repo/**/*.tgz, .dist/local-repo/**/*.gz
+      reports:
+        junit: false
+
+  - name: pie-spark-2.11_2.1.0-release
+    branchName: pie-spark-2.1.0
+    timeout: 90
+    machine: 
+      env: 
+        SCALA_BINARY_VERSION: "2.11"
+        SCALA_VERSION: "2.11.8"
+        HADOOP_VERSION: "2.7"
+    build:
+      template: freestyle:v2:release
+      steps: 
+        - ./rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --hadoop "$HADOOP_VERSION" --release --maven-opts ""
+        - ./make-distribution.sh --tgz --use-existing-build --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION" -Dhadoop.version="$HADOOP_VERSION"
+    trigger:
+      gitPush: false
+    publish:
+      archives:
+        includePattern: .dist/local-repo/**/*.jar, .dist/local-repo/**/*.pom, .dist/local-repo/**/*.tgz, .dist/local-repo/**/*.gz
+      reports:
+        junit: false
+    finally:
+      tag:
+        enabled: true
+        expression: "releases_2.11/$CODE_VERSION"
