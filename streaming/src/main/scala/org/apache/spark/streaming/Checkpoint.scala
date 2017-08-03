@@ -59,7 +59,6 @@ class Checkpoint(ssc: StreamingContext, val checkpointTime: Time)
       "spark.ui.port",
       "spark.blockManager.port",
       "spark.broadcast.port",
-      "spark.legacy.akka.port",
       "spark.fileserver.port")
 
     val newSparkConf = new SparkConf(loadDefaults = false).setAll(sparkConfPairs)
