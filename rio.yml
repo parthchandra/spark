@@ -47,4 +47,4 @@ builds:
     finally:
       tag:
         enabled: true
-        expression: "releases_2.11_2.1.0/$CODE_VERSION"
+        expression: "releases_2.11/$CODE_VERSION"
