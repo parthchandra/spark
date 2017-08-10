@@ -69,10 +69,10 @@
   <dependencySets>
     <dependencySet>
       <includes>
-        <include>org.apache.spark:*:jar</include>
+        <include>com.apple.pie.spark:*:jar</include>
       </includes>
       <excludes>
-        <exclude>org.apache.spark:spark-assembly:jar</exclude>
+        <exclude>com.apple.pie.spark:spark-assembly:jar</exclude>
       </excludes>
     </dependencySet>
     <dependencySet>
@@ -83,7 +83,7 @@
       <useProjectArtifact>false</useProjectArtifact>
       <excludes>
         <exclude>org.apache.hadoop:*:jar</exclude>
-        <exclude>org.apache.spark:*:jar</exclude>
+        <exclude>com.apple.pie.spark:*:jar</exclude>
         <exclude>org.apache.zookeeper:*:jar</exclude>
         <exclude>org.apache.avro:*:jar</exclude>
       </excludes>
