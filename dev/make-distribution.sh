@@ -273,7 +273,10 @@ if [ "$MAKE_PIP" == "true" ]; then
 fi
 
 cp -r "$SPARK_HOME/sbin" "$DISTDIR"
-cp -r "$SPARK_HOME/ec2" "$DISTDIR" 2> /dev/null
+if [ -d "$SPARK_HOME/ec2" ]; then
+  cp -r "$SPARK_HOME/ec2" "$DISTDIR" 2> /dev/null
+fi
+
 # Copy SparkR if it exists
 if [ -d "$SPARK_HOME"/R/lib/SparkR ]; then
   mkdir -p "$DISTDIR"/R/lib
