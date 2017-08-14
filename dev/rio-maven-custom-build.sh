@@ -5,7 +5,7 @@ set -eux -o pipefail
 export PATH=$PATH:$JAVA_HOME/bin
 
 # Figure out where the Spark framework is installed
-SPARK_HOME="$(cd "`dirname "$0"`"; pwd)"
+SPARK_HOME="$(cd "`dirname "$0"`/.."; pwd)"
 MVN="$SPARK_HOME/build/mvn"
 VALID_SCALA_VERSIONS=( 2.10 2.11)
 
@@ -138,11 +138,15 @@ execute_command "./dev/change-scala-version.sh" $SCALA_VERSION "$@"
 
 ##Get POM Variables
 
-POM_PROJECT_ARTIFACT_ID=$("$MVN" help:evaluate -Dexpression=project.artifactId $@ 2>/dev/null | grep -v "INFO" | tail -n 1)
-POM_PROJECT_VERSION=$("$MVN" help:evaluate -Dexpression=project.version $@ 2>/dev/null | grep -v "INFO" | tail -n 1)
-POM_SCALA_VERSION=$("$MVN" help:evaluate -Dexpression=scala.binary.version $@ 2>/dev/null\
-    | grep -v "INFO"\
-    | tail -n 1)
+# POM_PROJECT_ARTIFACT_ID=$("$MVN" help:evaluate -Dexpression=project.artifactId $@ | grep -v "INFO" | tail -n 1)
+# POM_PROJECT_VERSION=$("$MVN" help:evaluate -Dexpression=project.version $@ | grep -v "INFO" | tail -n 1)
+# POM_SCALA_VERSION=$("$MVN" help:evaluate -Dexpression=scala.binary.version $@ \
+#     | grep -v "INFO"\
+#     | tail -n 1)
+
+POM_PROJECT_ARTIFACT_ID="spark-parent_2.11"
+POM_PROJECT_VERSION="2.1.0-pie1.0.9-SNAPSHOT"
+POM_SCALA_VERSION="2.11"
 
 ##Scala Version Validation
 if  [[ $POM_SCALA_VERSION != $SCALA_VERSION ]] || [[ $POM_PROJECT_ARTIFACT_ID != *$SCALA_VERSION ]] ; then
@@ -173,8 +177,8 @@ REPO_URL="local-release::default::file://${LOCAL_REPO_DIR}"
 execute_command "$MVN" package deploy -DaltDeploymentRepository="${REPO_URL}" "$SKIP_TESTS_D_PARAM" $ADDITIONAL_MAVEN_PARAMS "$@"
 
 if [ $IS_RELEASE -eq 0 ] ; then
-	find ./.dist/local-repo/com/apple/pie/spark/ -name "*.jar" -exec bash -c 'mv $0 $(echo "$0" | sed -E  "s/-[[:digit:]]+\.[[:digit:]]+-[[:digit:]]+\.jar/-SNAPSHOT.jar/" )' '{}' \;
-	find ./.dist/local-repo/com/apple/pie/spark/ -name "*.pom" -exec bash -c 'mv $0 $(echo "$0" | sed -E  "s/-[[:digit:]]+\.[[:digit:]]+-[[:digit:]]+\.pom/-SNAPSHOT.pom/" )' '{}' \;
+	find "./.dist/local-repo/com/apple/pie/spark/" -name "*.jar" -exec bash -c 'mv $0 $(echo "$0" | sed -E  "s/-[[:digit:]]+\.[[:digit:]]+-[[:digit:]]+\.jar/-SNAPSHOT.jar/" )' '{}' \;
+	find "./.dist/local-repo/com/apple/pie/spark/" -name "*.pom" -exec bash -c 'mv $0 $(echo "$0" | sed -E  "s/-[[:digit:]]+\.[[:digit:]]+-[[:digit:]]+\.pom/-SNAPSHOT.pom/" )' '{}' \;
 fi
 
 echo -e "Build Successful"
