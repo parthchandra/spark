@@ -21,7 +21,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.apple.pie.spark</groupId>
   <artifactId>spark-parent_2.10</artifactId>
-  <version>1.6.2-pie1.0.4-SNAPSHOT</version>
+  <version>1.6.2-pie1.0.5-SNAPSHOT</version>
   <parent>
     <groupId>com.apple.cie.rio</groupId>
     <artifactId>maven-parent-pom</artifactId>
@@ -653,7 +653,7 @@
       <dependency>
         <groupId>io.netty</groupId>
         <artifactId>netty-all</artifactId>
-        <version>4.0.29.Final</version>
+        <version>4.0.50.Final</version>
       </dependency>
       <dependency>
         <groupId>org.apache.derby</groupId>
