@@ -394,7 +394,7 @@ object SparkHadoopUtil {
       .newInstance()
       .asInstanceOf[SparkHadoopUtil]
   } catch {
-    case e: Exception => throw new SparkException("Unable to load YARN support", e)
+    case e: Exception => throw new SparkException("Unable to load JARVIS support", e)
   }
 
   val SPARK_YARN_CREDS_TEMP_EXTENSION = ".tmp"
