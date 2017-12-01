@@ -389,6 +389,13 @@ object SparkHadoopUtil {
   } catch {
     case e: Exception => throw new SparkException("Unable to load YARN support", e)
   }
+  private lazy val jarvis = try {
+    Utils.classForName("org.apache.spark.integration.JarvisSparkHadoopUtil")
+      .newInstance()
+      .asInstanceOf[SparkHadoopUtil]
+  } catch {
+    case e: Exception => throw new SparkException("Unable to load JARVIS support", e)
+  }
 
   val SPARK_YARN_CREDS_TEMP_EXTENSION = ".tmp"
 
@@ -406,8 +413,12 @@ object SparkHadoopUtil {
     // Check each time to support changing to/from YARN
     val yarnMode = java.lang.Boolean.parseBoolean(
         System.getProperty("SPARK_YARN_MODE", System.getenv("SPARK_YARN_MODE")))
+    val jarvisMode = java.lang.Boolean.parseBoolean(
+      System.getProperty("SPARK_JARVIS_MODE", System.getenv("SPARK_JARVIS_MODE")))
     if (yarnMode) {
       yarn
+    } else if (jarvisMode) {
+      jarvis
     } else {
       hadoop
     }
