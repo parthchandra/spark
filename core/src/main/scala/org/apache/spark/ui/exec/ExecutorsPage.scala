@@ -46,7 +46,6 @@ private[ui] case class ExecutorSummaryInfo(
     maxOffHeapMem: Long,
     executorLogs: Map[String, String])
 
-
 private[ui] class ExecutorsPage(
     parent: ExecutorsTab,
     threadDumpEnabled: Boolean,
