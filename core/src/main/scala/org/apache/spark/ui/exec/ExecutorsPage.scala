@@ -55,6 +55,7 @@ private[ui] class ExecutorsPage(
         {
           <div id="active-executors"></div> ++
           <script src={UIUtils.prependBaseUri("/static/utils.js")}></script> ++
+          <script src={UIUtils.prependBaseUri("/static/executorspage-template.js")}></script> ++
           <script src={UIUtils.prependBaseUri("/static/executorspage.js")}></script> ++
           <script>setThreadDumpEnabled({threadDumpEnabled})</script>
         }
