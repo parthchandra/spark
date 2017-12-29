@@ -54,46 +54,6 @@ $(document).ajaxStart(function () {
     $.blockUI({message: '<h3>Loading Executors Page...</h3>'});
 });
 
-function createTemplateURI(appId) {
-    var words = document.baseURI.split('/');
-    var ind = words.indexOf("proxy");
-    if (ind > 0) {
-        var baseURI = words.slice(0, ind + 1).join('/') + '/' + appId + '/static/executorspage-template.html';
-        return baseURI;
-    }
-    ind = words.indexOf("history");
-    if(ind > 0) {
-        var baseURI = words.slice(0, ind).join('/') + '/static/executorspage-template.html';
-        return baseURI;
-    }
-    return location.origin + "/static/executorspage-template.html";
-}
-
-function getStandAloneppId(cb) {
-    var words = document.baseURI.split('/');
-    var ind = words.indexOf("proxy");
-    if (ind > 0) {
-        var appId = words[ind + 1];
-        cb(appId);
-        return;
-    }
-    ind = words.indexOf("history");
-    if (ind > 0) {
-        var appId = words[ind + 1];
-        cb(appId);
-        return;
-    }
-    //Looks like Web UI is running in standalone mode
-    //Let's get application-id using REST End Point
-    $.getJSON(location.origin + "/api/v1/applications", function(response, status, jqXHR) {
-        if (response && response.length > 0) {
-            var appId = response[0].id
-            cb(appId);
-            return;
-        }
-    });
-}
-
 function createRESTEndPoint(appId) {
     var words = document.baseURI.split('/');
     var ind = words.indexOf("proxy");
@@ -181,425 +141,421 @@ $(document).ready(function () {
 
     executorsSummary = $("#active-executors");
 
-    getStandAloneppId(function (appId) {
+    var endPoint = createRESTEndPoint(SPARK_APP_ID);
+    $.getJSON(endPoint, function (response, status, jqXHR) {
+        var summary = [];
+        var allExecCnt = 0;
+        var allRDDBlocks = 0;
+        var allMemoryUsed = 0;
+        var allMaxMemory = 0;
+        var allOnHeapMemoryUsed = 0;
+        var allOnHeapMaxMemory = 0;
+        var allOffHeapMemoryUsed = 0;
+        var allOffHeapMaxMemory = 0;
+        var allDiskUsed = 0;
+        var allTotalCores = 0;
+        var allMaxTasks = 0;
+        var allActiveTasks = 0;
+        var allFailedTasks = 0;
+        var allCompletedTasks = 0;
+        var allTotalTasks = 0;
+        var allTotalDuration = 0;
+        var allTotalGCTime = 0;
+        var allTotalInputBytes = 0;
+        var allTotalShuffleRead = 0;
+        var allTotalShuffleWrite = 0;
+        var allTotalBlacklisted = 0;
 
-        var endPoint = createRESTEndPoint(appId);
-        $.getJSON(endPoint, function (response, status, jqXHR) {
-            var summary = [];
-            var allExecCnt = 0;
-            var allRDDBlocks = 0;
-            var allMemoryUsed = 0;
-            var allMaxMemory = 0;
-            var allOnHeapMemoryUsed = 0;
-            var allOnHeapMaxMemory = 0;
-            var allOffHeapMemoryUsed = 0;
-            var allOffHeapMaxMemory = 0;
-            var allDiskUsed = 0;
-            var allTotalCores = 0;
-            var allMaxTasks = 0;
-            var allActiveTasks = 0;
-            var allFailedTasks = 0;
-            var allCompletedTasks = 0;
-            var allTotalTasks = 0;
-            var allTotalDuration = 0;
-            var allTotalGCTime = 0;
-            var allTotalInputBytes = 0;
-            var allTotalShuffleRead = 0;
-            var allTotalShuffleWrite = 0;
-            var allTotalBlacklisted = 0;
+        var activeExecCnt = 0;
+        var activeRDDBlocks = 0;
+        var activeMemoryUsed = 0;
+        var activeMaxMemory = 0;
+        var activeOnHeapMemoryUsed = 0;
+        var activeOnHeapMaxMemory = 0;
+        var activeOffHeapMemoryUsed = 0;
+        var activeOffHeapMaxMemory = 0;
+        var activeDiskUsed = 0;
+        var activeTotalCores = 0;
+        var activeMaxTasks = 0;
+        var activeActiveTasks = 0;
+        var activeFailedTasks = 0;
+        var activeCompletedTasks = 0;
+        var activeTotalTasks = 0;
+        var activeTotalDuration = 0;
+        var activeTotalGCTime = 0;
+        var activeTotalInputBytes = 0;
+        var activeTotalShuffleRead = 0;
+        var activeTotalShuffleWrite = 0;
+        var activeTotalBlacklisted = 0;
 
-            var activeExecCnt = 0;
-            var activeRDDBlocks = 0;
-            var activeMemoryUsed = 0;
-            var activeMaxMemory = 0;
-            var activeOnHeapMemoryUsed = 0;
-            var activeOnHeapMaxMemory = 0;
-            var activeOffHeapMemoryUsed = 0;
-            var activeOffHeapMaxMemory = 0;
-            var activeDiskUsed = 0;
-            var activeTotalCores = 0;
-            var activeMaxTasks = 0;
-            var activeActiveTasks = 0;
-            var activeFailedTasks = 0;
-            var activeCompletedTasks = 0;
-            var activeTotalTasks = 0;
-            var activeTotalDuration = 0;
-            var activeTotalGCTime = 0;
-            var activeTotalInputBytes = 0;
-            var activeTotalShuffleRead = 0;
-            var activeTotalShuffleWrite = 0;
-            var activeTotalBlacklisted = 0;
+        var deadExecCnt = 0;
+        var deadRDDBlocks = 0;
+        var deadMemoryUsed = 0;
+        var deadMaxMemory = 0;
+        var deadOnHeapMemoryUsed = 0;
+        var deadOnHeapMaxMemory = 0;
+        var deadOffHeapMemoryUsed = 0;
+        var deadOffHeapMaxMemory = 0;
+        var deadDiskUsed = 0;
+        var deadTotalCores = 0;
+        var deadMaxTasks = 0;
+        var deadActiveTasks = 0;
+        var deadFailedTasks = 0;
+        var deadCompletedTasks = 0;
+        var deadTotalTasks = 0;
+        var deadTotalDuration = 0;
+        var deadTotalGCTime = 0;
+        var deadTotalInputBytes = 0;
+        var deadTotalShuffleRead = 0;
+        var deadTotalShuffleWrite = 0;
+        var deadTotalBlacklisted = 0;
 
-            var deadExecCnt = 0;
-            var deadRDDBlocks = 0;
-            var deadMemoryUsed = 0;
-            var deadMaxMemory = 0;
-            var deadOnHeapMemoryUsed = 0;
-            var deadOnHeapMaxMemory = 0;
-            var deadOffHeapMemoryUsed = 0;
-            var deadOffHeapMaxMemory = 0;
-            var deadDiskUsed = 0;
-            var deadTotalCores = 0;
-            var deadMaxTasks = 0;
-            var deadActiveTasks = 0;
-            var deadFailedTasks = 0;
-            var deadCompletedTasks = 0;
-            var deadTotalTasks = 0;
-            var deadTotalDuration = 0;
-            var deadTotalGCTime = 0;
-            var deadTotalInputBytes = 0;
-            var deadTotalShuffleRead = 0;
-            var deadTotalShuffleWrite = 0;
-            var deadTotalBlacklisted = 0;
-
-            response.forEach(function (exec) {
-                exec.onHeapMemoryUsed = exec.hasOwnProperty('onHeapMemoryUsed') ? exec.onHeapMemoryUsed : 0;
-                exec.maxOnHeapMemory = exec.hasOwnProperty('maxOnHeapMemory') ? exec.maxOnHeapMemory : 0;
-                exec.offHeapMemoryUsed = exec.hasOwnProperty('offHeapMemoryUsed') ? exec.offHeapMemoryUsed : 0;
-                exec.maxOffHeapMemory = exec.hasOwnProperty('maxOffHeapMemory') ? exec.maxOffHeapMemory : 0;
-            });
-
-            response.forEach(function (exec) {
-                allExecCnt += 1;
-                allRDDBlocks += exec.rddBlocks;
-                allMemoryUsed += exec.memoryUsed;
-                allMaxMemory += exec.maxMemory;
-                allOnHeapMemoryUsed += exec.onHeapMemoryUsed;
-                allOnHeapMaxMemory += exec.maxOnHeapMemory;
-                allOffHeapMemoryUsed += exec.offHeapMemoryUsed;
-                allOffHeapMaxMemory += exec.maxOffHeapMemory;
-                allDiskUsed += exec.diskUsed;
-                allTotalCores += exec.totalCores;
-                allMaxTasks += exec.maxTasks;
-                allActiveTasks += exec.activeTasks;
-                allFailedTasks += exec.failedTasks;
-                allCompletedTasks += exec.completedTasks;
-                allTotalTasks += exec.totalTasks;
-                allTotalDuration += exec.totalDuration;
-                allTotalGCTime += exec.totalGCTime;
-                allTotalInputBytes += exec.totalInputBytes;
-                allTotalShuffleRead += exec.totalShuffleRead;
-                allTotalShuffleWrite += exec.totalShuffleWrite;
-                allTotalBlacklisted += exec.isBlacklisted ? 1 : 0;
-                if (exec.isActive) {
-                    activeExecCnt += 1;
-                    activeRDDBlocks += exec.rddBlocks;
-                    activeMemoryUsed += exec.memoryUsed;
-                    activeMaxMemory += exec.maxMemory;
-                    activeOnHeapMemoryUsed += exec.onHeapMemoryUsed;
-                    activeOnHeapMaxMemory += exec.maxOnHeapMemory;
-                    activeOffHeapMemoryUsed += exec.offHeapMemoryUsed;
-                    activeOffHeapMaxMemory += exec.maxOffHeapMemory;
-                    activeDiskUsed += exec.diskUsed;
-                    activeTotalCores += exec.totalCores;
-                    activeMaxTasks += exec.maxTasks;
-                    activeActiveTasks += exec.activeTasks;
-                    activeFailedTasks += exec.failedTasks;
-                    activeCompletedTasks += exec.completedTasks;
-                    activeTotalTasks += exec.totalTasks;
-                    activeTotalDuration += exec.totalDuration;
-                    activeTotalGCTime += exec.totalGCTime;
-                    activeTotalInputBytes += exec.totalInputBytes;
-                    activeTotalShuffleRead += exec.totalShuffleRead;
-                    activeTotalShuffleWrite += exec.totalShuffleWrite;
-                    activeTotalBlacklisted += exec.isBlacklisted ? 1 : 0;
-                } else {
-                    deadExecCnt += 1;
-                    deadRDDBlocks += exec.rddBlocks;
-                    deadMemoryUsed += exec.memoryUsed;
-                    deadMaxMemory += exec.maxMemory;
-                    deadOnHeapMemoryUsed += exec.onHeapMemoryUsed;
-                    deadOnHeapMaxMemory += exec.maxOnHeapMemory;
-                    deadOffHeapMemoryUsed += exec.offHeapMemoryUsed;
-                    deadOffHeapMaxMemory += exec.maxOffHeapMemory;
-                    deadDiskUsed += exec.diskUsed;
-                    deadTotalCores += exec.totalCores;
-                    deadMaxTasks += exec.maxTasks;
-                    deadActiveTasks += exec.activeTasks;
-                    deadFailedTasks += exec.failedTasks;
-                    deadCompletedTasks += exec.completedTasks;
-                    deadTotalTasks += exec.totalTasks;
-                    deadTotalDuration += exec.totalDuration;
-                    deadTotalGCTime += exec.totalGCTime;
-                    deadTotalInputBytes += exec.totalInputBytes;
-                    deadTotalShuffleRead += exec.totalShuffleRead;
-                    deadTotalShuffleWrite += exec.totalShuffleWrite;
-                    deadTotalBlacklisted += exec.isBlacklisted ? 1 : 0;
-                }
-            });
-
-            var totalSummary = {
-                "execCnt": ( "Total(" + allExecCnt + ")"),
-                "allRDDBlocks": allRDDBlocks,
-                "allMemoryUsed": allMemoryUsed,
-                "allMaxMemory": allMaxMemory,
-                "allOnHeapMemoryUsed": allOnHeapMemoryUsed,
-                "allOnHeapMaxMemory": allOnHeapMaxMemory,
-                "allOffHeapMemoryUsed": allOffHeapMemoryUsed,
-                "allOffHeapMaxMemory": allOffHeapMaxMemory,
-                "allDiskUsed": allDiskUsed,
-                "allTotalCores": allTotalCores,
-                "allMaxTasks": allMaxTasks,
-                "allActiveTasks": allActiveTasks,
-                "allFailedTasks": allFailedTasks,
-                "allCompletedTasks": allCompletedTasks,
-                "allTotalTasks": allTotalTasks,
-                "allTotalDuration": allTotalDuration,
-                "allTotalGCTime": allTotalGCTime,
-                "allTotalInputBytes": allTotalInputBytes,
-                "allTotalShuffleRead": allTotalShuffleRead,
-                "allTotalShuffleWrite": allTotalShuffleWrite,
-                "allTotalBlacklisted": allTotalBlacklisted
-            };
-            var activeSummary = {
-                "execCnt": ( "Active(" + activeExecCnt + ")"),
-                "allRDDBlocks": activeRDDBlocks,
-                "allMemoryUsed": activeMemoryUsed,
-                "allMaxMemory": activeMaxMemory,
-                "allOnHeapMemoryUsed": activeOnHeapMemoryUsed,
-                "allOnHeapMaxMemory": activeOnHeapMaxMemory,
-                "allOffHeapMemoryUsed": activeOffHeapMemoryUsed,
-                "allOffHeapMaxMemory": activeOffHeapMaxMemory,
-                "allDiskUsed": activeDiskUsed,
-                "allTotalCores": activeTotalCores,
-                "allMaxTasks": activeMaxTasks,
-                "allActiveTasks": activeActiveTasks,
-                "allFailedTasks": activeFailedTasks,
-                "allCompletedTasks": activeCompletedTasks,
-                "allTotalTasks": activeTotalTasks,
-                "allTotalDuration": activeTotalDuration,
-                "allTotalGCTime": activeTotalGCTime,
-                "allTotalInputBytes": activeTotalInputBytes,
-                "allTotalShuffleRead": activeTotalShuffleRead,
-                "allTotalShuffleWrite": activeTotalShuffleWrite,
-                "allTotalBlacklisted": activeTotalBlacklisted
-            };
-            var deadSummary = {
-                "execCnt": ( "Dead(" + deadExecCnt + ")" ),
-                "allRDDBlocks": deadRDDBlocks,
-                "allMemoryUsed": deadMemoryUsed,
-                "allMaxMemory": deadMaxMemory,
-                "allOnHeapMemoryUsed": deadOnHeapMemoryUsed,
-                "allOnHeapMaxMemory": deadOnHeapMaxMemory,
-                "allOffHeapMemoryUsed": deadOffHeapMemoryUsed,
-                "allOffHeapMaxMemory": deadOffHeapMaxMemory,
-                "allDiskUsed": deadDiskUsed,
-                "allTotalCores": deadTotalCores,
-                "allMaxTasks": deadMaxTasks,
-                "allActiveTasks": deadActiveTasks,
-                "allFailedTasks": deadFailedTasks,
-                "allCompletedTasks": deadCompletedTasks,
-                "allTotalTasks": deadTotalTasks,
-                "allTotalDuration": deadTotalDuration,
-                "allTotalGCTime": deadTotalGCTime,
-                "allTotalInputBytes": deadTotalInputBytes,
-                "allTotalShuffleRead": deadTotalShuffleRead,
-                "allTotalShuffleWrite": deadTotalShuffleWrite,
-                "allTotalBlacklisted": deadTotalBlacklisted
-            };
-
-            var data = {executors: response, "execSummary": [activeSummary, deadSummary, totalSummary]};
-            $.get(createTemplateURI(appId), function (template) {
-
-                executorsSummary.append(Mustache.render($(template).filter("#executors-summary-template").html(), data));
-                var selector = "#active-executors-table";
-                var conf = {
-                    "data": response,
-                    "columns": [
-                        {
-                            data: function (row, type) {
-                                return type !== 'display' ? (isNaN(row.id) ? 0 : row.id ) : row.id;
-                            }
-                        },
-                        {data: 'hostPort'},
-                        {data: 'isActive', render: function (data, type, row) {
-                            if (type !== 'display') return data;
-                            if (row.isBlacklisted) return "Blacklisted";
-                            else return formatStatus (data, type);
-                            }
-                        },
-                        {data: 'rddBlocks'},
-                        {
-                            data: function (row, type) {
-                                if (type !== 'display')
-                                    return row.memoryUsed;
-                                else
-                                    return (formatBytes(row.memoryUsed, type) + ' / ' +
-                                        formatBytes(row.maxMemory, type));
-                            }
-                        },
-                        {
-                            data: function (row, type) {
-                                if (type !== 'display')
-                                    return row.onHeapMemoryUsed;
-                                else
-                                    return (formatBytes(row.onHeapMemoryUsed, type) + ' / ' +
-                                        formatBytes(row.maxOnHeapMemory, type));
-                            },
-                            "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
-                                $(nTd).addClass('on_heap_memory')
-                            }
-                        },
-                        {
-                            data: function (row, type) {
-                                if (type !== 'display')
-                                    return row.offHeapMemoryUsed;
-                                else
-                                    return (formatBytes(row.offHeapMemoryUsed, type) + ' / ' +
-                                        formatBytes(row.maxOffHeapMemory, type));
-                            },
-                            "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
-                                $(nTd).addClass('off_heap_memory')
-                            }
-                        },
-                        {data: 'diskUsed', render: formatBytes},
-                        {data: 'totalCores'},
-                        {
-                            data: 'activeTasks',
-                            "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
-                                if (sData > 0) {
-                                    $(nTd).css('color', 'white');
-                                    $(nTd).css('background', activeTasksStyle(oData.activeTasks, oData.maxTasks));
-                                }
-                            }
-                        },
-                        {
-                            data: 'failedTasks',
-                            "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
-                                if (sData > 0) {
-                                    $(nTd).css('color', 'white');
-                                    $(nTd).css('background', failedTasksStyle(oData.failedTasks, oData.totalTasks));
-                                }
-                            }
-                        },
-                        {data: 'completedTasks'},
-                        {data: 'totalTasks'},
-                        {
-                            data: function (row, type) {
-                                return type === 'display' ? (formatDuration(row.totalDuration) + ' (' + formatDuration(row.totalGCTime) + ')') : row.totalDuration
-                            },
-                            "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
-                                if (oData.totalDuration > 0) {
-                                    $(nTd).css('color', totalDurationColor(oData.totalGCTime, oData.totalDuration));
-                                    $(nTd).css('background', totalDurationStyle(oData.totalGCTime, oData.totalDuration));
-                                }
-                            }
-                        },
-                        {data: 'totalInputBytes', render: formatBytes},
-                        {data: 'totalShuffleRead', render: formatBytes},
-                        {data: 'totalShuffleWrite', render: formatBytes},
-                        {data: 'executorLogs', render: formatLogsCells},
-                        {
-                            data: 'id', render: function (data, type) {
-                                return type === 'display' ? ("<a href='threadDump/?executorId=" + data + "'>Thread Dump</a>" ) : data;
-                            }
-                        }
-                    ],
-                    "columnDefs": [
-                        {
-                            "targets": [ 16 ],
-                            "visible": getThreadDumpEnabled()
-                        }
-                    ],
-                    "order": [[0, "asc"]]
-                };
-    
-                var dt = $(selector).DataTable(conf);
-                dt.column(15).visible(logsExist(response));
-                $('#active-executors [data-toggle="tooltip"]').tooltip();
-    
-                var sumSelector = "#summary-execs-table";
-                var sumConf = {
-                    "data": [activeSummary, deadSummary, totalSummary],
-                    "columns": [
-                        {
-                            data: 'execCnt',
-                            "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
-                                $(nTd).css('font-weight', 'bold');
-                            }
-                        },
-                        {data: 'allRDDBlocks'},
-                        {
-                            data: function (row, type) {
-                                if (type !== 'display')
-                                    return row.allMemoryUsed
-                                else
-                                    return (formatBytes(row.allMemoryUsed, type) + ' / ' +
-                                        formatBytes(row.allMaxMemory, type));
-                            }
-                        },
-                        {
-                            data: function (row, type) {
-                                if (type !== 'display')
-                                    return row.allOnHeapMemoryUsed;
-                                else
-                                    return (formatBytes(row.allOnHeapMemoryUsed, type) + ' / ' +
-                                        formatBytes(row.allOnHeapMaxMemory, type));
-                            },
-                            "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
-                                $(nTd).addClass('on_heap_memory')
-                            }
-                        },
-                        {
-                            data: function (row, type) {
-                                if (type !== 'display')
-                                    return row.allOffHeapMemoryUsed;
-                                else
-                                    return (formatBytes(row.allOffHeapMemoryUsed, type) + ' / ' +
-                                        formatBytes(row.allOffHeapMaxMemory, type));
-                            },
-                            "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
-                                $(nTd).addClass('off_heap_memory')
-                            }
-                        },
-                        {data: 'allDiskUsed', render: formatBytes},
-                        {data: 'allTotalCores'},
-                        {
-                            data: 'allActiveTasks',
-                            "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
-                                if (sData > 0) {
-                                    $(nTd).css('color', 'white');
-                                    $(nTd).css('background', activeTasksStyle(oData.allActiveTasks, oData.allMaxTasks));
-                                }
-                            }
-                        },
-                        {
-                            data: 'allFailedTasks',
-                            "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
-                                if (sData > 0) {
-                                    $(nTd).css('color', 'white');
-                                    $(nTd).css('background', failedTasksStyle(oData.allFailedTasks, oData.allTotalTasks));
-                                }
-                            }
-                        },
-                        {data: 'allCompletedTasks'},
-                        {data: 'allTotalTasks'},
-                        {
-                            data: function (row, type) {
-                                return type === 'display' ? (formatDuration(row.allTotalDuration, type) + ' (' + formatDuration(row.allTotalGCTime, type) + ')') : row.allTotalDuration
-                            },
-                            "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
-                                if (oData.allTotalDuration > 0) {
-                                    $(nTd).css('color', totalDurationColor(oData.allTotalGCTime, oData.allTotalDuration));
-                                    $(nTd).css('background', totalDurationStyle(oData.allTotalGCTime, oData.allTotalDuration));
-                                }
-                            }
-                        },
-                        {data: 'allTotalInputBytes', render: formatBytes},
-                        {data: 'allTotalShuffleRead', render: formatBytes},
-                        {data: 'allTotalShuffleWrite', render: formatBytes},
-                        {data: 'allTotalBlacklisted'}
-                    ],
-                    "paging": false,
-                    "searching": false,
-                    "info": false
-
-                };
-    
-                $(sumSelector).DataTable(sumConf);
-                $('#execSummary [data-toggle="tooltip"]').tooltip();
-    
-            });
+        response.forEach(function (exec) {
+            exec.onHeapMemoryUsed = exec.hasOwnProperty('onHeapMemoryUsed') ? exec.onHeapMemoryUsed : 0;
+            exec.maxOnHeapMemory = exec.hasOwnProperty('maxOnHeapMemory') ? exec.maxOnHeapMemory : 0;
+            exec.offHeapMemoryUsed = exec.hasOwnProperty('offHeapMemoryUsed') ? exec.offHeapMemoryUsed : 0;
+            exec.maxOffHeapMemory = exec.hasOwnProperty('maxOffHeapMemory') ? exec.maxOffHeapMemory : 0;
         });
+
+        response.forEach(function (exec) {
+            allExecCnt += 1;
+            allRDDBlocks += exec.rddBlocks;
+            allMemoryUsed += exec.memoryUsed;
+            allMaxMemory += exec.maxMemory;
+            allOnHeapMemoryUsed += exec.onHeapMemoryUsed;
+            allOnHeapMaxMemory += exec.maxOnHeapMemory;
+            allOffHeapMemoryUsed += exec.offHeapMemoryUsed;
+            allOffHeapMaxMemory += exec.maxOffHeapMemory;
+            allDiskUsed += exec.diskUsed;
+            allTotalCores += exec.totalCores;
+            allMaxTasks += exec.maxTasks;
+            allActiveTasks += exec.activeTasks;
+            allFailedTasks += exec.failedTasks;
+            allCompletedTasks += exec.completedTasks;
+            allTotalTasks += exec.totalTasks;
+            allTotalDuration += exec.totalDuration;
+            allTotalGCTime += exec.totalGCTime;
+            allTotalInputBytes += exec.totalInputBytes;
+            allTotalShuffleRead += exec.totalShuffleRead;
+            allTotalShuffleWrite += exec.totalShuffleWrite;
+            allTotalBlacklisted += exec.isBlacklisted ? 1 : 0;
+            if (exec.isActive) {
+                activeExecCnt += 1;
+                activeRDDBlocks += exec.rddBlocks;
+                activeMemoryUsed += exec.memoryUsed;
+                activeMaxMemory += exec.maxMemory;
+                activeOnHeapMemoryUsed += exec.onHeapMemoryUsed;
+                activeOnHeapMaxMemory += exec.maxOnHeapMemory;
+                activeOffHeapMemoryUsed += exec.offHeapMemoryUsed;
+                activeOffHeapMaxMemory += exec.maxOffHeapMemory;
+                activeDiskUsed += exec.diskUsed;
+                activeTotalCores += exec.totalCores;
+                activeMaxTasks += exec.maxTasks;
+                activeActiveTasks += exec.activeTasks;
+                activeFailedTasks += exec.failedTasks;
+                activeCompletedTasks += exec.completedTasks;
+                activeTotalTasks += exec.totalTasks;
+                activeTotalDuration += exec.totalDuration;
+                activeTotalGCTime += exec.totalGCTime;
+                activeTotalInputBytes += exec.totalInputBytes;
+                activeTotalShuffleRead += exec.totalShuffleRead;
+                activeTotalShuffleWrite += exec.totalShuffleWrite;
+                activeTotalBlacklisted += exec.isBlacklisted ? 1 : 0;
+            } else {
+                deadExecCnt += 1;
+                deadRDDBlocks += exec.rddBlocks;
+                deadMemoryUsed += exec.memoryUsed;
+                deadMaxMemory += exec.maxMemory;
+                deadOnHeapMemoryUsed += exec.onHeapMemoryUsed;
+                deadOnHeapMaxMemory += exec.maxOnHeapMemory;
+                deadOffHeapMemoryUsed += exec.offHeapMemoryUsed;
+                deadOffHeapMaxMemory += exec.maxOffHeapMemory;
+                deadDiskUsed += exec.diskUsed;
+                deadTotalCores += exec.totalCores;
+                deadMaxTasks += exec.maxTasks;
+                deadActiveTasks += exec.activeTasks;
+                deadFailedTasks += exec.failedTasks;
+                deadCompletedTasks += exec.completedTasks;
+                deadTotalTasks += exec.totalTasks;
+                deadTotalDuration += exec.totalDuration;
+                deadTotalGCTime += exec.totalGCTime;
+                deadTotalInputBytes += exec.totalInputBytes;
+                deadTotalShuffleRead += exec.totalShuffleRead;
+                deadTotalShuffleWrite += exec.totalShuffleWrite;
+                deadTotalBlacklisted += exec.isBlacklisted ? 1 : 0;
+            }
+        });
+
+        var totalSummary = {
+            "execCnt": ( "Total(" + allExecCnt + ")"),
+            "allRDDBlocks": allRDDBlocks,
+            "allMemoryUsed": allMemoryUsed,
+            "allMaxMemory": allMaxMemory,
+            "allOnHeapMemoryUsed": allOnHeapMemoryUsed,
+            "allOnHeapMaxMemory": allOnHeapMaxMemory,
+            "allOffHeapMemoryUsed": allOffHeapMemoryUsed,
+            "allOffHeapMaxMemory": allOffHeapMaxMemory,
+            "allDiskUsed": allDiskUsed,
+            "allTotalCores": allTotalCores,
+            "allMaxTasks": allMaxTasks,
+            "allActiveTasks": allActiveTasks,
+            "allFailedTasks": allFailedTasks,
+            "allCompletedTasks": allCompletedTasks,
+            "allTotalTasks": allTotalTasks,
+            "allTotalDuration": allTotalDuration,
+            "allTotalGCTime": allTotalGCTime,
+            "allTotalInputBytes": allTotalInputBytes,
+            "allTotalShuffleRead": allTotalShuffleRead,
+            "allTotalShuffleWrite": allTotalShuffleWrite,
+            "allTotalBlacklisted": allTotalBlacklisted
+        };
+        var activeSummary = {
+            "execCnt": ( "Active(" + activeExecCnt + ")"),
+            "allRDDBlocks": activeRDDBlocks,
+            "allMemoryUsed": activeMemoryUsed,
+            "allMaxMemory": activeMaxMemory,
+            "allOnHeapMemoryUsed": activeOnHeapMemoryUsed,
+            "allOnHeapMaxMemory": activeOnHeapMaxMemory,
+            "allOffHeapMemoryUsed": activeOffHeapMemoryUsed,
+            "allOffHeapMaxMemory": activeOffHeapMaxMemory,
+            "allDiskUsed": activeDiskUsed,
+            "allTotalCores": activeTotalCores,
+            "allMaxTasks": activeMaxTasks,
+            "allActiveTasks": activeActiveTasks,
+            "allFailedTasks": activeFailedTasks,
+            "allCompletedTasks": activeCompletedTasks,
+            "allTotalTasks": activeTotalTasks,
+            "allTotalDuration": activeTotalDuration,
+            "allTotalGCTime": activeTotalGCTime,
+            "allTotalInputBytes": activeTotalInputBytes,
+            "allTotalShuffleRead": activeTotalShuffleRead,
+            "allTotalShuffleWrite": activeTotalShuffleWrite,
+            "allTotalBlacklisted": activeTotalBlacklisted
+        };
+        var deadSummary = {
+            "execCnt": ( "Dead(" + deadExecCnt + ")" ),
+            "allRDDBlocks": deadRDDBlocks,
+            "allMemoryUsed": deadMemoryUsed,
+            "allMaxMemory": deadMaxMemory,
+            "allOnHeapMemoryUsed": deadOnHeapMemoryUsed,
+            "allOnHeapMaxMemory": deadOnHeapMaxMemory,
+            "allOffHeapMemoryUsed": deadOffHeapMemoryUsed,
+            "allOffHeapMaxMemory": deadOffHeapMaxMemory,
+            "allDiskUsed": deadDiskUsed,
+            "allTotalCores": deadTotalCores,
+            "allMaxTasks": deadMaxTasks,
+            "allActiveTasks": deadActiveTasks,
+            "allFailedTasks": deadFailedTasks,
+            "allCompletedTasks": deadCompletedTasks,
+            "allTotalTasks": deadTotalTasks,
+            "allTotalDuration": deadTotalDuration,
+            "allTotalGCTime": deadTotalGCTime,
+            "allTotalInputBytes": deadTotalInputBytes,
+            "allTotalShuffleRead": deadTotalShuffleRead,
+            "allTotalShuffleWrite": deadTotalShuffleWrite,
+            "allTotalBlacklisted": deadTotalBlacklisted
+        };
+
+        var data = {executors: response, "execSummary": [activeSummary, deadSummary, totalSummary]};
+
+        executorsSummary.append(Mustache.render($(executorsSummaryTemplate).filter("#executors-summary-template").html(), data));
+
+        var selector = "#active-executors-table";
+        var conf = {
+            "data": response,
+            "columns": [
+                {
+                    data: function (row, type) {
+                        return type !== 'display' ? (isNaN(row.id) ? 0 : row.id ) : row.id;
+                    }
+                },
+                {data: 'hostPort'},
+                {data: 'isActive', render: function (data, type, row) {
+                    if (type !== 'display') return data;
+                    if (row.isBlacklisted) return "Blacklisted";
+                    else return formatStatus (data, type);
+                    }
+                },
+                {data: 'rddBlocks'},
+                {
+                    data: function (row, type) {
+                        if (type !== 'display')
+                            return row.memoryUsed;
+                        else
+                            return (formatBytes(row.memoryUsed, type) + ' / ' +
+                                formatBytes(row.maxMemory, type));
+                    }
+                },
+                {
+                    data: function (row, type) {
+                        if (type !== 'display')
+                            return row.onHeapMemoryUsed;
+                        else
+                            return (formatBytes(row.onHeapMemoryUsed, type) + ' / ' +
+                                formatBytes(row.maxOnHeapMemory, type));
+                    },
+                    "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                        $(nTd).addClass('on_heap_memory')
+                    }
+                },
+                {
+                    data: function (row, type) {
+                        if (type !== 'display')
+                            return row.offHeapMemoryUsed;
+                        else
+                            return (formatBytes(row.offHeapMemoryUsed, type) + ' / ' +
+                                formatBytes(row.maxOffHeapMemory, type));
+                    },
+                    "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                        $(nTd).addClass('off_heap_memory')
+                    }
+                },
+                {data: 'diskUsed', render: formatBytes},
+                {data: 'totalCores'},
+                {
+                    data: 'activeTasks',
+                    "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                        if (sData > 0) {
+                            $(nTd).css('color', 'white');
+                            $(nTd).css('background', activeTasksStyle(oData.activeTasks, oData.maxTasks));
+                        }
+                    }
+                },
+                {
+                    data: 'failedTasks',
+                    "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                        if (sData > 0) {
+                            $(nTd).css('color', 'white');
+                            $(nTd).css('background', failedTasksStyle(oData.failedTasks, oData.totalTasks));
+                        }
+                    }
+                },
+                {data: 'completedTasks'},
+                {data: 'totalTasks'},
+                {
+                    data: function (row, type) {
+                        return type === 'display' ? (formatDuration(row.totalDuration) + ' (' + formatDuration(row.totalGCTime) + ')') : row.totalDuration
+                    },
+                    "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                        if (oData.totalDuration > 0) {
+                            $(nTd).css('color', totalDurationColor(oData.totalGCTime, oData.totalDuration));
+                            $(nTd).css('background', totalDurationStyle(oData.totalGCTime, oData.totalDuration));
+                        }
+                    }
+                },
+                {data: 'totalInputBytes', render: formatBytes},
+                {data: 'totalShuffleRead', render: formatBytes},
+                {data: 'totalShuffleWrite', render: formatBytes},
+                {data: 'executorLogs', render: formatLogsCells},
+                {
+                    data: 'id', render: function (data, type) {
+                        return type === 'display' ? ("<a href='threadDump/?executorId=" + data + "'>Thread Dump</a>" ) : data;
+                    }
+                }
+            ],
+            "columnDefs": [
+                {
+                    "targets": [ 16 ],
+                    "visible": getThreadDumpEnabled()
+                }
+            ],
+            "order": [[0, "asc"]]
+        };
+
+        var dt = $(selector).DataTable(conf);
+        dt.column(15).visible(logsExist(response));
+        $('#active-executors [data-toggle="tooltip"]').tooltip();
+
+        var sumSelector = "#summary-execs-table";
+        var sumConf = {
+            "data": [activeSummary, deadSummary, totalSummary],
+            "columns": [
+                {
+                    data: 'execCnt',
+                    "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                        $(nTd).css('font-weight', 'bold');
+                    }
+                },
+                {data: 'allRDDBlocks'},
+                {
+                    data: function (row, type) {
+                        if (type !== 'display')
+                            return row.allMemoryUsed
+                        else
+                            return (formatBytes(row.allMemoryUsed, type) + ' / ' +
+                                formatBytes(row.allMaxMemory, type));
+                    }
+                },
+                {
+                    data: function (row, type) {
+                        if (type !== 'display')
+                            return row.allOnHeapMemoryUsed;
+                        else
+                            return (formatBytes(row.allOnHeapMemoryUsed, type) + ' / ' +
+                                formatBytes(row.allOnHeapMaxMemory, type));
+                    },
+                    "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                        $(nTd).addClass('on_heap_memory')
+                    }
+                },
+                {
+                    data: function (row, type) {
+                        if (type !== 'display')
+                            return row.allOffHeapMemoryUsed;
+                        else
+                            return (formatBytes(row.allOffHeapMemoryUsed, type) + ' / ' +
+                                formatBytes(row.allOffHeapMaxMemory, type));
+                    },
+                    "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                        $(nTd).addClass('off_heap_memory')
+                    }
+                },
+                {data: 'allDiskUsed', render: formatBytes},
+                {data: 'allTotalCores'},
+                {
+                    data: 'allActiveTasks',
+                    "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                        if (sData > 0) {
+                            $(nTd).css('color', 'white');
+                            $(nTd).css('background', activeTasksStyle(oData.allActiveTasks, oData.allMaxTasks));
+                        }
+                    }
+                },
+                {
+                    data: 'allFailedTasks',
+                    "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                        if (sData > 0) {
+                            $(nTd).css('color', 'white');
+                            $(nTd).css('background', failedTasksStyle(oData.allFailedTasks, oData.allTotalTasks));
+                        }
+                    }
+                },
+                {data: 'allCompletedTasks'},
+                {data: 'allTotalTasks'},
+                {
+                    data: function (row, type) {
+                        return type === 'display' ? (formatDuration(row.allTotalDuration, type) + ' (' + formatDuration(row.allTotalGCTime, type) + ')') : row.allTotalDuration
+                    },
+                    "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                        if (oData.allTotalDuration > 0) {
+                            $(nTd).css('color', totalDurationColor(oData.allTotalGCTime, oData.allTotalDuration));
+                            $(nTd).css('background', totalDurationStyle(oData.allTotalGCTime, oData.allTotalDuration));
+                        }
+                    }
+                },
+                {data: 'allTotalInputBytes', render: formatBytes},
+                {data: 'allTotalShuffleRead', render: formatBytes},
+                {data: 'allTotalShuffleWrite', render: formatBytes},
+                {data: 'allTotalBlacklisted'}
+            ],
+            "paging": false,
+            "searching": false,
+            "info": false
+
+        };
+
+        $(sumSelector).DataTable(sumConf);
+        $('#execSummary [data-toggle="tooltip"]').tooltip();
+
     });
 });
