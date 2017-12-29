@@ -16,6 +16,7 @@
  */
 
 var threadDumpEnabled = false;
+var ajaxEnabled = false;
 
 function setThreadDumpEnabled(val) {
     threadDumpEnabled = val;
@@ -23,6 +24,14 @@ function setThreadDumpEnabled(val) {
 
 function getThreadDumpEnabled() {
     return threadDumpEnabled;
+}
+
+function setAjaxEnabled(val) {
+    ajaxEnabled = val;
+}
+
+function getAjaxEnabled() {
+    return ajaxEnabled;
 }
 
 function formatStatus(status, type) {
@@ -132,6 +141,8 @@ function totalDurationColor(totalGCTime, totalDuration) {
     return (totalGCTime > GCTimePercent * totalDuration) ? "white" : "black";
 }
 
+
+
 $(document).ready(function () {
     $.extend($.fn.dataTable.defaults, {
         stateSave: true,
@@ -139,11 +150,8 @@ $(document).ready(function () {
         pageLength: 20
     });
 
-    executorsSummary = $("#active-executors");
-
-    var endPoint = createRESTEndPoint(SPARK_APP_ID);
-    $.getJSON(endPoint, function (response, status, jqXHR) {
-
+    function displayAllExecutorsSummary(allExecutorsDataJSON) {
+        executorsSummary = $("#active-executors");
         var summary = [];
         var allExecCnt = 0;
         var allRDDBlocks = 0;
@@ -196,7 +204,7 @@ $(document).ready(function () {
         var deadTotalShuffleRead = 0;
         var deadTotalShuffleWrite = 0;
 
-        response.forEach(function (exec) {
+        allExecutorsDataJSON.forEach(function (exec) {
             allExecCnt += 1;
             allRDDBlocks += exec.rddBlocks;
             allMemoryUsed += exec.memoryUsed;
@@ -305,12 +313,13 @@ $(document).ready(function () {
             "allTotalShuffleWrite": deadTotalShuffleWrite
         };
 
-        var data = {executors: response, "execSummary": [activeSummary, deadSummary, totalSummary]};
+        var data = {executors: allExecutorsDataJSON, "execSummary": [activeSummary, deadSummary, totalSummary]};
+
         executorsSummary.append(Mustache.render($(executorsSummaryTemplate).filter("#executors-summary-template").html(), data));
 
         var selector = "#active-executors-table";
         var conf = {
-            "data": response,
+            "data": allExecutorsDataJSON,
             "columns": [
                 {
                     data: function (row, type) {
@@ -378,7 +387,7 @@ $(document).ready(function () {
         };
 
         var dt = $(selector).DataTable(conf);
-        dt.column(15).visible(logsExist(response));
+        dt.column(15).visible(logsExist(allExecutorsDataJSON));
         $('#active-executors [data-toggle="tooltip"]').tooltip();
 
         var sumSelector = "#summary-execs-table";
@@ -442,5 +451,17 @@ $(document).ready(function () {
 
         $(sumSelector).DataTable(sumConf);
         $('#execSummary [data-toggle="tooltip"]').tooltip();
-    });
+    }
+
+    if (getAjaxEnabled()) {
+        var endPoint = createRESTEndPoint(SPARK_APP_ID);
+        $.getJSON(endPoint, function(response, status, jqXHR) {
+            if (response != null) {
+                displayAllExecutorsSummary(response)
+            }
+        });
+    } else {
+        var allExecutorsDataJSON = $.parseJSON(allExecutorsData);
+        displayAllExecutorsSummary(allExecutorsDataJSON);
+    }
 });
