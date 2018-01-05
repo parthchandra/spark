@@ -21,8 +21,8 @@ import javax.servlet.http.HttpServletRequest
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
-
 import scala.xml.{Node, Unparsed}
+
 import org.apache.spark.status.api.v1.ExecutorSummary
 import org.apache.spark.ui.{UIUtils, WebUIPage}
 
