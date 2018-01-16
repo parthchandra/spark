@@ -138,6 +138,7 @@ private[spark] abstract class SparkUITab(parent: SparkUI, prefix: String)
   extends WebUITab(parent, prefix) {
 
   def appName: String = parent.appName
+  def appId: String = parent.appId
 
 }
 

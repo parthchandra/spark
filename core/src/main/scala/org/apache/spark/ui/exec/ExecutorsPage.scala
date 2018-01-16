@@ -19,7 +19,9 @@ package org.apache.spark.ui.exec
 
 import javax.servlet.http.HttpServletRequest
 
-import scala.xml.Node
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.scala.DefaultScalaModule
+import scala.xml.{Node, Unparsed}
 
 import org.apache.spark.status.api.v1.ExecutorSummary
 import org.apache.spark.ui.{UIUtils, WebUIPage}
@@ -44,13 +46,33 @@ private[ui] case class ExecutorSummaryInfo(
     maxOffHeapMem: Long,
     executorLogs: Map[String, String])
 
-
 private[ui] class ExecutorsPage(
     parent: ExecutorsTab,
-    threadDumpEnabled: Boolean)
+    threadDumpEnabled: Boolean,
+    ajaxEnabled: Boolean)
   extends WebUIPage("") {
 
+  def executorList(): Seq[ExecutorSummary] = {
+    val listener = parent.listener
+    listener.synchronized {
+      // The follow codes should be protected by `listener` to make sure no executors will be
+      // removed before we query their status. See SPARK-12784.
+      (0 until listener.activeStorageStatusList.size).map { statusId =>
+        ExecutorsPage.getExecInfo(listener, statusId, isActive = true)
+      } ++ (0 until listener.deadStorageStatusList.size).map { statusId =>
+        ExecutorsPage.getExecInfo(listener, statusId, isActive = false)
+      }
+    }
+  }
+
   def render(request: HttpServletRequest): Seq[Node] = {
+    def allExecutorsDataScript: Seq[Node] = {
+      <script>
+        {Unparsed {
+        "var allExecutorsData='" + ExecutorsPage.mapper.writeValueAsString(executorList) + "';"
+      }}
+      </script>
+    }
     val content =
       <div>
         {
@@ -84,8 +106,11 @@ private[ui] class ExecutorsPage(
           </div> ++
           <div id="active-executors"></div> ++
           <script src={UIUtils.prependBaseUri("/static/utils.js")}></script> ++
+          <script src={UIUtils.prependBaseUri("/static/executorspage-template.js")}></script> ++
           <script src={UIUtils.prependBaseUri("/static/executorspage.js")}></script> ++
-          <script>setThreadDumpEnabled({threadDumpEnabled})</script>
+          {if (!ajaxEnabled) allExecutorsDataScript else Seq.empty} ++
+          <script>setThreadDumpEnabled({threadDumpEnabled})</script> ++
+          <script>setAjaxEnabled({ajaxEnabled})</script>
         }
       </div>
 
@@ -98,6 +123,9 @@ private[spark] object ExecutorsPage {
     "storage of data like RDD partitions cached in memory."
   private val OFF_HEAP_MEMORY_TOOLTIP = "Memory used / total available memory for off heap " +
     "storage of data like RDD partitions cached in memory."
+
+  private val mapper = new ObjectMapper().registerModule(DefaultScalaModule)
+
 
   /** Represent an executor's info as a map given a storage status index */
   def getExecInfo(
