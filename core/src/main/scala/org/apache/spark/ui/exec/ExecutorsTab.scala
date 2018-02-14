@@ -31,7 +31,9 @@ private[ui] class ExecutorsTab(parent: SparkUI) extends SparkUITab(parent, "exec
   val threadDumpEnabled =
     sc.isDefined && parent.conf.getBoolean("spark.ui.threadDumpsEnabled", true)
 
-  attachPage(new ExecutorsPage(this, threadDumpEnabled))
+  val ajaxEnabled = parent.conf.getBoolean("spark.ui.ajax.enabled", true)
+
+  attachPage(new ExecutorsPage(this, threadDumpEnabled, ajaxEnabled))
   if (threadDumpEnabled) {
     attachPage(new ExecutorThreadDumpPage(this))
   }

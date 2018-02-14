@@ -257,6 +257,7 @@ private[history] class FsHistoryProvider(conf: SparkConf, clock: Clock)
           val appListener = replay(fileStatus, isApplicationCompleted(fileStatus), replayBus)
 
           if (appListener.appId.isDefined) {
+            ui.setAppId(appListener.appId.get)
             ui.getSecurityManager.setAcls(HISTORY_UI_ACLS_ENABLE)
             // make sure to set admin acls before view acls so they are properly picked up
             val adminAcls = HISTORY_UI_ADMIN_ACLS + "," + appListener.adminAcls.getOrElse("")
