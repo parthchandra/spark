@@ -88,3 +88,6 @@ spark-warehouse/
 *.Rproj.*
 
 .Rproj.user
+
+.dist
+.library
