@@ -558,7 +558,7 @@ $(document).ready(function () {
             "info": false
 
         };
-    
+
         $(sumSelector).DataTable(sumConf);
         $('#execSummary [data-toggle="tooltip"]').tooltip();
 
