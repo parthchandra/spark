@@ -25,12 +25,10 @@ import scala.collection.mutable.ArrayBuffer
 import scala.concurrent.duration._
 import scala.language.implicitConversions
 import scala.language.postfixOps
-
 import org.mockito.Mockito.{mock, when}
 import org.scalatest._
 import org.scalatest.concurrent.Eventually._
 import org.scalatest.concurrent.Timeouts._
-
 import org.apache.spark.network.netty.NettyBlockTransferService
 import org.apache.spark.rpc.RpcEnv
 import org.apache.spark._
@@ -41,7 +39,6 @@ import org.apache.spark.serializer.{JavaSerializer, KryoSerializer}
 import org.apache.spark.shuffle.hash.HashShuffleManager
 import org.apache.spark.storage.BlockManagerMessages.BlockManagerHeartbeat
 import org.apache.spark.util._
-
 
 class BlockManagerSuite extends SparkFunSuite with Matchers with BeforeAndAfterEach
   with PrivateMethodTester with ResetSystemProperties {
@@ -1402,4 +1399,37 @@ class BlockManagerSuite extends SparkFunSuite with Matchers with BeforeAndAfterE
     }
   }
 
+  test("remove should close AutoCloseable object") {
+
+    store = makeBlockManager(12000)
+
+    val id = BroadcastBlockId(0)
+    val tracker = new CloseTracker
+    store.putSingle(id, tracker, StorageLevel.MEMORY_ONLY)
+    assert(store.getSingle(id).isDefined)
+    store.removeBlock(id)
+    assert(tracker.getClosed())
+  }
+
+  test("MemoryStore.clear should close AutoCloseable objects") {
+
+    store = makeBlockManager(12000)
+
+    val id = BroadcastBlockId(0)
+    val tracker = new CloseTracker
+    store.putSingle(id, tracker, StorageLevel.MEMORY_ONLY)
+    assert(store.getSingle(id).isDefined)
+    val memory = store.memoryStore
+    memory.clear()
+    assert(tracker.getClosed())
+  }
 }
+
+class CloseTracker extends AutoCloseable {
+  var closed = false
+  override def close(): Unit = {closed = true}
+  def getClosed(): Boolean = {
+    closed
+  }
+}
+
