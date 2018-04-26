@@ -1411,6 +1411,18 @@ class BlockManagerSuite extends SparkFunSuite with Matchers with BeforeAndAfterE
     assert(tracker.getClosed())
   }
 
+  test("remove should close AutoCloseable objects even if they throw exceptions") {
+
+    store = makeBlockManager(12000)
+
+    val id = BroadcastBlockId(0)
+    val tracker = new CloseTracker(true)
+    store.putSingle(id, tracker, StorageLevel.MEMORY_ONLY)
+    assert(store.getSingle(id).isDefined)
+    store.removeBlock(id)
+    assert(tracker.getClosed())
+  }
+
   test("MemoryStore.clear should close AutoCloseable objects") {
 
     store = makeBlockManager(12000)
@@ -1423,11 +1435,50 @@ class BlockManagerSuite extends SparkFunSuite with Matchers with BeforeAndAfterE
     memory.clear()
     assert(tracker.getClosed())
   }
+
+  test("MemoryStore.clear should close AutoCloseable objects put as arrays of values") {
+
+    store = makeBlockManager(12000)
+
+    val id1 = BroadcastBlockId(1)
+    val tracker2 = new CloseTracker
+    val tracker1 = new CloseTracker
+    store.putArray(id1, Array(tracker1, tracker2), StorageLevel.MEMORY_ONLY)
+    assert(store.getSingle(id1).isDefined)
+    val memory = store.memoryStore
+    memory.clear()
+    assert(tracker1.getClosed())
+    assert(tracker2.getClosed())
+  }
+
+  test("MemoryStore.clear should close AutoCloseable objects even if they throw exceptions") {
+
+    store = makeBlockManager(12000)
+
+    val id1 = BroadcastBlockId(1)
+    val id2 = BroadcastBlockId(2)
+    val tracker2 = new CloseTracker(true)
+    val tracker1 = new CloseTracker(true)
+    store.putSingle(id1, tracker1, StorageLevel.MEMORY_ONLY)
+    store.putSingle(id2, tracker2, StorageLevel.MEMORY_ONLY)
+    assert(store.getSingle(id1).isDefined)
+    assert(store.getSingle(id2).isDefined)
+    val memory = store.memoryStore
+    memory.clear()
+    assert(tracker1.getClosed())
+    assert(tracker2.getClosed())
+  }
+
 }
 
-class CloseTracker extends AutoCloseable {
+class CloseTracker (val throwsOnClosed: Boolean = false) extends AutoCloseable {
   var closed = false
-  override def close(): Unit = {closed = true}
+  override def close(): Unit = {
+    closed = true
+    if (throwsOnClosed) {
+      throw new RuntimeException("Throwing")
+    }
+  }
   def getClosed(): Boolean = {
     closed
   }

@@ -213,16 +213,18 @@ private[spark] class MemoryStore(blockManager: BlockManager, memoryManager: Memo
     }
   }
 
-  private def maybeReleaseResources(entry: MemoryEntry) = {
+  private def maybeReleaseResources(entry: MemoryEntry): Unit = {
     entry match {
       case MemoryEntry(objs: Array[Any], _, true) => maybeCloseValues(objs)
       case _ =>
     }
   }
 
-  def maybeCloseValues(objs: Array[Any]): Unit = {
+  private def maybeCloseValues(objs: Array[Any]): Unit = {
     objs.filter((obj) => obj.isInstanceOf[AutoCloseable])
-      .foreach(_.asInstanceOf[AutoCloseable].close())
+      .foreach((obj) => try obj.asInstanceOf[AutoCloseable].close() catch {
+        case ex: Throwable => logWarning(s"Error closing AutoClosable $obj", ex)
+      })
   }
 
   override def remove(blockId: BlockId): Boolean = memoryManager.synchronized {
