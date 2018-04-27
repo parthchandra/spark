@@ -20,13 +20,14 @@ package org.apache.spark.storage
 import java.nio.ByteBuffer
 import java.util.LinkedHashMap
 
-import scala.collection.mutable
-import scala.collection.mutable.ArrayBuffer
-
 import org.apache.spark.TaskContext
 import org.apache.spark.memory.MemoryManager
-import org.apache.spark.util.{SizeEstimator, Utils}
 import org.apache.spark.util.collection.SizeTrackingVector
+import org.apache.spark.util.{SizeEstimator, Utils}
+
+import scala.collection.mutable
+import scala.collection.mutable.ArrayBuffer
+import scala.collection.JavaConverters._
 
 private case class MemoryEntry(value: Any, size: Long, deserialized: Boolean)
 
@@ -212,9 +213,24 @@ private[spark] class MemoryStore(blockManager: BlockManager, memoryManager: Memo
     }
   }
 
+  private def maybeReleaseResources(entry: MemoryEntry): Unit = {
+    entry match {
+      case MemoryEntry(objs: Array[Any], _, true) => maybeCloseValues(objs)
+      case _ =>
+    }
+  }
+
+  private def maybeCloseValues(objs: Array[Any]): Unit = {
+    objs.filter((obj) => obj.isInstanceOf[AutoCloseable])
+      .foreach((obj) => try obj.asInstanceOf[AutoCloseable].close() catch {
+        case ex: Throwable => logWarning(s"Error closing AutoClosable $obj", ex)
+      })
+  }
+
   override def remove(blockId: BlockId): Boolean = memoryManager.synchronized {
     val entry = entries.synchronized { entries.remove(blockId) }
     if (entry != null) {
+      maybeReleaseResources(entry)
       memoryManager.releaseStorageMemory(entry.size)
       logDebug(s"Block $blockId of size ${entry.size} dropped " +
         s"from memory (free ${maxMemory - blocksMemoryUsed})")
@@ -226,6 +242,9 @@ private[spark] class MemoryStore(blockManager: BlockManager, memoryManager: Memo
 
   override def clear(): Unit = memoryManager.synchronized {
     entries.synchronized {
+      for (entry <- entries.values().asScala) {
+        maybeReleaseResources(entry)
+      }
       entries.clear()
     }
     unrollMemoryMap.clear()
