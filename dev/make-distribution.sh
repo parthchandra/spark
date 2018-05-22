@@ -36,6 +36,7 @@ DISTDIR="$SPARK_HOME/dist"
 
 USE_EXISTING_BUILD=false
 
+HADOOP_PROVIDED=false
 MAKE_TGZ=false
 MAKE_PIP=false
 MAKE_R=false
@@ -87,6 +88,10 @@ while (( "$#" )); do
       ;;
     --mvn)
       MVN="$2"
+      shift
+      ;;
+    --hadoop-provided)
+      HADOOP_PROVIDED=true
       shift
       ;;
     --name)
