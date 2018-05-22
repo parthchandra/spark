@@ -153,9 +153,17 @@ if [ "$NAME" == "none" ]; then
 fi
 
 if [[ "$VERSION" == *-SNAPSHOT ]]; then
-	TGZ_VERSION=`echo $VERSION | sed -e 's/-SNAPSHOT$/-'$SPARK_HADOOP_VERSION'-SNAPSHOT/g'`
+    if [ "$HADOOP_PROVIDED" == "true" ]; then
+    	 TGZ_VERSION=`echo $VERSION | sed -e 's/-SNAPSHOT$/-without-hadoop-SNAPSHOT/g'`
+    else
+         TGZ_VERSION=`echo $VERSION | sed -e 's/-SNAPSHOT$/-'$SPARK_HADOOP_VERSION'-SNAPSHOT/g'`
+    fi
 else
-	TGZ_VERSION="${VERSION}"
+    if [ "$HADOOP_PROVIDED" == "true" ]; then
+    	 TGZ_VERSION="${VERSION}-without-hadoop"
+    else
+         TGZ_VERSION="${VERSION}"
+    fi
 fi
 
 SPARK_DISTRIBUTION_FILE_NAME="spark-distribution_$SCALA_VERSION-$TGZ_VERSION.tgz"
