@@ -60,6 +60,9 @@ while (( "$#" )); do
     --skip-java-test)
       SKIP_JAVA_TEST=true
       ;;
+   --hadoop-provided)
+      HADOOP_PROVIDED=true
+      ;;
     --use-existing-build)
       USE_EXISTING_BUILD=true
       ;;
@@ -74,10 +77,6 @@ while (( "$#" )); do
       ;;
     --mvn)
       MVN="$2"
-      shift
-      ;;
-    --hadoop-provided)
-      HADOOP_PROVIDED=true
       shift
       ;;
     --name)
