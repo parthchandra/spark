@@ -77,6 +77,9 @@ while (( "$#" )); do
     --use-existing-build)
       USE_EXISTING_BUILD=true
       ;;
+    --hadoop-provided)
+      HADOOP_PROVIDED=true
+      ;;
     --tgz)
       MAKE_TGZ=true
       ;;
@@ -88,10 +91,6 @@ while (( "$#" )); do
       ;;
     --mvn)
       MVN="$2"
-      shift
-      ;;
-    --hadoop-provided)
-      HADOOP_PROVIDED=true
       shift
       ;;
     --name)
