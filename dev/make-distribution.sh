@@ -77,7 +77,7 @@ while (( "$#" )); do
     --use-existing-build)
       USE_EXISTING_BUILD=true
       ;;
-    --hadoop-provided)
+    --with-hadoop)
       WITH_HADOOP=true
       ;;
     --tgz)
