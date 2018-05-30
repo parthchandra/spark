@@ -36,7 +36,7 @@ DISTDIR="$SPARK_HOME/dist"
 
 USE_EXISTING_BUILD=false
 
-HADOOP_PROVIDED=false
+WITH_HADOOP=false
 MAKE_TGZ=false
 MAKE_PIP=false
 MAKE_R=false
@@ -78,7 +78,7 @@ while (( "$#" )); do
       USE_EXISTING_BUILD=true
       ;;
     --hadoop-provided)
-      HADOOP_PROVIDED=true
+      WITH_HADOOP=true
       ;;
     --tgz)
       MAKE_TGZ=true
@@ -157,13 +157,13 @@ if [ "$NAME" == "none" ]; then
 fi
 
 if [[ "$VERSION" == *-SNAPSHOT ]]; then
-    if [ "$HADOOP_PROVIDED" == "true" ]; then
+    if [ "$WITH_HADOOP" == "false" ]; then
     	 TGZ_VERSION=`echo $VERSION | sed -e 's/-SNAPSHOT$/-without-hadoop-SNAPSHOT/g'`
     else
          TGZ_VERSION=`echo $VERSION | sed -e 's/-SNAPSHOT$/-'$SPARK_HADOOP_VERSION'-SNAPSHOT/g'`
     fi
 else
-    if [ "$HADOOP_PROVIDED" == "true" ]; then
+    if [ "$WITH_HADOOP" == "false" ]; then
     	 TGZ_VERSION="${VERSION}-without-hadoop"
     else
          TGZ_VERSION="${VERSION}"
