@@ -158,13 +158,13 @@ fi
 
 if [[ "$VERSION" == *-SNAPSHOT ]]; then
     if [ "$WITH_HADOOP" == "false" ]; then
-    	 TGZ_VERSION=`echo $VERSION | sed -e 's/-SNAPSHOT$/-without-hadoop-SNAPSHOT/g'`
+    	 TGZ_VERSION=`echo $VERSION | sed -e 's/-SNAPSHOT$/-no-hadoop-SNAPSHOT/g'`
     else
          TGZ_VERSION=`echo $VERSION | sed -e 's/-SNAPSHOT$/-'$SPARK_HADOOP_VERSION'-SNAPSHOT/g'`
     fi
 else
     if [ "$WITH_HADOOP" == "false" ]; then
-    	 TGZ_VERSION="${VERSION}-without-hadoop"
+    	 TGZ_VERSION="${VERSION}-no-hadoop"
     else
          TGZ_VERSION="${VERSION}"
     fi
