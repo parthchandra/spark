@@ -36,6 +36,7 @@ DISTDIR="$SPARK_HOME/dist"
 
 USE_EXISTING_BUILD=false
 
+WITH_HADOOP=false
 MAKE_TGZ=false
 MAKE_PIP=false
 MAKE_R=false
@@ -75,6 +76,9 @@ while (( "$#" )); do
       ;;
     --use-existing-build)
       USE_EXISTING_BUILD=true
+      ;;
+    --with-hadoop)
+      WITH_HADOOP=true
       ;;
     --tgz)
       MAKE_TGZ=true
@@ -153,9 +157,17 @@ if [ "$NAME" == "none" ]; then
 fi
 
 if [[ "$VERSION" == *-SNAPSHOT ]]; then
-	TGZ_VERSION=`echo $VERSION | sed -e 's/-SNAPSHOT$/-'$SPARK_HADOOP_VERSION'-SNAPSHOT/g'`
+    if [ "$WITH_HADOOP" == "false" ]; then
+    	 TGZ_VERSION=`echo $VERSION | sed -e 's/-SNAPSHOT$/-no-hadoop-SNAPSHOT/g'`
+    else
+         TGZ_VERSION=`echo $VERSION | sed -e 's/-SNAPSHOT$/-'$SPARK_HADOOP_VERSION'-SNAPSHOT/g'`
+    fi
 else
-	TGZ_VERSION="${VERSION}"
+    if [ "$WITH_HADOOP" == "false" ]; then
+    	 TGZ_VERSION="${VERSION}-no-hadoop"
+    else
+         TGZ_VERSION="${VERSION}"
+    fi
 fi
 
 SPARK_DISTRIBUTION_FILE_NAME="spark-distribution_$SCALA_VERSION-$TGZ_VERSION.tgz"
