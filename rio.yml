@@ -60,8 +60,7 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --snapshot --maven-opts "" --maven-params "-P hadoop-provided"
-        - ./dev/make-distribution.sh --tgz --use-existing-build --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION"
+        - ./dev/make-distribution.sh --tgz --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION" -P hadoop-provided
     publish:
       archives:
         includePattern: .dist/local-repo/**/*.jar, .dist/local-repo/**/*.pom, .dist/local-repo/**/*.tgz, .dist/local-repo/**/*.gz
@@ -79,8 +78,7 @@ builds:
     build:
       template: freestyle:v2:release
       steps:
-        - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --release --maven-opts "" --maven-params "-P hadoop-provided"
-        - ./dev/make-distribution.sh --tgz --use-existing-build --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION"
+        - ./dev/make-distribution.sh --tgz --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION" -P hadoop-provided
     publish:
       archives:
         includePattern: .dist/local-repo/**/*.jar, .dist/local-repo/**/*.pom, .dist/local-repo/**/*.tgz, .dist/local-repo/**/*.gz
