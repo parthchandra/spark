@@ -34,7 +34,7 @@ export PATH=$PATH:$JAVA_HOME/bin
 SPARK_HOME="$(cd "`dirname "$0"`"; pwd)"
 DISTDIR="$SPARK_HOME/dist"
 
-HADOOP_PROVIDED=false
+WITH_HADOOP=false
 SPARK_TACHYON=false
 TACHYON_VERSION="0.8.2"
 TACHYON_TGZ="tachyon-${TACHYON_VERSION}-bin.tar.gz"
@@ -76,8 +76,8 @@ while (( "$#" )); do
     --skip-java-test)
       SKIP_JAVA_TEST=true
       ;;
-    --hadoop-provided)
-      HADOOP_PROVIDED=true
+    --with-hadoop)
+      WITH_HADOOP=true
       ;;
     --with-tachyon)
       SPARK_TACHYON=true
@@ -156,14 +156,14 @@ if [ "$NAME" == "none" ]; then
 fi
 
 if [[ "$VERSION" == *-SNAPSHOT ]]; then
-    if [ "$HADOOP_PROVIDED" == "true" ]; then
-    	 TGZ_VERSION=`echo $VERSION | sed -e 's/-SNAPSHOT$/-without-hadoop-SNAPSHOT/g'`
+    if [ "$WITH_HADOOP" == "false" ]; then
+    	 TGZ_VERSION=`echo $VERSION | sed -e 's/-SNAPSHOT$/-no-hadoop-SNAPSHOT/g'`
     else
          TGZ_VERSION=`echo $VERSION | sed -e 's/-SNAPSHOT$/-'$SPARK_HADOOP_VERSION'-SNAPSHOT/g'`
     fi
 else
-    if [ "$HADOOP_PROVIDED" == "true" ]; then
-    	 TGZ_VERSION="${VERSION}-without-hadoop"
+    if [ "$WITH_HADOOP" == "false" ]; then
+    	 TGZ_VERSION="${VERSION}-no-hadoop"
     else
          TGZ_VERSION="${VERSION}"
     fi
