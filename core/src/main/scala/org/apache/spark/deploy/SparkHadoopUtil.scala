@@ -414,7 +414,7 @@ object SparkHadoopUtil {
     val yarnMode = java.lang.Boolean.parseBoolean(
         System.getProperty("SPARK_YARN_MODE", System.getenv("SPARK_YARN_MODE")))
     val jarvisMode = java.lang.Boolean.parseBoolean(
-      System.getProperty("SPARK_JARVIS_MODE", System.getenv("SPARK_JARVIS_MODE")))
+      System.getProperty("INTERNAL_SPARK_JARVIS_MODE", System.getenv("INTERNAL_SPARK_JARVIS_MODE")))
     if (yarnMode) {
       yarn
     } else if (jarvisMode) {
