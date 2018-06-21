@@ -15,6 +15,7 @@ builds:
         SCALA_BINARY_VERSION: "2.11"
         SCALA_VERSION: "2.11.7"
         HADOOP_VERSION: "2.6.0-mr1-cdh5.6.0"
+        PUBLISH_JARS: true
     build:
       template: freestyle:v2:snapshot
       steps: 
@@ -34,6 +35,7 @@ builds:
         SCALA_BINARY_VERSION: "2.11"
         SCALA_VERSION: "2.11.7"
         HADOOP_VERSION: "2.6.0-mr1-cdh5.6.0"
+        PUBLISH_JARS: true
     build:
       template: freestyle:v2:release
       steps: 
@@ -57,10 +59,12 @@ builds:
         SCALA_BINARY_VERSION: "2.11"
         SCALA_VERSION: "2.11.7"
         HADOOP_VERSION: "2.6.0-mr1-cdh5.6.0"
+        PUBLISH_JARS: false
     build:
       template: freestyle:v2:snapshot
       steps:
-        - ./make-distribution.sh --tgz --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION" -P hadoop-provided
+        - ./rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --snapshot --maven-opts "" --maven-params "-P hadoop-provided"
+        - ./make-distribution.sh --tgz --use-existing-build --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION"
     publish:
       archives:
         includePattern: .dist/local-repo/**/*.jar, .dist/local-repo/**/*.pom, .dist/local-repo/**/*.tgz, .dist/local-repo/**/*.gz
@@ -75,10 +79,12 @@ builds:
         SCALA_BINARY_VERSION: "2.11"
         SCALA_VERSION: "2.11.7"
         HADOOP_VERSION: "2.6.0-mr1-cdh5.6.0"
+        PUBLISH_JARS: false
     build:
       template: freestyle:v2:release
       steps:
-        - ./make-distribution.sh --tgz --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION" -P hadoop-provided
+        - ./rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --release --maven-opts "" --maven-params "-P hadoop-provided"
+        - ./make-distribution.sh --tgz --use-existing-build --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION"
     publish:
       archives:
         includePattern: .dist/local-repo/**/*.jar, .dist/local-repo/**/*.pom, .dist/local-repo/**/*.tgz, .dist/local-repo/**/*.gz
