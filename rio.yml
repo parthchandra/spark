@@ -92,5 +92,4 @@ builds:
         junit: false
     finally:
       tag:
-        enabled: true
-        expression: "releases_2.11/$CODE_VERSION"
+        enabled: false
