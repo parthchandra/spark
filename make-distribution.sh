@@ -34,6 +34,7 @@ export PATH=$PATH:$JAVA_HOME/bin
 SPARK_HOME="$(cd "`dirname "$0"`"; pwd)"
 DISTDIR="$SPARK_HOME/dist"
 
+WITH_HADOOP=false
 SPARK_TACHYON=false
 TACHYON_VERSION="0.8.2"
 TACHYON_TGZ="tachyon-${TACHYON_VERSION}-bin.tar.gz"
@@ -74,6 +75,9 @@ while (( "$#" )); do
       ;;
     --skip-java-test)
       SKIP_JAVA_TEST=true
+      ;;
+    --with-hadoop)
+      WITH_HADOOP=true
       ;;
     --with-tachyon)
       SPARK_TACHYON=true
@@ -152,9 +156,17 @@ if [ "$NAME" == "none" ]; then
 fi
 
 if [[ "$VERSION" == *-SNAPSHOT ]]; then
-	TGZ_VERSION=`echo $VERSION | sed -e 's/-SNAPSHOT$/-'$SPARK_HADOOP_VERSION'-SNAPSHOT/g'`
+    if [ "$WITH_HADOOP" == "false" ]; then
+    	 TGZ_VERSION=`echo $VERSION | sed -e 's/-SNAPSHOT$/-no-hadoop-SNAPSHOT/g'`
+    else
+         TGZ_VERSION=`echo $VERSION | sed -e 's/-SNAPSHOT$/-'$SPARK_HADOOP_VERSION'-SNAPSHOT/g'`
+    fi
 else
-	TGZ_VERSION="${VERSION}"
+    if [ "$WITH_HADOOP" == "false" ]; then
+    	 TGZ_VERSION="${VERSION}-no-hadoop"
+    else
+         TGZ_VERSION="${VERSION}"
+    fi
 fi
 
 SPARK_DISTRIBUTION_FILE_NAME="spark-distribution_$SCALA_VERSION-$TGZ_VERSION.tgz"
@@ -292,4 +304,8 @@ fi
 if [[ "$TGZ_VERSION" == *-SNAPSHOT ]]; then
 	find ./.dist/local-repo/com/apple/pie/spark/ -name "*.tgz" -exec bash -c 'mv $0 $(echo "$0" | sed -E  "s/-[[:digit:]]+\.[[:digit:]]+-[[:digit:]]+\.tgz/-SNAPSHOT.tgz/" )' '{}' \;
 	find ./.dist/local-repo/com/apple/pie/spark/ -name "*.pom" -exec bash -c 'mv $0 $(echo "$0" | sed -E  "s/-[[:digit:]]+\.[[:digit:]]+-[[:digit:]]+\.pom/-SNAPSHOT.pom/" )' '{}' \;
+fi
+
+if [ "$PUBLISH_JARS" == "false" ]; then
+  find ./.dist/local-repo/com/apple/pie/spark/ \! -name "*spark-distribution*[pom|tgz]" -type f -exec bash -c 'rm $0' '{}' \;
 fi
