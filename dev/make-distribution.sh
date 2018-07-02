@@ -36,6 +36,7 @@ DISTDIR="$SPARK_HOME/dist"
 
 USE_EXISTING_BUILD=false
 
+WITH_HADOOP=false
 MAKE_TGZ=false
 MAKE_PIP=false
 MAKE_R=false
@@ -58,6 +59,9 @@ while (( "$#" )); do
   case $1 in
     --skip-java-test)
       SKIP_JAVA_TEST=true
+      ;;
+   --with-hadoop)
+      WITH_HADOOP=true
       ;;
     --use-existing-build)
       USE_EXISTING_BUILD=true
@@ -146,9 +150,17 @@ if [ "$NAME" == "none" ]; then
 fi
 
 if [[ "$VERSION" == *-SNAPSHOT ]]; then
-	TGZ_VERSION=`echo $VERSION | sed -e 's/-SNAPSHOT$/-'$SPARK_HADOOP_VERSION'-SNAPSHOT/g'`
+    if [ "$WITH_HADOOP" == "false" ]; then
+    	 TGZ_VERSION=`echo $VERSION | sed -e 's/-SNAPSHOT$/-no-hadoop-SNAPSHOT/g'`
+    else
+         TGZ_VERSION=`echo $VERSION | sed -e 's/-SNAPSHOT$/-'$SPARK_HADOOP_VERSION'-SNAPSHOT/g'`
+    fi
 else
-	TGZ_VERSION="${VERSION}"
+    if [ "$WITH_HADOOP" == "false" ]; then
+    	 TGZ_VERSION="${VERSION}-no-hadoop"
+    else
+         TGZ_VERSION="${VERSION}"
+    fi
 fi
 
 SPARK_DISTRIBUTION_FILE_NAME="spark-distribution_$SCALA_VERSION-$TGZ_VERSION.tgz"
@@ -296,4 +308,8 @@ fi
 if [[ "$TGZ_VERSION" == *-SNAPSHOT ]]; then
 	find ./.dist/local-repo/com/apple/pie/spark/ -name "*.tgz" -exec bash -c 'mv $0 $(echo "$0" | sed -E  "s/-[[:digit:]]+\.[[:digit:]]+-[[:digit:]]+\.tgz/-SNAPSHOT.tgz/" )' '{}' \;
 	find ./.dist/local-repo/com/apple/pie/spark/ -name "*.pom" -exec bash -c 'mv $0 $(echo "$0" | sed -E  "s/-[[:digit:]]+\.[[:digit:]]+-[[:digit:]]+\.pom/-SNAPSHOT.pom/" )' '{}' \;
+fi
+
+if [ "$PUBLISH_JARS" == "false" ]; then
+  find ./.dist/local-repo/com/apple/pie/spark/ \! -name "*spark-distribution*[pom|tgz]" -type f -exec bash -c 'rm $0' '{}' \;
 fi
