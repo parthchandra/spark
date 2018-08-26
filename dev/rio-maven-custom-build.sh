@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-#!/usr/bin/env bash
-
 set -eux -o pipefail
 
 export PATH=$PATH:$JAVA_HOME/bin
