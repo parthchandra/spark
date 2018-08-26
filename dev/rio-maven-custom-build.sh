@@ -64,7 +64,7 @@ while (( "$#" )); do
       ;;
     --do-not-skip-tests)
       SKIP_TESTS="false"
-      SKIP_TESTS_D_PARAM=""
+      SKIP_TESTS_D_PARAM="-DskipTests=false"
       ;;
     --skip-test-package)
       SKIP_TESTS="true"
