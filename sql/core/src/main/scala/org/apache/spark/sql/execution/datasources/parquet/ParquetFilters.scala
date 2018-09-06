@@ -27,7 +27,7 @@ import scala.collection.JavaConverters.asScalaBufferConverter
 import org.apache.parquet.filter2.predicate._
 import org.apache.parquet.filter2.predicate.FilterApi._
 import org.apache.parquet.io.api.Binary
-import org.apache.parquet.schema.{DecimalMetadata, MessageType, OriginalType, PrimitiveComparator}
+import org.apache.parquet.schema._
 import org.apache.parquet.schema.OriginalType._
 import org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName
 import org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName._
@@ -54,7 +54,7 @@ private[parquet] class ParquetFilters(
    * @param fieldName field name in parquet file
    * @param fieldType field type related info in parquet file
    */
-  private case class ParquetField(
+  private case class ParquetPrimitiveField (
       fieldName: String,
       fieldType: ParquetSchemaType)
 
@@ -364,16 +364,46 @@ private[parquet] class ParquetFilters(
   /**
    * Returns a map, which contains parquet field name and data type, if predicate push down applies.
    */
-  private def getFieldMap(dataType: MessageType): Map[String, ParquetField] = {
-    // Here we don't flatten the fields in the nested schema but just look up through
-    // root fields. Currently, accessing to nested fields does not push down filters
-    // and it does not support to create filters for them.
-    val primitiveFields =
-      dataType.getFields.asScala.filter(_.isPrimitive).map(_.asPrimitiveType()).map { f =>
-        f.getName -> ParquetField(f.getName,
-          ParquetSchemaType(f.getOriginalType,
-            f.getPrimitiveTypeName, f.getTypeLength, f.getDecimalMetadata))
+  private def getFieldMap(dataType: MessageType): Map[String, ParquetPrimitiveField] = {
+    def canPushDownField(field: Type): Boolean = {
+      if (field.getName.contains(".")) {
+        // Parquet does not allow dots in the column name because dots are used as a column path
+        // delimiter. Since Parquet 1.8.2 (PARQUET-389), Parquet accepts the filter predicates
+        // with missing columns. The incorrect results could be got from Parquet when we push down
+        // filters for the column having dots in the names. Thus, we do not push down such filters.
+        // See SPARK-20364.
+        false
+      } else {
+        field match {
+          case _: PrimitiveType => true
+          // Parquet only supports push-down for primitive types; as a result, Map and List types
+          // are filtered out. FYI, when g is a `Struct`, `g.getOriginalType` is `null`.
+          // When g is a `Map`, `g.getOriginalType` is `MAP`.
+          // When g is a `List`, `g.getOriginalType` is `LIST`.
+          case g: GroupType if g.getOriginalType == null => true
+          case _ => false
+        }
       }
+    }
+
+    def getFieldMapHelper(
+        fields: Seq[Type],
+        baseName: Option[String] = None): Seq[(String, ParquetPrimitiveField)] = {
+      fields.filter(canPushDownField).flatMap { field =>
+        val name = baseName.map(_ + "." + field.getName).getOrElse(field.getName)
+        field match {
+          case p: PrimitiveType =>
+            val primitiveField = ParquetPrimitiveField(fieldName = name,
+              fieldType = ParquetSchemaType(p.getOriginalType,
+                p.getPrimitiveTypeName, p.getTypeLength, p.getDecimalMetadata))
+            Some((name, primitiveField))
+          case g: GroupType =>
+            getFieldMapHelper(g.getFields.asScala, Some(name))
+        }
+      }
+    }
+
+    val primitiveFields = getFieldMapHelper(dataType.getFields.asScala)
     if (caseSensitive) {
       primitiveFields.toMap
     } else {
@@ -393,14 +423,15 @@ private[parquet] class ParquetFilters(
    * Converts data sources filters to Parquet filter predicates.
    */
   def createFilter(schema: MessageType, predicate: sources.Filter): Option[FilterPredicate] = {
-    val nameToParquetField = getFieldMap(schema)
-    createFilterHelper(nameToParquetField, predicate, canRemoveOneSideInAnd = true)
+    createFilterHelper(schema, predicate, canPartialPushDownConjuncts = true)
   }
 
   private def createFilterHelper(
-      nameToParquetField: Map[String, ParquetField],
+      schema: MessageType,
       predicate: sources.Filter,
-      canRemoveOneSideInAnd: Boolean): Option[FilterPredicate] = {
+      canPartialPushDownConjuncts: Boolean): Option[FilterPredicate] = {
+    val nameToParquetField = getFieldMap(schema)
+
     // Decimal type must make sure that filter value's scale matched the file.
     // If doesn't matched, which would cause data corruption.
     def isDecimalMatched(value: Any, decimalMeta: DecimalMetadata): Boolean = value match {
@@ -433,13 +464,8 @@ private[parquet] class ParquetFilters(
       })
     }
 
-    // Parquet does not allow dots in the column name because dots are used as a column path
-    // delimiter. Since Parquet 1.8.2 (PARQUET-389), Parquet accepts the filter predicates
-    // with missing columns. The incorrect results could be got from Parquet when we push down
-    // filters for the column having dots in the names. Thus, we do not push down such filters.
-    // See SPARK-20364.
     def canMakeFilterOn(name: String, value: Any): Boolean = {
-      nameToParquetField.contains(name) && !name.contains(".") && valueCanMakeFilterOn(name, value)
+      nameToParquetField.contains(name) && valueCanMakeFilterOn(name, value)
     }
 
     // NOTE:
@@ -505,24 +531,28 @@ private[parquet] class ParquetFilters(
         // Pushing one side of AND down is only safe to do at the top level or in the child
         // AND before hitting NOT or OR conditions, and in this case, the unsupported predicate
         // can be safely removed.
-        val lhsFilterOption = createFilterHelper(nameToParquetField, lhs, canRemoveOneSideInAnd)
-        val rhsFilterOption = createFilterHelper(nameToParquetField, rhs, canRemoveOneSideInAnd)
+        val lhsFilterOption =
+          createFilterHelper(schema, lhs, canPartialPushDownConjuncts)
+        val rhsFilterOption =
+          createFilterHelper(schema, rhs, canPartialPushDownConjuncts)
 
         (lhsFilterOption, rhsFilterOption) match {
           case (Some(lhsFilter), Some(rhsFilter)) => Some(FilterApi.and(lhsFilter, rhsFilter))
-          case (Some(lhsFilter), None) if canRemoveOneSideInAnd => Some(lhsFilter)
-          case (None, Some(rhsFilter)) if canRemoveOneSideInAnd => Some(rhsFilter)
+          case (Some(lhsFilter), None) if canPartialPushDownConjuncts => Some(lhsFilter)
+          case (None, Some(rhsFilter)) if canPartialPushDownConjuncts => Some(rhsFilter)
           case _ => None
         }
 
       case sources.Or(lhs, rhs) =>
         for {
-          lhsFilter <- createFilterHelper(nameToParquetField, lhs, canRemoveOneSideInAnd = false)
-          rhsFilter <- createFilterHelper(nameToParquetField, rhs, canRemoveOneSideInAnd = false)
+          lhsFilter <-
+            createFilterHelper(schema, lhs, canPartialPushDownConjuncts = false)
+          rhsFilter <-
+            createFilterHelper(schema, rhs, canPartialPushDownConjuncts = false)
         } yield FilterApi.or(lhsFilter, rhsFilter)
 
       case sources.Not(pred) =>
-        createFilterHelper(nameToParquetField, pred, canRemoveOneSideInAnd = false)
+        createFilterHelper(schema, pred, canPartialPushDownConjuncts = false)
           .map(FilterApi.not)
 
       case sources.In(name, values) if canMakeFilterOn(name, values.head)

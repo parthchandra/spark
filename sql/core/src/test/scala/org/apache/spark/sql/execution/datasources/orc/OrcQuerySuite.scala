@@ -672,7 +672,7 @@ class OrcQuerySuite extends OrcQueryTest with SharedSQLContext {
     }
   }
 
-  test("SPARK-25579 ORC PPD should support column names with dot") {
+  ignore("SPARK-25579 ORC PPD should support column names with dot") {
     withSQLConf(SQLConf.ORC_FILTER_PUSHDOWN_ENABLED.key -> "true") {
       checkPredicatePushDown(spark.range(10).toDF("col.dot"), 10, "`col.dot` == 2")
     }
