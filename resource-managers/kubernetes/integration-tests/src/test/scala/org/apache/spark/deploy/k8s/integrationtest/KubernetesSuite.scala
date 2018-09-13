@@ -67,6 +67,7 @@ private[spark] class KubernetesSuite extends SparkFunSuite
     s"${(1024 + memOverheadConstant*1024 + additionalMemory).toInt}Mi"
 
   override def beforeAll(): Unit = {
+    super.beforeAll()
     // The scalatest-maven-plugin gives system properties that are referenced but not set null
     // values. We need to remove the null-value properties before initializing the test backend.
     val nullValueProperties = System.getProperties.asScala
@@ -98,7 +99,11 @@ private[spark] class KubernetesSuite extends SparkFunSuite
   }
 
   override def afterAll(): Unit = {
-    testBackend.cleanUp()
+    try {
+      testBackend.cleanUp()
+    } finally {
+      super.afterAll()
+    }
   }
 
   before {
