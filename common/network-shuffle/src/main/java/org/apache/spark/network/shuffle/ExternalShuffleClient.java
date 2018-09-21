@@ -73,10 +73,14 @@ public class ExternalShuffleClient extends ShuffleClient {
     assert appId != null : "Called before init()";
   }
 
+  /**
+   * Initializes the ShuffleClient, specifying this Executor's appId.
+   * Must be called before any other method on the ShuffleClient.
+   */
   @Override
   public void init(String appId) {
     this.appId = appId;
-    TransportContext context = new TransportContext(conf, new NoOpRpcHandler(), true);
+    TransportContext context = new TransportContext(conf, new NoOpRpcHandler(), true, true);
     List<TransportClientBootstrap> bootstraps = Lists.newArrayList();
     if (authEnabled) {
       bootstraps.add(new AuthClientBootstrap(conf, appId, secretKeyHolder));
