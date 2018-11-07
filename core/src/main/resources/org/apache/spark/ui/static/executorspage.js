@@ -16,6 +16,7 @@
  */
 
 var threadDumpEnabled = false;
+var ajaxEnabled = false;
 
 function setThreadDumpEnabled(val) {
     threadDumpEnabled = val;
@@ -23,6 +24,14 @@ function setThreadDumpEnabled(val) {
 
 function getThreadDumpEnabled() {
     return threadDumpEnabled;
+}
+
+function setAjaxEnabled(val) {
+    ajaxEnabled = val;
+}
+
+function getAjaxEnabled() {
+    return ajaxEnabled;
 }
 
 function formatStatus(status, type, row) {
@@ -59,7 +68,7 @@ $(document).ajaxStart(function () {
     $.blockUI({message: '<h3>Loading Executors Page...</h3>'});
 });
 
-function createTemplateURI(appId) {
+function _createTemplateURI(appId) {
     var words = document.baseURI.split('/');
     var ind = words.indexOf("proxy");
     if (ind > 0) {
@@ -74,7 +83,7 @@ function createTemplateURI(appId) {
     return location.origin + "/static/executorspage-template.html";
 }
 
-function getStandAloneppId(cb) {
+function _getStandAloneppId(cb) {
     var words = document.baseURI.split('/');
     var ind = words.indexOf("proxy");
     if (ind > 0) {
@@ -205,12 +214,9 @@ $(document).ready(function () {
         pageLength: 20
     });
 
-    var executorsSummary = $("#active-executors");
-
-    getStandAloneppId(function (appId) {
-
-        var endPoint = createRESTEndPoint(appId);
-        $.getJSON(endPoint, function (response, status, jqXHR) {
+    // Intentionally add 4 more spaces for this function
+        function displayAllExecutorsSummary(allExecutorsDataJSON) {
+            var executorsSummary = $("#active-executors");
             var summary = [];
             var allExecCnt = 0;
             var allRDDBlocks = 0;
@@ -278,26 +284,24 @@ $(document).ready(function () {
             var deadTotalShuffleWrite = 0;
             var deadTotalBlacklisted = 0;
 
-            response.forEach(function (exec) {
-                var memoryMetrics = {
-                    usedOnHeapStorageMemory: 0,
-                    usedOffHeapStorageMemory: 0,
-                    totalOnHeapStorageMemory: 0,
-                    totalOffHeapStorageMemory: 0
-                };
-
-                exec.memoryMetrics = exec.hasOwnProperty('memoryMetrics') ? exec.memoryMetrics : memoryMetrics;
+            allExecutorsDataJSON.forEach(function (exec) {
+                exec.onHeapMemoryUsed = exec.hasOwnProperty('onHeapMemoryUsed') ? exec.onHeapMemoryUsed : 0;
+                exec.maxOnHeapMemory = exec.hasOwnProperty('maxOnHeapMemory') ? exec.maxOnHeapMemory : 0;
+                exec.offHeapMemoryUsed = exec.hasOwnProperty('offHeapMemoryUsed') ? exec.offHeapMemoryUsed : 0;
+                exec.maxOffHeapMemory = exec.hasOwnProperty('maxOffHeapMemory') ? exec.maxOffHeapMemory : 0;
             });
 
-            response.forEach(function (exec) {
+            allExecutorsDataJSON.forEach(function (exec) {
                 allExecCnt += 1;
                 allRDDBlocks += exec.rddBlocks;
                 allMemoryUsed += exec.memoryUsed;
                 allMaxMemory += exec.maxMemory;
+                if (exec.memoryMetrics != null) { // Intentionally, ignore indentation in the following 4 lines
                 allOnHeapMemoryUsed += exec.memoryMetrics.usedOnHeapStorageMemory;
                 allOnHeapMaxMemory += exec.memoryMetrics.totalOnHeapStorageMemory;
                 allOffHeapMemoryUsed += exec.memoryMetrics.usedOffHeapStorageMemory;
                 allOffHeapMaxMemory += exec.memoryMetrics.totalOffHeapStorageMemory;
+                }
                 allDiskUsed += exec.diskUsed;
                 allTotalCores += exec.totalCores;
                 allMaxTasks += exec.maxTasks;
@@ -316,10 +320,12 @@ $(document).ready(function () {
                     activeRDDBlocks += exec.rddBlocks;
                     activeMemoryUsed += exec.memoryUsed;
                     activeMaxMemory += exec.maxMemory;
+                    if (exec.memoryMetrics != null) { // Intentionally, ignore indentation in the following 4 lines
                     activeOnHeapMemoryUsed += exec.memoryMetrics.usedOnHeapStorageMemory;
                     activeOnHeapMaxMemory += exec.memoryMetrics.totalOnHeapStorageMemory;
                     activeOffHeapMemoryUsed += exec.memoryMetrics.usedOffHeapStorageMemory;
                     activeOffHeapMaxMemory += exec.memoryMetrics.totalOffHeapStorageMemory;
+                    }
                     activeDiskUsed += exec.diskUsed;
                     activeTotalCores += exec.totalCores;
                     activeMaxTasks += exec.maxTasks;
@@ -338,10 +344,12 @@ $(document).ready(function () {
                     deadRDDBlocks += exec.rddBlocks;
                     deadMemoryUsed += exec.memoryUsed;
                     deadMaxMemory += exec.maxMemory;
+                    if (exec.memoryMetrics != null) { // Intentionally, ignore indentation in the following 4 lines
                     deadOnHeapMemoryUsed += exec.memoryMetrics.usedOnHeapStorageMemory;
                     deadOnHeapMaxMemory += exec.memoryMetrics.totalOnHeapStorageMemory;
                     deadOffHeapMemoryUsed += exec.memoryMetrics.usedOffHeapStorageMemory;
                     deadOffHeapMaxMemory += exec.memoryMetrics.totalOffHeapStorageMemory;
+                    }
                     deadDiskUsed += exec.diskUsed;
                     deadTotalCores += exec.totalCores;
                     deadMaxTasks += exec.maxTasks;
@@ -428,13 +436,13 @@ $(document).ready(function () {
                 "allTotalBlacklisted": deadTotalBlacklisted
             };
 
-            var data = {executors: response, "execSummary": [activeSummary, deadSummary, totalSummary]};
-            $.get(createTemplateURI(appId), function (template) {
+            var data = {executors: allExecutorsDataJSON, "execSummary": [activeSummary, deadSummary, totalSummary]};
 
-                executorsSummary.append(Mustache.render($(template).filter("#executors-summary-template").html(), data));
+            executorsSummary.append(Mustache.render($(executorsSummaryTemplate).filter("#executors-summary-template").html(), data));
+                // Intentionally ignore indentaion
                 var selector = "#active-executors-table";
                 var conf = {
-                    "data": response,
+                    "data": allExecutorsDataJSON,
                     "columns": [
                         {
                             data: function (row, type) {
@@ -460,6 +468,7 @@ $(document).ready(function () {
                         },
                         {
                             data: function (row, type) {
+                                if (row.memoryMetrics == null) return 0;
                                 if (type !== 'display')
                                     return row.memoryMetrics.usedOnHeapStorageMemory;
                                 else
@@ -469,6 +478,7 @@ $(document).ready(function () {
                         },
                         {
                             data: function (row, type) {
+                                if (row.memoryMetrics == null) return 0;
                                 if (type !== 'display')
                                     return row.memoryMetrics.usedOffHeapStorageMemory;
                                 else
@@ -528,8 +538,7 @@ $(document).ready(function () {
                 };
 
                 execDataTable = $(selector).DataTable(conf);
-                execDataTable.column('executorLogsCol:name').visible(logsExist(response));
-                execDataTable.column('threadDumpCol:name').visible(getThreadDumpEnabled());
+                execDataTable.column(15).visible(logsExist(allExecutorsDataJSON));
                 $('#active-executors [data-toggle="tooltip"]').tooltip();
     
                 var sumSelector = "#summary-execs-table";
@@ -673,7 +682,17 @@ $(document).ready(function () {
                         $("#toggle-metrics").toggle();
                     }
                 }
-            });
+        }; // function displayAllExecutorsSummary
+
+    if (getAjaxEnabled()) {
+        var endPoint = createRESTEndPoint(SPARK_APP_ID);
+        $.getJSON(endPoint, function(response, status, jqXHR) {
+            if (response != null) {
+                displayAllExecutorsSummary(response)
+            }
         });
-    });
+    } else {
+        var allExecutorsDataJSON = $.parseJSON(allExecutorsData);
+        displayAllExecutorsSummary(allExecutorsDataJSON);
+    }
 });
