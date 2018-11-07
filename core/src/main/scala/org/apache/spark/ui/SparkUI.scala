@@ -64,7 +64,7 @@ private[spark] class SparkUI private (
     attachTab(stagesTab)
     attachTab(new StorageTab(this, store))
     attachTab(new EnvironmentTab(this, store))
-    attachTab(new ExecutorsTab(this))
+    attachTab(new ExecutorsTab(this, store))
     addStaticHandler(SparkUI.STATIC_RESOURCE_DIR)
     attachHandler(createRedirectHandler("/", "/jobs/", basePath = basePath))
     attachHandler(ApiRootResource.getServletHandler(this))
@@ -149,6 +149,7 @@ private[spark] abstract class SparkUITab(parent: SparkUI, prefix: String)
   extends WebUITab(parent, prefix) {
 
   def appName: String = parent.appName
+  def appId: String = parent.appId
 
   def appSparkVersion: String = parent.appSparkVersion
 }
