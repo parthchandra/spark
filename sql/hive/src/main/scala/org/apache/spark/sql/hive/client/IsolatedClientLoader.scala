@@ -53,7 +53,7 @@ private[hive] object IsolatedClientLoader extends Logging {
       sharesHadoopClasses: Boolean = true): IsolatedClientLoader = synchronized {
     val resolvedVersion = hiveVersion(hiveMetastoreVersion)
     // We will first try to share Hadoop classes. If we cannot resolve the Hadoop artifact
-    // with the given version, we will use Hadoop 2.6 and then will not share Hadoop classes.
+    // with the given version, we will use Hadoop 2.7 and then will not share Hadoop classes.
     var _sharesHadoopClasses = sharesHadoopClasses
     val files = if (resolvedVersions.contains((resolvedVersion, hadoopVersion))) {
       resolvedVersions((resolvedVersion, hadoopVersion))
@@ -66,12 +66,12 @@ private[hive] object IsolatedClientLoader extends Logging {
             // If the error message contains hadoop, it is probably because the hadoop
             // version cannot be resolved.
             logWarning(s"Failed to resolve Hadoop artifacts for the version $hadoopVersion. " +
-              s"We will change the hadoop version from $hadoopVersion to 2.6.0 and try again. " +
+              s"We will change the hadoop version from $hadoopVersion to 2.7.4 and try again. " +
               "Hadoop classes will not be shared between Spark and Hive metastore client. " +
               "It is recommended to set jars used by Hive metastore client through " +
               "spark.sql.hive.metastore.jars in the production environment.")
             _sharesHadoopClasses = false
-            (downloadVersion(resolvedVersion, "2.6.5", ivyPath), "2.6.5")
+            (downloadVersion(resolvedVersion, "2.7.4", ivyPath), "2.7.4")
         }
       resolvedVersions.put((resolvedVersion, actualHadoopVersion), downloadedFiles)
       resolvedVersions((resolvedVersion, actualHadoopVersion))
