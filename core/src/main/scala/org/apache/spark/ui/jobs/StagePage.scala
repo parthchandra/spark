@@ -1054,8 +1054,13 @@ private[ui] object ApiHelper {
   }
 
   def lastStageNameAndDescription(store: AppStatusStore, job: JobData): (String, String) = {
-    val stage = store.asOption(store.stageAttempt(job.stageIds.max, 0))
-    (stage.map(_.name).getOrElse(""), stage.flatMap(_.description).getOrElse(job.name))
+    // Some jobs have only 0 partitions.
+    if (job.stageIds.isEmpty) {
+      ("", job.name)
+    } else {
+      val stage = store.asOption(store.stageAttempt(job.stageIds.max, 0))
+      (stage.map(_.name).getOrElse(""), stage.flatMap(_.description).getOrElse(job.name))
+    }
   }
 
 }
