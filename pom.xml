@@ -253,6 +253,18 @@
         <enabled>false</enabled>
       </snapshots>
     </pluginRepository>
+    <pluginRepository>
+      <!-- Enable our maven-shade-plugin patch, until we get it pushed to public. 
+           Without this, mvn deploy doesn't work due to test jar shading. -->
+      <id>siri-libs-snapshot-local</id>
+      <url>https://artifactory.siri.apple.com/libs-snapshot-local</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </pluginRepository>
   </pluginRepositories>
   <dependencies>
     <!--
@@ -2348,7 +2360,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-shade-plugin</artifactId>
-          <version>3.1.0</version>
+          <version>3.2.2-SNAPSHOT</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
