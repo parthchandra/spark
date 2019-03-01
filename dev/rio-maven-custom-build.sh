@@ -145,7 +145,7 @@ execute_command "./dev/change-scala-version.sh" $SCALA_VERSION "$@"
 #     | tail -n 1)
 
 POM_PROJECT_ARTIFACT_ID="spark-parent_2.11"
-POM_PROJECT_VERSION="2.1.0-pie1.0.10-SNAPSHOT"
+POM_PROJECT_VERSION="2.1.0-pie1.0.11-SNAPSHOT"
 POM_SCALA_VERSION="2.11"
 
 ##Scala Version Validation
