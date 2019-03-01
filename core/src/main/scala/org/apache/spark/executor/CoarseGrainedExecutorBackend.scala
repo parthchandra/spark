@@ -239,7 +239,7 @@ private[spark] object CoarseGrainedExecutorBackend extends Logging {
   def main(args: Array[String]) {
     var driverUrl: String = null
     var executorId: String = null
-    var bindAddress: String = null
+    var bindAddress: String = Utils.localHostName()
     var hostname: String = null
     var cores: Int = 0
     var appId: String = null
@@ -291,6 +291,9 @@ private[spark] object CoarseGrainedExecutorBackend extends Logging {
     if (bindAddress == null) {
       bindAddress = hostname
     }
+
+    logInfo("SPARK_LOCAL_HOSTNAME set to " + sys.env.get("SPARK_LOCAL_HOSTNAME"))
+    logInfo("Using bindAddress: " + bindAddress)
 
     run(driverUrl, executorId, bindAddress, hostname, cores, appId, workerUrl, userClassPath)
     System.exit(0)
