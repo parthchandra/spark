@@ -171,9 +171,23 @@ private[spark] abstract class YarnSchedulerBackend(
       filterParams != null && filterParams.nonEmpty
     if (hasFilter) {
       logInfo(s"Add WebUI Filter. $filterName, $filterParams, $proxyBase")
-      conf.set("spark.ui.filters", filterName)
-      filterParams.foreach { case (k, v) => conf.set(s"spark.$filterName.param.$k", v) }
-      scheduler.sc.ui.foreach { ui => JettyUtils.addFilters(ui.getHandlers, conf) }
+
+      // For already installed handlers, prepend the filter.
+      scheduler.sc.ui.foreach { ui =>
+        // Lock the UI so that new handlers are not added while this is running. Set the updated
+        // filter config inside the lock so that we're sure all handlers will properly get it.
+        ui.synchronized {
+          filterParams.foreach { case (k, v) =>
+            conf.set(s"spark.$filterName.param.$k", v)
+          }
+          conf.set(UI_FILTERS, allFilters)
+
+          ui.getDelegatingHandlers.foreach { h =>
+            h.addFilter(filterName, filterName, filterParams)
+            h.prependFilterMapping(filterName, "/*", EnumSet.allOf(classOf[DispatcherType]))
+          }
+        }
+      }
     }
   }
 

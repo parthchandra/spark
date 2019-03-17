@@ -78,4 +78,51 @@ class YarnSchedulerBackendSuite extends SparkFunSuite with MockitoSugar with Loc
     }
   }
 
+  test("Respect user filters when adding AM IP filter") {
+    val conf = new SparkConf(false)
+      .set("spark.ui.filters", classOf[TestFilter].getName())
+      .set(s"spark.${classOf[TestFilter].getName()}.param.responseCode",
+        HttpServletResponse.SC_BAD_GATEWAY.toString)
+
+    sc = new SparkContext("local", "YarnSchedulerBackendSuite", conf)
+    val sched = mock[TaskSchedulerImpl]
+    when(sched.sc).thenReturn(sc)
+
+    val url = new URL(sc.uiWebUrl.get)
+    // Before adding the "YARN" filter, should get the code from the filter in SparkConf.
+    assert(TestUtils.httpResponseCode(url) === HttpServletResponse.SC_BAD_GATEWAY)
+
+    yarnSchedulerBackend = new YarnSchedulerBackend(sched, sc) { }
+
+    yarnSchedulerBackend.addWebUIFilter(classOf[TestFilter2].getName(),
+      Map("responseCode" -> HttpServletResponse.SC_NOT_ACCEPTABLE.toString), "")
+
+    sc.ui.get.getDelegatingHandlers.foreach { h =>
+      // Two filters above + security filter.
+      assert(h.filterCount() === 3)
+    }
+
+    // The filter should have been added first in the chain, so we should get SC_NOT_ACCEPTABLE
+    // instead of SC_OK.
+    assert(TestUtils.httpResponseCode(url) === HttpServletResponse.SC_NOT_ACCEPTABLE)
+
+    // Add a new handler and make sure the added filter is properly registered.
+    val servlet = new HttpServlet() {
+      override def doGet(req: HttpServletRequest, res: HttpServletResponse): Unit = {
+        res.sendError(HttpServletResponse.SC_CONFLICT)
+      }
+    }
+
+    sc.ui.get.attachHandler("/new-handler", servlet, "/")
+
+    val newUrl = new URL(sc.uiWebUrl.get + "/new-handler/")
+    assert(TestUtils.httpResponseCode(newUrl) === HttpServletResponse.SC_NOT_ACCEPTABLE)
+
+    val bypassUrl = new URL(sc.uiWebUrl.get + "/new-handler/?bypass")
+    assert(TestUtils.httpResponseCode(bypassUrl) === HttpServletResponse.SC_CONFLICT)
+  }
+
 }
+
+// Just extend the test filter so we can configure two of them.
+class TestFilter2 extends TestFilter
