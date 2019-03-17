@@ -17,14 +17,15 @@
 
 package org.apache.spark.scheduler.cluster
 
-import java.util.concurrent.atomic.{AtomicBoolean}
+import java.util
+import java.util.concurrent.atomic.AtomicBoolean
+import javax.servlet.DispatcherType
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.util.{Failure, Success}
 import scala.util.control.NonFatal
 
-import org.apache.hadoop.security.UserGroupInformation
 import org.apache.hadoop.yarn.api.records.{ApplicationAttemptId, ApplicationId}
 
 import org.apache.spark.SparkContext
@@ -33,7 +34,6 @@ import org.apache.spark.internal.Logging
 import org.apache.spark.rpc._
 import org.apache.spark.scheduler._
 import org.apache.spark.scheduler.cluster.CoarseGrainedClusterMessages._
-import org.apache.spark.ui.JettyUtils
 import org.apache.spark.util.{RpcUtils, ThreadUtils}
 
 /**
@@ -171,9 +171,21 @@ private[spark] abstract class YarnSchedulerBackend(
       filterParams != null && filterParams.nonEmpty
     if (hasFilter) {
       logInfo(s"Add WebUI Filter. $filterName, $filterParams, $proxyBase")
-      conf.set("spark.ui.filters", filterName)
-      filterParams.foreach { case (k, v) => conf.set(s"spark.$filterName.param.$k", v) }
-      scheduler.sc.ui.foreach { ui => JettyUtils.addFilters(ui.getHandlers, conf) }
+      scheduler.sc.ui.foreach { ui =>
+        ui.synchronized {
+          conf.set("spark.ui.filters", filterName)
+          filterParams.foreach { case (k, v) => conf.set(s"spark.$filterName.param.$k", v) }
+          // conf.set(UI_FILTERS, allFilters)
+
+          ui.getDelegatingHandlers.foreach { h =>
+            h.addFilter(filterName, filterName, filterParams)
+            h.prependFilterMapping(filterName, "/*", util.EnumSet.allOf(classOf[DispatcherType]))
+          }
+        }
+
+
+      }
+
     }
   }
 
