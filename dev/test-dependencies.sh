@@ -33,7 +33,7 @@ MVN="build/mvn"
 HADOOP_PROFILES=(
     hadoop-2.6
     hadoop-2.7
-    hadoop-3.1
+    hadoop-3.2
 )
 
 SCALA_VERSION=$("$MVN" help:evaluate -Dexpression=scala.binary.version $@ 2>/dev/null\
