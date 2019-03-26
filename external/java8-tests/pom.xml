@@ -20,7 +20,7 @@
   <parent>
     <groupId>com.apple.pie.spark</groupId>
     <artifactId>spark-parent_2.11</artifactId>
-    <version>2.1.1-pie1.0.5-SNAPSHOT</version>
+    <version>2.1.1-pie1.0.6-SNAPSHOT</version>
     <relativePath>../../pom.xml</relativePath>
   </parent>
 
