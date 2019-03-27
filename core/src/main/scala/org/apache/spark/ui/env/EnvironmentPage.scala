@@ -38,7 +38,7 @@ private[ui] class EnvironmentPage(parent: EnvironmentTab) extends WebUIPage("") 
     val sparkPropertiesTable = UIUtils.listingTable(
       propertyHeader, propertyRow, listener.sparkProperties.map(removePass), fixedWidth = true)
     val systemPropertiesTable = UIUtils.listingTable(
-      propertyHeader, propertyRow, listener.systemProperties, fixedWidth = true)
+      propertyHeader, propertyRow, listener.systemProperties.map(removePass), fixedWidth = true)
     val classpathEntriesTable = UIUtils.listingTable(
       classPathHeaders, classPathRow, listener.classpathEntries, fixedWidth = true)
     val content =
