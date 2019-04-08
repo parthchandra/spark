@@ -61,6 +61,12 @@ while (( "$#" )); do
     --r)
       MAKE_R=true
       ;;
+    --avro)
+      INCLUDE_AVRO=true
+      ;;
+    --kafka-sql)
+      INCLUDE_KAFKA_SQL=true
+      ;;
     --mvn)
       MVN="$2"
       shift
@@ -137,6 +143,10 @@ SPARK_HADOOP_VERSION=$("$MVN" help:evaluate -Dexpression=hadoop.version $@ 2>/de
     | grep -v "INFO"\
     | grep -v "WARNING"\
     | tail -n 1)
+KAFKA_VERSION=$("$MVN" help:evaluate -Dexpression=kafka.version $@ 2>/dev/null\
+    | grep -v "INFO"\
+    | grep -v "WARNING"\
+    | tail -n 1)
 SPARK_HIVE=$("$MVN" help:evaluate -Dexpression=project.activeProfiles -pl sql/hive $@ 2>/dev/null\
     | grep -v "INFO"\
     | grep -v "WARNING"\
@@ -195,6 +205,18 @@ if [ -d "$SPARK_HOME"/resource-managers/kubernetes/core/target/ ]; then
   cp -a "$SPARK_HOME"/resource-managers/kubernetes/integration-tests/tests "$DISTDIR/kubernetes/"
 fi
 
+# Copy "external" package jars if requested
+if [ "$INCLUDE_AVRO" == "true" ]; then
+  cp "$SPARK_HOME"/external/avro/target/"spark-avro_${SCALA_VERSION}-${VERSION}.jar" "$DISTDIR/jars/"
+fi
+if [ "$INCLUDE_KAFKA_SQL" == "true" ]; then
+  cp "$SPARK_HOME"/external/kafka-0-10-sql/target/"spark-sql-kafka-0-10_${SCALA_VERSION}-${VERSION}.jar" "$DISTDIR/jars/"
+  # fetch dependency
+  "$MVN" dependency:get -Dtransitive=false -Dartifact=org.apache.kafka:kafka-clients:"${KAFKA_VERSION}":jar
+  "$MVN" dependency:copy -Dartifact=org.apache.kafka:kafka-clients:"${KAFKA_VERSION}":jar \
+          -Dmdep.overIfNewer=true -DoutputDirectory="$DISTDIR/jars/"
+fi
+
 # Copy examples and dependencies
 mkdir -p "$DISTDIR/examples/jars"
 cp "$SPARK_HOME"/examples/target/scala*/jars/* "$DISTDIR/examples/jars"
@@ -233,6 +255,11 @@ if [ "$MAKE_PIP" == "true" ]; then
   pushd "$SPARK_HOME/python" > /dev/null
   # Delete the egg info file if it exists, this can cache older setup files.
   rm -rf pyspark.egg-info || echo "No existing egg info file, skipping deletion"
+  # Set version to match spark build
+  version_pythonic=`echo $VERSION |sed -e 's/-/./g'`
+  sed -i -e 's/__version__.*/__version__ = '"\"${version_pythonic}\"/" pyspark/version.py
+  rm -f pyspark/version.pyc
+  # Build the sdist
   python setup.py sdist
   popd > /dev/null
 else
