@@ -37,6 +37,7 @@ MAKE_PIP=false
 MAKE_R=false
 NAME=none
 MVN="$SPARK_HOME/build/mvn"
+TAR_CROSS_BUILD_SUFFIX=""
 
 function exit_with_usage {
   echo "make-distribution.sh - tool for making binary distributions of Spark"
@@ -54,6 +55,10 @@ while (( "$#" )); do
   case $1 in
     --tgz)
       MAKE_TGZ=true
+      ;;
+    --tar-cross-build)
+      TAR_CROSS_BUILD_SUFFIX="_$2"
+      shift
       ;;
     --pip)
       MAKE_PIP=true
@@ -309,10 +314,10 @@ if [ -d "$SPARK_HOME/R/lib/SparkR" ]; then
 fi
 
 if [ "$MAKE_TGZ" == "true" ]; then
-  TARDIR_NAME=spark-$VERSION-bin-$NAME
+  TARDIR_NAME="spark${TAR_CROSS_BUILD_SUFFIX}-$VERSION-bin-$NAME"
   TARDIR="$SPARK_HOME/$TARDIR_NAME"
   rm -rf "$TARDIR"
   cp -r "$DISTDIR" "$TARDIR"
-  tar czf "spark-$VERSION-bin-$NAME.tgz" -C "$SPARK_HOME" "$TARDIR_NAME"
+  tar czf "spark${TAR_CROSS_BUILD_SUFFIX}-$VERSION-bin-$NAME.tgz" -C "$SPARK_HOME" "$TARDIR_NAME"
   rm -rf "$TARDIR"
 fi
