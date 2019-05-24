@@ -2898,5 +2898,8 @@
     <profile>
       <id>sparkr</id>
     </profile>
+    <profile>
+      <id>zstd</id>
+    </profile>
   </profiles>
 </project>
