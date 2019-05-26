@@ -710,6 +710,15 @@ private[hive] class HiveClientImpl(
    * in the sequence is one row.
    */
   protected def runHive(cmd: String, maxRows: Int = 1000): Seq[String] = withHiveState {
+    def closeDriver(driver: Driver): Unit = {
+      // Since HIVE-18238(Hive 3.0.0), the Driver.close function's return type changed
+      // and the CommandProcessorFactory.clean function removed.
+      driver.getClass.getMethod("close").invoke(driver)
+      if (version != hive.v3_1) {
+        CommandProcessorFactory.clean(conf)
+      }
+    }
+
     logDebug(s"Running hiveql '$cmd'")
     if (cmd.toLowerCase(Locale.ROOT).startsWith("set")) { logDebug(s"Changing config: $cmd") }
     try {
@@ -723,15 +732,13 @@ private[hive] class HiveClientImpl(
           val response: CommandProcessorResponse = driver.run(cmd)
           // Throw an exception if there is an error in query processing.
           if (response.getResponseCode != 0) {
-            driver.close()
-            CommandProcessorFactory.clean(conf)
+            closeDriver(driver)
             throw new QueryExecutionException(response.getErrorMessage)
           }
           driver.setMaxRows(maxRows)
 
           val results = shim.getDriverResults(driver)
-          driver.close()
-          CommandProcessorFactory.clean(conf)
+          closeDriver(driver)
           results
 
         case _ =>
