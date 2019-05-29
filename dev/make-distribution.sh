@@ -148,7 +148,7 @@ SPARK_HADOOP_VERSION=$("$MVN" help:evaluate -Dexpression=hadoop.version $@ 2>/de
     | grep -v "INFO"\
     | grep -v "WARNING"\
     | tail -n 1)
-KAFKA_VERSION=$("$MVN" help:evaluate -Dexpression=kafka.version $@ 2>/dev/null\
+KAFKA_CLIENT_VERSION=$(cd external/kafka-0-10-sql; "$MVN" help:evaluate -Dexpression=kafka.version $@ 2>/dev/null\
     | grep -v "INFO"\
     | grep -v "WARNING"\
     | tail -n 1)
@@ -217,8 +217,8 @@ fi
 if [ "$INCLUDE_KAFKA_SQL" == "true" ]; then
   cp "$SPARK_HOME"/external/kafka-0-10-sql/target/"spark-sql-kafka-0-10_${SCALA_VERSION}-${VERSION}.jar" "$DISTDIR/jars/"
   # fetch dependency
-  "$MVN" dependency:get -Dtransitive=false -Dartifact=org.apache.kafka:kafka-clients:"${KAFKA_VERSION}":jar
-  "$MVN" dependency:copy -Dartifact=org.apache.kafka:kafka-clients:"${KAFKA_VERSION}":jar \
+  "$MVN" dependency:get -Dtransitive=false -Dartifact=org.apache.kafka:kafka-clients:"${KAFKA_CLIENT_VERSION}":jar
+  "$MVN" dependency:copy -Dartifact=org.apache.kafka:kafka-clients:"${KAFKA_CLIENT_VERSION}":jar \
           -Dmdep.overIfNewer=true -DoutputDirectory="$DISTDIR/jars/"
 fi
 
