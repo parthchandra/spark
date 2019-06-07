@@ -1183,7 +1183,7 @@ private[client] class Shim_v2_2 extends Shim_v2_1
 
 private[client] class Shim_v2_3 extends Shim_v2_1
 
-private[client] class Shim_v3_1 extends Shim_v2_3 {
+private[client] class Shim_v3_0 extends Shim_v2_3 {
   // Spark supports only non-ACID operations
   protected lazy val isAcidIUDoperation = JBoolean.FALSE
 
@@ -1307,3 +1307,5 @@ private[client] class Shim_v3_1 extends Shim_v2_3 {
       replace: JBoolean)
   }
 }
+
+private[client] class Shim_v3_1 extends Shim_v3_0
