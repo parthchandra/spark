@@ -44,28 +44,6 @@ public final class Platform {
   public static final int DOUBLE_ARRAY_OFFSET;
 
   private static final boolean unaligned;
-  static {
-    boolean _unaligned;
-    String arch = System.getProperty("os.arch", "");
-    if (arch.equals("ppc64le") || arch.equals("ppc64")) {
-      // Since java.nio.Bits.unaligned() doesn't return true on ppc (See JDK-8165231), but
-      // ppc64 and ppc64le support it
-      _unaligned = true;
-    } else {
-      try {
-        Class<?> bitsClass =
-          Class.forName("java.nio.Bits", false, ClassLoader.getSystemClassLoader());
-        Method unalignedMethod = bitsClass.getDeclaredMethod("unaligned");
-        unalignedMethod.setAccessible(true);
-        _unaligned = Boolean.TRUE.equals(unalignedMethod.invoke(null));
-      } catch (Throwable t) {
-        // We at least know x86 and x64 support unaligned access.
-        //noinspection DynamicRegexReplaceableByCompiledPattern
-        _unaligned = arch.matches("^(i[3-6]86|x86(_64)?|x64|amd64|aarch64)$");
-      }
-    }
-    unaligned = _unaligned;
-  }
 
   /**
    * @return true when running JVM is having sun's Unsafe package available in it and underlying
@@ -253,5 +231,41 @@ public final class Platform {
       FLOAT_ARRAY_OFFSET = 0;
       DOUBLE_ARRAY_OFFSET = 0;
     }
+  }
+
+  // Split java.version on non-digit chars:
+  private static final int majorVersion =
+    Integer.parseInt(System.getProperty("java.version").split("\\D+")[0]);
+
+  // This requires `majorVersion` and `_UNSAFE`.
+  static {
+    boolean _unaligned;
+    String arch = System.getProperty("os.arch", "");
+    if (arch.equals("ppc64le") || arch.equals("ppc64")) {
+      // Since java.nio.Bits.unaligned() doesn't return true on ppc (See JDK-8165231), but
+      // ppc64 and ppc64le support it
+      _unaligned = true;
+    } else {
+      try {
+        Class<?> bitsClass =
+          Class.forName("java.nio.Bits", false, ClassLoader.getSystemClassLoader());
+        if (_UNSAFE != null && majorVersion >= 9) {
+          // Java 9/10 and 11/12 have different field names.
+          Field unalignedField =
+            bitsClass.getDeclaredField(majorVersion >= 11 ? "UNALIGNED" : "unaligned");
+          _unaligned = _UNSAFE.getBoolean(
+            _UNSAFE.staticFieldBase(unalignedField), _UNSAFE.staticFieldOffset(unalignedField));
+        } else {
+          Method unalignedMethod = bitsClass.getDeclaredMethod("unaligned");
+          unalignedMethod.setAccessible(true);
+          _unaligned = Boolean.TRUE.equals(unalignedMethod.invoke(null));
+        }
+      } catch (Throwable t) {
+        // We at least know x86 and x64 support unaligned access.
+        //noinspection DynamicRegexReplaceableByCompiledPattern
+        _unaligned = arch.matches("^(i[3-6]86|x86(_64)?|x64|amd64|aarch64)$");
+      }
+    }
+    unaligned = _unaligned;
   }
 }
