@@ -52,7 +52,7 @@ package object config {
   private[spark] val EVENT_LOG_COMPRESS =
     ConfigBuilder("spark.eventLog.compress")
       .booleanConf
-      .createWithDefault(false)
+      .createWithDefault(true)
 
   private[spark] val EVENT_LOG_COMPRESSION_CODEC =
     ConfigBuilder("spark.eventLog.compression.codec")
@@ -60,7 +60,7 @@ package object config {
         "lz4, lzf, snappy, and zstd. You can also use fully qualified class names to specify " +
         "the codec. If this is not given, spark.io.compression.codec will be used.")
       .stringConf
-      .createOptional
+      .createWithDefault("snappy")
 
   private[spark] val EVENT_LOG_BLOCK_UPDATES =
     ConfigBuilder("spark.eventLog.logBlockUpdates.enabled")

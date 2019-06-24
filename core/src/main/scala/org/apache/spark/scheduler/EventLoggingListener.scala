@@ -73,7 +73,6 @@ private[spark] class EventLoggingListener(
   private val compressionCodec =
     if (shouldCompress) {
       val codecName = sparkConf.get(EVENT_LOG_COMPRESSION_CODEC)
-        .getOrElse(sparkConf.get("spark.io.compression.codec", "lz4"))
       Some(CompressionCodec.createCodec(sparkConf, codecName))
     } else {
       None
