@@ -32,7 +32,7 @@ import org.apache.hadoop.hdfs.{DFSInputStream, DistributedFileSystem}
 import org.apache.hadoop.security.AccessControlException
 import org.json4s.jackson.JsonMethods._
 import org.mockito.ArgumentMatcher
-import org.mockito.Matchers.{any, argThat}
+import org.mockito.ArgumentMatchers.{any, argThat}
 import org.mockito.Mockito.{doThrow, mock, spy, verify, when}
 import org.scalatest.BeforeAndAfter
 import org.scalatest.Matchers
