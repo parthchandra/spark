@@ -2143,7 +2143,7 @@ class MultilayerPerceptronClassifierTest(SparkSessionTestCase):
         expected_rawPrediction = [57.3955, -124.5462, 67.9943]
         self.assertTrue(result.prediction, expected_prediction)
         self.assertTrue(np.allclose(result.probability, expected_probability, atol=1E-4))
-        self.assertTrue(np.allclose(result.rawPrediction, expected_rawPrediction, atol=1E-4))
+        self.assertTrue(np.allclose(result.rawPrediction, expected_rawPrediction, atol=3))
 
 
 class FPGrowthTests(SparkSessionTestCase):
