@@ -55,7 +55,8 @@ class RateSourceSuite extends StreamTest {
 
   test("microbatch in registry") {
     withTempDir { temp =>
-      DataSource.lookupDataSource("rate", spark.sqlContext.conf).getConstructor().newInstance() match {
+      DataSource.lookupDataSource("rate", spark.sqlContext.conf).getConstructor().newInstance()
+      match {
         case ds: MicroBatchReadSupport =>
           val reader = ds.createMicroBatchReader(
             Optional.empty(), temp.getCanonicalPath, DataSourceOptions.empty())
