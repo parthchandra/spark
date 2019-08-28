@@ -5,7 +5,7 @@ machine:
     version: maven-3.3
 
 builds:
-  - name: pie-spark-2.12_2.4.4-jdk8-prb
+  - name: pie-spark-2.11_2.4.4-jdk8-prb
     branchName: pie-spark-2.4.4-jdk11
     timeout: 90
     machine:
@@ -20,7 +20,7 @@ builds:
         - java -version
         - ./dev/rio-maven-custom-build.sh --do-not-skip-tests --scala "$SCALA_BINARY_VERSION" --snapshot --maven-opts "" --maven-params "-P hive,scala-${SCALA_BINARY_VERSION},hadoop-${HADOOP_BINARY_VERSION}" 
 
-  - name: pie-spark-2.12_2.4.4-openjdk11-prb
+  - name: pie-spark-2.11_2.4.4-openjdk11-prb
     branchName: pie-spark-2.4.4-jdk11
     timeout: 90
     machine:
@@ -35,7 +35,7 @@ builds:
         - java -version
         - ./dev/rio-maven-custom-build.sh --do-not-skip-tests --scala "$SCALA_BINARY_VERSION" --snapshot --maven-opts "" --maven-params "-P hive,scala-${SCALA_BINARY_VERSION},hadoop-${HADOOP_BINARY_VERSION}" 
 
-  - name: pie-spark-2.12_2.4.4-jdk8-no-tests-prb
+  - name: pie-spark-2.11_2.4.4-jdk8-no-tests-prb
     branchName: pie-spark-2.4.4-jdk11
     timeout: 90
     machine:
@@ -50,7 +50,7 @@ builds:
         - java -version
         - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --snapshot --maven-opts "" --maven-params "-P hive,scala-${SCALA_BINARY_VERSION},hadoop-${HADOOP_BINARY_VERSION}" 
 
-  - name: pie-spark-2.12_2.4.4-openjdk11-no-tests-prb
+  - name: pie-spark-2.11_2.4.4-openjdk11-no-tests-prb
     branchName: pie-spark-2.4.4-jdk11
     timeout: 90
     machine:
