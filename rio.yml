@@ -18,7 +18,7 @@ builds:
       template: freestyle:v4:prb
       steps:
         - java -version
-        - ./dev/rio-maven-custom-build.sh --do-not-skip-tests --scala "$SCALA_BINARY_VERSION" --snapshot --maven-opts "" --maven-params "-P hive,scala-${SCALA_BINARY_VERSION},hadoop-${HADOOP_BINARY_VERSION}" 
+        - ./dev/rio-maven-custom-build.sh --do-not-skip-tests --scala "$SCALA_BINARY_VERSION" --snapshot --maven-opts "" --maven-params "-P hive,scala-${SCALA_BINARY_VERSION},hadoop-${HADOOP_BINARY_VERSION},yarn,hive-thriftserver,kinesis-asl,mesos --fail-at-end" 
 
   - name: pie-spark-2.11_2.4.4-openjdk11-prb
     branchName: pie-spark-2.4.4-jdk11
@@ -33,7 +33,7 @@ builds:
       template: freestyle:v4:prb
       steps:
         - java -version
-        - ./dev/rio-maven-custom-build.sh --do-not-skip-tests --scala "$SCALA_BINARY_VERSION" --snapshot --maven-opts "" --maven-params "-P hive,scala-${SCALA_BINARY_VERSION},hadoop-${HADOOP_BINARY_VERSION}" 
+        - ./dev/rio-maven-custom-build.sh --do-not-skip-tests --scala "$SCALA_BINARY_VERSION" --snapshot --maven-opts "" --maven-params "-P hive,scala-${SCALA_BINARY_VERSION},hadoop-${HADOOP_BINARY_VERSION},yarn,hive-thriftserver,kinesis-asl,mesos --fail-at-end" 
 
   - name: pie-spark-2.11_2.4.4-jdk8-no-tests-prb
     branchName: pie-spark-2.4.4-jdk11
@@ -48,7 +48,7 @@ builds:
       template: freestyle:v4:prb
       steps:
         - java -version
-        - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --snapshot --maven-opts "" --maven-params "-P hive,scala-${SCALA_BINARY_VERSION},hadoop-${HADOOP_BINARY_VERSION}" 
+        - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --snapshot --maven-opts "" --maven-params "-P hive,scala-${SCALA_BINARY_VERSION},hadoop-${HADOOP_BINARY_VERSION},yarn,hive-thriftserver,kinesis-asl,mesos --fail-at-end" 
 
   - name: pie-spark-2.11_2.4.4-openjdk11-no-tests-prb
     branchName: pie-spark-2.4.4-jdk11
@@ -63,5 +63,5 @@ builds:
       template: freestyle:v4:prb
       steps:
         - java -version
-        - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --snapshot --maven-opts "" --maven-params "-P hive,scala-${SCALA_BINARY_VERSION},hadoop-${HADOOP_BINARY_VERSION}" 
+        - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --snapshot --maven-opts "" --maven-params "-P hive,scala-${SCALA_BINARY_VERSION},hadoop-${HADOOP_BINARY_VERSION},yarn,hive-thriftserver,kinesis-asl,mesos --fail-at-end" 
 
