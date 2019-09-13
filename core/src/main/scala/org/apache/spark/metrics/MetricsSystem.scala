@@ -28,7 +28,7 @@ import org.eclipse.jetty.servlet.ServletContextHandler
 import org.apache.spark.{SecurityManager, SparkConf}
 import org.apache.spark.internal.Logging
 import org.apache.spark.internal.config._
-import org.apache.spark.metrics.sink.{MetricsServlet, Sink}
+import org.apache.spark.metrics.sink.{MetricsServlet, PrometheusServlet, Sink}
 import org.apache.spark.metrics.source.{Source, StaticSources}
 import org.apache.spark.util.Utils
 
@@ -83,13 +83,15 @@ private[spark] class MetricsSystem private (
 
   // Treat MetricsServlet as a special sink as it should be exposed to add handlers to web ui
   private var metricsServlet: Option[MetricsServlet] = None
+  private var prometheusServlet: Option[PrometheusServlet] = None
 
   /**
    * Get any UI handlers used by this metrics system; can only be called after start().
    */
   def getServletHandlers: Array[ServletContextHandler] = {
     require(running, "Can only call getServletHandlers on a running MetricsSystem")
-    metricsServlet.map(_.getHandlers(conf)).getOrElse(Array())
+    metricsServlet.map(_.getHandlers(conf)).getOrElse(Array()) ++
+      prometheusServlet.map(_.getHandlers(conf)).getOrElse(Array())
   }
 
   metricsConfig.initialize()
@@ -202,6 +204,8 @@ private[spark] class MetricsSystem private (
             .newInstance(kv._2, registry, securityMgr)
           if (kv._1 == "servlet") {
             metricsServlet = Some(sink.asInstanceOf[MetricsServlet])
+          } else if (kv._1 == "prometheusServlet") {
+            prometheusServlet = Some(sink.asInstanceOf[PrometheusServlet])
           } else {
             sinks += sink.asInstanceOf[Sink]
           }
