@@ -31,6 +31,7 @@ import org.apache.spark.sql.execution.command.{DescribeColumnCommand, DescribeTa
 import org.apache.spark.sql.internal.SQLConf
 import org.apache.spark.sql.test.SharedSQLContext
 import org.apache.spark.sql.types.StructType
+import org.apache.spark.tags.ExtendedSQLTest
 
 /**
  * End-to-end test cases for SQL queries.
@@ -82,6 +83,7 @@ import org.apache.spark.sql.types.StructType
  *   ...
  * }}}
  */
+@ExtendedSQLTest
 class SQLQueryTestSuite extends QueryTest with SharedSQLContext {
 
   private val regenerateGoldenFiles: Boolean = System.getenv("SPARK_GENERATE_GOLDEN_FILES") == "1"
