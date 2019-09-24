@@ -556,7 +556,7 @@ class TaskSchedulerImplSuite extends SparkFunSuite with LocalSparkContext with B
     }
   }
 
-  test("SPARK-22148 try to acquire a new executor when task is unschedulable with 1 executor") {
+  ignore("SPARK-22148 try to acquire a new executor when task is unschedulable with 1 executor") {
     taskScheduler = setupSchedulerWithMockTaskSetBlacklist(
       config.UNSCHEDULABLE_TASKSET_TIMEOUT.key -> "10")
 
