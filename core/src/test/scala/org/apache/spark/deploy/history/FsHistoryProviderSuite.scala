@@ -145,7 +145,9 @@ class FsHistoryProviderSuite extends SparkFunSuite with BeforeAndAfter with Matc
     }
   }
 
-  test("SPARK-3697: ignore files that cannot be read.") {
+
+
+  ignore("SPARK-3697: ignore files that cannot be read.") {
     // setReadable(...) does not work on Windows. Please refer JDK-6728842.
     assume(!Utils.isWindows)
 

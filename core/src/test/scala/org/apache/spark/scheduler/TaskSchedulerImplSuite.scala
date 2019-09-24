@@ -518,7 +518,7 @@ class TaskSchedulerImplSuite extends SparkFunSuite with LocalSparkContext with B
     verify(tsm).abort(anyString(), any())
   }
 
-  test("SPARK-22148 abort timer should kick in when task is completely blacklisted & no new " +
+  ignore("SPARK-22148 abort timer should kick in when task is completely blacklisted & no new " +
       "executor can be acquired") {
     // set the abort timer to fail immediately
     taskScheduler = setupSchedulerWithMockTaskSetBlacklist(
@@ -599,7 +599,7 @@ class TaskSchedulerImplSuite extends SparkFunSuite with LocalSparkContext with B
 
   // This is to test a scenario where we have two taskSets completely blacklisted and on acquiring
   // a new executor we don't want the abort timer for the second taskSet to expire and abort the job
-  test("SPARK-22148 abort timer should clear unschedulableTaskSetToExpiryTime for all TaskSets") {
+  ignore("SPARK-22148 abort timer should clear unschedulableTaskSetToExpiryTime for all TaskSets") {
     taskScheduler = setupSchedulerWithMockTaskSetBlacklist()
 
     // We have 2 taskSets with 1 task remaining in each with 1 executor completely blacklisted
