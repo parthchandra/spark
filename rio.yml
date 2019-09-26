@@ -7,7 +7,7 @@ machine:
 builds:
   - name: pie-spark-2.11_2.4.4-jdk8-prb
     branchName: pie-spark-2.4.4-jdk11
-    timeout: 90
+    timeout: 180
     machine:
       baseImage: docker.apple.com/cpbuild/jdk1.8:latest
       env:
@@ -22,7 +22,7 @@ builds:
 
   - name: pie-spark-2.11_2.4.4-openjdk11-prb
     branchName: pie-spark-2.4.4-jdk11
-    timeout: 90
+    timeout: 180
     machine:
       baseImage: docker.apple.com/cpbuild/openjdk11:latest
       env:
@@ -37,7 +37,7 @@ builds:
 
   - name: pie-spark-2.11_2.4.4-jdk8-no-tests-prb
     branchName: pie-spark-2.4.4-jdk11
-    timeout: 90
+    timeout: 180
     machine:
       baseImage: docker.apple.com/cpbuild/jdk1.8:latest
       env:
@@ -52,7 +52,7 @@ builds:
 
   - name: pie-spark-2.11_2.4.4-openjdk11-no-tests-prb
     branchName: pie-spark-2.4.4-jdk11
-    timeout: 90
+    timeout: 180
     machine:
       baseImage: docker.apple.com/cpbuild/openjdk11:latest
       env:
