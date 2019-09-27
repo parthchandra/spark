@@ -24,7 +24,7 @@
     <artifactId>apache</artifactId>
     <version>18</version>
   </parent>
-  <groupId>org.apache.spark</groupId>
+  <groupId>com.apple.pie.spark</groupId>
   <artifactId>spark-parent_2.11</artifactId>
   <version>2.4.4-SNAPSHOT</version>
   <packaging>pom</packaging>
@@ -296,12 +296,12 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>org.apache.spark</groupId>
+        <groupId>com.apple.pie.spark</groupId>
         <artifactId>spark-tags_${scala.binary.version}</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.apache.spark</groupId>
+        <groupId>com.apple.pie.spark</groupId>
         <artifactId>spark-tags_${scala.binary.version}</artifactId>
         <version>${project.version}</version>
         <type>test-jar</type>
