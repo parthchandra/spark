@@ -117,4 +117,4 @@ TaskSchedulerImplSuite.scala [flaky test]
 CreateTableAsSelectSuite.scala [root user issue]
     CREATE TABLE USING AS SELECT based on the file without write permission
 
-Removed YARN profile
+Removed YARN profile from builds
