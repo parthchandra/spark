@@ -116,3 +116,5 @@ TaskSchedulerImplSuite.scala [flaky test]
     SPARK-22148 try to acquire a new executor when task is unschedulable with 1 executor
 CreateTableAsSelectSuite.scala [root user issue]
     CREATE TABLE USING AS SELECT based on the file without write permission
+
+Removed YARN profile
