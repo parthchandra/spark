@@ -732,6 +732,17 @@ object SQLConf {
       .intConf
       .createWithDefault(10000)
 
+  val IGNORE_DATA_LOCALITY =
+    buildConf("spark.sql.sources.ignore.datalocality")
+      .doc("If true, Spark will not fetch the block locations for each file on " +
+        "listing files. This speeds up file listing, but the scheduler cannot " +
+        "schedule tasks to take advantage of data locality. It can be particularly " +
+        "useful if data is read from a remote cluster so the scheduler could never " +
+        "take advantage of locality anyway.")
+      .internal()
+      .booleanConf
+      .createWithDefault(false)
+
   // Whether to automatically resolve ambiguity in join conditions for self-joins.
   // See SPARK-6231.
   val DATAFRAME_SELF_JOIN_AUTO_RESOLVE_AMBIGUITY =
@@ -2017,6 +2028,8 @@ class SQLConf extends Serializable with Logging {
 
   def legacyMsSqlServerNumericMappingEnabled: Boolean =
     getConf(LEGACY_MSSQLSERVER_NUMERIC_MAPPING_ENABLED)
+
+  def ignoreDataLocality: Boolean = getConf(SQLConf.IGNORE_DATA_LOCALITY)
 
   /** ********************** SQLConf functionality methods ************ */
 
