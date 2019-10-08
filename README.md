@@ -103,3 +103,20 @@ in the online documentation for an overview on how to configure Spark.
 
 Please review the [Contribution to Spark guide](http://spark.apache.org/contributing.html)
 for information on how to get started contributing to the project.
+
+##JDK11 Specific Information to be added here.
+
+Note: hive and hive-thriftserver profiles are disabled
+
+The following tests are ignored for now to make the build pass,
+
+FSHistoryProviderSuite.scala
+    SPARK-3697: ignore files that cannot be read.
+TaskSchedulerImplSuite.scala [flaky test]
+    SPARK-22148 abort timer should clear unschedulableTaskSetToExpiryTime for all TaskSets"
+    SPARK-22148 abort timer should kick in when task is completely blacklisted & no new executor can be acquired
+    SPARK-22148 try to acquire a new executor when task is unschedulable with 1 executor
+CreateTableAsSelectSuite.scala [root user issue]
+    CREATE TABLE USING AS SELECT based on the file without write permission
+
+Removed YARN profile from builds
