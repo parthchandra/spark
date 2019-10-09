@@ -76,7 +76,7 @@ builds:
         HADOOP_BINARY_VERSION: 2.7
         PUBLISH_JARS: true
     build:
-      template: freestyle:v4:snapshot
+      template: freestyle:v2:snapshot
       steps:
         - java -version
         - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --snapshot --maven-opts "" --maven-params "-P hive,scala-${SCALA_BINARY_VERSION},hadoop-${HADOOP_BINARY_VERSION},hive-thriftserver,kinesis-asl,mesos --fail-at-end --snapshot"
@@ -98,7 +98,7 @@ builds:
         HADOOP_BINARY_VERSION: 2.7
         PUBLISH_JARS: true
     build:
-      template: freestyle:v4:release
+      template: freestyle:v2:release
       steps:
         - java -version
         - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --snapshot --maven-opts "" --maven-params "-P hive,scala-${SCALA_BINARY_VERSION},hadoop-${HADOOP_BINARY_VERSION},hive-thriftserver,kinesis-asl,mesos --fail-at-end --release"
