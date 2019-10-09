@@ -5,33 +5,111 @@ machine:
     version: maven-3.3
 
 builds:
-  - name: pie-spark-2.12_2.4.4-jdk8-prb
-    branchName: pie-spark-2.4.4-jdk11
+  - name: pie-spark-2.11_2.4.3-jdk8-prb
+    branchName: pie-spark-2.4.3-jdk11
     timeout: 180
     machine:
       baseImage: docker.apple.com/cpbuild/jdk1.8:latest
       env:
-        SCALA_BINARY_VERSION: 2.12
+        SCALA_BINARY_VERSION: 2.11
         HADOOP_BINARY_VERSION: 2.7
         PUBLISH_JARS: false
     build:
       template: freestyle:v4:prb
       steps:
         - java -version
-        - ./dev/rio-maven-custom-build.sh --do-not-skip-tests --scala "$SCALA_BINARY_VERSION" --snapshot --maven-opts "" --maven-params "-P hive,scala-${SCALA_BINARY_VERSION},hadoop-${HADOOP_BINARY_VERSION}" 
+        - ./dev/rio-maven-custom-build.sh --do-not-skip-tests --scala "$SCALA_BINARY_VERSION" --snapshot --maven-opts "" --maven-params "-P hive,scala-${SCALA_BINARY_VERSION},hadoop-${HADOOP_BINARY_VERSION},hive-thriftserver,kinesis-asl,mesos --fail-at-end"
 
-  - name: pie-spark-2.12_2.4.4-openjdk11-prb
-    branchName: pie-spark-2.4.4-jdk11
+  - name: pie-spark-2.11_2.4.3-openjdk11-prb
+    branchName: pie-spark-2.4.3-jdk11
     timeout: 180
     machine:
       baseImage: docker.apple.com/cpbuild/openjdk11:latest
       env:
-        SCALA_BINARY_VERSION: 2.12
+        SCALA_BINARY_VERSION: 2.11
         HADOOP_BINARY_VERSION: 2.7
         PUBLISH_JARS: false
     build:
       template: freestyle:v4:prb
       steps:
         - java -version
-        - ./dev/rio-maven-custom-build.sh --do-not-skip-tests --scala "$SCALA_BINARY_VERSION" --snapshot --maven-opts "" --maven-params "-P hive,scala-${SCALA_BINARY_VERSION},hadoop-${HADOOP_BINARY_VERSION}" 
+        - ./dev/rio-maven-custom-build.sh --do-not-skip-tests --scala "$SCALA_BINARY_VERSION" --snapshot --maven-opts "" --maven-params "-P hive,scala-${SCALA_BINARY_VERSION},hadoop-${HADOOP_BINARY_VERSION},hive-thriftserver,kinesis-asl,mesos --fail-at-end"
 
+  - name: pie-spark-2.11_2.4.3-jdk8-no-tests-prb
+    branchName: pie-spark-2.4.3-jdk11
+    timeout: 180
+    machine:
+      baseImage: docker.apple.com/cpbuild/jdk1.8:latest
+      env:
+        SCALA_BINARY_VERSION: 2.11
+        HADOOP_BINARY_VERSION: 2.7
+        PUBLISH_JARS: false
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - java -version
+        - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --snapshot --maven-opts "" --maven-params "-P hive,scala-${SCALA_BINARY_VERSION},hadoop-${HADOOP_BINARY_VERSION},hive-thriftserver,kinesis-asl,mesos --fail-at-end"
+
+  - name: pie-spark-2.11_2.4.3-openjdk11-no-tests-prb
+    branchName: pie-spark-2.4.3-jdk11
+    timeout: 180
+    machine:
+      baseImage: docker.apple.com/cpbuild/openjdk11:latest
+      env:
+        SCALA_BINARY_VERSION: 2.11
+        HADOOP_BINARY_VERSION: 2.7
+        PUBLISH_JARS: false
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - java -version
+        - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --snapshot --maven-opts "" --maven-params "-P hive,scala-${SCALA_BINARY_VERSION},hadoop-${HADOOP_BINARY_VERSION},hive-thriftserver,kinesis-asl,mesos --fail-at-end"
+
+
+  - name: pie-spark-2.11_2.4.3-openjdk11-no-tests-snapshot
+    branchName: pie-spark-2.4.3-jdk11
+    timeout: 180
+    machine:
+      baseImage: docker.apple.com/cpbuild/openjdk11:latest
+      env:
+        SCALA_BINARY_VERSION: 2.11
+        HADOOP_BINARY_VERSION: 2.7
+        PUBLISH_JARS: true
+    build:
+      template: freestyle:v4:snapshot
+      steps:
+        - java -version
+        - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --snapshot --maven-opts "" --maven-params "-P hive,scala-${SCALA_BINARY_VERSION},hadoop-${HADOOP_BINARY_VERSION},hive-thriftserver,kinesis-asl,mesos --fail-at-end --snapshot"
+        - ./dev/make-distribution.sh --tgz --use-existing-build --with-hadoop --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION" -Dhadoop.version="$HADOOP_VERSION"
+    publish:
+      archives:
+        includePattern: .dist/local-repo/**/*.jar, .dist/local-repo/**/*.pom, .dist/local-repo/**/*.tgz, .dist/local-repo/**/*.gz
+      reports:
+        junit: false
+
+
+  - name: pie-spark-2.11_2.4.3-openjdk11-no-tests-release
+    branchName: pie-spark-2.4.3-jdk11-release
+    timeout: 180
+    machine:
+      baseImage: docker.apple.com/cpbuild/openjdk11:latest
+      env:
+        SCALA_BINARY_VERSION: 2.11
+        HADOOP_BINARY_VERSION: 2.7
+        PUBLISH_JARS: true
+    build:
+      template: freestyle:v4:release
+      steps:
+        - java -version
+        - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --snapshot --maven-opts "" --maven-params "-P hive,scala-${SCALA_BINARY_VERSION},hadoop-${HADOOP_BINARY_VERSION},hive-thriftserver,kinesis-asl,mesos --fail-at-end --release"
+        - ./dev/make-distribution.sh --tgz --use-existing-build --with-hadoop --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION" -Dhadoop.version="$HADOOP_VERSION"
+
+    publish:
+      archives:
+        includePattern: .dist/local-repo/**/*.jar, .dist/local-repo/**/*.pom, .dist/local-repo/**/*.tgz, .dist/local-repo/**/*.gz
+      reports:
+        junit: false
+    finally:
+      tag:
+        enabled: true
+        expression: "releases_2.11/$CODE_VERSION"
