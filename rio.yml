@@ -78,7 +78,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - java -version
         - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --snapshot --maven-opts "" --maven-params "-P hive,scala-${SCALA_BINARY_VERSION},hadoop-${HADOOP_BINARY_VERSION},hive-thriftserver,kinesis-asl,mesos --fail-at-end"
         - ./dev/make-distribution.sh --tgz --use-existing-build --with-hadoop --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION" -Dhadoop.version="$HADOOP_VERSION"
     publish:
@@ -100,7 +99,6 @@ builds:
     build:
       template: freestyle:v2:release
       steps:
-        - java -version
         - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --release --maven-opts "" --maven-params "-P hive,scala-${SCALA_BINARY_VERSION},hadoop-${HADOOP_BINARY_VERSION},hive-thriftserver,kinesis-asl,mesos --fail-at-end"
         - ./dev/make-distribution.sh --tgz --use-existing-build --with-hadoop --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION" -Dhadoop.version="$HADOOP_VERSION"
 
