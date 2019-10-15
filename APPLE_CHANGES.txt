@@ -7,6 +7,7 @@ SPARK-31876       Upgrade to Zstd 1.4.5
 SPARK-32150       Upgrade to ZStd 1.4.5-4
 
 # From Spark 3.0.0
+SPARK-24540       Support for multiple character delimiter in Spark CSV read
 SPARK-26839       Work around classloader changes in Java 9 for Hive isolation
 SPARK-28708       IsolatedClientLoader will not load hive classes from application jars on JDK9+
 SPARK-20636       Add new optimization rule to transpose adjacent Window expressions.
