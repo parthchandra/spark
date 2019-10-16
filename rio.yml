@@ -9,7 +9,8 @@ builds:
     branchName: pie-spark-2.4.3-jdk11
     timeout: 180
     machine:
-      baseImage: docker.apple.com/cpbuild/jdk1.8:latest
+      java:
+        version: 8-applejdk
       env:
         SCALA_BINARY_VERSION: 2.11
         HADOOP_BINARY_VERSION: 2.7
@@ -24,7 +25,8 @@ builds:
     branchName: pie-spark-2.4.3-jdk11
     timeout: 180
     machine:
-      baseImage: docker.apple.com/cpbuild/openjdk11:latest
+      java:
+        version: 11
       env:
         SCALA_BINARY_VERSION: 2.11
         HADOOP_BINARY_VERSION: 2.7
@@ -39,7 +41,8 @@ builds:
     branchName: pie-spark-2.4.3-jdk11
     timeout: 180
     machine:
-      baseImage: docker.apple.com/cpbuild/jdk1.8:latest
+      java:
+        version: 8-applejdk
       env:
         SCALA_BINARY_VERSION: 2.11
         HADOOP_BINARY_VERSION: 2.7
@@ -54,7 +57,8 @@ builds:
     branchName: pie-spark-2.4.3-jdk11
     timeout: 180
     machine:
-      baseImage: docker.apple.com/cpbuild/openjdk11:latest
+      java:
+        version: 11
       env:
         SCALA_BINARY_VERSION: 2.11
         HADOOP_BINARY_VERSION: 2.7
@@ -70,7 +74,8 @@ builds:
     branchName: pie-spark-2.4.3-jdk11
     timeout: 180
     machine:
-      baseImage: docker.apple.com/cpbuild/openjdk11:latest
+      java:
+        version: 11
       env:
         SCALA_BINARY_VERSION: 2.11
         HADOOP_BINARY_VERSION: 2.7
@@ -91,7 +96,8 @@ builds:
     branchName: pie-spark-2.4.3-jdk11-release
     timeout: 180
     machine:
-      baseImage: docker.apple.com/cpbuild/openjdk11:latest
+      java:
+        version: 11
       env:
         SCALA_BINARY_VERSION: 2.11
         HADOOP_BINARY_VERSION: 2.7
