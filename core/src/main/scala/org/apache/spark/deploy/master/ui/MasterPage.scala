@@ -85,12 +85,17 @@ private[ui] class MasterPage(parent: MasterWebUI) extends WebUIPage("") {
     val completedApps = state.completedApps.sortBy(_.endTime).reverse
     val completedAppsTable = UIUtils.listingTable(appHeaders, appRow, completedApps)
 
-    val driverHeaders = Seq("Submission ID", "Submitted Time", "Worker", "State", "Cores",
-      "Memory", "Main Class")
+    val activeDriverHeaders = Seq("Submission ID", "Submitted Time", "Worker", "State", "Cores",
+      "Memory", "Main Class", "Duration")
     val activeDrivers = state.activeDrivers.sortBy(_.startTime).reverse
-    val activeDriversTable = UIUtils.listingTable(driverHeaders, driverRow, activeDrivers)
+    val activeDriversTable =
+      UIUtils.listingTable(activeDriverHeaders, activeDriverRow, activeDrivers)
+
+    val completedDriverHeaders = Seq("Submission ID", "Submitted Time", "Worker", "State", "Cores",
+      "Memory", "Main Class")
     val completedDrivers = state.completedDrivers.sortBy(_.startTime).reverse
-    val completedDriversTable = UIUtils.listingTable(driverHeaders, driverRow, completedDrivers)
+    val completedDriversTable =
+      UIUtils.listingTable(completedDriverHeaders, completedDriverRow, completedDrivers)
 
     // For now we only show driver information if the user has submitted drivers to the cluster.
     // This is until we integrate the notion of drivers and applications in the UI.
@@ -281,7 +286,11 @@ private[ui] class MasterPage(parent: MasterWebUI) extends WebUIPage("") {
     </tr>
   }
 
-  private def driverRow(driver: DriverInfo): Seq[Node] = {
+  private def activeDriverRow(driver: DriverInfo) = driverRow(driver, showDuration = true)
+
+  private def completedDriverRow(driver: DriverInfo) = driverRow(driver, showDuration = false)
+
+  private def driverRow(driver: DriverInfo, showDuration: Boolean): Seq[Node] = {
     val killLink = if (parent.killEnabled &&
       (driver.state == DriverState.RUNNING ||
         driver.state == DriverState.SUBMITTED ||
@@ -315,6 +324,9 @@ private[ui] class MasterPage(parent: MasterWebUI) extends WebUIPage("") {
         {Utils.megabytesToString(driver.desc.mem.toLong)}
       </td>
       <td>{driver.desc.command.arguments(2)}</td>
+      {if (showDuration) {
+        <td>{UIUtils.formatDuration(System.currentTimeMillis() - driver.startTime)}</td>
+      }}
     </tr>
   }
 }
