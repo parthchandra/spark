@@ -410,6 +410,7 @@
      placed in the "provided" scope, rather than the "compile" scope, and NoClassDefFoundError exceptions are handled
      when the user has not explicitly compiled with the Hive module.
     -->
+    <!--
     <dependency>
       <groupId>${hive.group}</groupId>
       <artifactId>hive-exec</artifactId>
@@ -430,7 +431,7 @@
       <artifactId>libfb303</artifactId>
       <scope>provided</scope>
     </dependency>
-
+    -->
   </dependencies>
   <build>
     <outputDirectory>target/scala-${scala.binary.version}/classes</outputDirectory>
