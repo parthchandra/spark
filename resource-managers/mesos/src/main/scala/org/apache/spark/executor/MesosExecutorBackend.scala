@@ -74,8 +74,8 @@ private[spark] class MesosExecutorBackend
     val properties = Utils.deserialize[Array[(String, String)]](executorInfo.getData.toByteArray) ++
       Seq[(String, String)](("spark.app.id", frameworkInfo.getId.getValue))
     val conf = new SparkConf(loadDefaults = true).setAll(properties)
-    val env = SparkEnv.createExecutorEnv(
-      conf, executorId, slaveInfo.getHostname, cpusPerTask, None, isLocal = false)
+    val env = SparkEnv.createExecutorEnv(conf, executorId, Utils.localHostName(),
+      slaveInfo.getHostname, cpusPerTask, None, isLocal = false)
 
     executor = new Executor(
       executorId,
