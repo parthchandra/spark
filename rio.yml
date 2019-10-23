@@ -79,6 +79,8 @@ builds:
       env:
         SCALA_BINARY_VERSION: 2.11
         HADOOP_BINARY_VERSION: 2.7
+        SCALA_VERSION: "2.11.8"
+        HADOOP_VERSION: "2.7"
         PUBLISH_JARS: true
     build:
       template: freestyle:v2:snapshot
@@ -102,6 +104,8 @@ builds:
       env:
         SCALA_BINARY_VERSION: 2.11
         HADOOP_BINARY_VERSION: 2.7
+        SCALA_VERSION: "2.11.8"
+        HADOOP_VERSION: "2.7"
         PUBLISH_JARS: true
     build:
       template: freestyle:v2:release
