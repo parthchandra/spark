@@ -175,6 +175,8 @@ private[spark] object UIUtils extends Logging {
     <link rel="stylesheet" href={prependBaseUri(request, "/static/webui.css")} type="text/css"/>
     <link rel="stylesheet"
           href={prependBaseUri(request, "/static/timeline-view.css")} type="text/css"/>
+    <script src={prependBaseUri(request, "/static/memorystorage.umd-0.11.0.js")} ></script>
+    <script src={prependBaseUri(request, "/static/storage.js")} ></script>
     <script src={prependBaseUri(request, "/static/sorttable.js")} ></script>
     <script src={prependBaseUri(request, "/static/jquery-1.12.4.min.js")}></script>
     <script src={prependBaseUri(request, "/static/vis.min.js")}></script>
@@ -224,6 +226,7 @@ private[spark] object UIUtils extends Logging {
       useDataTables: Boolean = false): Seq[Node] = {
 
     val appName = activeTab.appName
+    val appId = activeTab.appId
     val shortAppName = if (appName.length < 36) appName else appName.take(32) + "..."
     val header = activeTab.headerTabs.map { tab =>
       <li class={if (tab == activeTab) "active" else ""}>
@@ -237,6 +240,7 @@ private[spark] object UIUtils extends Logging {
         {commonHeaderNodes(request)}
         {if (showVisualization) vizHeaderNodes(request) else Seq.empty}
         {if (useDataTables) dataTablesHeaderNodes(request) else Seq.empty}
+        <script>const SPARK_APP_ID='{appId}';</script>
         <link rel="shortcut icon"
               href={prependBaseUri(request, "/static/spark-logo-77x50px-hd.png")}></link>
         <title>{appName} - {title}</title>
