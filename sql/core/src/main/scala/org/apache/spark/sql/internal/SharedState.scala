@@ -32,6 +32,7 @@ import org.apache.spark.sql.SQLContext
 import org.apache.spark.sql.catalyst.catalog._
 import org.apache.spark.sql.execution.CacheManager
 import org.apache.spark.sql.execution.ui.{SQLAppStatusListener, SQLAppStatusStore, SQLTab}
+import org.apache.spark.sql.internal.SQLConf.EXTERNAL_CATALOG_CLASS_NAME
 import org.apache.spark.sql.internal.StaticSQLConf._
 import org.apache.spark.status.ElementTrackingStore
 import org.apache.spark.util.{MutableURLClassLoader, Utils}
@@ -169,6 +170,11 @@ object SharedState extends Logging {
     conf.get(CATALOG_IMPLEMENTATION) match {
       case "hive" => HIVE_EXTERNAL_CATALOG_CLASS_NAME
       case "in-memory" => classOf[InMemoryCatalog].getCanonicalName
+      case "provided" => conf.get(EXTERNAL_CATALOG_CLASS_NAME) match {
+        case Some(className) => className
+        case None => throw new SparkException(s"Setting '${CATALOG_IMPLEMENTATION.key}' as " +
+          s"'provided' requires '${EXTERNAL_CATALOG_CLASS_NAME.key}' to be defined as well.")
+      }
     }
   }
 

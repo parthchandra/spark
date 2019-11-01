@@ -24,7 +24,7 @@ import scala.collection.JavaConverters._
 import scala.reflect.runtime.universe.TypeTag
 import scala.util.control.NonFatal
 
-import org.apache.spark.{SPARK_VERSION, SparkConf, SparkContext, TaskContext}
+import org.apache.spark.{SPARK_VERSION, SparkConf, SparkContext, SparkException, TaskContext}
 import org.apache.spark.annotation.{DeveloperApi, Experimental, InterfaceStability}
 import org.apache.spark.api.java.JavaRDD
 import org.apache.spark.internal.Logging
@@ -39,6 +39,7 @@ import org.apache.spark.sql.catalyst.plans.logical.{LocalRelation, Range}
 import org.apache.spark.sql.execution._
 import org.apache.spark.sql.execution.datasources.LogicalRelation
 import org.apache.spark.sql.internal._
+import org.apache.spark.sql.internal.SQLConf.SESSION_STATE_BUILDER_CLASS_NAME
 import org.apache.spark.sql.internal.StaticSQLConf.CATALOG_IMPLEMENTATION
 import org.apache.spark.sql.sources.BaseRelation
 import org.apache.spark.sql.streaming._
@@ -873,6 +874,16 @@ object SparkSession extends Logging {
     }
 
     /**
+     * Enables the use of provided ExternalCatalog and SessionState classes.
+     *
+     * @since 2.4.0
+     */
+    def enableProvidedCatalog(): Builder = synchronized {
+      // Assume that the classes exist in classpath.
+      config(CATALOG_IMPLEMENTATION.key, "provided")
+    }
+
+    /**
      * Inject extensions into the [[SparkSession]]. This allows a user to add Analyzer rules,
      * Optimizer rules, Planning Strategies or a customized parser.
      *
@@ -1079,6 +1090,11 @@ object SparkSession extends Logging {
     conf.get(CATALOG_IMPLEMENTATION) match {
       case "hive" => HIVE_SESSION_STATE_BUILDER_CLASS_NAME
       case "in-memory" => classOf[SessionStateBuilder].getCanonicalName
+      case "provided" => conf.get(SESSION_STATE_BUILDER_CLASS_NAME) match {
+        case Some(className) => className
+        case None => throw new SparkException(s"Setting '${CATALOG_IMPLEMENTATION.key}' as " +
+          s"'provided' requires '${SESSION_STATE_BUILDER_CLASS_NAME.key}' to be defined as well.")
+      }
     }
   }
 

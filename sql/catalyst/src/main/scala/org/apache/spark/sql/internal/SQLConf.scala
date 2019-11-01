@@ -158,6 +158,20 @@ object SQLConf {
     }
   }
 
+  val SESSION_STATE_BUILDER_CLASS_NAME = buildConf("spark.sql.sessionStateBuilder")
+    .doc("Name of the class used to configure Spark SessionState builder. The class should " +
+      "extend BaseSessionStateBuilder.")
+    .internal()
+    .stringConf
+    .createOptional
+
+  val EXTERNAL_CATALOG_CLASS_NAME = buildConf("spark.sql.externalCatalog")
+    .doc("Name of the class used to configure Spark External Catalog. The class should " +
+      "implement ExternalCatalog interface.")
+    .internal()
+    .stringConf
+    .createOptional
+
   val OPTIMIZER_EXCLUDED_RULES = buildConf("spark.sql.optimizer.excludedRules")
     .doc("Configures a list of rules to be disabled in the optimizer, in which the rules are " +
       "specified by their rule names and separated by comma. It is not guaranteed that all the " +
