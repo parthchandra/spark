@@ -114,3 +114,4 @@ announce.tmpl
 vote.tmpl
 SessionManager.java
 SessionHandler.java
+GangliaReporter.java
