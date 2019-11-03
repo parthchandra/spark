@@ -91,7 +91,7 @@ class DiskBlockManagerSuite extends SparkFunSuite with BeforeAndAfterEach with B
     writer.close()
   }
 
-  test("temporary shuffle/local file should be able to handle disk failures") {
+  ignore("temporary shuffle/local file should be able to handle disk failures") {
     try {
       // the following two lines pre-create subdirectories under each root dir of block manager
       diskBlockManager.getFile("1")
