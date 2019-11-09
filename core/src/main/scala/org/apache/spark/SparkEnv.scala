@@ -363,7 +363,7 @@ object SparkEnv extends Logging {
       // ID into the metrics they report.
       conf.set("spark.executor.id", executorId)
       val ms = MetricsSystem.createMetricsSystem("executor", conf, securityManager)
-      ms.start()
+      ms.start(conf.get(METRICS_STATIC_SOURCES_ENABLED))
       ms
     }
 
