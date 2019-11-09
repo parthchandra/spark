@@ -110,6 +110,9 @@ private[spark] class MetricsSystem private (
   def stop() {
     if (running) {
       sinks.foreach(_.stop)
+      registry.removeMatching(new MetricFilter {
+        override def matches(name: String, metric: Metric): Boolean = true
+      })
     } else {
       logWarning("Stopping a MetricsSystem that is not running")
     }
