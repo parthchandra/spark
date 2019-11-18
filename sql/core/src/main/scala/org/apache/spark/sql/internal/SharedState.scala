@@ -34,6 +34,8 @@ import org.apache.spark.sql.execution.CacheManager
 import org.apache.spark.sql.execution.ui.{SQLAppStatusListener, SQLAppStatusStore, SQLTab}
 import org.apache.spark.sql.internal.SQLConf.EXTERNAL_CATALOG_CLASS_NAME
 import org.apache.spark.sql.internal.StaticSQLConf._
+import org.apache.spark.sql.internal.config.DEFAULT_URL_STREAM_HANDLER_FACTORY_ENABLED
+import org.apache.spark.sql.streaming.StreamingQuery
 import org.apache.spark.status.ElementTrackingStore
 import org.apache.spark.util.{MutableURLClassLoader, Utils}
 
@@ -43,7 +45,7 @@ import org.apache.spark.util.{MutableURLClassLoader, Utils}
  */
 private[sql] class SharedState(val sparkContext: SparkContext) extends Logging {
 
-  SharedState.setUrlStreamHandlerFactoryIfNeeded(sparkContext.conf)
+  SharedState.setFsUrlStreamHandlerFactory(sparkContext.conf)
 
   // Load hive-site.xml into hadoopConf and determine the warehouse path we want to use, based on
   // the config from both hive and Spark SQL. Finally set the warehouse config value to sparkConf.
@@ -159,22 +161,20 @@ private[sql] class SharedState(val sparkContext: SparkContext) extends Logging {
 }
 
 object SharedState extends Logging {
-  private var initialized = false
+  @volatile private var fsUrlStreamHandlerFactoryInitialized = false
 
-  private def setUrlStreamHandlerFactoryIfNeeded(conf: SparkConf): Unit = {
-    synchronized {
-      if (!initialized) {
-        try {
-          if (conf.getBoolean("spark.FsUrlStreamHandlerFactory.enabled", true)) {
+  private def setFsUrlStreamHandlerFactory(conf: SparkConf): Unit = {
+    if (!fsUrlStreamHandlerFactoryInitialized &&
+        conf.get(DEFAULT_URL_STREAM_HANDLER_FACTORY_ENABLED)) {
+      synchronized {
+        if (!fsUrlStreamHandlerFactoryInitialized) {
+          try {
             URL.setURLStreamHandlerFactory(new FsUrlStreamHandlerFactory())
+            fsUrlStreamHandlerFactoryInitialized = true
+          } catch {
+            case NonFatal(_) =>
+              logWarning("URL.setURLStreamHandlerFactory failed to set FsUrlStreamHandlerFactory")
           }
-        } catch {
-          case e: Error =>
-            logWarning("URL.setURLStreamHandlerFactory failed to set " +
-              "FsUrlStreamHandlerFactory", e)
-        } finally {
-          // don't retry on failure
-          initialized = true
         }
       }
     }
