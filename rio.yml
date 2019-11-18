@@ -122,7 +122,7 @@ builds:
     finally:
       tag:
         enabled: true
-        expression: "releases_2.11/$CODE_VERSION"
+        expression: "releases_2.11/2.4.3-jdk11-pie1.0.3"
         
   - name: pie-spark-2.11_2.4.3-applejdk11-no-tests-no-hadoop-snapshot
     branchName: pie-spark-2.4.3-jdk11
@@ -171,5 +171,4 @@ builds:
         junit: false
     finally:
       tag:
-        enabled: true
-        expression: "releases_2.11/$CODE_VERSION"
+        enabled: false
