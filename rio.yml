@@ -303,11 +303,8 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        # The following is tested and parellized.
-        # - mvn -Phadoop-3.2 -Phadoop-cloud -Pyarn -Pmesos -Pkubernetes -Phive -Phive-thriftserver -Djava.version=11 -DskipTests package
-        # - mvn -Phadoop-3.2 -Phadoop-cloud -Pyarn -Pmesos -Pkubernetes -Phive -Phive-thriftserver -Djava.version=11 test
         - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --hadoop "$HADOOP_VERSION" --snapshot --maven-opts "-Xmx6g" --maven-params "-P hive,hadoop-${HADOOP_BINARY_VERSION},hive-thriftserver,kinesis-asl,mesos"
-        - ./dev/make-distribution.sh --tgz --use-existing-build --with-hadoop --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION" -Phadoop-3.2 -Dhadoop.version="$HADOOP_VERSION"
+        - ./dev/make-distribution.sh --tgz --use-existing-build --with-hadoop --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION" -Phadoop-${HADOOP_BINARY_VERSION} -Dhadoop.version="$HADOOP_VERSION"
     publish:
       archives:
         includePattern: .dist/local-repo/**/*.jar, .dist/local-repo/**/*.pom, .dist/local-repo/**/*.tgz, .dist/local-repo/**/*.gz
@@ -316,9 +313,6 @@ builds:
 
   - name: pie-spark-2.11_2.4.4-release
     branchName: pie-spark-2.4.4-release
-    jenkins:
-      concurrentBuild: true
-      maxConcurrentTotal: 8
     timeout: 90
     machine:
       env:
@@ -327,13 +321,12 @@ builds:
         HADOOP_BINARY_VERSION: "3.2"
         HADOOP_VERSION: "3.2.0"
         PUBLISH_JARS: true
-        TAG_NAME: $(./dev/tag-name.sh)
       docker:
         baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
       template: freestyle:v2:release
       steps:
-        - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --hadoop "$HADOOP_VERSION" --release --maven-opts ""
+        - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --hadoop "$HADOOP_VERSION" --release --maven-opts "-Xmx6g" --maven-params "-P hive,hadoop-${HADOOP_BINARY_VERSION},hive-thriftserver,kinesis-asl,mesos"
         - ./dev/make-distribution.sh --tgz --use-existing-build --with-hadoop --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION" -Phadoop-${HADOOP_BINARY_VERSION} -Dhadoop.version="$HADOOP_VERSION"
     publish:
       archives:
@@ -343,7 +336,7 @@ builds:
     finally:
       tag:
         enabled: true
-        expression: "$TAG_NAME"
+        expression: "releases_2.11/2.4.4-pie1.0.1"
 
   - name: pie-spark-2.11_2.4.4-hadoop-provided-snapshot
     branchName: pie-spark-2.4.4
@@ -372,9 +365,6 @@ builds:
 
   - name: pie-spark-2.11_2.4.4-hadoop-provided-release
     branchName: pie-spark-2.4.4-release
-    jenkins:
-      concurrentBuild: true
-      maxConcurrentTotal: 8
     timeout: 90
     machine:
       env:
