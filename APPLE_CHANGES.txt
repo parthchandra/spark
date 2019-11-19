@@ -1,0 +1,201 @@
+This contains the changes after v3.0.0-preview-rc2.
+
+# From Spark 3.0.0
+SPARK-29277       Add early DSv2 filter and projection pushdown
+SPARK-29651       Fix parsing of interval seconds fraction
+SPARK-29126       Pandas Cogroup udf usage guide
+SPARK-29523       SHOW COLUMNS should do multi-catalog resolution
+SPARK-29592       ALTER TABLE (set partition location) should look up catalog/table like v2 commands
+SPARK-29668       Add a deprecation warning for Python 3.4 and 3.5
+SPARK-29582       Support `TaskContext.get()` in a barrier task from Python side
+SPARK-29645       ML add param RelativeError
+SPARK-29520       Fix checks of negative intervals
+SPARK-11150       Dynamic partition pruning
+SPARK-28560       support the build side to local shuffle reader as far as possible in BroadcastHashJoin
+SPARK-29604       Let SparkSQLEnvSuite to be run in dedicated JVM
+SPARK-29675       Add exception when isolationLevel is Illegal
+SPARK-29687       Fix JDBC metrics counter data type
+SPARK-29664       Column.getItem behavior is not consistent with Scala
+SPARK-29676       ALTER TABLE (RENAME PARTITION) should look up catalog/table like v2 commands
+SPARK-29686       LinearSVC should persist instances if needed
+SPARK-29486       CalendarInterval should have 3 fields: months, days and microseconds
+SPARK-29643       ALTER TABLE/VIEW (DROP PARTITION) should look up catalog/table like v2 commands
+SPARK-29109       Port window.sql (Part 3)
+SPARK-29452       Improve Storage tab tooltip
+MINOR             Fix typo in example documentation
+SPARK-29611       Sort Kafka metadata by the number of messages
+SPARK-29623       do not allow multiple unit TO unit statements in interval literal syntax
+SPARK-29677       amazon-kinesis-client 1.12.0
+SPARK-29729       Upgrade ASM to 7.2
+SPARK-29731       Use public JIRA REST API to read-only access
+SPARK-29733       Fix wrong order of parameters passed to `assertEquals`
+SPARK-29674       Update dropwizard metrics to 4.1.x for JDK 9+
+SPARK-29722       Non reversed keywords should be able to be used in high order functions
+SPARK-29343       Eliminate sorts without limit in the subquery of Join/Aggregation
+SPARK-29671       Simplify string representation of intervals
+SPARK-29353       Fallback AlterTableAlterColumnStatement to v1 AlterTableChangeColumnCommand
+SPARK-29739       Use `java` instead of `cc` in test_pipe_functions
+SPARK-29736       Improve stability of tests for special datetime values
+SPARK-29285       Temporary shuffle files should be able to handle disk failures
+SPARK-29590       JDBC/ODBC tab in the spark UI support hide tables, to make it consistent with other tabs
+SPARK-29678       ALTER TABLE (ADD PARTITION) should look up catalog/table like v2 commands
+SPARK-29663       Support sum with interval type values
+SPARK-29742       Update checkstyle plugin's check dir scope
+SPARK-28798       Document DROP TABLE/VIEW statement in SQL Reference
+SPARK-28809       Document SHOW TABLE in SQL Reference
+SPARK-29743       sample should set needCopyResult to true if its child is
+SPARK-29723       Get date and time parts of an interval as java classes
+SPARK-29397       Extend plugin interface to include the driver
+SPARK-28552       Case-insensitive database URLs in JdbcDialect
+SPARK-20568       Provide option to clean up completed files in streaming query
+SPARK-29747       Bump joda-time version to 2.10.5
+SPARK-29734       Datasource V2: Support SHOW CURRENT NAMESPACE
+SPARK-29696       Port groupingsets.sql
+SPARK-29630       Disallow creating a permanent view that references a temporary view in an expression
+SPARK-29695       ALTER TABLE (SerDe properties) should look up catalog/table like v2 commands
+SPARK-29648       Port limit.sql
+SPARK-29151       Support fractional resources for task resource scheduling
+SPARK-29387       Support `*` and `/` operators for intervals
+SPARK-29763       Fix Stage UI Page not showing all accumulators in Task Table
+SPARK-29714       Port insert.sql
+SPARK-29656       ML algs expose aggregationDepth
+SPARK-29680       Remove ALTER TABLE CHANGE COLUMN syntax
+SPARK-29754       LoR/AFT/LiR/SVC use Summarizer instead of MultivariateOnlineSummarizer
+SPARK-29725       Add ThriftServerPageSuite
+SPARK-29746       Implement validateInputType in Normalizer/ElementwiseProduct/PolynomialExpansion
+SPARK-29751       Scalers use Summarizer instead of MultivariateOnlineSummarizer
+MINOR             Change the Github Actions build command to `mvn install`
+SPARK-29603       Support application priority for YARN priority scheduling
+SPARK-29752       make AdaptiveQueryExecSuite more robust
+SPARK-29642       Change the element type of underlying array to UnsafeRow for ContinuousRecordEndpoint
+SPARK-29759       LocalShuffleReaderExec.outputPartitioning should use the corrected attributes
+SPARK-29635       Extract base test suites between Kafka micro-batch sink and Kafka continuous sink
+SPARK-29387       Fix issues of the multiply and divide for intervals
+SPARK-29605       Optimize string to interval casting
+SPARK-29761       do not output leading 'interval' in CalendarInterval.toString
+SPARK-29757       Move calendar interval constants together
+SPARK-29796       `HiveExternalCatalogVersionsSuite` should ignore preview release
+SPARK-22340       Add a mode to pin Python thread into JVM's
+SPARK-21869       Apply Apache Commons Pool to Kafka producer
+SPARK-29787       Move methods add/subtract/negate from CalendarInterval to IntervalUtils
+SPARK-29772       Add withNamespace in SQLTestUtils
+SPARK-29756       CountVectorizer forget to unpersist intermediate rdd
+SPARK-28477       Rewrite CaseWhen with single branch to If
+SPARK-29688       Support average for interval type values
+SPARK-29679       Make interval type comparable and orderable
+SPARK-29790       Note required port for Kube API
+SPARK-29798       Infers bytes as binary type in createDataFrame in Python 3 at PySpark
+SPARK-29680       Replace qualifiedName with multipartIdentifier
+SPARK-28978       Support > 256 args to python udf
+SPARK-28893       Support MERGE INTO in the parser and add the corresponding logical plan
+MINOR             Fix the SQLBase.g4
+SPARK-29788       Fix the typos in the SQL reference documents
+MINOR             FsHistoryProvider import cleanup
+SPARK-29795       Explicitly clear registered metrics on MetricSystem shutdown
+SPARK-29654       Add configuration to allow disabling registration of static sources to the metrics system
+SPARK-29730       ALTER VIEW QUERY should look up catalog/table like v2 commands
+SPARK-29819       Introduce an enum for interval units
+SPARK-29528       Upgrade scala-maven-plugin to 4.3.0 for Scala 2.13.1
+SPARK-29408       Support `-` before `interval` in interval literals
+SPARK-29820       Use GitHub Action Cache for `./.m2/repository/[com|org]`
+SPARK-29601       JDBC ODBC Tab Statement column provide ellipsis for big SQL statement
+SPARK-29393       Add `make_interval` function
+SPARK-29421       Supporting Create Table Like Using Provider
+SPARK-29822       Fix cast error when there are white spaces between signs and values
+SPARK-29825       Add join-related configs in `inner-join.sql` and `postgreSQL/join.sql`
+SPARK-29801       ML models unify toString method
+SPARK-29805       Enable nested schema pruning and nested pruning on expressions by default
+SPARK-29766       Do metrics aggregation asynchronously in SQL listener
+SPARK-26154       Streaming left/right outer join should not return outer nulls for already matched rows
+SPARK-29755       Provide @JsonDeserialize for Option[Long] in LogInfo & AttemptInfoWrapper
+SPARK-29519       SHOW TBLPROPERTIES should do multi-catalog resolution
+SPARK-29001       Print events that take too long time to process
+SPARK-29298       Separate block manager heartbeat endpoint from driver endpoint
+SPARK-29855       typed literals with negative sign with proper result or exception
+SPARK-29850       sort-merge-join an empty table should not memory leak
+SPARK-29789       should not parse the bucket column name when creating v2 tables
+SPARK-29844       Improper unpersist strategy in ml.recommendation.ASL.train
+SPARK-29570       Improve tooltip for Executor Tab for Shuffle Write,Blacklisted,Logs,Threaddump columns
+SPARK-29399       Remove old ExecutorPlugin interface
+SPARK-29145       Move tests from `SubquerySuite` to `subquery/in-subquery/in-joins.sql`
+SPARK-29390       Add the justify_days(), justify_hours() and justif_interval() functions
+SPARK-29851       V2 catalog: Change default behavior of dropping namespace to cascade
+SPARK-29835       Remove the unnecessary conversion from Statement to LogicalPlan for DELETE/UPDATE
+MINOR             Fix an incorrect path in license-binary file
+SPARK-28795       Links should point to html instead of md files
+SPARK-28798       Add alter view link to drop view
+SPARK-29753       refine the default catalog config
+SPARK-29863       Rename EveryAgg/AnyAgg to BoolAnd/BoolOr
+SPARK-29823       Improper persist strategy in mllib.clustering.KMeans.run()
+SPARK-29808       StopWordsRemover should support multi-cols
+SPARK-29568       Stop existing running streams when a new stream is launched
+SPARK-24203       Make executor's bindAddress configurable
+SPARK-29778       pass writer options to saveAsTable in append mode
+SPARK-29287       Add LaunchedExecutor message to tell driver which executor is ready for making offers
+SPARK-29649       Stop task set if FileAlreadyExistsException was thrown when writing to output file
+SPARK-29837       PostgreSQL dialect: cast to boolean
+SPARK-29873       Support `--import` directive to load queries from another test case in SQLQueryTestSuite
+SPARK-29682       Resolve conflicting attributes in Expand correctly
+SPARK-29672       update spark testing framework to use python3
+SPARK-28833       Document ALTER VIEW command
+SPARK-29865       Ensure client-mode executors have same name prefix
+SPARK-29857       Defer render the spark UI dataTables
+SPARK-26923       Show stderr in the exception whenever possible in RRunner
+SPARK-29901       Fix broken links in SQL Reference
+SPARK-29889       unify the interval tests
+SPARK-29376       Upgrade Apache Arrow to version 0.15.1
+SPARK-28752       Documentation build to support Python 3
+SPARK-29888       new interval string parser shall handle numeric with only fractional part
+SPARK-29655       Read bucketed tables obeys spark.sql.shuffle.partitions
+SPARK-26499       Replace `update` with `setByte` for ByteType in JdbcUtils.makeGetter
+SPARK-29902       Add listener event queue capacity configuration to documentation
+SPARK-29829       SHOW TABLE EXTENDED should do multi-catalog resolution
+SPARK-29833       Add FileNotFoundException check for spark.yarn.jars
+SPARK-29127       Add a clue for Python related version information in integrated UDF tests
+SPARK-29834       DESC DATABASE should look up catalog like v2 commands
+SPARK-29343       Remove floating-point Sum/Average/CentralMomentAgg from order-insensitive aggregates
+SPARK-29867       Add __repr__ in Python ML Models
+SPARK-29923       Set io.netty.tryReflectionSetAccessible for Arrow on JDK9+
+SPARK-29807       Rename "spark.sql.ansi.enabled" to "spark.sql.dialect.spark.ansi.enabled"
+MINOR             Ignore GitHub Action and AppVeyor file changes in testing
+SPARK-29476       add tooltip for Thread
+SPARK-29928       Check parsing timestamps up to microsecond precision by JSON/CSV datasource
+SPARK-29378       Upgrade SparkR to use Arrow 0.15 API
+SPARK-29858       ALTER DATABASE (SET DBPROPERTIES) should look up catalog like v2 commands
+SPARK-29456       Improve tooltip for Session Statistics Table column in JDBC/ODBC Server Tab
+SPARK-29932       lint-r should do non-zero exit in case of errors
+SPARK-29930       Remove SQL configs declared to be removed in Spark 3.0
+SPARK-16872       Impl Gaussian Naive Bayes Classifier
+SPARK-29907       Move DELETE/UPDATE/MERGE relative rules to dmlStatementNoWith to support cte
+SPARK-29378       Remove manual installation of Arrow dependencies in AppVeyor build
+SPARK-29936       Fix SparkR lint errors and add lint-r GitHub Action
+SPARK-25694       Add a config for `URL.setURLStreamHandlerFactory`
+SPARK-29020       Improving array_sort behaviour
+SPARK-29783       Support SQL Standard/ISO_8601 output style for interval type
+SPARK-29870       Unify the logic of multi-units interval string to CalendarInterval
+SPARK-29859       ALTER DATABASE (SET LOCATION) should look up catalog like v2 commands
+SPARK-29941       Add ansi type aliases for char and decimal
+SPARK-29873       set operations should not escape when regen golden file with --SET --import both specified
+SPARK-29777       SparkR::cleanClosure aggressively removes a function required by user function
+SPARK-25694       Move 'spark.sql.defaultUrlStreamHandlerFactory.enabled' into StaticSQLConf.scala
+SPARK-29870       Keep CalendarInterval's toString
+SPARK-28527       Add guides for ThriftServerQueryTestSuite
+SPARK-29728       Datasource V2: Support ALTER TABLE RENAME TO
+SPARK-27558       Gracefully cleanup task when it fails with OOM exception
+SPARK-29869       improve error message in HiveMetastoreCatalog#convertToLogicalRelation
+SPARK-29948       make the default alias consistent between date, timestamp and interval
+SPARK-29918       RecordBinaryComparator should check endianness when compared by long
+SPARK-29893       improve the local shuffle reader performance by changing the reading task number from 1 to multi
+SPARK-29926       Fix weird interval string whose value is only a dangling decimal point
+SPARK-29913       Improve Exception in postgreCastToBoolean
+SPARK-29906       AQE should not introduce extra shuffle for outermost limit
+
+# Internal Patches
+SPARK-17767       Support user-provided ExternalCatalog and SessionBuilder
+MINOR             Support JarvisSparkHadoopUtil
+MINOR             SparkUI Port value is not getting reloaded for StreamingContexts created from Checkpoint
+MINOR             Add JDK11 options
+MINOR             Ignore permission-based test due to RIO limitation
+MINOR             Add rio.yml/rio-maven-custom-build.sh/change-to-pie.sh/tag-name.sh
+MINOR             Update make-distribution.sh
+MINOR             Bump to 3.0.0-preview-pie1.0.0-SNAPSHOT
