@@ -327,7 +327,7 @@ builds:
         HADOOP_BINARY_VERSION: "3.2"
         HADOOP_VERSION: "3.2.0"
         PUBLISH_JARS: true
-        CODE_VERSION: "2.4.4-pie1.0.0"
+        TAG_NAME: $(./dev/tag-name.sh)
       docker:
         baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
@@ -343,7 +343,7 @@ builds:
     finally:
       tag:
         enabled: true
-        expression: "releases_2.12/$CODE_VERSION"
+        expression: "$TAG_NAME"
 
   - name: pie-spark-2.11_2.4.4-hadoop-provided-snapshot
     branchName: pie-spark-2.4.4
@@ -381,7 +381,6 @@ builds:
         SCALA_BINARY_VERSION: "2.11"
         SCALA_VERSION: "2.11.12"
         HADOOP_VERSION: "3.2.0"
-        CODE_VERSION: "2.4.4-pie1.0.0"
         PUBLISH_JARS: false
       docker:
         baseImage: docker.apple.com/cpbuild7/applejdk-11
