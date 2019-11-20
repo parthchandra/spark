@@ -454,8 +454,7 @@ builds:
         SCALA_BINARY_VERSION: "2.12"
         SCALA_VERSION: "2.12.10"
         HADOOP_VERSION: "3.2.0"
-        CODE_VERSION: "3.0.0-preview-pie1.0.0"
-        PUBLISH_JARS: true
+        PUBLISH_JARS: false
       docker:
         baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
