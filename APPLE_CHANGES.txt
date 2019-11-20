@@ -199,3 +199,5 @@ MINOR             Ignore permission-based test due to RIO limitation
 MINOR             Add rio.yml/rio-maven-custom-build.sh/change-to-pie.sh/tag-name.sh
 MINOR             Update make-distribution.sh
 MINOR             Bump to 3.0.0-preview-pie1.0.0-SNAPSHOT
+MINOR             Disable publish in hadoop-provided release
+MINOR             Bump to 3.0.0-preview-pie1.0.1-SNAPSHOT
