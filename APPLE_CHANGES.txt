@@ -208,3 +208,5 @@ MINOR             Use abstract storage as a replacement for window.localStorage
 <rdar://33357966> SparkUI Port value is not getting reloaded for StreamingContexts created from Checkpoint
 MINOR             SparkUI patch
 MINOR             Bump to 2.4.4-pie1.0.0-SNAPSHOT
+MINOR             Fix tag interpolation, sync maven options, remove parallel run in release
+MINOR             Bump to 2.4.4-pie1.0.1-SNAPSHOT
