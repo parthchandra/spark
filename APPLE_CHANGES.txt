@@ -189,6 +189,73 @@ SPARK-29893       improve the local shuffle reader performance by changing the r
 SPARK-29926       Fix weird interval string whose value is only a dangling decimal point
 SPARK-29913       Improve Exception in postgreCastToBoolean
 SPARK-29906       AQE should not introduce extra shuffle for outermost limit
+SPARK-29691       ensure Param objects are valid in fit, transform
+SPARK-29964       lintr github workflows failed due to buggy GnuPG
+SPARK-29963       Check formatting timestamps up to microsecond precision by JSON/CSV datasource
+SPARK-29945       do not handle negative sign specially in the parser
+SPARK-29029       Use AttributeMap in PhysicalOperation.collectProjectsAndFilters
+SPARK-29968       Remove the Predicate code from SparkPlan
+SPARK-18409       LSH approxNearestNeighbors should use approxQuantile instead of sort
+SPARK-29894       Add Codegen Stage Id to Spark plan graphs in Web UI SQL Tab
+SPARK-28885       Re-enable the ported PgSQL regression tests of SQLQueryTestSuite
+SPARK-29951       Make the behavior of Postgre dialect independent of ansi mode config
+MINOR             Replace JVM assert with JUnit Assert in tests
+SPARK-29911       Uncache cached tables when session closed
+SPARK-29978       Check `json_tuple` does not truncate results
+SPARK-29961       Implement builtin function - typeof
+SPARK-22340       Add a better message and improve documentation for pinned thread mode
+SPARK-29961       Remove useless test for VectorUDT
+MINOR             Add `io` and `net` to GitHub Action Cache
+SPARK-29885       Improve the exception message when reading the daemon port
+SPARK-29942       Impl Complement Naive Bayes Classifier
+SPARK-29960       MulticlassClassificationEvaluator support hammingLoss
+SPARK-29874       Optimize Dataset.isEmpty()
+SPARK-29977       Remove newMutableProjection/newOrdering/newNaturalAscendingOrdering  from SparkPlan
+SPARK-29248       provider number of partitions when creating v2 data writer factory
+SPARK-29558       ResolveTables and ResolveRelations should be order-insensitive
+SPARK-29975       introduce --CONFIG_DIM directive
+SPARK-29911       Move related unit test to ThriftServerWithSparkContextSuite
+SPARK-28023       Add trim logic in UTF8String's toInt/toLong to make it consistent with other string-numeric casting
+SPARK-29893       code cleanup for local shuffle reader
+SPARK-29427       Add API to convert RelationalGroupedDataset to KeyValueGroupedDataset
+SPARK-29971       Fix buffer leaks in `TransportFrameDecoder/TransportCipher`
+SPARK-30003       Do not throw stack overflow exception in non-root unknown hint resolution
+SPARK-29981       Add hive-1.2/2.3 profiles
+SPARK-29981       Change hive.version.short
+SPARK-29970       Preserver open/close state of Timelineview
+SPARK-29681       Support column sorting in Environment tab
+SPARK-28812       Document SHOW PARTITIONS in SQL Reference
+SPARK-29554       Rename Version to SparkVersion
+SPARK-30007       Publish snapshot/release artifacts with `-Phive-2.3` only
+SPARK-29973       Make `processedRowsPerSecond` calculated more accurately and meaningfully
+SPARK-24690       Add a config to control plan stats computation in LogicalRelation
+SPARK-30005       Update `test-dependencies.sh` to check `hive-1.2/2.3` profile
+MINOR             Use GitHub Action Cache for `build`
+SPARK-29999       Handle FileStreamSink metadata correctly for empty partition
+SPARK-29937       Make FileSourceScanExec class fields lazy
+SPARK-30013       For scala 2.13, omit parens in various BigDecimal value() methods
+SPARK-30000       Trim the string when cast string type to decimals
+SPARK-29939       Add spark.shuffle.mapStatus.compression.codec conf
+SPARK-29986       casting string to date/timestamp/interval should trim all whitespaces
+SPARK-29975       document --CONFIG_DIM
+SPARK-29415       Stage Level Sched: Add base ResourceProfile and Request classes
+SPARK-29890       DataFrameNaFunctions.fill should handle duplicate columns
+SPARK-29979       Add basic/reserved property key constants in TableCatalog and SupportsNamespaces
+SPARK-26260       For disk store tasks summary table should show only successful tasks summary
+SPARK-30015       Move hive-storage-api dependency from `hive-2.3` to `sql/core`
+SPARK-30030       Use RegexChecker instead of TokenChecker to check `org.apache.commons.lang.`
+SPARK-30031       Remove `hive-2.3` profile from `sql/hive` module
+SPARK-30032       Upgrade to ORC 1.5.8
+MINOR             Fix the CalendarIntervalType description
+MINOR             Make EventLogger codec be consistent between EventLogFileWriter and SparkContext
+SPARK-29862       CREATE (OR REPLACE) ... VIEW should look up catalog/table like v2 commands
+SPARK-30030       Remove unused org.apache.commons.lang
+SPARK-30035       Upgrade to Apache Commons Lang 3.9
+SPARK-28574       Several minor improvements for event queue capacity config
+SPARK-30009       Support different floating-point Ordering for Scala 2.12 / 2.13
+SPARK-30026       Whitespaces can be identified as delimiters in interval string
+SPARK-29293       Move scalafmt to Scala 2.12 profile; bump to 0.12
+SPARK-27651       Avoid the network when shuffle blocks are fetched from the same host
 
 # Internal Patches
 SPARK-17767       Support user-provided ExternalCatalog and SessionBuilder
