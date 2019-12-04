@@ -231,7 +231,6 @@ SPARK-29973       Make `processedRowsPerSecond` calculated more accurately and m
 SPARK-24690       Add a config to control plan stats computation in LogicalRelation
 SPARK-30005       Update `test-dependencies.sh` to check `hive-1.2/2.3` profile
 MINOR             Use GitHub Action Cache for `build`
-SPARK-29999       Handle FileStreamSink metadata correctly for empty partition
 SPARK-29937       Make FileSourceScanExec class fields lazy
 SPARK-30013       For scala 2.13, omit parens in various BigDecimal value() methods
 SPARK-30000       Trim the string when cast string type to decimals
@@ -256,6 +255,60 @@ SPARK-30009       Support different floating-point Ordering for Scala 2.12 / 2.1
 SPARK-30026       Whitespaces can be identified as delimiters in interval string
 SPARK-29293       Move scalafmt to Scala 2.12 profile; bump to 0.12
 SPARK-27651       Avoid the network when shuffle blocks are fetched from the same host
+SPARK-28752       Fix to install `rouge` instead of `rogue`
+SPARK-29997       Show job name for empty jobs in WebUI
+SPARK-30008       The dataType of collect_list/collect_set aggs should be ArrayType(_, false)
+SPARK-29768       Column pruning through nondeterministic expressions
+SPARK-30056       Skip building test artifacts in `dev/make-distribution.sh`
+SPARK-28366       Improve the conf IO_WARNING_LARGEFILETHRESHOLD
+SPARK-29979       improve the output of DesribeTableExec
+SPARK-29989       Add `hadoop-2.7/hive-2.3` pre-built distribution
+SPARK-29877       static PageRank allow checkPoint from previous computations
+SPARK-29724       Support JDBC/ODBC tab for HistoryServer WebUI
+SPARK-29726       Support JDBC/ODBC tab for HistoryServer WebUI
+SPARK-29991       Support Hive 1.2 and Hive 2.3 (default) in PR builder
+SPARK-25016       Remove leftover for dropping Hadoop 2.6 in Jenkins's test script
+SPARK-30086       Run HiveThriftServer2ListenerSuite on a dedicated JVM to fix flakiness
+SPARK-29486       Document the reason to add days field
+SPARK-30057       Add a statement of platforms Spark runs on
+SPARK-30076       Upgrade Mockito to 3.1.0
+SPARK-28461       Pad Decimal numbers with trailing zeros to the scale of the column
+SPARK-29956       A literal number with an exponent should be parsed to Double
+SPARK-30065       DataFrameNaFunctions.drop should handle duplicate columns
+SPARK-30074       The maxNumPostShufflePartitions config should obey reducePostShufflePartitions enabled
+SPARK-29851       Use foreach instead of misusing map
+SPARK-30050       analyze table and rename table should not erase hive table bucketing info
+SPARK-29959       Summarizer support more metrics
+SPARK-30025       Continuous shuffle block fetching should be disabled by default when the old fetch protocol is used
+SPARK-29839       Supporting STORED AS in CREATE TABLE LIKE
+SPARK-30047       Support interval types in UnsafeRow
+MINOR             Rename config name to spark.sql.analyzer.failAmbiguousSelfJoin.enabled
+MINOR             Add implementation note on overriding serialize/deserialize in HDFSMetadataLog methods' scaladoc
+SPARK-27721       Switch to use right leveldbjni according to the platforms
+SPARK-30085       Standardize sql reference
+SPARK-30075       Fix the hashCode implementation of ArrayKeyIndexType correctly
+SPARK-30072       Create dedicated planner for subqueries
+SPARK-29943       Improve error messages for unsupported data type
+SPARK-30044       MNB/CNB/BNB use empty sigma matrix instead of null
+SPARK-29537       throw exception when user defined a wrong base path
+SPARK-29348       Add observable Metrics for Streaming queries
+SPARK-30048       Enable aggregates with interval type values for RelationalGroupedDataset
+SPARK-30083       visitArithmeticUnary should wrap PLUS case with UnaryPositive for type checking
+SPARK-30082       Do not replace Zeros when replacing NaNs
+SPARK-29477       Improve tooltip for Streaming tab
+SPARK-30012       Change classes extending scala collection classes to work with 2.13
+SPARK-30106       Fix the test of DynamicPartitionPruningSuite
+SPARK-30060       Rename metrics enable/disable configs
+SPARK-30051       Clean up hadoop-3.2 dependency
+SPARK-27990       Add recursiveFileLookup option to Python DataFrameReader
+SPARK-30109       PCA use BLAS.gemv for sparse vectors
+SPARK-30111       Apt-get update to fix debian issues
+SPARK-30091       Document mergeSchema option directly in the PySpark Parquet APIs
+SPARK-30113       Expose mergeSchema option in PySpark's ORC APIs
+SPARK-30099       Improve Analyzed Logical Plan
+SPARK-29914       ML models attach metadata in `transform`/`transformSchema`
+SPARK-29453       Improve tooltips information for SQL tab
+SPARK-29392       Avoid deprecated (in 2.13) Symbol syntax 'foo in favor of simpler expression, where it generated deprecation warnings
 
 # Internal Patches
 SPARK-17767       Support user-provided ExternalCatalog and SessionBuilder
