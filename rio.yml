@@ -403,7 +403,6 @@ builds:
         HADOOP_BINARY_VERSION: "3.2"
         HADOOP_VERSION: "3.2.0"
         PUBLISH_JARS: true
-        TAG_NAME: $(./dev/tag-name.sh)
       docker:
         baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
@@ -419,7 +418,7 @@ builds:
     finally:
       tag:
         enabled: true
-        expression: ${TAG_NAME}
+        expression: "releases_2.12/3.0.0-preview-pie1.0.2"
 
   - name: pie-spark-2.12_3.0.0-preview-hadoop-provided-snapshot
     branchName: pie-spark-3.0.0-preview
