@@ -101,6 +101,23 @@ SPARK-28939       Propagate SQLConf for plans executed by toRdd
 SPARK-29850       sort-merge-join an empty table should not memory leak
 SPARK-29875       Avoid to use deprecated pyarrow.open_stream API in Spark 2.4.x
 SPARK-29682       Resolve conflicting attributes in Expand correctly
+SPARK-26499       JdbcUtils.makeGetter does not handle ByteType
+SPARK-29904       Parse timestamps in microsecond precision by JSON/CSV datasources
+SPARK-29932       lint-r should do non-zero exit in case of errors
+SPARK-29936       Fix SparkR lint errors and add lint-r GitHub Action
+MINOR             Ignore GitHub Action and AppVeyor file changes in testing
+SPARK-29918       RecordBinaryComparator should check endianness when compared by long
+SPARK-29949       Fix formatting of timestamps by JSON/CSV datasources
+SPARK-29964       lintr github workflows failed due to buggy GnuPG
+SPARK-29758       Fix truncation of requested string fields in `json_tuple`
+SPARK-27558       Gracefully cleanup task when it fails with OOM exception
+SPARK-29970       Preserver open/close state of Timelineview
+MINOR             Use GitHub Action Cache for `build`
+SPARK-29971       Fix buffer leaks in `TransportFrameDecoder/TransportCipher`
+SPARK-30030       Use RegexChecker instead of TokenChecker to check `org.apache.commons.lang.`
+SPARK-30050       analyze table and rename table should not erase hive table bucketing info
+SPARK-30082       Do not replace Zeros when replacing NaNs
+SPARK-30129       Set client's id in TransportClient after successful auth
 
 # From Spark 3.0.0
 SPARK-20636       Add new optimization rule to transpose adjacent Window expressions.
@@ -191,6 +208,7 @@ SPARK-27849       Fix the testing regex in DataSourceScanRedactionTest
 SPARK-29528       Upgrade scala-maven-plugin to 4.3.0 for Scala 2.13.1
 SPARK-29795       Explicitly clear registered metrics on MetricSystem shutdown
 SPARK-29674       Update dropwizard metrics to 4.1.x for JDK 9+
+SPARK-30056       Skip building test artifacts in `dev/make-distribution.sh`
 
 # Internal Patches
 SPARK-17767       Support user-provided ExternalCatalog and SessionBuilder
@@ -210,3 +228,5 @@ MINOR             SparkUI patch
 MINOR             Bump to 2.4.4-pie1.0.0-SNAPSHOT
 MINOR             Fix tag interpolation, sync maven options, remove parallel run in release
 MINOR             Bump to 2.4.4-pie1.0.1-SNAPSHOT
+MINOR             Bump to 2.4.4-pie1.0.2-SNAPSHOT
+<rdar://47971223> Add Scala-2.12 test and snapshot publishing
