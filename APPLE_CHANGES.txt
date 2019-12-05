@@ -309,6 +309,15 @@ SPARK-30099       Improve Analyzed Logical Plan
 SPARK-29914       ML models attach metadata in `transform`/`transformSchema`
 SPARK-29453       Improve tooltips information for SQL tab
 SPARK-29392       Avoid deprecated (in 2.13) Symbol syntax 'foo in favor of simpler expression, where it generated deprecation warnings
+SPARK-30084       Document how to trigger Jekyll build on Python API doc changes
+SPARK-30129       Set client's id in TransportClient after successful auth
+SPARK-30009       Remove OrderingUtil and Utils.nanSafeCompare{Doubles,Floats} and use java.lang.{Double,Float}.compare directly
+SPARK-30093       Improve error message for creating view
+SPARK-29860       Fix dataType mismatch issue for InSubquery
+SPARK-29425       The ownership of a database should be respected
+SPARK-29774       Date and Timestamp type +/- null should be null as Postgres
+SPARK-30121       Fix memory usage in sbt build script
+SPARK-30124       unnecessary persist in PythonMLLibAPI.scala
 
 # Internal Patches
 SPARK-17767       Support user-provided ExternalCatalog and SessionBuilder
@@ -321,3 +330,4 @@ MINOR             Update make-distribution.sh
 MINOR             Bump to 3.0.0-preview-pie1.0.0-SNAPSHOT
 MINOR             Disable publish in hadoop-provided release
 MINOR             Bump to 3.0.0-preview-pie1.0.1-SNAPSHOT
+MINOR             Bump to 3.0.0-preview-pie1.0.2-SNAPSHOT
