@@ -317,7 +317,7 @@ builds:
       template: freestyle:v2:snapshot
       steps:
         - build/mvn -Phadoop-3.2 -pl external/kafka-0-10,external/kafka-0-10-sql -am package -DskipTests
-        - build/mvn -Phadoop-3.2 -pl external/kafka-0-10,external/kafka-0-10-sql test
+        - build/mvn -Phadoop-3.2 -pl external/kafka-0-10,external/kafka-0-10-sql -am test
 
   - name: pie-spark-2.12_2.4.4-snapshot-kafka
     branchName: pie-spark-2.4.4
