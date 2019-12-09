@@ -76,3 +76,24 @@ class ExecutorMetrics private[spark] extends Serializable {
     updated
   }
 }
+
+private[spark] object ExecutorMetrics {
+
+  /**
+   * Get the current executor metrics. These are returned as an array, with the index
+   * determined by ExecutorMetricType.metricToOffset.
+   *
+   * @param memoryManager the memory manager for execution and storage memory
+   * @return the values of the metrics
+   */
+  def getCurrentMetrics(memoryManager: org.apache.spark.memory.MemoryManager): Array[Long] = {
+    val currentMetrics = new Array[Long](ExecutorMetricType.numMetrics)
+    var offset = 0
+    ExecutorMetricType.metricGetters.foreach { metricType =>
+      val metricValues = metricType.getMetricValues(memoryManager)
+      Array.copy(metricValues, 0, currentMetrics, offset, metricValues.length)
+      offset += metricValues.length
+    }
+    currentMetrics
+  }
+}
