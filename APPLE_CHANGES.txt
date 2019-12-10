@@ -365,3 +365,4 @@ MINOR             Disable publish in hadoop-provided release
 MINOR             Bump to 3.0.0-preview-pie1.0.1-SNAPSHOT
 MINOR             Bump to 3.0.0-preview-pie1.0.2-SNAPSHOT
 MINOR             Bump to 3.0.0-preview-pie1.0.3-SNAPSHOT
+MINOR             Bump to 3.0.0-preview-pie1.0.4-SNAPSHOT
