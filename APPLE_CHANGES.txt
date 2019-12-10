@@ -318,6 +318,39 @@ SPARK-29425       The ownership of a database should be respected
 SPARK-29774       Date and Timestamp type +/- null should be null as Postgres
 SPARK-30121       Fix memory usage in sbt build script
 SPARK-30124       unnecessary persist in PythonMLLibAPI.scala
+SPARK-29392       Avoid deprecated (in 2.13) Symbol syntax 'foo in favor of simpler expression, where it generated deprecation warnings
+SPARK-24666       Fix infinity vectors produced by Word2Vec when numIterations are large
+SPARK-29953       Don't clean up source files for FileStreamSource if the files belong to the output of FileStreamSink
+SPARK-29957       Reset MiniKDC's default enctypes to fit jdk8/jdk11
+SPARK-30067       Fix fragment offset comparison in getBlockHosts
+SPARK-30001       ResolveRelations should handle both V1 and V2 tables
+SPARK-28083       Support LIKE ... ESCAPE syntax
+SPARK-30142       Upgrade Maven to 3.6.3
+SPARK-30011       Inline 2.12 "AsIfIntegral" classes, not present in 2.13
+SPARK-30112       Allow insert overwrite same table if using dynamic partition overwrite
+SPARK-30098       Use default datasource as provider for CREATE TABLE syntax
+SPARK-30152       Enable Hadoop-2.7/JDK11 build at GitHub Action
+SPARK-30155       Rename parse() to parseString() to avoid conflict in Scala 2.13
+SPARK-30148       Optimize writing plans if there is an analysis exception
+SPARK-30157       Upgrade Apache HttpCore from 4.4.10 to 4.4.12
+SPARK-30156       Upgrade Jersey from 2.29 to 2.29.1
+SPARK-30147       Trim the string when cast string type to booleans
+SPARK-30163       Use Google Maven mirror in GitHub Action
+SPARK-30163       Make `.m2` directory for cold start without cache
+SPARK-29922       SHOW FUNCTIONS should do multi-catalog resolution
+SPARK-30164       Exclude Hive domain in Unidoc build explicitly
+SPARK-29883       Implement a helper method for aliasing bool_and() and bool_or()
+SPARK-30138       Separate configuration key of max iterations for analyzer and optimizer
+SPARK-30159       Fix the method calls of `QueryTest.checkAnswer`
+SPARK-27189       Add Executor metrics and memory usage instrumentation to the metrics system
+SPARK-30159       Fix lint-java via removing unnecessary imports
+SPARK-30146       Add setWeightCol to GBTs in PySpark
+SPARK-30158       Seq -> Array for sc.parallelize for 2.13 compatibility; remove WrappedArray
+SPARK-30179       Improve test in SingleSessionSuite
+SPARK-30196       Bump lz4-java version to 1.7.0
+SPARK-30151       Issue better error message when user-specified schema mismatched
+SPARK-29967       KMeans support instance weighting
+SPARK-30206       Rename normalizeFilters in DataSourceStrategy to be generic
 
 # Internal Patches
 SPARK-17767       Support user-provided ExternalCatalog and SessionBuilder
@@ -331,3 +364,4 @@ MINOR             Bump to 3.0.0-preview-pie1.0.0-SNAPSHOT
 MINOR             Disable publish in hadoop-provided release
 MINOR             Bump to 3.0.0-preview-pie1.0.1-SNAPSHOT
 MINOR             Bump to 3.0.0-preview-pie1.0.2-SNAPSHOT
+MINOR             Bump to 3.0.0-preview-pie1.0.3-SNAPSHOT
