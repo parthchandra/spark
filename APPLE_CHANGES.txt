@@ -240,3 +240,4 @@ MINOR             Bump to 2.4.4-pie1.0.2-SNAPSHOT
 <rdar://47971223> Add Scala-2.12 test and snapshot publishing
 MINOR             Bump to 2.4.4-pie1.0.3-SNAPSHOT
 MINOR             Add `-am` to kafka mvn testing
+MINOR             Bump to 2.4.4-pie1.0.4-SNAPSHOT
