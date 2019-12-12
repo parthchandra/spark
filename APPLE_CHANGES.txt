@@ -118,6 +118,12 @@ SPARK-30030       Use RegexChecker instead of TokenChecker to check `org.apache.
 SPARK-30050       analyze table and rename table should not erase hive table bucketing info
 SPARK-30082       Do not replace Zeros when replacing NaNs
 SPARK-30129       Set client's id in TransportClient after successful auth
+SPARK-24666       Fix infinity vectors produced by Word2Vec when numIterations are large
+SPARK-30163       Use Google Maven mirror in GitHub Action
+SPARK-30163       Make `.m2` directory for cold start without cache
+SPARK-29152       Executor Plugin shutdown when dynamic allocation is enabled
+SPARK-30198       BytesToBytesMap does not grow internal long array as expected
+MINOR             Fix the ss-kafka doc for availability of 'minPartitions' option
 
 # From Spark 3.0.0
 SPARK-20636       Add new optimization rule to transpose adjacent Window expressions.
@@ -209,6 +215,9 @@ SPARK-29528       Upgrade scala-maven-plugin to 4.3.0 for Scala 2.13.1
 SPARK-29795       Explicitly clear registered metrics on MetricSystem shutdown
 SPARK-29674       Update dropwizard metrics to 4.1.x for JDK 9+
 SPARK-30056       Skip building test artifacts in `dev/make-distribution.sh`
+SPARK-30035       Upgrade to Apache Commons Lang 3.9
+SPARK-30199       Recover `spark.(ui|blockManager).port` from checkpoint
+SPARK-30228       Update zstd-jni to 1.4.4-3
 
 # Internal Patches
 SPARK-17767       Support user-provided ExternalCatalog and SessionBuilder
@@ -223,10 +232,11 @@ MINOR             Add rio.yml/rio-maven-custom-build.sh/change-to-pie.sh
 MINOR             Update make-distribution.sh
 MINOR             Fix SBT dependency issue
 MINOR             Use abstract storage as a replacement for window.localStorage
-<rdar://33357966> SparkUI Port value is not getting reloaded for StreamingContexts created from Checkpoint
 MINOR             SparkUI patch
 MINOR             Bump to 2.4.4-pie1.0.0-SNAPSHOT
 MINOR             Fix tag interpolation, sync maven options, remove parallel run in release
 MINOR             Bump to 2.4.4-pie1.0.1-SNAPSHOT
 MINOR             Bump to 2.4.4-pie1.0.2-SNAPSHOT
 <rdar://47971223> Add Scala-2.12 test and snapshot publishing
+MINOR             Bump to 2.4.4-pie1.0.3-SNAPSHOT
+MINOR             Add `-am` to kafka mvn testing
