@@ -60,11 +60,7 @@ class Checkpoint(ssc: StreamingContext, val checkpointTime: Time)
       "spark.yarn.keytab",
       "spark.yarn.principal",
       "spark.ui.filters",
-      "spark.mesos.driver.frameworkId",
-      "spark.ui.port",
-      "spark.blockManager.port",
-      "spark.broadcast.port",
-      "spark.fileserver.port")
+      "spark.mesos.driver.frameworkId")
 
     val newSparkConf = new SparkConf(loadDefaults = false).setAll(sparkConfPairs)
       .remove("spark.driver.host")
