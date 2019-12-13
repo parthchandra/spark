@@ -77,7 +77,7 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/sbt -Phadoop-3.2 "mllib/test" "mllib-local/test" "graphx/test"
+        - build/sbt -Phadoop-3.2 "mllib/test" "mllib-local/test"
 
   - name: pie-spark-2.12_3.0.0-preview-snapshot-graphx
     branchName: pie-spark-3.0.0-preview
