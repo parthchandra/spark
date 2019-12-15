@@ -1129,9 +1129,9 @@ object SparkSession extends Logging {
    */
   private[spark] def hiveClassesArePresent: Boolean = {
     try {
-      Utils.classForName(HIVE_SESSION_STATE_BUILDER_CLASS_NAME)
-      Utils.classForName("org.apache.hadoop.hive.conf.HiveConf")
-      true
+      false // Hive is disabled since PIE Spark 2.4.3
+      // Utils.classForName(HIVE_SESSION_STATE_BUILDER_CLASS_NAME)
+      // Utils.classForName("org.apache.hadoop.hive.conf.HiveConf")
     } catch {
       case _: ClassNotFoundException | _: NoClassDefFoundError => false
     }
