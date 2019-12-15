@@ -76,7 +76,6 @@ SPARK-29761       do not output leading 'interval' in CalendarInterval.toString
 SPARK-29757       Move calendar interval constants together
 SPARK-29796       `HiveExternalCatalogVersionsSuite` should ignore preview release
 SPARK-22340       Add a mode to pin Python thread into JVM's
-SPARK-21869       Apply Apache Commons Pool to Kafka producer
 SPARK-29787       Move methods add/subtract/negate from CalendarInterval to IntervalUtils
 SPARK-29772       Add withNamespace in SQLTestUtils
 SPARK-29756       CountVectorizer forget to unpersist intermediate rdd
@@ -351,11 +350,60 @@ SPARK-30196       Bump lz4-java version to 1.7.0
 SPARK-30151       Issue better error message when user-specified schema mismatched
 SPARK-29967       KMeans support instance weighting
 SPARK-30206       Rename normalizeFilters in DataSourceStrategy to be generic
+SPARK-30125       Remove PostgreSQL dialect
+SPARK-30200       Add ExplainMode for Dataset.explain
+SPARK-28351       Remove 'DELETE FROM' from unsupportedHiveNativeCommands
+SPARK-29587       Support SQL Standard type real as float(4) numeric as decimal
+SPARK-30205       Import ABCs from collections.abc to remove deprecation warnings
+SPARK-29976       Trigger speculation for stages with too few tasks
+SPARK-29152       Executor Plugin shutdown when dynamic allocation is enabled
+SPARK-29392       More removal of 'foo Symbol syntax for Scala 2.13
+SPARK-30211       Use python3 in make-distribution.sh
+SPARK-30104       Fix catalog resolution for 'global_temp'
+SPARK-27506       Allow deserialization of Avro data using compatible schemas
+SPARK-30207       Enhance the SQL NULL Semantics document
+SPARK-29460       Add tooltip for Jobs page
+SPARK-30200       Fix typo in ExplainMode
+SPARK-29864       Strict parsing of day-time strings to intervals
+MINOR             Fix the ss-kafka doc for availability of 'minPartitions' option
+SPARK-30195       Change some function, import definitions to work with stricter compiler in Scala 2.13
+SPARK-30038       DESCRIBE FUNCTION should do multi-catalog resolution
+SPARK-30198       BytesToBytesMap does not grow internal long array as expected
+SPARK-30199       Recover `spark.(ui|blockManager).port` from checkpoint
+SPARK-30213       Remove the mutable status in ShuffleQueryStageExec
+SPARK-30228       Update zstd-jni to 1.4.4-3
+SPARK-30104       V2 catalog named 'global_temp' should always be masked
+SPARK-30150       ADD FILE, ADD JAR, LIST FILE & LIST JAR Command do not accept quoted path
+SPARK-29188       toPandas (without Arrow) gets wrong dtypes when applied on empty DF
+SPARK-30126       support space in file path and name for addFile and addJar function
+SPARK-30170       Eliminate compilation warnings: part 1
+MINOR             Typo in HashedRelation error
+SPARK-30162       Add PushedFilters to metadata in Parquet DSv2 implementation
+MINOR             Fix google style guide address
+SPARK-30238       hive partition pruning can only support string and integral types
+SPARK-30107       Expose nested schema pruning to all V2 sources
+SPARK-30040       DROP FUNCTION should do multi-catalog resolution
+SPARK-30227       Add close() on DataWriter interface
+SPARK-30231       Support explain mode in PySpark df.explain
+SPARK-30248       Fix DROP TABLE behavior when session catalog name is provided in the identifier
+SPARK-30243       Upgrade K8s client dependency to 4.6.4
+SPARK-30216       Use python3 in Docker release image
+SPARK-29455       Improve tooltip information for Stages
+SPARK-30167       Log4j configuration for REPL can't override the root logger properly
+SPARK-30143       Add a timeout on stopping a streaming query
+SPARK-30236       Clarify date and time patterns supported in docs
+SPARK-30066       Support columnar execution on interval types
+SPARK-30263       Don't log potentially sensitive value of non-Spark properties ignored in spark-submit
+SPARK-30231       Make error messages clear in PySpark df.explain
+SPARK-30259       Fix CREATE TABLE behavior when session catalog is specified explicitly
+SPARK-25100       Register TaskCommitMessage to KyroSerializer
+SPARK-30240       Support HTTP redirects directly to a proxy server
+SPARK-30173       Automatically close stale PRs
+SPARK-30166       Eliminate compilation warnings in JSONOptions
 
 # Internal Patches
 SPARK-17767       Support user-provided ExternalCatalog and SessionBuilder
 MINOR             Support JarvisSparkHadoopUtil
-MINOR             SparkUI Port value is not getting reloaded for StreamingContexts created from Checkpoint
 MINOR             Add JDK11 options
 MINOR             Ignore permission-based test due to RIO limitation
 MINOR             Add rio.yml/rio-maven-custom-build.sh/change-to-pie.sh/tag-name.sh
@@ -366,3 +414,4 @@ MINOR             Bump to 3.0.0-preview-pie1.0.1-SNAPSHOT
 MINOR             Bump to 3.0.0-preview-pie1.0.2-SNAPSHOT
 MINOR             Bump to 3.0.0-preview-pie1.0.3-SNAPSHOT
 MINOR             Bump to 3.0.0-preview-pie1.0.4-SNAPSHOT
+MINOR             Remove duplicated graphx test
