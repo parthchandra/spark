@@ -125,6 +125,9 @@ SPARK-30198       BytesToBytesMap does not grow internal long array as expected
 MINOR             Fix the ss-kafka doc for availability of 'minPartitions' option
 SPARK-30238       hive partition pruning can only support string and integral types
 SPARK-30263       Don't log potentially sensitive value of non-Spark properties ignored in spark-submit
+MINOR             Fix documentation for slide function
+SPARK-25392       Prevent error page when accessing pools page from history server
+SPARK-30274       Avoid BytesToBytesMap lookup hang forever when holding keys reaching max capacity
 
 # From Spark 3.0.0
 SPARK-20636       Add new optimization rule to transpose adjacent Window expressions.
@@ -244,3 +247,5 @@ MINOR             Bump to 2.4.4-pie1.0.3-SNAPSHOT
 MINOR             Add `-am` to kafka mvn testing
 MINOR             Bump to 2.4.4-pie1.0.4-SNAPSHOT
 MINOR             Disable Hive since PIE Spark 2.4.3
+MINOR             Rename to 2.4.4-jdk11-pie1.0.4-SNAPSHOT
+MINOR             Add mesos, yarn and kubernetes
