@@ -223,6 +223,7 @@ private[spark] object UIUtils extends Logging {
       useDataTables: Boolean = false): Seq[Node] = {
 
     val appName = activeTab.appName
+    val appId = activeTab.appId
     val shortAppName = if (appName.length < 36) appName else appName.take(32) + "..."
     val header = activeTab.headerTabs.map { tab =>
       <li class={if (tab == activeTab) "active" else ""}>
@@ -236,6 +237,7 @@ private[spark] object UIUtils extends Logging {
         {commonHeaderNodes(request)}
         {if (showVisualization) vizHeaderNodes(request) else Seq.empty}
         {if (useDataTables) dataTablesHeaderNodes(request) else Seq.empty}
+        <script>const SPARK_APP_ID='{appId}';</script>
         <link rel="shortcut icon"
               href={prependBaseUri(request, "/static/spark-logo-77x50px-hd.png")}></link>
         <title>{appName} - {title}</title>
