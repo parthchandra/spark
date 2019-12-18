@@ -250,3 +250,4 @@ MINOR             Disable Hive since PIE Spark 2.4.3
 MINOR             Rename to 2.4.4-jdk11-pie1.0.4-SNAPSHOT
 MINOR             Add mesos, yarn and kubernetes
 MINOR             Bump to 2.4.4-jdk11-pie1.0.5-SNAPSHOT
+MINOR             Bump to 2.4.4-jdk11-pie1.0.6-SNAPSHOT
