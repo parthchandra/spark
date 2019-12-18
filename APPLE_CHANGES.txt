@@ -141,8 +141,6 @@ SPARK-25407       Allow nested access for non-existent field for Parquet file wh
 SPARK-27644       Enable spark.sql.optimizer.nestedSchemaPruning.enabled by default
 SPARK-25559       Remove the unsupported predicates in Parquet when possible
 SPARK-25860       Replace Literal(null, _) with FalseLiteral whenever possible
-SPARK-25558       [WIP] Pushdown predicates for nested fields in DataSource Strategy
-SPARK-17636       [WIP] Parquet predicate pushdown in nested fields
 SPARK-27514       Skip collapsing windows with empty window expressions
 SPARK-25338       Ensure to call super.beforeAll() and super.afterAll() in test cases
 SPARK-25631       Improve the test runtime of KafkaRDDSuite
@@ -225,7 +223,9 @@ SPARK-30228       Update zstd-jni to 1.4.4-3
 SPARK-30157       Upgrade Apache HttpCore from 4.4.10 to 4.4.12
 
 # Internal Patches
+SPARK-17636       Parquet predicate pushdown in nested fields
 SPARK-17767       Support user-provided ExternalCatalog and SessionBuilder
+SPARK-25558       Pushdown predicates for nested fields in DataSource Strategy
 SPARK-25694       Make setURLStreamHandlerFactory invocation configurable
 MINOR             Added bindAddress in Mesos Executor Backend for now set to local host name
 MINOR             Use reflection to reduce hive dependency
@@ -251,3 +251,4 @@ MINOR             Rename to 2.4.4-jdk11-pie1.0.4-SNAPSHOT
 MINOR             Add mesos, yarn and kubernetes
 MINOR             Bump to 2.4.4-jdk11-pie1.0.5-SNAPSHOT
 MINOR             Bump to 2.4.4-jdk11-pie1.0.6-SNAPSHOT
+MINOR             Bump to 2.4.4-jdk11-pie1.0.7-SNAPSHOT
