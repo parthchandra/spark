@@ -209,7 +209,7 @@ function reselectCheckboxesBasedOnTaskTableState() {
 
 $(document).ready(function () {
     $.extend($.fn.dataTable.defaults, {
-        stateSave: true,
+        stateSave: isLocalStorageAvailable,
         lengthMenu: [[20, 40, 60, 100, -1], [20, 40, 60, 100, "All"]],
         pageLength: 20
     });
