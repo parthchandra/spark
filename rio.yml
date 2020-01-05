@@ -69,7 +69,7 @@ builds:
         # "sketch/test" "kvstore/test" "network-common/test" "network-shuffle/test" "unsafe/test"
         # "launcher/test" "core/test"
         - dev/change-scala-version.sh 2.12
-        - sed -i 's/scala\.version>[0-9.]*/scala\.version>2.12.10/' pom.xml
+        - sed -i 's/<scala\.version>[0-9.]*/<scala\.version>2.12.10/' pom.xml
         - build/mvn -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 -pl core -am package
 
   - name: pie-spark-2.11_2.4.4-jdk11-snapshot-streaming
@@ -332,7 +332,7 @@ builds:
       template: freestyle:v2:snapshot
       steps:
         - dev/change-scala-version.sh 2.12
-        - sed -i 's/scala\.version>[0-9.]*/scala\.version>2.12.10/' pom.xml
+        - sed -i 's/<scala\.version>[0-9.]*/<scala\.version>2.12.10/' pom.xml
         - build/mvn -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 -pl external/kafka-0-10,external/kafka-0-10-sql -am package -DskipTests
         - build/mvn -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 -pl external/kafka-0-10,external/kafka-0-10-sql test
 
@@ -597,7 +597,7 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - sed -i 's/scala\.version>[0-9.]*/scala\.version>2.12.10/' pom.xml
+        - sed -i 's/<scala\.version>[0-9.]*/<scala\.version>2.12.10/' pom.xml
         - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --hadoop "$HADOOP_VERSION" --snapshot --maven-opts "-Xmx6g" --maven-params "-Dscala.version=$SCALA_VERSION -P scala-${SCALA_BINARY_VERSION},hive,hadoop-${HADOOP_BINARY_VERSION},hive-thriftserver,kinesis-asl,mesos,yarn,kubernetes"
         - ./dev/make-distribution.sh --tgz --use-existing-build --with-hadoop --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION" -Pscala-$SCALA_BINARY_VERSION -Phadoop-${HADOOP_BINARY_VERSION} -Dhadoop.version="$HADOOP_VERSION"
     publish:
@@ -648,7 +648,7 @@ builds:
     build:
       template: freestyle:v2:release
       steps:
-        - sed -i 's/scala\.version>[0-9.]*/scala\.version>2.12.10/' pom.xml
+        - sed -i 's/<scala\.version>[0-9.]*/<scala\.version>2.12.10/' pom.xml
         - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --hadoop "$HADOOP_VERSION" --release --maven-opts "-Xmx6g" --maven-params "-Dscala.version=$SCALA_VERSION -P scala-${SCALA_BINARY_VERSION},hive,hadoop-${HADOOP_BINARY_VERSION},hive-thriftserver,kinesis-asl,mesos,yarn,kubernetes"
         - ./dev/make-distribution.sh --tgz --use-existing-build --with-hadoop --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION" -Pscala-$SCALA_BINARY_VERSION -Phadoop-${HADOOP_BINARY_VERSION} -Dhadoop.version="$HADOOP_VERSION"
     publish:
@@ -703,7 +703,7 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - sed -i 's/scala\.version>[0-9.]*/scala\.version>2.12.10/' pom.xml
+        - sed -i 's/<scala\.version>[0-9.]*/<scala\.version>2.12.10/' pom.xml
         - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --snapshot --maven-opts "-Xmx6g" --maven-params "-Dscala.version=$SCALA_VERSION -P scala-${SCALA_BINARY_VERSION},hadoop-provided,mesos --fail-at-end"
         - ./dev/make-distribution.sh --tgz --use-existing-build --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION" -Pscala-$SCALA_BINARY_VERSION
     publish:
@@ -751,7 +751,7 @@ builds:
     build:
       template: freestyle:v2:release
       steps:
-        - sed -i 's/scala\.version>[0-9.]*/scala\.version>2.12.10/' pom.xml
+        - sed -i 's/<scala\.version>[0-9.]*/<scala\.version>2.12.10/' pom.xml
         - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --release --maven-opts "" --maven-params "-Dscala.version=$SCALA_VERSION -P scala-${SCALA_BINARY_VERSION},hadoop-provided,mesos"
         - ./dev/make-distribution.sh --tgz --use-existing-build --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION" -Pscala-$SCALA_BINARY_VERSION
     publish:
