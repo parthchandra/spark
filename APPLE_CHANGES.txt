@@ -128,6 +128,15 @@ SPARK-30263       Don't log potentially sensitive value of non-Spark properties 
 MINOR             Fix documentation for slide function
 SPARK-25392       Prevent error page when accessing pools page from history server
 SPARK-30274       Avoid BytesToBytesMap lookup hang forever when holding keys reaching max capacity
+SPARK-30236       Clarify date and time patterns supported in the related functions
+SPARK-17398       Fix ClassCastException when querying partitioned JSON table
+SPARK-29918       Fix arrayOffset in `RecordBinaryComparatorSuite`
+SPARK-30269       Should use old partition stats to decide whether to update stats when analyzing partition
+SPARK-30333       Upgrade jackson-databind to 2.6.7.3
+SPARK-30339       Avoid to fail twice in function lookup
+SPARK-26560       Spark should be able to run Hive UDF using jar regardless of current thread context classloader
+SPARK-30285       Fix deadlock between LiveListenerBus#stop and AsyncEventQueue#removeListenerOnError
+SPARK-30225       Correct read() behavior past EOF in NioBufferedFileInputStream
 
 # From Spark 3.0.0
 SPARK-20636       Add new optimization rule to transpose adjacent Window expressions.
@@ -251,3 +260,4 @@ MINOR             Disable Hive on JDK9+
 MINOR             Use Hadoop 2.7.4 with Hive module test on JDK8 and publish with JDK8
 MINOR             Add mesos, yarn and kubernetes
 MINOR             Bump to 2.4.4-pie1.0.6-SNAPSHOT
+MINOR             Update Scala replace pattern in rio
