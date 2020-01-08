@@ -137,6 +137,7 @@ SPARK-30339       Avoid to fail twice in function lookup
 SPARK-26560       Spark should be able to run Hive UDF using jar regardless of current thread context classloader
 SPARK-30285       Fix deadlock between LiveListenerBus#stop and AsyncEventQueue#removeListenerOnError
 SPARK-30225       Correct read() behavior past EOF in NioBufferedFileInputStream
+SPARK-30450       Exclude .git folder for python linter
 
 # From Spark 3.0.0
 SPARK-20636       Add new optimization rule to transpose adjacent Window expressions.
@@ -262,3 +263,6 @@ MINOR             Bump to 2.4.4-jdk11-pie1.0.5-SNAPSHOT
 MINOR             Bump to 2.4.4-jdk11-pie1.0.6-SNAPSHOT
 MINOR             Bump to 2.4.4-jdk11-pie1.0.7-SNAPSHOT
 MINOR             Update Scala replace pattern in rio
+MINOR             Updated state save parameter to rely on ajax enabled property
+MINOR             Bump to 2.4.4-jdk11-pie1.0.8-SNAPSHOT
+MINOR             Use Utils.localHostName() for bindAddress
