@@ -12,7 +12,7 @@ builds:
   - name: pie-spark-2.12_3.0.0-preview-snapshot-common
     branchName: pie-spark-3.0.0-preview
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -26,7 +26,7 @@ builds:
   - name: pie-spark-2.12_3.0.0-preview-snapshot-tools
     branchName: pie-spark-3.0.0-preview
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -40,7 +40,7 @@ builds:
   - name: pie-spark-2.12_3.0.0-preview-snapshot-core
     branchName: pie-spark-3.0.0-preview
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -54,7 +54,7 @@ builds:
   - name: pie-spark-2.12_3.0.0-preview-snapshot-streaming
     branchName: pie-spark-3.0.0-preview
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -68,7 +68,7 @@ builds:
   - name: pie-spark-2.12_3.0.0-preview-snapshot-mllib
     branchName: pie-spark-3.0.0-preview
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -82,7 +82,7 @@ builds:
   - name: pie-spark-2.12_3.0.0-preview-snapshot-graphx
     branchName: pie-spark-3.0.0-preview
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -96,7 +96,7 @@ builds:
   - name: pie-spark-2.12_3.0.0-preview-snapshot-catalyst
     branchName: pie-spark-3.0.0-preview
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -110,7 +110,7 @@ builds:
   - name: pie-spark-2.12_3.0.0-preview-snapshot-sql-1
     branchName: pie-spark-3.0.0-preview
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -124,7 +124,7 @@ builds:
   - name: pie-spark-2.12_3.0.0-preview-snapshot-sql-2
     branchName: pie-spark-3.0.0-preview
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -138,7 +138,7 @@ builds:
   - name: pie-spark-2.12_3.0.0-preview-snapshot-hadoop-cloud
     branchName: pie-spark-3.0.0-preview
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -152,7 +152,7 @@ builds:
   - name: pie-spark-2.12_3.0.0-preview-snapshot-hive-1
     branchName: pie-spark-3.0.0-preview
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -166,7 +166,7 @@ builds:
   - name: pie-spark-2.12_3.0.0-preview-snapshot-hive-2
     branchName: pie-spark-3.0.0-preview
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -180,7 +180,7 @@ builds:
   - name: pie-spark-2.12_3.0.0-preview-snapshot-hive-3
     branchName: pie-spark-3.0.0-preview
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -194,7 +194,7 @@ builds:
   - name: pie-spark-2.12_3.0.0-preview-snapshot-launcher
     branchName: pie-spark-3.0.0-preview
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -208,7 +208,7 @@ builds:
   - name: pie-spark-2.12_3.0.0-preview-snapshot-repl
     branchName: pie-spark-3.0.0-preview
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -222,7 +222,7 @@ builds:
   - name: pie-spark-2.12_3.0.0-preview-snapshot-hive-thriftserver
     branchName: pie-spark-3.0.0-preview
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -236,7 +236,7 @@ builds:
   - name: pie-spark-2.12_3.0.0-preview-snapshot-kafka
     branchName: pie-spark-3.0.0-preview
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -250,7 +250,7 @@ builds:
   - name: pie-spark-2.12_3.0.0-preview-snapshot-kinesis
     branchName: pie-spark-3.0.0-preview
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -264,7 +264,7 @@ builds:
   - name: pie-spark-2.12_3.0.0-preview-snapshot-avro
     branchName: pie-spark-3.0.0-preview
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -278,7 +278,7 @@ builds:
   - name: pie-spark-2.12_3.0.0-preview-snapshot-kinesis
     branchName: pie-spark-3.0.0-preview
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -292,7 +292,7 @@ builds:
   - name: pie-spark-2.12_3.0.0-preview-snapshot-yarn
     branchName: pie-spark-3.0.0-preview
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -306,7 +306,7 @@ builds:
   - name: pie-spark-2.12_3.0.0-preview-snapshot-mesos
     branchName: pie-spark-3.0.0-preview
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -320,7 +320,7 @@ builds:
   - name: pie-spark-2.12_3.0.0-preview-snapshot-kubernetes
     branchName: pie-spark-3.0.0-preview
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -334,7 +334,7 @@ builds:
   - name: pie-spark-2.12_3.0.0-preview-snapshot-python27
     branchName: pie-spark-3.0.0-preview
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -353,7 +353,7 @@ builds:
   - name: pie-spark-2.12_3.0.0-preview-snapshot-python36
     branchName: pie-spark-3.0.0-preview
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -370,7 +370,7 @@ builds:
   - name: pie-spark-2.12_3.0.0-preview-snapshot
     branchName: pie-spark-3.0.0-preview
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -423,7 +423,7 @@ builds:
   - name: pie-spark-2.12_3.0.0-preview-hadoop-provided-snapshot
     branchName: pie-spark-3.0.0-preview
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
