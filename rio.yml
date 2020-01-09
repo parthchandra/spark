@@ -12,7 +12,7 @@ builds:
   - name: pie-spark-2.11_2.4.4-snapshot-tools
     branchName: pie-spark-2.4.4
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -26,7 +26,7 @@ builds:
   - name: pie-spark-2.12_2.4.4-snapshot-tools
     branchName: pie-spark-2.4.4
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -41,7 +41,7 @@ builds:
   - name: pie-spark-2.11_2.4.4-snapshot-core
     branchName: pie-spark-2.4.4
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -57,7 +57,7 @@ builds:
   - name: pie-spark-2.12_2.4.4-snapshot-core
     branchName: pie-spark-2.4.4
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -75,7 +75,7 @@ builds:
   - name: pie-spark-2.11_2.4.4-snapshot-streaming
     branchName: pie-spark-2.4.4
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -89,7 +89,7 @@ builds:
   - name: pie-spark-2.12_2.4.4-snapshot-streaming
     branchName: pie-spark-2.4.4
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -104,7 +104,7 @@ builds:
   - name: pie-spark-2.11_2.4.4-snapshot-mllib
     branchName: pie-spark-2.4.4
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -118,7 +118,7 @@ builds:
   - name: pie-spark-2.12_2.4.4-snapshot-mllib
     branchName: pie-spark-2.4.4
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -133,7 +133,7 @@ builds:
   - name: pie-spark-2.11_2.4.4-snapshot-graphx
     branchName: pie-spark-2.4.4
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -147,7 +147,7 @@ builds:
   - name: pie-spark-2.12_2.4.4-snapshot-graphx
     branchName: pie-spark-2.4.4
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -162,7 +162,7 @@ builds:
   - name: pie-spark-2.11_2.4.4-snapshot-catalyst
     branchName: pie-spark-2.4.4
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -176,7 +176,7 @@ builds:
   - name: pie-spark-2.12_2.4.4-snapshot-catalyst
     branchName: pie-spark-2.4.4
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -191,7 +191,7 @@ builds:
   - name: pie-spark-2.11_2.4.4-snapshot-sql-1
     branchName: pie-spark-2.4.4
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -205,7 +205,7 @@ builds:
   - name: pie-spark-2.12_2.4.4-snapshot-sql-1
     branchName: pie-spark-2.4.4
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -220,7 +220,7 @@ builds:
   - name: pie-spark-2.11_2.4.4-snapshot-sql-2
     branchName: pie-spark-2.4.4
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -234,7 +234,7 @@ builds:
   - name: pie-spark-2.12_2.4.4-snapshot-sql-2
     branchName: pie-spark-2.4.4
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -249,7 +249,7 @@ builds:
   - name: pie-spark-2.11_2.4.4-snapshot-hive-1
     branchName: pie-spark-2.4.4
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -263,7 +263,7 @@ builds:
   - name: pie-spark-2.12_2.4.4-snapshot-hive-1
     branchName: pie-spark-2.4.4
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -278,7 +278,7 @@ builds:
   - name: pie-spark-2.11_2.4.4-snapshot-hive-2
     branchName: pie-spark-2.4.4
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -292,7 +292,7 @@ builds:
   - name: pie-spark-2.12_2.4.4-snapshot-hive-2
     branchName: pie-spark-2.4.4
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -307,7 +307,7 @@ builds:
   - name: pie-spark-2.11_2.4.4-snapshot-hive-3
     branchName: pie-spark-2.4.4
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -321,7 +321,7 @@ builds:
   - name: pie-spark-2.12_2.4.4-snapshot-hive-3
     branchName: pie-spark-2.4.4
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -336,7 +336,7 @@ builds:
   - name: pie-spark-2.11_2.4.4-snapshot-hadoop-cloud
     branchName: pie-spark-2.4.4
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -350,7 +350,7 @@ builds:
   - name: pie-spark-2.12_2.4.4-snapshot-hadoop-cloud
     branchName: pie-spark-2.4.4
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -365,7 +365,7 @@ builds:
   - name: pie-spark-2.11_2.4.4-snapshot-repl
     branchName: pie-spark-2.4.4
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -379,7 +379,7 @@ builds:
   - name: pie-spark-2.12_2.4.4-snapshot-repl
     branchName: pie-spark-2.4.4
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -394,7 +394,7 @@ builds:
   - name: pie-spark-2.11_2.4.4-snapshot-kafka
     branchName: pie-spark-2.4.4
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -409,7 +409,7 @@ builds:
   - name: pie-spark-2.12_2.4.4-snapshot-kafka
     branchName: pie-spark-2.4.4
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -426,7 +426,7 @@ builds:
   - name: pie-spark-2.11_2.4.4-snapshot-kinesis
     branchName: pie-spark-2.4.4
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -440,7 +440,7 @@ builds:
   - name: pie-spark-2.12_2.4.4-snapshot-kinesis
     branchName: pie-spark-2.4.4
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -455,7 +455,7 @@ builds:
   - name: pie-spark-2.11_2.4.4-snapshot-avro
     branchName: pie-spark-2.4.4
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -469,7 +469,7 @@ builds:
   - name: pie-spark-2.12_2.4.4-snapshot-avro
     branchName: pie-spark-2.4.4
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -484,7 +484,7 @@ builds:
   - name: pie-spark-2.11_2.4.4-snapshot-yarn
     branchName: pie-spark-2.4.4
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -498,7 +498,7 @@ builds:
   - name: pie-spark-2.12_2.4.4-snapshot-yarn
     branchName: pie-spark-2.4.4
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -513,7 +513,7 @@ builds:
   - name: pie-spark-2.11_2.4.4-snapshot-mesos
     branchName: pie-spark-2.4.4
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -527,7 +527,7 @@ builds:
   - name: pie-spark-2.12_2.4.4-snapshot-mesos
     branchName: pie-spark-2.4.4
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -542,7 +542,7 @@ builds:
   - name: pie-spark-2.11_2.4.4-snapshot-kubernetes
     branchName: pie-spark-2.4.4
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -556,7 +556,7 @@ builds:
   - name: pie-spark-2.12_2.4.4-snapshot-kubernetes
     branchName: pie-spark-2.4.4
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -571,7 +571,7 @@ builds:
   - name: pie-spark-2.11_2.4.4-snapshot-python27
     branchName: pie-spark-2.4.4
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -589,7 +589,7 @@ builds:
   - name: pie-spark-2.12_2.4.4-snapshot-python27
     branchName: pie-spark-2.4.4
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -608,7 +608,7 @@ builds:
   - name: pie-spark-2.11_2.4.4-snapshot-python36
     branchName: pie-spark-2.4.4
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -625,7 +625,7 @@ builds:
   - name: pie-spark-2.12_2.4.4-snapshot-python36
     branchName: pie-spark-2.4.4
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -643,7 +643,7 @@ builds:
   - name: pie-spark-2.11_2.4.4-snapshot
     branchName: pie-spark-2.4.4
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -669,7 +669,7 @@ builds:
   - name: pie-spark-2.12_2.4.4-snapshot
     branchName: pie-spark-2.4.4
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -751,7 +751,7 @@ builds:
   - name: pie-spark-2.11_2.4.4-hadoop-provided-snapshot
     branchName: pie-spark-2.4.4
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
@@ -776,7 +776,7 @@ builds:
   - name: pie-spark-2.12_2.4.4-hadoop-provided-snapshot
     branchName: pie-spark-2.4.4
     jenkins:
-      concurrentBuild: true
+      concurrentBuild: false
       maxConcurrentTotal: 8
     timeout: 600
     machine:
