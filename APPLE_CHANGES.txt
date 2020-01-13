@@ -122,6 +122,76 @@ SPARK-29800       Rewrite non-correlated EXISTS subquery use ScalaSubquery to op
 SPARK-30226       Remove withXXX functions in WriteBuilder
 SPARK-30313       Ensure EndpointRef is available MasterWebUI/WorkerPage
 
+SPARK-30154       PySpark UDF to convert MLlib vectors to dense arrays
+SPARK-30430       Add a note that UserDefinedFunction's constructor is private
+SPARK-19784       Refresh the table even table stats is empty
+SPARK-30433       Make conflict attributes resolution more scalable in ResolveReferences
+SPARK-30338       Avoid unnecessary InternalRow copies in ParquetRowConverter
+SPARK-30414       ParquetRowConverter optimizations: arrays, maps, plus misc. constant factors
+SPARK-30335       Add a note first, last, collect_list and collect_set can be non-deterministic in SQL function docs as well
+SPARK-30214       V2 commands resolves namespaces with new resolution framework
+SPARK-30431       Update SqlBase.g4 to create commentSpec pattern like locationSpec
+SPARK-30173       Tweak stale PR message
+SPARK-30039       CREATE FUNCTION should do multi-catalog resolution
+SPARK-30382       Remove Hive LogUtils usage to prevent ClassNotFoundException
+SPARK-30450       Exclude .git folder for python linter
+SPARK-28825       Documentation for Explain Command
+SPARK-30381       Refactor GBT to reuse treePoints for all trees
+SPARK-30302       Complete info for show create table for views
+SPARK-30453       Update AppVeyor R version to 3.6.2
+SPARK-30429       Optimize catalogString and usage in ValidateExternalType.errMsg to avoid OOM
+SPARK-30267       Use while loop in Avro Array Deserializer
+SPARK-30214       Remove statement logical plans for namespace commands
+SPARK-30215       Remove PrunedInMemoryFileIndex and merge its functionality into InMemoryFileIndex
+SPARK-30410       Calculating size of table with large number of partitions causes flooding logs
+MINOR             Process bar should print new line to avoid polluting logs
+MINOR             Array.fill(0) -> Array.ofDim; Array.empty -> Array.emptyIntArray
+SPARK-30445       Accelerator aware scheduling handle setting configs to 0
+SPARK-30281       Consider partitioned/recursive option while verifying archive path on FileStreamSource
+SPARK-30417       Task speculation numTaskThreshold should be greater than 0 even EXECUTOR_CORES is not set under Standalone mode
+SPARK-30315       Add adaptive execution context
+SPARK-30440       Avoid race condition in TaskSetManagerSuite by not using resourceOffer
+SPARK-30434       Move pandas related functionalities into 'pandas' sub-package
+SPARK-30464       Explicitly note that we don't add "pandas compatible" aliases
+SPARK-30183       Disallow to specify reserved properties in CREATE/ALTER NAMESPACE syntax
+SPARK-30450       Fix git folder regex for windows file separator
+SPARK-28198       Run the tests of MAP ITER UDF in Jenkins
+SPARK-30428       File source V2: support partition pruning
+SPARK-30452       Add predict and numFeatures in Python IsotonicRegressionModel
+SPARK-29219       Introduce SupportsCatalogOptions for TableProvider
+SPARK-30459       Fix ignoreMissingFiles/ignoreCorruptFiles in data source v2
+MINOR             Fix scalastyle error due to length line in hive-1.2 profile
+SPARK-30416       Log a warning for deprecated SQL config in `set()` and `unset()`
+SPARK-30439       Support non-nullable column in CREATE TABLE, ADD COLUMN and ALTER TABLE
+SPARK-30018       Support ALTER DATABASE SET OWNER syntax
+SPARK-30447       Constant propagation nullability issue
+SPARK-30234       ADD FILE cannot add directories from sql CLI
+SPARK-30448       accelerator aware scheduling enforce cores as limiting resource
+SPARK-30343       Skip unnecessary checks in RewriteDistinctAggregates
+SPARK-30468       Use multiple lines to display data columns for show create table command
+SPARK-29779       Compact old event log files and cleanup
+SPARK-30312       Preserve path permission and acl when truncate table
+SPARK-29748       Remove Row field sorting in PySpark for version 3.6+
+SPARK-30489       Make build delete pyspark.zip file properly
+SPARK-30312       Use inequality check instead to be robust
+SPARK-30478       Fix Memory Package documentation
+SPARK-30458       Fix Wrong Executor Computing Time in Time Line of Stage Page
+SPARK-30353       Add IsNotNull check in SimplifyBinaryComparison optimization
+SPARK-27296       Allows Aggregator to be registered as a UDF
+SPARK-29173       Use `NoOp` datasource in SQL benchmarks
+SPARK-30409       Use `NoOp` datasource in SQL benchmarks
+SPARK-30409       Remove dangling JSONBenchmark-jdk11-results.txt
+SPARK-28752       Render examples imported from Jekyll properly via Rouge
+SPARK-30457       Use PeriodicRDDCheckpointer instead of NodeIdCache
+SPARK-30245       Add cache for Like and RLike when pattern is not static
+SPARK-28152       Add a legacy conf for old MsSqlServerDialect numeric mapping
+SPARK-21869       Document Kafka producer pool configuration
+SPARK-30480       Increases the memory limit being tested in 'WorkerMemoryTest.test_memory_limit'
+SPARK-30493       Remove OneVsRestModel setClassifier, setLabelCol and setWeightCol methods
+SPARK-30377       Make Regressors extend abstract class Regressor
+SPARK-30351       BisectingKMeans support instance weighting
+SPARK-30188       Resolve the failed unit tests when enable AQE
+
 # Internal Patches
 SPARK-17767       Support user-provided ExternalCatalog and SessionBuilder
 MINOR             Support JarvisSparkHadoopUtil
@@ -139,6 +209,10 @@ MINOR             Remove duplicated graphx test
 MINOR             Bump to 3.0.0-preview-pie1.0.5-SNAPSHOT
 MINOR             Use abstract storage as a replacement for window.localStorage
 MINOR             Added bindAddress in Mesos Executor Backend for now set to local host name
+MINOR             Use Utils.localHostName() for bindAddress
 MINOR             SparkUI patch
 MINOR             Add mesos, yarn, kubernetes
 MINOR             Bump to 3.0.0-preview-pie1.0.6-SNAPSHOT
+rdar://57766589   Updated state save parameter to rely on ajax enabled property
+MINOR             Bump to 3.0.0-preview-pie1.1.0-SNAPSHOT
+MINOR             Disable concurrent build
