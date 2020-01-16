@@ -418,7 +418,7 @@ builds:
     finally:
       tag:
         enabled: true
-        expression: "releases_2.12/3.0.0-preview-pie1.1.0"
+        expression: "releases_2.12/3.0.0-preview-pie1.1.1"
 
   - name: pie-spark-2.12_3.0.0-preview-hadoop-provided-snapshot
     branchName: pie-spark-3.0.0-preview

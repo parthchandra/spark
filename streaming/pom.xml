@@ -21,7 +21,7 @@
   <parent>
     <groupId>com.apple.pie.spark</groupId>
     <artifactId>spark-parent_2.12</artifactId>
-    <version>3.0.0-preview-pie1.1.0-SNAPSHOT</version>
+    <version>3.0.0-preview-pie1.1.1-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
