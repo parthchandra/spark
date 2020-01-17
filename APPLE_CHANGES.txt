@@ -62,7 +62,6 @@ SPARK-30102       GMM supports instance weighting
 SPARK-30355       Unify isExecutorActive between CoarseGrainedSchedulerBackend and DriverEndpoint
 SPARK-30345       Fix intermittent test failure (ConnectException) on ThriftServerQueryTestSuite/ThriftServerWithSparkContextSuite
 SPARK-30356       Codegen support for the function str_to_map
-SPARK-28670       create function should thrown Exception if the resource is not found
 SPARK-30354       GBT reuse DecisionTreeMetadata among iterations
 SPARK-30360       Avoid Redact classpath entries in History Server UI
 SPARK-29967       KMeans Cleanup
@@ -191,6 +190,54 @@ SPARK-30493       Remove OneVsRestModel setClassifier, setLabelCol and setWeight
 SPARK-30377       Make Regressors extend abstract class Regressor
 SPARK-30351       BisectingKMeans support instance weighting
 SPARK-30188       Resolve the failed unit tests when enable AQE
+SPARK-30234       Update Documentation for ADD FILE and LIST FILE
+SPARK-30500       Remove SQL configs deprecated in Spark 2.1 and 2.3
+SPARK-30501       Remove SQL configs deprecated in Spark 2.1 and 2.3
+SPARK-30482       Add sub-class of `AppenderSkeleton` reusable in tests
+SPARK-30292       Throw Exception when invalid string is cast to numeric type in ANSI mode
+SPARK-30325       markPartitionCompleted cause task status inconsistent
+SPARK-30498       Fix some ml parity issues between python and scala
+SPARK-29544       optimize skewed partition based on data size
+SPARK-30423       Deprecate UserDefinedAggregateFunction
+SPARK-9478        Add sample weights to Random Forest
+SPARK-27142       Provide REST API for SQL information
+SPARK-30509       Fix deprecation log warning in Avro schema inferring
+MINOR             Remove unsupported `header` option in AvroSuite
+SPARK-30452       Change IsotonicRegressionModel.numFeatures to property
+SPARK-30505       Deprecate Avro option `ignoreExtension` in sql-data-sources-avro.md
+SPARK-30515       Refactor SimplifyBinaryComparison to reduce the time complexity
+SPARK-29708       Correct aggregated values when grouping sets are duplicated
+SPARK-30504       Set weightCol in OneVsRest(Model) _to_java and _from_java
+SPARK-30378       Remove Param fields provided by _FactorizationMachinesParams
+SPARK-30479       Apply compaction of event log to SQL events
+SPARK-30495       Consider spark.security.credentials.kafka.enabled and cluster configuration when checking latest delegation token
+SPARK-30246       OneForOneStreamManager might leak memory in connectionTerminated
+SPARK-26736       Partition pruning through nondeterministic expressions in Hive tables
+SPARK-30497       migrate DESCRIBE TABLE to the new framework
+SPARK-27986       Respect filter in sql/toString of AggregateExpression
+SPARK-30518       Precision and scale should be same for values between -1.0 and 1.0 in Decimal
+SPARK-30502       PeriodicRDDCheckpointer support storageLevel
+SPARK-30434       Make the parameter list consistent in createDataFrame
+SPARK-30312       Rename conf by adding `.enabled`
+SPARK-30323       Support filters pushdown in CSV datasource
+SPARK-30491       Enable dependency audit files to tell dependency classifier
+SPARK-30521       Eliminate deprecation warnings for ExpressionInfo
+SPARK-29565       add setInputCol/setOutputCol in OHEModel
+SPARK-30507       TableCalalog reserved properties shoudn't be changed via options or tblpropeties
+SPARK-30524       Disable OptimizeSkewedJoin rule when introducing additional shuffle
+SPARK-29950       Blacklist deleted executors in K8S with dynamic allocation
+SPARK-30534       Use mvn in `dev/scalastyle`
+MINOR             Change DecisionTreeClassifier to FMClassifier in OneVsRest setWeightCol test
+SPARK-30499       Remove SQL config spark.sql.execution.pandas.respectSessionTimeZone
+SPARK-29188       Explicitly disable Arrow execution for the test of toPandas empty types
+SPARK-29572       add v1 read fallback API in DS v2
+SPARK-29188       Explicitly disable Arrow execution for all test of toPandas empty types
+SPARK-30282       Migrate SHOW TBLPROPERTIES to new framework
+SPARK-29306       Stage Level Sched: Executors need to track what ResourceProfile they are created with
+SPARK-30310       Resolve missing match case in SparkUncaughtExceptionHandler and added tests
+SPARK-30041       Add Codegen Stage Id to Stage DAG visualization in Web UI
+SPARK-27868       Recover the default value to -1 again
+SPARK-29876       Delete/archive file source completed files in separate thread
 
 # Internal Patches
 SPARK-17767       Support user-provided ExternalCatalog and SessionBuilder
@@ -216,3 +263,5 @@ MINOR             Bump to 3.0.0-preview-pie1.0.6-SNAPSHOT
 rdar://57766589   Updated state save parameter to rely on ajax enabled property
 MINOR             Bump to 3.0.0-preview-pie1.1.0-SNAPSHOT
 MINOR             Disable concurrent build
+MINOR             Bump to 3.0.0-preview-pie1.1.1-SNAPSHOT
+MINOR             Add `build/mvn clean` as a workaround `http` issue
