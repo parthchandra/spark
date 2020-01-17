@@ -1,5 +1,16 @@
 This contains the changes after v2.4.5-rc1
 
+# From Spark 2.4.5
+SPARK-30246       OneForOneStreamManager might leak memory in connectionTerminated
+SPARK-30325       markPartitionCompleted cause task status inconsistent
+SPARK-30312       Rename conf by adding `.enabled`
+SPARK-30491       Enable dependency audit files to tell dependency classifier
+Revert            SPARK-27868 Better default value and documentation for socket server backlog
+SPARK-29450       Measure the number of output rows for streaming aggregation with append mode
+SPARK-29708       Correct aggregated values when grouping sets are duplicated
+SPARK-30534       Use mvn in `dev/scalastyle`
+SPARK-30333       Update sbt build together
+
 # From Spark 3.0.0
 SPARK-20636       Add new optimization rule to transpose adjacent Window expressions.
 SPARK-25691       Use semantic equality in AliasViewChild in order to compare attributes
@@ -129,3 +140,5 @@ MINOR             Update Hadoop version to 2.7.3
 MINOR             Use Utils.localHostName() for bindAddress
 MINOR             Disable concurrent build
 MINOR             Bump to 2.4.4-pie1.0.8-SNAPSHOT
+MINOR             Bump to 2.4.4-pie1.1.0-SNAPSHOT
+MINOR             Add `build/mvn clean` as a workaround `http` issue and deduplicate graphx test
