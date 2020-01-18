@@ -320,11 +320,14 @@ if [ "$MAKE_TGZ" == "true" ]; then
   rm -rf "$TARDIR"
   cp -r "$DISTDIR" "$TARDIR"
   tar czf "$SPARK_DISTRIBUTION_FILE_NAME" -C "$SPARK_HOME" "$TARDIR_NAME"
+  SPARK_DISTRIBUTION_YARN_ARCHIVE_FILE_NAME="spark-distribution_$SCALA_VERSION-$TGZ_VERSION-yarn-archive.tgz"
+  tar czf "$SPARK_DISTRIBUTION_YARN_ARCHIVE_FILE_NAME" --xform s:^.*/:: -C "$SPARK_HOME" $TARDIR_NAME/jars/*.jar
   rm -rf "$TARDIR"
   LOCAL_REPO_DIR="$SPARK_HOME/.dist/local-repo"
   mkdir -p "${LOCAL_REPO_DIR}"
   LOCAL_REPO="file://${LOCAL_REPO_DIR}"
   "$MVN" deploy:deploy-file -DgroupId="com.apple.pie.spark" -DartifactId="spark-distribution_${SCALA_VERSION}" -Dversion="${TGZ_VERSION}" -Dfile="${SPARK_DISTRIBUTION_FILE_NAME}" -Durl="${LOCAL_REPO}" -Dpackaging=tgz
+  "$MVN" deploy:deploy-file -DgroupId="com.apple.pie.spark" -DartifactId="spark-distribution_${SCALA_VERSION}" -Dversion="${TGZ_VERSION}" -Dfile="${SPARK_DISTRIBUTION_YARN_ARCHIVE_FILE_NAME}" -Durl="${LOCAL_REPO}" -Dclassifier=yarn-archive
 fi
 
 if [[ "$TGZ_VERSION" == *-SNAPSHOT ]]; then
