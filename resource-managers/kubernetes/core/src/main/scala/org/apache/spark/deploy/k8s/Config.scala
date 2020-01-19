@@ -18,10 +18,18 @@ package org.apache.spark.deploy.k8s
 
 import java.util.concurrent.TimeUnit
 
+import org.apache.spark.deploy.k8s.Constants._
 import org.apache.spark.internal.Logging
 import org.apache.spark.internal.config.ConfigBuilder
 
 private[spark] object Config extends Logging {
+
+  val KUBERNETES_DRIVER_MASTER_URL =
+    ConfigBuilder("spark.kubernetes.driver.master")
+      .doc("The internal Kubernetes master (API server) address " +
+        "to be used for driver to request executors.")
+      .stringConf
+      .createWithDefault(KUBERNETES_MASTER_INTERNAL_URL)
 
   val KUBERNETES_NAMESPACE =
     ConfigBuilder("spark.kubernetes.namespace")
