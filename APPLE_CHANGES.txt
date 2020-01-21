@@ -10,6 +10,11 @@ SPARK-29450       Measure the number of output rows for streaming aggregation wi
 SPARK-29708       Correct aggregated values when grouping sets are duplicated
 SPARK-30534       Use mvn in `dev/scalastyle`
 SPARK-30333       Update sbt build together
+SPARK-30312       Add a migration guide
+SPARK-28152       Add a migration guide for MsSQLServer JDBC dialect
+MINOR             Remove note about -T for parallel build
+MINOR             Pick up HIVE-22708 HTTP transport fix
+SPARK-30572       Add a fallback Maven repository
 
 # From Spark 3.0.0
 SPARK-20636       Add new optimization rule to transpose adjacent Window expressions.
@@ -141,4 +146,6 @@ MINOR             Use Utils.localHostName() for bindAddress
 MINOR             Disable concurrent build
 MINOR             Bump to 2.4.4-pie1.0.8-SNAPSHOT
 MINOR             Bump to 2.4.4-pie1.1.0-SNAPSHOT
-MINOR             Add `build/mvn clean` as a workaround `http` issue and deduplicate graphx test
+MINOR             Bump to 2.4.4-pie1.1.1-SNAPSHOT
+MINOR             Publish yarn archive
+MINOR             Remove redundant graphx rio job
