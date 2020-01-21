@@ -130,35 +130,6 @@ builds:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 "mllib/test" "mllib-local/test" "graphx/test"
 
-  - name: pie-spark-2.11_2.4.4-snapshot-graphx
-    branchName: pie-spark-2.4.4
-    jenkins:
-      concurrentBuild: false
-      maxConcurrentTotal: 8
-    timeout: 600
-    machine:
-      docker:
-        baseImage: docker.apple.com/cpbuild7/applejdk-11
-    build:
-      template: freestyle:v2:snapshot
-      steps:
-        - build/sbt -Phadoop-2.7 "graphx/test"
-
-  - name: pie-spark-2.12_2.4.4-snapshot-graphx
-    branchName: pie-spark-2.4.4
-    jenkins:
-      concurrentBuild: false
-      maxConcurrentTotal: 8
-    timeout: 600
-    machine:
-      docker:
-        baseImage: docker.apple.com/cpbuild7/applejdk-11
-    build:
-      template: freestyle:v2:snapshot
-      steps:
-        - dev/change-scala-version.sh 2.12
-        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 "graphx/test"
-
   - name: pie-spark-2.11_2.4.4-snapshot-catalyst
     branchName: pie-spark-2.4.4
     jenkins:
