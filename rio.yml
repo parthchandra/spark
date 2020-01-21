@@ -21,7 +21,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - build/sbt -Phadoop-3.2 "sketch/test" "kvstore/test" "network-common/test" "network-shuffle/test" "unsafe/test"
 
   - name: pie-spark-2.12_3.0.0-preview-snapshot-tools
@@ -36,7 +35,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - build/sbt -Phadoop-3.2 "tools/test"
 
   - name: pie-spark-2.12_3.0.0-preview-snapshot-core
@@ -51,7 +49,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - build/sbt -Phadoop-3.2 "core/test"
 
   - name: pie-spark-2.12_3.0.0-preview-snapshot-streaming
@@ -66,7 +63,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - build/sbt -Phadoop-3.2 "streaming/test"
 
   - name: pie-spark-2.12_3.0.0-preview-snapshot-mllib
@@ -81,7 +77,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - build/sbt -Phadoop-3.2 "mllib/test" "mllib-local/test"
 
   - name: pie-spark-2.12_3.0.0-preview-snapshot-graphx
@@ -96,7 +91,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - build/sbt -Phadoop-3.2 "graphx/test"
 
   - name: pie-spark-2.12_3.0.0-preview-snapshot-catalyst
@@ -111,7 +105,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - build/sbt -Phadoop-3.2 "catalyst/test"
 
   - name: pie-spark-2.12_3.0.0-preview-snapshot-sql-1
@@ -126,7 +119,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - build/sbt -Phadoop-3.2 "sql/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedSQLTest
 
   - name: pie-spark-2.12_3.0.0-preview-snapshot-sql-2
@@ -141,7 +133,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - build/sbt -Phadoop-3.2 "sql/test-only *.SQLQueryTestSuite"
 
   - name: pie-spark-2.12_3.0.0-preview-snapshot-hadoop-cloud
@@ -156,7 +147,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - build/sbt -Phadoop-3.2 -Phadoop-cloud "hadoop-cloud/test"
 
   - name: pie-spark-2.12_3.0.0-preview-snapshot-hive-1
@@ -171,7 +161,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - build/sbt -Phadoop-3.2 -Phive "hive/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedHiveTest
 
   - name: pie-spark-2.12_3.0.0-preview-snapshot-hive-2
@@ -186,7 +175,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - build/sbt -Phadoop-3.2 -Phive "hive/test-only *.HiveExternalCatalogVersionsSuite" "hive/test-only *.HiveSparkSubmitSuite" "hive/test-only *.VersionsSuite" "hive/test-only *.Hive_2_1_DDLSuite"
 
   - name: pie-spark-2.12_3.0.0-preview-snapshot-hive-3
@@ -201,7 +189,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - build/sbt -Phadoop-3.2 -Phive "hive/test-only *.HiveCompatibilitySuite"
 
   - name: pie-spark-2.12_3.0.0-preview-snapshot-launcher
@@ -216,7 +203,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - build/sbt -Phadoop-3.2 "launcher/test"
 
   - name: pie-spark-2.12_3.0.0-preview-snapshot-repl
@@ -231,7 +217,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - build/sbt -Phadoop-3.2 "repl/test"
 
   - name: pie-spark-2.12_3.0.0-preview-snapshot-hive-thriftserver
@@ -246,7 +231,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - build/sbt -Phadoop-3.2 "hive-thriftserver/test" -Phive -Phive-thriftserver
 
   - name: pie-spark-2.12_3.0.0-preview-snapshot-kafka
@@ -261,7 +245,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - build/sbt -Phadoop-3.2 "streaming-kafka-0-10/test" "sql-kafka-0-10/test" "token-provider-kafka-0-10/test"
 
   - name: pie-spark-2.12_3.0.0-preview-snapshot-kinesis
@@ -276,7 +259,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - build/sbt -Phadoop-3.2 -Pkinesis-asl "streaming-kinesis-asl/test"
 
   - name: pie-spark-2.12_3.0.0-preview-snapshot-avro
@@ -291,7 +273,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - build/sbt -Phadoop-3.2 "avro/test" -Pavro
 
   - name: pie-spark-2.12_3.0.0-preview-snapshot-kinesis
@@ -306,7 +287,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - build/sbt -Phadoop-3.2 -Pkinesis-asl "streaming-kinesis-asl/test"
 
   - name: pie-spark-2.12_3.0.0-preview-snapshot-yarn
@@ -321,7 +301,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - build/sbt -Phadoop-3.2 -Pyarn "yarn/test"
 
   - name: pie-spark-2.12_3.0.0-preview-snapshot-mesos
@@ -336,7 +315,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - build/sbt -Phadoop-3.2 -Pmesos "mesos/test"
 
   - name: pie-spark-2.12_3.0.0-preview-snapshot-kubernetes
@@ -351,7 +329,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - build/sbt -Phadoop-3.2 -Pkubernetes "kubernetes/test"
 
   - name: pie-spark-2.12_3.0.0-preview-snapshot-python27
@@ -366,7 +343,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py"
         - python get-pip.py
         - pip2.7 install -r python/requirements.txt
@@ -386,7 +362,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - yum install -y python3
         - pip3.6 install -r python/requirements.txt
         - build/sbt -Phadoop-3.2 test:package
