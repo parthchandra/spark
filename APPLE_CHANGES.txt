@@ -226,7 +226,6 @@ SPARK-29565       add setInputCol/setOutputCol in OHEModel
 SPARK-30507       TableCalalog reserved properties shoudn't be changed via options or tblpropeties
 SPARK-30524       Disable OptimizeSkewedJoin rule when introducing additional shuffle
 SPARK-29950       Blacklist deleted executors in K8S with dynamic allocation
-SPARK-30534       Use mvn in `dev/scalastyle`
 MINOR             Change DecisionTreeClassifier to FMClassifier in OneVsRest setWeightCol test
 SPARK-30499       Remove SQL config spark.sql.execution.pandas.respectSessionTimeZone
 SPARK-29188       Explicitly disable Arrow execution for the test of toPandas empty types
@@ -238,6 +237,42 @@ SPARK-30310       Resolve missing match case in SparkUncaughtExceptionHandler an
 SPARK-30041       Add Codegen Stage Id to Stage DAG visualization in Web UI
 SPARK-27868       Recover the default value to -1 again
 SPARK-29876       Delete/archive file source completed files in separate thread
+SPARK-30312       Add a migration guide
+SPARK-25993       Add test cases for CREATE EXTERNAL TABLE with subdirectories
+SPARK-28152       Add a migration guide for MsSQLServer JDBC dialect
+SPARK-30533       Add classes to represent Java Regressors and RegressionModels
+SPARK-30544       Upgrade the version of Genjavadoc to 0.15
+SPARK-30539       Add DataFrame.tail in PySpark
+MINOR             Remove note about -T for parallel build
+MINOR             Pick up HIVE-22708 HTTP transport fix
+SPARK-30524       follow up SPARK-30524 to resolve comments
+SPARK-30551       Disable comparison for interval type
+SPARK-30530       Fix filter pushdown for bad CSV records
+SPARK-30371       Add spark.kubernetes.driver.master conf
+SPARK-30282       Update SQL migration guide for SHOW TBLPROPERTIES
+SPARK-30566       Iterator doesn't refer outer identifier named "iterator" properly in Scala 2.13
+SPARK-30572       Add a fallback Maven repository
+SPARK-29290       Update to chill 0.9.5
+SPARK-30486       Bump lz4-java version to 1.7.1
+SPARK-30413       Avoid WrappedArray roundtrip in GenericArrayData constructor, plus related optimization in ParquetMapConverter
+SPARK-30547       Add unstable annotation to the CalendarInterval class
+SPARK-30554       Return `Iterable` from `FailureSafeParser.rawParser`
+SPARK-30558       Avoid rebuilding `AvroOptions` per each partition
+SPARK-30535       Migrate ALTER TABLE commands to the new framework
+SPARK-30578       Explicitly set conf to use DSv2 for orc in OrcFilterSuite
+SPARK-30482       Output caller info in log appenders while reaching the limit
+SPARK-30530       Remove unnecessary codes and fix comments accordingly in UnivocityParser
+SPARK-30019       Add the owner property to v2 table
+SPARK-30568       Invalidate interval type as a field table schema
+SPARK-30587       Add test suites for CSV and JSON v1
+SPARK-30475       File source V2: Push data filters for file listing
+SPARK-30433       Optimize collect conflict plans
+SPARK-30571       fix splitting shuffle fetch requests
+MINOR             Fix Jenkins build image and link in README.md
+SPARK-30547       Update since anotation for CalendarInterval class
+SPARK-30593       Revert interval ISO/ANSI SQL Standard output since we decide not to follow ANSI and no round trip
+SPARK-30252       Disallow negative scale of Decimal
+SPARK-15616       Add optimizer rule PruneHiveTablePartitions
 
 # Internal Patches
 SPARK-17767       Support user-provided ExternalCatalog and SessionBuilder
@@ -264,4 +299,5 @@ rdar://57766589   Updated state save parameter to rely on ajax enabled property
 MINOR             Bump to 3.0.0-preview-pie1.1.0-SNAPSHOT
 MINOR             Disable concurrent build
 MINOR             Bump to 3.0.0-preview-pie1.1.1-SNAPSHOT
-MINOR             Add `build/mvn clean` as a workaround `http` issue
+MINOR             Bump to 3.0.0-preview-pie1.1.2-SNAPSHOT
+MINOR             Publish yarn archive
