@@ -21,7 +21,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - build/sbt -Phadoop-3.2 "tools/test"
 
   - name: pie-spark-2.12_2.4.4-jdk11-snapshot-tools
@@ -36,7 +35,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 "tools/test"
 
@@ -86,7 +84,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - build/sbt -Phadoop-3.2 "streaming/test"
 
   - name: pie-spark-2.12_2.4.4-jdk11-snapshot-streaming
@@ -101,7 +98,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 "streaming/test"
 
@@ -117,7 +113,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - build/sbt -Phadoop-3.2 "mllib/test" "mllib-local/test" "graphx/test"
 
   - name: pie-spark-2.12_2.4.4-jdk11-snapshot-mllib
@@ -132,7 +127,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 "mllib/test" "mllib-local/test" "graphx/test"
 
@@ -148,7 +142,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - build/sbt -Phadoop-3.2 "graphx/test"
 
   - name: pie-spark-2.12_2.4.4-jdk11-snapshot-graphx
@@ -163,7 +156,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 "graphx/test"
 
@@ -179,7 +171,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - build/sbt -Phadoop-3.2 "catalyst/test"
 
   - name: pie-spark-2.12_2.4.4-jdk11-snapshot-catalyst
@@ -194,7 +185,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 "catalyst/test"
 
@@ -210,7 +200,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - build/sbt -Phadoop-3.2 "sql/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedSQLTest
 
   - name: pie-spark-2.12_2.4.4-jdk11-snapshot-sql-1
@@ -225,7 +214,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 "sql/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedSQLTest
 
@@ -241,7 +229,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - build/sbt -Phadoop-3.2 "sql/test-only *.SQLQueryTestSuite"
 
   - name: pie-spark-2.12_2.4.4-jdk11-snapshot-sql-2
@@ -256,7 +243,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 "sql/test-only *.SQLQueryTestSuite"
 
@@ -272,7 +258,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - build/sbt -Phadoop-3.2 -Phadoop-cloud "hadoop-cloud/test"
 
   - name: pie-spark-2.12_2.4.4-jdk11-snapshot-hadoop-cloud
@@ -287,7 +272,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 -Phadoop-cloud "hadoop-cloud/test"
 
@@ -303,7 +287,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - build/sbt -Phadoop-3.2 "repl/test"
 
   - name: pie-spark-2.12_2.4.4-jdk11-snapshot-repl
@@ -318,7 +301,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 "repl/test"
 
@@ -366,7 +348,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - build/sbt -Phadoop-3.2 -Pkinesis-asl "streaming-kinesis-asl/test"
 
   - name: pie-spark-2.12_2.4.4-jdk11-snapshot-kinesis
@@ -381,7 +362,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 -Pkinesis-asl "streaming-kinesis-asl/test"
 
@@ -397,7 +377,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - build/sbt -Phadoop-3.2 "avro/test" -Pavro
 
   - name: pie-spark-2.12_2.4.4-jdk11-snapshot-avro
@@ -412,7 +391,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 "avro/test" -Pavro
 
@@ -428,7 +406,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - build/sbt -Phadoop-3.2 -Pyarn "yarn/test"
 
   - name: pie-spark-2.12_2.4.4-jdk11-snapshot-yarn
@@ -443,7 +420,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 -Pyarn "yarn/test"
 
@@ -459,7 +435,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - build/sbt -Phadoop-3.2 -Pmesos "mesos/test"
 
   - name: pie-spark-2.12_2.4.4-jdk11-snapshot-mesos
@@ -474,7 +449,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 -Pmesos "mesos/test"
 
@@ -490,7 +464,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - build/sbt -Phadoop-3.2 -Pkubernetes "kubernetes/test"
 
   - name: pie-spark-2.12_2.4.4-jdk11-snapshot-kubernetes
@@ -505,7 +478,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 -Pkubernetes "kubernetes/test"
 
@@ -521,7 +493,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py"
         - python get-pip.py
         - pip2.7 install -r python/requirements_python2.txt
@@ -540,7 +511,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - dev/change-scala-version.sh 2.12
         - curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py"
         - python get-pip.py
@@ -560,7 +530,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - yum install -y python3
         - pip3.6 install -r python/requirements_python3.txt
         - build/sbt -Phadoop-3.2 -Pflume assembly/package streaming-flume-assembly/assembly test:package
@@ -578,7 +547,6 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/mvn clean
         - dev/change-scala-version.sh 2.12
         - yum install -y python3
         - pip3.6 install -r python/requirements_python3.txt
