@@ -622,7 +622,7 @@ builds:
         SCALA_BINARY_VERSION: "2.11"
         SCALA_VERSION: "2.11.12"
         HADOOP_BINARY_VERSION: "2.7"
-        HADOOP_VERSION: "2.7.3"
+        HADOOP_VERSION: "2.7.4"
         PUBLISH_JARS: true
       docker:
         baseImage: docker.apple.com/cpbuild7/applejdk-8
@@ -648,7 +648,7 @@ builds:
         SCALA_BINARY_VERSION: "2.12"
         SCALA_VERSION: "2.12.10"
         HADOOP_BINARY_VERSION: "2.7"
-        HADOOP_VERSION: "2.7.3"
+        HADOOP_VERSION: "2.7.4"
         PUBLISH_JARS: true
       docker:
         baseImage: docker.apple.com/cpbuild7/applejdk-8
@@ -672,7 +672,7 @@ builds:
         SCALA_BINARY_VERSION: "2.11"
         SCALA_VERSION: "2.11.12"
         HADOOP_BINARY_VERSION: "2.7"
-        HADOOP_VERSION: "2.7.3"
+        HADOOP_VERSION: "2.7.4"
         PUBLISH_JARS: true
       docker:
         baseImage: docker.apple.com/cpbuild7/applejdk-8
@@ -699,7 +699,7 @@ builds:
         SCALA_BINARY_VERSION: "2.12"
         SCALA_VERSION: "2.12.10"
         HADOOP_BINARY_VERSION: "2.7"
-        HADOOP_VERSION: "2.7.3"
+        HADOOP_VERSION: "2.7.4"
         PUBLISH_JARS: true
       docker:
         baseImage: docker.apple.com/cpbuild7/applejdk-8
@@ -729,7 +729,7 @@ builds:
       env:
         SCALA_BINARY_VERSION: "2.11"
         SCALA_VERSION: "2.11.12"
-        HADOOP_VERSION: "2.7.3"
+        HADOOP_VERSION: "2.7.4"
         PUBLISH_JARS: false
       docker:
         baseImage: docker.apple.com/cpbuild7/applejdk-8
@@ -754,7 +754,7 @@ builds:
       env:
         SCALA_BINARY_VERSION: "2.12"
         SCALA_VERSION: "2.12.10"
-        HADOOP_VERSION: "2.7.3"
+        HADOOP_VERSION: "2.7.4"
         PUBLISH_JARS: false
       docker:
         baseImage: docker.apple.com/cpbuild7/applejdk-8
@@ -777,7 +777,7 @@ builds:
       env:
         SCALA_BINARY_VERSION: "2.11"
         SCALA_VERSION: "2.11.12"
-        HADOOP_VERSION: "2.7.3"
+        HADOOP_VERSION: "2.7.4"
         PUBLISH_JARS: false
       docker:
         baseImage: docker.apple.com/cpbuild7/applejdk-8
@@ -802,7 +802,7 @@ builds:
       env:
         SCALA_BINARY_VERSION: "2.12"
         SCALA_VERSION: "2.12.10"
-        HADOOP_VERSION: "2.7.3"
+        HADOOP_VERSION: "2.7.4"
         PUBLISH_JARS: false
       docker:
         baseImage: docker.apple.com/cpbuild7/applejdk-8
