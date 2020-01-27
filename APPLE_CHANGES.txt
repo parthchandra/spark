@@ -120,7 +120,6 @@ SPARK-30426       Fix the disorder of structured-streaming-kafka-integration pag
 SPARK-29800       Rewrite non-correlated EXISTS subquery use ScalaSubquery to optimize perf
 SPARK-30226       Remove withXXX functions in WriteBuilder
 SPARK-30313       Ensure EndpointRef is available MasterWebUI/WorkerPage
-
 SPARK-30154       PySpark UDF to convert MLlib vectors to dense arrays
 SPARK-30430       Add a note that UserDefinedFunction's constructor is private
 SPARK-19784       Refresh the table even table stats is empty
@@ -258,7 +257,6 @@ SPARK-30413       Avoid WrappedArray roundtrip in GenericArrayData constructor, 
 SPARK-30547       Add unstable annotation to the CalendarInterval class
 SPARK-30554       Return `Iterable` from `FailureSafeParser.rawParser`
 SPARK-30558       Avoid rebuilding `AvroOptions` per each partition
-SPARK-30535       Migrate ALTER TABLE commands to the new framework
 SPARK-30578       Explicitly set conf to use DSv2 for orc in OrcFilterSuite
 SPARK-30482       Output caller info in log appenders while reaching the limit
 SPARK-30530       Remove unnecessary codes and fix comments accordingly in UnivocityParser
@@ -273,6 +271,60 @@ SPARK-30547       Update since anotation for CalendarInterval class
 SPARK-30593       Revert interval ISO/ANSI SQL Standard output since we decide not to follow ANSI and no round trip
 SPARK-30252       Disallow negative scale of Decimal
 SPARK-15616       Add optimizer rule PruneHiveTablePartitions
+SPARK-30599       Increase the maximum number of log events in LogAppender
+SPARK-30553       fix structured-streaming java example error
+SPARK-28264       Support type hints in pandas UDF and rename/move inconsistent pandas UDF types
+SPARK-30591       Remove the nonstandard SET OWNER syntax for namespaces
+SPARK-30555       MERGE INTO insert action should only access columns from source table
+SPARK-30503       OnlineLDAOptimizer does not handle persistance correctly
+SPARK-30573       Document WHERE Clause of SELECT statement in SQL Reference
+SPARK-30575       Document HAVING Clause of SELECT statement in SQL Reference
+SPARK-30583       Document LIMIT Clause of SELECT statement in SQL Reference
+SPARK-30592       Interval support for csv and json funtions
+SPARK-30549       Fix the subquery shown issue in UI When enable AQE
+SPARK-30604       Fix a log message by including hostLocalBlockBytes to total bytes
+SPARK-30606       Fix the `like` function with 2 parameters
+SPARK-30574       Document GROUP BY Clause of SELECT statement in SQL Reference
+SPARK-28801       Document SELECT statement in SQL Reference (Main page)
+SPARK-30531       Do not render plan viz when it exists already
+SPARK-30556       Copy sparkContext.localproperties to child thread inSubqueryExec.executionContext
+SPARK-30609       Allow default merge command resolution to be bypassed by DSv2 tables
+SPARK-30601       Add a Google Maven Central as a primary repository
+SPARK-30607       Add overlay wrappers for SparkR and PySpark
+SPARK-30543       RandomForest add Param bootstrap to control sampling method
+SPARK-30575       Fix typos in documents
+SPARK-27871       Remove the conf spark.sql.optimizer.reassignLambdaVariableID.enabled
+SPARK-30605       move defaultNamespace from SupportsNamespace to CatalogPlugin
+SPARK-30188       Remove `sorted` in asserts of comparing two strings
+SPARK-29175       Rename the config name to spark.sql.maven.additionalRemoteRepositories
+SPARK-30620       avoid unnecessary serialization in AggregateExpression
+SPARK-28794       Documentation for Create table Command
+SPARK-30570       Update scalafmt plugin to 1.0.3 with onlyChangedFiles feature
+SPARK-29947       Fix table lookup cache
+SPARK-30603       Move RESERVED_PROPERTIES from SupportsNamespaces and TableCatalog to CatalogV2Util
+SPARK-30298       Respect aliases in output partitioning of projects and aggregates
+SPARK-27083       Rename spark.sql.subquery.reuse to spark.sql.execution.subquery.reuse.enabled
+SPARK-28962       Add the parameter description for the Scala function API filter
+MINOR             Fix src/dest type documentation for `to_timestamp`
+SPARK-30627       Disable all the V2 file sources by default
+SPARK-29924       Document Apache Arrow JDK11 requirement
+SPARK-30626       Add SPARK_APPLICATION_ID into driver pod env
+SPARK-30630       Remove numTrees in GBT in 3.0.0
+SPARK-29721       Prune unnecessary nested fields from Generate without Project
+SPARK-30639       Upgrade Jersey to 2.30
+SPARK-30579       Document ORDER BY Clause of SELECT statement in SQL Reference
+SPARK-30645       Move Unicode test data to external file
+SPARK-29777       Remove no longer valid test for recursive calls
+Revert            SPARK-25496 Deprecate from_utc_timestamp and to_utc_timestamp
+SPARK-30644       Remove query index from the golden files of SQLQueryTestSuite
+SPARK-30314       Add identifier and catalog information to DataSourceV2Relation
+SPARK-30640       Prevent unnecessary copies of data during Arrow to Pandas conversion
+SPARK-30581       Document SORT BY Clause of SELECT statement in SQLReference
+SPARK-30589       Document DISTRIBUTE BY Clause of SELECT statement in SQL Reference
+SPARK-30588       Document CLUSTER BY Clause of SELECT statement in SQL Reference
+SPARK-30653       EOL character enforcement for java/scala/xml/py/R files
+SPARK-30633       Append L to seed when type is LongType
+SPARK-30625       Support `escape` as third parameter of the `like` function
 
 # Internal Patches
 SPARK-17767       Support user-provided ExternalCatalog and SessionBuilder
@@ -301,3 +353,4 @@ MINOR             Disable concurrent build
 MINOR             Bump to 3.0.0-preview-pie1.1.1-SNAPSHOT
 MINOR             Bump to 3.0.0-preview-pie1.1.2-SNAPSHOT
 MINOR             Publish yarn archive
+MINOR             Bump to 3.0.0-preview-pie1.1.3-SNAPSHOT
