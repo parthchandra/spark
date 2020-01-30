@@ -1,0 +1,822 @@
+schemaVersion: 2.0
+
+notify:
+  email:
+    enabled: false
+
+machine:
+  java:
+    version: 11-applejdk
+
+builds:
+  - name: pie-spark-2.11_2.4.4-snapshot-tools
+    branchName: pie-spark-2.4.4
+    jenkins:
+      concurrentBuild: false
+      maxConcurrentTotal: 8
+    timeout: 600
+    machine:
+      docker:
+        baseImage: docker.apple.com/cpbuild7/applejdk-11
+    build:
+      template: freestyle:v2:snapshot
+      steps:
+        - build/sbt -Phadoop-2.7 "tools/test"
+
+  - name: pie-spark-2.12_2.4.4-snapshot-tools
+    branchName: pie-spark-2.4.4
+    jenkins:
+      concurrentBuild: false
+      maxConcurrentTotal: 8
+    timeout: 600
+    machine:
+      docker:
+        baseImage: docker.apple.com/cpbuild7/applejdk-11
+    build:
+      template: freestyle:v2:snapshot
+      steps:
+        - dev/change-scala-version.sh 2.12
+        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 "tools/test"
+
+  - name: pie-spark-2.11_2.4.4-snapshot-core
+    branchName: pie-spark-2.4.4
+    jenkins:
+      concurrentBuild: false
+      maxConcurrentTotal: 8
+    timeout: 600
+    machine:
+      docker:
+        baseImage: docker.apple.com/cpbuild7/applejdk-11
+    build:
+      template: freestyle:v2:snapshot
+      steps:
+        # "sketch/test" "kvstore/test" "network-common/test" "network-shuffle/test" "unsafe/test"
+        # "launcher/test" "core/test"
+        - build/mvn -Phadoop-2.7 -pl core -am package
+
+  - name: pie-spark-2.12_2.4.4-snapshot-core
+    branchName: pie-spark-2.4.4
+    jenkins:
+      concurrentBuild: false
+      maxConcurrentTotal: 8
+    timeout: 600
+    machine:
+      docker:
+        baseImage: docker.apple.com/cpbuild7/applejdk-11
+    build:
+      template: freestyle:v2:snapshot
+      steps:
+        # "sketch/test" "kvstore/test" "network-common/test" "network-shuffle/test" "unsafe/test"
+        # "launcher/test" "core/test"
+        - dev/change-scala-version.sh 2.12
+        - sed -i 's/<scala\.version>[0-9.]*/<scala\.version>2.12.10/' pom.xml
+        - build/mvn -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 -pl core -am package
+
+  - name: pie-spark-2.11_2.4.4-snapshot-streaming
+    branchName: pie-spark-2.4.4
+    jenkins:
+      concurrentBuild: false
+      maxConcurrentTotal: 8
+    timeout: 600
+    machine:
+      docker:
+        baseImage: docker.apple.com/cpbuild7/applejdk-11
+    build:
+      template: freestyle:v2:snapshot
+      steps:
+        - build/sbt -Phadoop-2.7 "streaming/test"
+
+  - name: pie-spark-2.12_2.4.4-snapshot-streaming
+    branchName: pie-spark-2.4.4
+    jenkins:
+      concurrentBuild: false
+      maxConcurrentTotal: 8
+    timeout: 600
+    machine:
+      docker:
+        baseImage: docker.apple.com/cpbuild7/applejdk-11
+    build:
+      template: freestyle:v2:snapshot
+      steps:
+        - dev/change-scala-version.sh 2.12
+        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 "streaming/test"
+
+  - name: pie-spark-2.11_2.4.4-snapshot-mllib
+    branchName: pie-spark-2.4.4
+    jenkins:
+      concurrentBuild: false
+      maxConcurrentTotal: 8
+    timeout: 600
+    machine:
+      docker:
+        baseImage: docker.apple.com/cpbuild7/applejdk-11
+    build:
+      template: freestyle:v2:snapshot
+      steps:
+        - build/sbt -Phadoop-2.7 "mllib/test" "mllib-local/test" "graphx/test"
+
+  - name: pie-spark-2.12_2.4.4-snapshot-mllib
+    branchName: pie-spark-2.4.4
+    jenkins:
+      concurrentBuild: false
+      maxConcurrentTotal: 8
+    timeout: 600
+    machine:
+      docker:
+        baseImage: docker.apple.com/cpbuild7/applejdk-11
+    build:
+      template: freestyle:v2:snapshot
+      steps:
+        - dev/change-scala-version.sh 2.12
+        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 "mllib/test" "mllib-local/test" "graphx/test"
+
+  - name: pie-spark-2.11_2.4.4-snapshot-catalyst
+    branchName: pie-spark-2.4.4
+    jenkins:
+      concurrentBuild: false
+      maxConcurrentTotal: 8
+    timeout: 600
+    machine:
+      docker:
+        baseImage: docker.apple.com/cpbuild7/applejdk-11
+    build:
+      template: freestyle:v2:snapshot
+      steps:
+        - build/sbt -Phadoop-2.7 "catalyst/test"
+
+  - name: pie-spark-2.12_2.4.4-snapshot-catalyst
+    branchName: pie-spark-2.4.4
+    jenkins:
+      concurrentBuild: false
+      maxConcurrentTotal: 8
+    timeout: 600
+    machine:
+      docker:
+        baseImage: docker.apple.com/cpbuild7/applejdk-11
+    build:
+      template: freestyle:v2:snapshot
+      steps:
+        - dev/change-scala-version.sh 2.12
+        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 "catalyst/test"
+
+  - name: pie-spark-2.11_2.4.4-snapshot-sql-1
+    branchName: pie-spark-2.4.4
+    jenkins:
+      concurrentBuild: false
+      maxConcurrentTotal: 8
+    timeout: 600
+    machine:
+      docker:
+        baseImage: docker.apple.com/cpbuild7/applejdk-11
+    build:
+      template: freestyle:v2:snapshot
+      steps:
+        - build/sbt -Phadoop-2.7 "sql/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedSQLTest
+
+  - name: pie-spark-2.12_2.4.4-snapshot-sql-1
+    branchName: pie-spark-2.4.4
+    jenkins:
+      concurrentBuild: false
+      maxConcurrentTotal: 8
+    timeout: 600
+    machine:
+      docker:
+        baseImage: docker.apple.com/cpbuild7/applejdk-11
+    build:
+      template: freestyle:v2:snapshot
+      steps:
+        - dev/change-scala-version.sh 2.12
+        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 "sql/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedSQLTest
+
+  - name: pie-spark-2.11_2.4.4-snapshot-sql-2
+    branchName: pie-spark-2.4.4
+    jenkins:
+      concurrentBuild: false
+      maxConcurrentTotal: 8
+    timeout: 600
+    machine:
+      docker:
+        baseImage: docker.apple.com/cpbuild7/applejdk-11
+    build:
+      template: freestyle:v2:snapshot
+      steps:
+        - build/sbt -Phadoop-2.7 "sql/test-only *.SQLQueryTestSuite"
+
+  - name: pie-spark-2.12_2.4.4-snapshot-sql-2
+    branchName: pie-spark-2.4.4
+    jenkins:
+      concurrentBuild: false
+      maxConcurrentTotal: 8
+    timeout: 600
+    machine:
+      docker:
+        baseImage: docker.apple.com/cpbuild7/applejdk-11
+    build:
+      template: freestyle:v2:snapshot
+      steps:
+        - dev/change-scala-version.sh 2.12
+        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 "sql/test-only *.SQLQueryTestSuite"
+
+  - name: pie-spark-2.11_2.4.4-snapshot-hive-1
+    branchName: pie-spark-2.4.4
+    jenkins:
+      concurrentBuild: false
+      maxConcurrentTotal: 8
+    timeout: 600
+    machine:
+      docker:
+        baseImage: docker.apple.com/cpbuild7/applejdk-8
+    build:
+      template: freestyle:v2:snapshot
+      steps:
+        - build/sbt -Phadoop-2.7 -Phive "hive/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedHiveTest
+
+  - name: pie-spark-2.12_2.4.4-snapshot-hive-1
+    branchName: pie-spark-2.4.4
+    jenkins:
+      concurrentBuild: false
+      maxConcurrentTotal: 8
+    timeout: 600
+    machine:
+      docker:
+        baseImage: docker.apple.com/cpbuild7/applejdk-8
+    build:
+      template: freestyle:v2:snapshot
+      steps:
+        - dev/change-scala-version.sh 2.12
+        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 -Phive "hive/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedHiveTest
+
+  - name: pie-spark-2.11_2.4.4-snapshot-hive-2
+    branchName: pie-spark-2.4.4
+    jenkins:
+      concurrentBuild: false
+      maxConcurrentTotal: 8
+    timeout: 600
+    machine:
+      docker:
+        baseImage: docker.apple.com/cpbuild7/applejdk-8
+    build:
+      template: freestyle:v2:snapshot
+      steps:
+        - build/sbt -Phadoop-2.7 -Phive "hive/test-only *.HiveSparkSubmitSuite" "hive/test-only *.VersionsSuite" "hive/test-only *.Hive_2_1_DDLSuite"
+
+  - name: pie-spark-2.12_2.4.4-snapshot-hive-2
+    branchName: pie-spark-2.4.4
+    jenkins:
+      concurrentBuild: false
+      maxConcurrentTotal: 8
+    timeout: 600
+    machine:
+      docker:
+        baseImage: docker.apple.com/cpbuild7/applejdk-8
+    build:
+      template: freestyle:v2:snapshot
+      steps:
+        - dev/change-scala-version.sh 2.12
+        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 -Phive "hive/test-only *.HiveSparkSubmitSuite" "hive/test-only *.VersionsSuite" "hive/test-only *.Hive_2_1_DDLSuite"
+
+  - name: pie-spark-2.11_2.4.4-snapshot-hive-3
+    branchName: pie-spark-2.4.4
+    jenkins:
+      concurrentBuild: false
+      maxConcurrentTotal: 8
+    timeout: 600
+    machine:
+      docker:
+        baseImage: docker.apple.com/cpbuild7/applejdk-8
+    build:
+      template: freestyle:v2:snapshot
+      steps:
+        - build/sbt -Phadoop-2.7 -Phive "hive/test-only *.HiveCompatibilitySuite"
+
+  - name: pie-spark-2.12_2.4.4-snapshot-hive-3
+    branchName: pie-spark-2.4.4
+    jenkins:
+      concurrentBuild: false
+      maxConcurrentTotal: 8
+    timeout: 600
+    machine:
+      docker:
+        baseImage: docker.apple.com/cpbuild7/applejdk-8
+    build:
+      template: freestyle:v2:snapshot
+      steps:
+        - dev/change-scala-version.sh 2.12
+        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 -Phive "hive/test-only *.HiveCompatibilitySuite"
+
+  - name: pie-spark-2.11_2.4.4-snapshot-hadoop-cloud
+    branchName: pie-spark-2.4.4
+    jenkins:
+      concurrentBuild: false
+      maxConcurrentTotal: 8
+    timeout: 600
+    machine:
+      docker:
+        baseImage: docker.apple.com/cpbuild7/applejdk-11
+    build:
+      template: freestyle:v2:snapshot
+      steps:
+        - build/sbt -Phadoop-2.7 -Phadoop-cloud "hadoop-cloud/test"
+
+  - name: pie-spark-2.12_2.4.4-snapshot-hadoop-cloud
+    branchName: pie-spark-2.4.4
+    jenkins:
+      concurrentBuild: false
+      maxConcurrentTotal: 8
+    timeout: 600
+    machine:
+      docker:
+        baseImage: docker.apple.com/cpbuild7/applejdk-11
+    build:
+      template: freestyle:v2:snapshot
+      steps:
+        - dev/change-scala-version.sh 2.12
+        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 -Phadoop-cloud "hadoop-cloud/test"
+
+  - name: pie-spark-2.11_2.4.4-snapshot-repl
+    branchName: pie-spark-2.4.4
+    jenkins:
+      concurrentBuild: false
+      maxConcurrentTotal: 8
+    timeout: 600
+    machine:
+      docker:
+        baseImage: docker.apple.com/cpbuild7/applejdk-11
+    build:
+      template: freestyle:v2:snapshot
+      steps:
+        - build/sbt -Phadoop-2.7 "repl/test"
+
+  - name: pie-spark-2.12_2.4.4-snapshot-repl
+    branchName: pie-spark-2.4.4
+    jenkins:
+      concurrentBuild: false
+      maxConcurrentTotal: 8
+    timeout: 600
+    machine:
+      docker:
+        baseImage: docker.apple.com/cpbuild7/applejdk-11
+    build:
+      template: freestyle:v2:snapshot
+      steps:
+        - dev/change-scala-version.sh 2.12
+        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 "repl/test"
+
+  - name: pie-spark-2.11_2.4.4-snapshot-kafka
+    branchName: pie-spark-2.4.4
+    jenkins:
+      concurrentBuild: false
+      maxConcurrentTotal: 8
+    timeout: 600
+    machine:
+      docker:
+        baseImage: docker.apple.com/cpbuild7/applejdk-11
+    build:
+      template: freestyle:v2:snapshot
+      steps:
+        - build/mvn -Phadoop-2.7 -pl external/kafka-0-10,external/kafka-0-10-sql -am package -DskipTests
+        - build/mvn -Phadoop-2.7 -pl external/kafka-0-10,external/kafka-0-10-sql -am test
+
+  - name: pie-spark-2.12_2.4.4-snapshot-kafka
+    branchName: pie-spark-2.4.4
+    jenkins:
+      concurrentBuild: false
+      maxConcurrentTotal: 8
+    timeout: 600
+    machine:
+      docker:
+        baseImage: docker.apple.com/cpbuild7/applejdk-11
+    build:
+      template: freestyle:v2:snapshot
+      steps:
+        - dev/change-scala-version.sh 2.12
+        - sed -i 's/<scala\.version>[0-9.]*/<scala\.version>2.12.10/' pom.xml
+        - build/mvn -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 -pl external/kafka-0-10,external/kafka-0-10-sql -am package -DskipTests
+        - build/mvn -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 -pl external/kafka-0-10,external/kafka-0-10-sql test
+
+  - name: pie-spark-2.11_2.4.4-snapshot-kinesis
+    branchName: pie-spark-2.4.4
+    jenkins:
+      concurrentBuild: false
+      maxConcurrentTotal: 8
+    timeout: 600
+    machine:
+      docker:
+        baseImage: docker.apple.com/cpbuild7/applejdk-11
+    build:
+      template: freestyle:v2:snapshot
+      steps:
+        - build/sbt -Phadoop-2.7 -Pkinesis-asl "streaming-kinesis-asl/test"
+
+  - name: pie-spark-2.12_2.4.4-snapshot-kinesis
+    branchName: pie-spark-2.4.4
+    jenkins:
+      concurrentBuild: false
+      maxConcurrentTotal: 8
+    timeout: 600
+    machine:
+      docker:
+        baseImage: docker.apple.com/cpbuild7/applejdk-11
+    build:
+      template: freestyle:v2:snapshot
+      steps:
+        - dev/change-scala-version.sh 2.12
+        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 -Pkinesis-asl "streaming-kinesis-asl/test"
+
+  - name: pie-spark-2.11_2.4.4-snapshot-avro
+    branchName: pie-spark-2.4.4
+    jenkins:
+      concurrentBuild: false
+      maxConcurrentTotal: 8
+    timeout: 600
+    machine:
+      docker:
+        baseImage: docker.apple.com/cpbuild7/applejdk-11
+    build:
+      template: freestyle:v2:snapshot
+      steps:
+        - build/sbt -Phadoop-2.7 "avro/test" -Pavro
+
+  - name: pie-spark-2.12_2.4.4-snapshot-avro
+    branchName: pie-spark-2.4.4
+    jenkins:
+      concurrentBuild: false
+      maxConcurrentTotal: 8
+    timeout: 600
+    machine:
+      docker:
+        baseImage: docker.apple.com/cpbuild7/applejdk-11
+    build:
+      template: freestyle:v2:snapshot
+      steps:
+        - dev/change-scala-version.sh 2.12
+        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 "avro/test" -Pavro
+
+  - name: pie-spark-2.11_2.4.4-snapshot-yarn
+    branchName: pie-spark-2.4.4
+    jenkins:
+      concurrentBuild: false
+      maxConcurrentTotal: 8
+    timeout: 600
+    machine:
+      docker:
+        baseImage: docker.apple.com/cpbuild7/applejdk-11
+    build:
+      template: freestyle:v2:snapshot
+      steps:
+        - build/sbt -Phadoop-2.7 -Pyarn "yarn/test"
+
+  - name: pie-spark-2.12_2.4.4-snapshot-yarn
+    branchName: pie-spark-2.4.4
+    jenkins:
+      concurrentBuild: false
+      maxConcurrentTotal: 8
+    timeout: 600
+    machine:
+      docker:
+        baseImage: docker.apple.com/cpbuild7/applejdk-11
+    build:
+      template: freestyle:v2:snapshot
+      steps:
+        - dev/change-scala-version.sh 2.12
+        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 -Pyarn "yarn/test"
+
+  - name: pie-spark-2.11_2.4.4-snapshot-mesos
+    branchName: pie-spark-2.4.4
+    jenkins:
+      concurrentBuild: false
+      maxConcurrentTotal: 8
+    timeout: 600
+    machine:
+      docker:
+        baseImage: docker.apple.com/cpbuild7/applejdk-11
+    build:
+      template: freestyle:v2:snapshot
+      steps:
+        - build/sbt -Phadoop-2.7 -Pmesos "mesos/test"
+
+  - name: pie-spark-2.12_2.4.4-snapshot-mesos
+    branchName: pie-spark-2.4.4
+    jenkins:
+      concurrentBuild: false
+      maxConcurrentTotal: 8
+    timeout: 600
+    machine:
+      docker:
+        baseImage: docker.apple.com/cpbuild7/applejdk-11
+    build:
+      template: freestyle:v2:snapshot
+      steps:
+        - dev/change-scala-version.sh 2.12
+        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 -Pmesos "mesos/test"
+
+  - name: pie-spark-2.11_2.4.4-snapshot-kubernetes
+    branchName: pie-spark-2.4.4
+    jenkins:
+      concurrentBuild: false
+      maxConcurrentTotal: 8
+    timeout: 600
+    machine:
+      docker:
+        baseImage: docker.apple.com/cpbuild7/applejdk-11
+    build:
+      template: freestyle:v2:snapshot
+      steps:
+        - build/sbt -Phadoop-2.7 -Pkubernetes "kubernetes/test"
+
+  - name: pie-spark-2.12_2.4.4-snapshot-kubernetes
+    branchName: pie-spark-2.4.4
+    jenkins:
+      concurrentBuild: false
+      maxConcurrentTotal: 8
+    timeout: 600
+    machine:
+      docker:
+        baseImage: docker.apple.com/cpbuild7/applejdk-11
+    build:
+      template: freestyle:v2:snapshot
+      steps:
+        - dev/change-scala-version.sh 2.12
+        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 -Pkubernetes "kubernetes/test"
+
+  - name: pie-spark-2.11_2.4.4-snapshot-python27
+    branchName: pie-spark-2.4.4
+    jenkins:
+      concurrentBuild: false
+      maxConcurrentTotal: 8
+    timeout: 600
+    machine:
+      docker:
+        baseImage: docker.apple.com/cpbuild7/applejdk-11
+    build:
+      template: freestyle:v2:snapshot
+      steps:
+        - curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py"
+        - python get-pip.py
+        - pip2.7 install numpy==1.16.4 scipy==1.2.2 pandas==0.19.2
+        - build/sbt -Phadoop-2.7 -Pflume assembly/package streaming-flume-assembly/assembly test:package
+        - python/run-tests.py --python-executables python2.7
+
+  - name: pie-spark-2.12_2.4.4-snapshot-python27
+    branchName: pie-spark-2.4.4
+    jenkins:
+      concurrentBuild: false
+      maxConcurrentTotal: 8
+    timeout: 600
+    machine:
+      docker:
+        baseImage: docker.apple.com/cpbuild7/applejdk-11
+    build:
+      template: freestyle:v2:snapshot
+      steps:
+        - dev/change-scala-version.sh 2.12
+        - curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py"
+        - python get-pip.py
+        - pip2.7 install numpy==1.16.4 scipy==1.2.2 pandas==0.19.2
+        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 -Pflume assembly/package streaming-flume-assembly/assembly test:package
+        - python/run-tests.py --python-executables python2.7
+
+  - name: pie-spark-2.11_2.4.4-snapshot-python36
+    branchName: pie-spark-2.4.4
+    jenkins:
+      concurrentBuild: false
+      maxConcurrentTotal: 8
+    timeout: 600
+    machine:
+      docker:
+        baseImage: docker.apple.com/cpbuild7/applejdk-11
+    build:
+      template: freestyle:v2:snapshot
+      steps:
+        - yum install -y python3
+        - pip3.6 install numpy==1.16.4 scipy==1.2.2 pandas==0.23.2
+        - build/sbt -Phadoop-2.7 -Pflume assembly/package streaming-flume-assembly/assembly test:package
+        - python/run-tests.py --python-executables python3.6
+
+  - name: pie-spark-2.12_2.4.4-snapshot-python36
+    branchName: pie-spark-2.4.4
+    jenkins:
+      concurrentBuild: false
+      maxConcurrentTotal: 8
+    timeout: 600
+    machine:
+      docker:
+        baseImage: docker.apple.com/cpbuild7/applejdk-11
+    build:
+      template: freestyle:v2:snapshot
+      steps:
+        - dev/change-scala-version.sh 2.12
+        - yum install -y python3
+        - pip3.6 install numpy==1.16.4 scipy==1.2.2 pandas==0.23.2
+        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 -Pflume assembly/package streaming-flume-assembly/assembly test:package
+        - python/run-tests.py --python-executables python3.6
+
+  - name: pie-spark-2.11_2.4.4-snapshot
+    branchName: pie-spark-2.4.4
+    jenkins:
+      concurrentBuild: false
+      maxConcurrentTotal: 8
+    timeout: 600
+    machine:
+      env:
+        SCALA_BINARY_VERSION: "2.11"
+        SCALA_VERSION: "2.11.12"
+        HADOOP_BINARY_VERSION: "2.7"
+        HADOOP_VERSION: "2.7.4"
+        PUBLISH_JARS: true
+      docker:
+        baseImage: docker.apple.com/cpbuild7/applejdk-8
+    build:
+      template: freestyle:v2:snapshot
+      steps:
+        - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --hadoop "$HADOOP_VERSION" --snapshot --maven-opts "-Xmx6g" --maven-params "-P hive,hadoop-${HADOOP_BINARY_VERSION},hive-thriftserver,kinesis-asl,mesos,yarn,kubernetes"
+        - ./dev/make-distribution.sh --tgz --use-existing-build --with-hadoop --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION" -Phadoop-${HADOOP_BINARY_VERSION} -Dhadoop.version="$HADOOP_VERSION"
+    publish:
+      archives:
+        includePattern: .dist/local-repo/**/*.jar, .dist/local-repo/**/*.pom, .dist/local-repo/**/*.tgz, .dist/local-repo/**/*.gz
+      reports:
+        junit: false
+
+  - name: pie-spark-2.12_2.4.4-snapshot
+    branchName: pie-spark-2.4.4
+    jenkins:
+      concurrentBuild: false
+      maxConcurrentTotal: 8
+    timeout: 600
+    machine:
+      env:
+        SCALA_BINARY_VERSION: "2.12"
+        SCALA_VERSION: "2.12.10"
+        HADOOP_BINARY_VERSION: "2.7"
+        HADOOP_VERSION: "2.7.4"
+        PUBLISH_JARS: true
+      docker:
+        baseImage: docker.apple.com/cpbuild7/applejdk-8
+    build:
+      template: freestyle:v2:snapshot
+      steps:
+        - sed -i 's/<scala\.version>[0-9.]*/<scala\.version>2.12.10/' pom.xml
+        - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --hadoop "$HADOOP_VERSION" --snapshot --maven-opts "-Xmx6g" --maven-params "-Dscala.version=$SCALA_VERSION -P scala-${SCALA_BINARY_VERSION},hive,hadoop-${HADOOP_BINARY_VERSION},hive-thriftserver,kinesis-asl,mesos,yarn,kubernetes"
+        - ./dev/make-distribution.sh --tgz --use-existing-build --with-hadoop --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION" -Pscala-$SCALA_BINARY_VERSION -Phadoop-${HADOOP_BINARY_VERSION} -Dhadoop.version="$HADOOP_VERSION"
+    publish:
+      archives:
+        includePattern: .dist/local-repo/**/*.jar, .dist/local-repo/**/*.pom, .dist/local-repo/**/*.tgz, .dist/local-repo/**/*.gz
+      reports:
+        junit: false
+
+  - name: pie-spark-2.11_2.4.4-release
+    branchName: pie-spark-2.4.4-release
+    timeout: 90
+    machine:
+      env:
+        SCALA_BINARY_VERSION: "2.11"
+        SCALA_VERSION: "2.11.12"
+        HADOOP_BINARY_VERSION: "2.7"
+        HADOOP_VERSION: "2.7.4"
+        PUBLISH_JARS: true
+      docker:
+        baseImage: docker.apple.com/cpbuild7/applejdk-8
+    build:
+      template: freestyle:v2:release
+      steps:
+        - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --hadoop "$HADOOP_VERSION" --release --maven-opts "-Xmx6g" --maven-params "-P hive,hadoop-${HADOOP_BINARY_VERSION},hive-thriftserver,kinesis-asl,mesos,yarn,kubernetes"
+        - ./dev/make-distribution.sh --tgz --use-existing-build --with-hadoop --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION" -Phadoop-${HADOOP_BINARY_VERSION} -Dhadoop.version="$HADOOP_VERSION"
+    publish:
+      archives:
+        includePattern: .dist/local-repo/**/*.jar, .dist/local-repo/**/*.pom, .dist/local-repo/**/*.tgz, .dist/local-repo/**/*.gz
+      reports:
+        junit: false
+    finally:
+      tag:
+        enabled: true
+        expression: "releases_2.11/2.4.4-pie1.1.3"
+
+  - name: pie-spark-2.12_2.4.4-release
+    branchName: pie-spark-2.4.4-release
+    timeout: 90
+    machine:
+      env:
+        SCALA_BINARY_VERSION: "2.12"
+        SCALA_VERSION: "2.12.10"
+        HADOOP_BINARY_VERSION: "2.7"
+        HADOOP_VERSION: "2.7.4"
+        PUBLISH_JARS: true
+      docker:
+        baseImage: docker.apple.com/cpbuild7/applejdk-8
+    build:
+      template: freestyle:v2:release
+      steps:
+        - sed -i 's/<scala\.version>[0-9.]*/<scala\.version>2.12.10/' pom.xml
+        - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --hadoop "$HADOOP_VERSION" --release --maven-opts "-Xmx6g" --maven-params "-Dscala.version=$SCALA_VERSION -P scala-${SCALA_BINARY_VERSION},hive,hadoop-${HADOOP_BINARY_VERSION},hive-thriftserver,kinesis-asl,mesos,yarn,kubernetes"
+        - ./dev/make-distribution.sh --tgz --use-existing-build --with-hadoop --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION" -Pscala-$SCALA_BINARY_VERSION -Phadoop-${HADOOP_BINARY_VERSION} -Dhadoop.version="$HADOOP_VERSION"
+    publish:
+      archives:
+        includePattern: .dist/local-repo/**/*.jar, .dist/local-repo/**/*.pom, .dist/local-repo/**/*.tgz, .dist/local-repo/**/*.gz
+      reports:
+        junit: false
+    finally:
+      tag:
+        enabled: true
+        expression: "releases_2.12/2.4.4-pie1.1.3"
+
+  - name: pie-spark-2.11_2.4.4-hadoop-provided-snapshot
+    branchName: pie-spark-2.4.4
+    jenkins:
+      concurrentBuild: false
+      maxConcurrentTotal: 8
+    timeout: 600
+    machine:
+      env:
+        SCALA_BINARY_VERSION: "2.11"
+        SCALA_VERSION: "2.11.12"
+        HADOOP_VERSION: "2.7.4"
+        PUBLISH_JARS: false
+      docker:
+        baseImage: docker.apple.com/cpbuild7/applejdk-8
+    build:
+      template: freestyle:v2:snapshot
+      steps:
+        - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --snapshot --maven-opts "-Xmx6g" --maven-params "-P hadoop-provided,mesos,yarn,kubernetes --fail-at-end"
+        - ./dev/make-distribution.sh --tgz --use-existing-build --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION"
+    publish:
+      archives:
+        includePattern: .dist/local-repo/**/*.jar, .dist/local-repo/**/*.pom, .dist/local-repo/**/*.tgz, .dist/local-repo/**/*.gz
+      reports:
+        junit: false
+
+  - name: pie-spark-2.12_2.4.4-hadoop-provided-snapshot
+    branchName: pie-spark-2.4.4
+    jenkins:
+      concurrentBuild: false
+      maxConcurrentTotal: 8
+    timeout: 600
+    machine:
+      env:
+        SCALA_BINARY_VERSION: "2.12"
+        SCALA_VERSION: "2.12.10"
+        HADOOP_VERSION: "2.7.4"
+        PUBLISH_JARS: false
+      docker:
+        baseImage: docker.apple.com/cpbuild7/applejdk-8
+    build:
+      template: freestyle:v2:snapshot
+      steps:
+        - sed -i 's/<scala\.version>[0-9.]*/<scala\.version>2.12.10/' pom.xml
+        - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --snapshot --maven-opts "-Xmx6g" --maven-params "-Dscala.version=$SCALA_VERSION -P scala-${SCALA_BINARY_VERSION},hadoop-provided,mesos,yarn,kubernetes --fail-at-end"
+        - ./dev/make-distribution.sh --tgz --use-existing-build --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION" -Pscala-$SCALA_BINARY_VERSION
+    publish:
+      archives:
+        includePattern: .dist/local-repo/**/*.jar, .dist/local-repo/**/*.pom, .dist/local-repo/**/*.tgz, .dist/local-repo/**/*.gz
+      reports:
+        junit: false
+
+  - name: pie-spark-2.11_2.4.4-hadoop-provided-release
+    branchName: pie-spark-2.4.4-release
+    timeout: 90
+    machine:
+      env:
+        SCALA_BINARY_VERSION: "2.11"
+        SCALA_VERSION: "2.11.12"
+        HADOOP_VERSION: "2.7.4"
+        PUBLISH_JARS: false
+      docker:
+        baseImage: docker.apple.com/cpbuild7/applejdk-8
+    build:
+      template: freestyle:v2:release
+      steps:
+        - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --release --maven-opts "" --maven-params "-P hadoop-provided,mesos,yarn,kubernetes"
+        - ./dev/make-distribution.sh --tgz --use-existing-build --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION"
+    publish:
+      archives:
+        includePattern: .dist/local-repo/**/*.jar, .dist/local-repo/**/*.pom, .dist/local-repo/**/*.tgz, .dist/local-repo/**/*.gz
+      reports:
+        junit: false
+    finally:
+      tag:
+        enabled: false
+
+  - name: pie-spark-2.12_2.4.4-hadoop-provided-release
+    branchName: pie-spark-2.4.4-release
+    timeout: 90
+    machine:
+      env:
+        SCALA_BINARY_VERSION: "2.12"
+        SCALA_VERSION: "2.12.10"
+        HADOOP_VERSION: "2.7.4"
+        PUBLISH_JARS: false
+      docker:
+        baseImage: docker.apple.com/cpbuild7/applejdk-8
+    build:
+      template: freestyle:v2:release
+      steps:
+        - sed -i 's/<scala\.version>[0-9.]*/<scala\.version>2.12.10/' pom.xml
+        - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --release --maven-opts "" --maven-params "-Dscala.version=$SCALA_VERSION -P scala-${SCALA_BINARY_VERSION},hadoop-provided,mesos,yarn,kubernetes"
+        - ./dev/make-distribution.sh --tgz --use-existing-build --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION" -Pscala-$SCALA_BINARY_VERSION
+    publish:
+      archives:
+        includePattern: .dist/local-repo/**/*.jar, .dist/local-repo/**/*.pom, .dist/local-repo/**/*.tgz, .dist/local-repo/**/*.gz
+      reports:
+        junit: false
+    finally:
+      tag:
+        enabled: false
