@@ -96,3 +96,7 @@ spark-warehouse/
 *.Rproj.*
 
 .Rproj.user
+
+# For RIO
+.dist
+.library
