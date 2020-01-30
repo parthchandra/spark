@@ -9,8 +9,8 @@ machine:
     version: 11-applejdk
 
 builds:
-  - name: pie-spark-2.11_2.4.4-snapshot-tools
-    branchName: pie-spark-2.4.4
+  - name: pie-spark-2.11_2.4.5-snapshot-tools
+    branchName: pie-spark-2.4.5
     jenkins:
       concurrentBuild: false
       maxConcurrentTotal: 8
@@ -23,8 +23,8 @@ builds:
       steps:
         - build/sbt -Phadoop-2.7 "tools/test"
 
-  - name: pie-spark-2.12_2.4.4-snapshot-tools
-    branchName: pie-spark-2.4.4
+  - name: pie-spark-2.12_2.4.5-snapshot-tools
+    branchName: pie-spark-2.4.5
     jenkins:
       concurrentBuild: false
       maxConcurrentTotal: 8
@@ -38,8 +38,8 @@ builds:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 "tools/test"
 
-  - name: pie-spark-2.11_2.4.4-snapshot-core
-    branchName: pie-spark-2.4.4
+  - name: pie-spark-2.11_2.4.5-snapshot-core
+    branchName: pie-spark-2.4.5
     jenkins:
       concurrentBuild: false
       maxConcurrentTotal: 8
@@ -54,8 +54,8 @@ builds:
         # "launcher/test" "core/test"
         - build/mvn -Phadoop-2.7 -pl core -am package
 
-  - name: pie-spark-2.12_2.4.4-snapshot-core
-    branchName: pie-spark-2.4.4
+  - name: pie-spark-2.12_2.4.5-snapshot-core
+    branchName: pie-spark-2.4.5
     jenkins:
       concurrentBuild: false
       maxConcurrentTotal: 8
@@ -72,8 +72,8 @@ builds:
         - sed -i 's/<scala\.version>[0-9.]*/<scala\.version>2.12.10/' pom.xml
         - build/mvn -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 -pl core -am package
 
-  - name: pie-spark-2.11_2.4.4-snapshot-streaming
-    branchName: pie-spark-2.4.4
+  - name: pie-spark-2.11_2.4.5-snapshot-streaming
+    branchName: pie-spark-2.4.5
     jenkins:
       concurrentBuild: false
       maxConcurrentTotal: 8
@@ -86,8 +86,8 @@ builds:
       steps:
         - build/sbt -Phadoop-2.7 "streaming/test"
 
-  - name: pie-spark-2.12_2.4.4-snapshot-streaming
-    branchName: pie-spark-2.4.4
+  - name: pie-spark-2.12_2.4.5-snapshot-streaming
+    branchName: pie-spark-2.4.5
     jenkins:
       concurrentBuild: false
       maxConcurrentTotal: 8
@@ -101,8 +101,8 @@ builds:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 "streaming/test"
 
-  - name: pie-spark-2.11_2.4.4-snapshot-mllib
-    branchName: pie-spark-2.4.4
+  - name: pie-spark-2.11_2.4.5-snapshot-mllib
+    branchName: pie-spark-2.4.5
     jenkins:
       concurrentBuild: false
       maxConcurrentTotal: 8
@@ -115,8 +115,8 @@ builds:
       steps:
         - build/sbt -Phadoop-2.7 "mllib/test" "mllib-local/test" "graphx/test"
 
-  - name: pie-spark-2.12_2.4.4-snapshot-mllib
-    branchName: pie-spark-2.4.4
+  - name: pie-spark-2.12_2.4.5-snapshot-mllib
+    branchName: pie-spark-2.4.5
     jenkins:
       concurrentBuild: false
       maxConcurrentTotal: 8
@@ -130,8 +130,8 @@ builds:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 "mllib/test" "mllib-local/test" "graphx/test"
 
-  - name: pie-spark-2.11_2.4.4-snapshot-catalyst
-    branchName: pie-spark-2.4.4
+  - name: pie-spark-2.11_2.4.5-snapshot-catalyst
+    branchName: pie-spark-2.4.5
     jenkins:
       concurrentBuild: false
       maxConcurrentTotal: 8
@@ -144,8 +144,8 @@ builds:
       steps:
         - build/sbt -Phadoop-2.7 "catalyst/test"
 
-  - name: pie-spark-2.12_2.4.4-snapshot-catalyst
-    branchName: pie-spark-2.4.4
+  - name: pie-spark-2.12_2.4.5-snapshot-catalyst
+    branchName: pie-spark-2.4.5
     jenkins:
       concurrentBuild: false
       maxConcurrentTotal: 8
@@ -159,8 +159,8 @@ builds:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 "catalyst/test"
 
-  - name: pie-spark-2.11_2.4.4-snapshot-sql-1
-    branchName: pie-spark-2.4.4
+  - name: pie-spark-2.11_2.4.5-snapshot-sql-1
+    branchName: pie-spark-2.4.5
     jenkins:
       concurrentBuild: false
       maxConcurrentTotal: 8
@@ -173,8 +173,8 @@ builds:
       steps:
         - build/sbt -Phadoop-2.7 "sql/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedSQLTest
 
-  - name: pie-spark-2.12_2.4.4-snapshot-sql-1
-    branchName: pie-spark-2.4.4
+  - name: pie-spark-2.12_2.4.5-snapshot-sql-1
+    branchName: pie-spark-2.4.5
     jenkins:
       concurrentBuild: false
       maxConcurrentTotal: 8
@@ -188,8 +188,8 @@ builds:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 "sql/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedSQLTest
 
-  - name: pie-spark-2.11_2.4.4-snapshot-sql-2
-    branchName: pie-spark-2.4.4
+  - name: pie-spark-2.11_2.4.5-snapshot-sql-2
+    branchName: pie-spark-2.4.5
     jenkins:
       concurrentBuild: false
       maxConcurrentTotal: 8
@@ -202,8 +202,8 @@ builds:
       steps:
         - build/sbt -Phadoop-2.7 "sql/test-only *.SQLQueryTestSuite"
 
-  - name: pie-spark-2.12_2.4.4-snapshot-sql-2
-    branchName: pie-spark-2.4.4
+  - name: pie-spark-2.12_2.4.5-snapshot-sql-2
+    branchName: pie-spark-2.4.5
     jenkins:
       concurrentBuild: false
       maxConcurrentTotal: 8
@@ -217,8 +217,8 @@ builds:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 "sql/test-only *.SQLQueryTestSuite"
 
-  - name: pie-spark-2.11_2.4.4-snapshot-hive-1
-    branchName: pie-spark-2.4.4
+  - name: pie-spark-2.11_2.4.5-snapshot-hive-1
+    branchName: pie-spark-2.4.5
     jenkins:
       concurrentBuild: false
       maxConcurrentTotal: 8
@@ -231,8 +231,8 @@ builds:
       steps:
         - build/sbt -Phadoop-2.7 -Phive "hive/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedHiveTest
 
-  - name: pie-spark-2.12_2.4.4-snapshot-hive-1
-    branchName: pie-spark-2.4.4
+  - name: pie-spark-2.12_2.4.5-snapshot-hive-1
+    branchName: pie-spark-2.4.5
     jenkins:
       concurrentBuild: false
       maxConcurrentTotal: 8
@@ -246,8 +246,8 @@ builds:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 -Phive "hive/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedHiveTest
 
-  - name: pie-spark-2.11_2.4.4-snapshot-hive-2
-    branchName: pie-spark-2.4.4
+  - name: pie-spark-2.11_2.4.5-snapshot-hive-2
+    branchName: pie-spark-2.4.5
     jenkins:
       concurrentBuild: false
       maxConcurrentTotal: 8
@@ -260,8 +260,8 @@ builds:
       steps:
         - build/sbt -Phadoop-2.7 -Phive "hive/test-only *.HiveSparkSubmitSuite" "hive/test-only *.VersionsSuite" "hive/test-only *.Hive_2_1_DDLSuite"
 
-  - name: pie-spark-2.12_2.4.4-snapshot-hive-2
-    branchName: pie-spark-2.4.4
+  - name: pie-spark-2.12_2.4.5-snapshot-hive-2
+    branchName: pie-spark-2.4.5
     jenkins:
       concurrentBuild: false
       maxConcurrentTotal: 8
@@ -275,8 +275,8 @@ builds:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 -Phive "hive/test-only *.HiveSparkSubmitSuite" "hive/test-only *.VersionsSuite" "hive/test-only *.Hive_2_1_DDLSuite"
 
-  - name: pie-spark-2.11_2.4.4-snapshot-hive-3
-    branchName: pie-spark-2.4.4
+  - name: pie-spark-2.11_2.4.5-snapshot-hive-3
+    branchName: pie-spark-2.4.5
     jenkins:
       concurrentBuild: false
       maxConcurrentTotal: 8
@@ -289,8 +289,8 @@ builds:
       steps:
         - build/sbt -Phadoop-2.7 -Phive "hive/test-only *.HiveCompatibilitySuite"
 
-  - name: pie-spark-2.12_2.4.4-snapshot-hive-3
-    branchName: pie-spark-2.4.4
+  - name: pie-spark-2.12_2.4.5-snapshot-hive-3
+    branchName: pie-spark-2.4.5
     jenkins:
       concurrentBuild: false
       maxConcurrentTotal: 8
@@ -304,8 +304,8 @@ builds:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 -Phive "hive/test-only *.HiveCompatibilitySuite"
 
-  - name: pie-spark-2.11_2.4.4-snapshot-hadoop-cloud
-    branchName: pie-spark-2.4.4
+  - name: pie-spark-2.11_2.4.5-snapshot-hadoop-cloud
+    branchName: pie-spark-2.4.5
     jenkins:
       concurrentBuild: false
       maxConcurrentTotal: 8
@@ -318,8 +318,8 @@ builds:
       steps:
         - build/sbt -Phadoop-2.7 -Phadoop-cloud "hadoop-cloud/test"
 
-  - name: pie-spark-2.12_2.4.4-snapshot-hadoop-cloud
-    branchName: pie-spark-2.4.4
+  - name: pie-spark-2.12_2.4.5-snapshot-hadoop-cloud
+    branchName: pie-spark-2.4.5
     jenkins:
       concurrentBuild: false
       maxConcurrentTotal: 8
@@ -333,8 +333,8 @@ builds:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 -Phadoop-cloud "hadoop-cloud/test"
 
-  - name: pie-spark-2.11_2.4.4-snapshot-repl
-    branchName: pie-spark-2.4.4
+  - name: pie-spark-2.11_2.4.5-snapshot-repl
+    branchName: pie-spark-2.4.5
     jenkins:
       concurrentBuild: false
       maxConcurrentTotal: 8
@@ -347,8 +347,8 @@ builds:
       steps:
         - build/sbt -Phadoop-2.7 "repl/test"
 
-  - name: pie-spark-2.12_2.4.4-snapshot-repl
-    branchName: pie-spark-2.4.4
+  - name: pie-spark-2.12_2.4.5-snapshot-repl
+    branchName: pie-spark-2.4.5
     jenkins:
       concurrentBuild: false
       maxConcurrentTotal: 8
@@ -362,8 +362,8 @@ builds:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 "repl/test"
 
-  - name: pie-spark-2.11_2.4.4-snapshot-kafka
-    branchName: pie-spark-2.4.4
+  - name: pie-spark-2.11_2.4.5-snapshot-kafka
+    branchName: pie-spark-2.4.5
     jenkins:
       concurrentBuild: false
       maxConcurrentTotal: 8
@@ -377,8 +377,8 @@ builds:
         - build/mvn -Phadoop-2.7 -pl external/kafka-0-10,external/kafka-0-10-sql -am package -DskipTests
         - build/mvn -Phadoop-2.7 -pl external/kafka-0-10,external/kafka-0-10-sql -am test
 
-  - name: pie-spark-2.12_2.4.4-snapshot-kafka
-    branchName: pie-spark-2.4.4
+  - name: pie-spark-2.12_2.4.5-snapshot-kafka
+    branchName: pie-spark-2.4.5
     jenkins:
       concurrentBuild: false
       maxConcurrentTotal: 8
@@ -394,8 +394,8 @@ builds:
         - build/mvn -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 -pl external/kafka-0-10,external/kafka-0-10-sql -am package -DskipTests
         - build/mvn -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 -pl external/kafka-0-10,external/kafka-0-10-sql test
 
-  - name: pie-spark-2.11_2.4.4-snapshot-kinesis
-    branchName: pie-spark-2.4.4
+  - name: pie-spark-2.11_2.4.5-snapshot-kinesis
+    branchName: pie-spark-2.4.5
     jenkins:
       concurrentBuild: false
       maxConcurrentTotal: 8
@@ -408,8 +408,8 @@ builds:
       steps:
         - build/sbt -Phadoop-2.7 -Pkinesis-asl "streaming-kinesis-asl/test"
 
-  - name: pie-spark-2.12_2.4.4-snapshot-kinesis
-    branchName: pie-spark-2.4.4
+  - name: pie-spark-2.12_2.4.5-snapshot-kinesis
+    branchName: pie-spark-2.4.5
     jenkins:
       concurrentBuild: false
       maxConcurrentTotal: 8
@@ -423,8 +423,8 @@ builds:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 -Pkinesis-asl "streaming-kinesis-asl/test"
 
-  - name: pie-spark-2.11_2.4.4-snapshot-avro
-    branchName: pie-spark-2.4.4
+  - name: pie-spark-2.11_2.4.5-snapshot-avro
+    branchName: pie-spark-2.4.5
     jenkins:
       concurrentBuild: false
       maxConcurrentTotal: 8
@@ -437,8 +437,8 @@ builds:
       steps:
         - build/sbt -Phadoop-2.7 "avro/test" -Pavro
 
-  - name: pie-spark-2.12_2.4.4-snapshot-avro
-    branchName: pie-spark-2.4.4
+  - name: pie-spark-2.12_2.4.5-snapshot-avro
+    branchName: pie-spark-2.4.5
     jenkins:
       concurrentBuild: false
       maxConcurrentTotal: 8
@@ -452,8 +452,8 @@ builds:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 "avro/test" -Pavro
 
-  - name: pie-spark-2.11_2.4.4-snapshot-yarn
-    branchName: pie-spark-2.4.4
+  - name: pie-spark-2.11_2.4.5-snapshot-yarn
+    branchName: pie-spark-2.4.5
     jenkins:
       concurrentBuild: false
       maxConcurrentTotal: 8
@@ -466,8 +466,8 @@ builds:
       steps:
         - build/sbt -Phadoop-2.7 -Pyarn "yarn/test"
 
-  - name: pie-spark-2.12_2.4.4-snapshot-yarn
-    branchName: pie-spark-2.4.4
+  - name: pie-spark-2.12_2.4.5-snapshot-yarn
+    branchName: pie-spark-2.4.5
     jenkins:
       concurrentBuild: false
       maxConcurrentTotal: 8
@@ -481,8 +481,8 @@ builds:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 -Pyarn "yarn/test"
 
-  - name: pie-spark-2.11_2.4.4-snapshot-mesos
-    branchName: pie-spark-2.4.4
+  - name: pie-spark-2.11_2.4.5-snapshot-mesos
+    branchName: pie-spark-2.4.5
     jenkins:
       concurrentBuild: false
       maxConcurrentTotal: 8
@@ -495,8 +495,8 @@ builds:
       steps:
         - build/sbt -Phadoop-2.7 -Pmesos "mesos/test"
 
-  - name: pie-spark-2.12_2.4.4-snapshot-mesos
-    branchName: pie-spark-2.4.4
+  - name: pie-spark-2.12_2.4.5-snapshot-mesos
+    branchName: pie-spark-2.4.5
     jenkins:
       concurrentBuild: false
       maxConcurrentTotal: 8
@@ -510,8 +510,8 @@ builds:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 -Pmesos "mesos/test"
 
-  - name: pie-spark-2.11_2.4.4-snapshot-kubernetes
-    branchName: pie-spark-2.4.4
+  - name: pie-spark-2.11_2.4.5-snapshot-kubernetes
+    branchName: pie-spark-2.4.5
     jenkins:
       concurrentBuild: false
       maxConcurrentTotal: 8
@@ -524,8 +524,8 @@ builds:
       steps:
         - build/sbt -Phadoop-2.7 -Pkubernetes "kubernetes/test"
 
-  - name: pie-spark-2.12_2.4.4-snapshot-kubernetes
-    branchName: pie-spark-2.4.4
+  - name: pie-spark-2.12_2.4.5-snapshot-kubernetes
+    branchName: pie-spark-2.4.5
     jenkins:
       concurrentBuild: false
       maxConcurrentTotal: 8
@@ -539,8 +539,8 @@ builds:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 -Pkubernetes "kubernetes/test"
 
-  - name: pie-spark-2.11_2.4.4-snapshot-python27
-    branchName: pie-spark-2.4.4
+  - name: pie-spark-2.11_2.4.5-snapshot-python27
+    branchName: pie-spark-2.4.5
     jenkins:
       concurrentBuild: false
       maxConcurrentTotal: 8
@@ -557,8 +557,8 @@ builds:
         - build/sbt -Phadoop-2.7 -Pflume assembly/package streaming-flume-assembly/assembly test:package
         - python/run-tests.py --python-executables python2.7
 
-  - name: pie-spark-2.12_2.4.4-snapshot-python27
-    branchName: pie-spark-2.4.4
+  - name: pie-spark-2.12_2.4.5-snapshot-python27
+    branchName: pie-spark-2.4.5
     jenkins:
       concurrentBuild: false
       maxConcurrentTotal: 8
@@ -576,8 +576,8 @@ builds:
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 -Pflume assembly/package streaming-flume-assembly/assembly test:package
         - python/run-tests.py --python-executables python2.7
 
-  - name: pie-spark-2.11_2.4.4-snapshot-python36
-    branchName: pie-spark-2.4.4
+  - name: pie-spark-2.11_2.4.5-snapshot-python36
+    branchName: pie-spark-2.4.5
     jenkins:
       concurrentBuild: false
       maxConcurrentTotal: 8
@@ -593,8 +593,8 @@ builds:
         - build/sbt -Phadoop-2.7 -Pflume assembly/package streaming-flume-assembly/assembly test:package
         - python/run-tests.py --python-executables python3.6
 
-  - name: pie-spark-2.12_2.4.4-snapshot-python36
-    branchName: pie-spark-2.4.4
+  - name: pie-spark-2.12_2.4.5-snapshot-python36
+    branchName: pie-spark-2.4.5
     jenkins:
       concurrentBuild: false
       maxConcurrentTotal: 8
@@ -611,8 +611,8 @@ builds:
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 -Pflume assembly/package streaming-flume-assembly/assembly test:package
         - python/run-tests.py --python-executables python3.6
 
-  - name: pie-spark-2.11_2.4.4-snapshot
-    branchName: pie-spark-2.4.4
+  - name: pie-spark-2.11_2.4.5-snapshot
+    branchName: pie-spark-2.4.5
     jenkins:
       concurrentBuild: false
       maxConcurrentTotal: 8
@@ -637,8 +637,8 @@ builds:
       reports:
         junit: false
 
-  - name: pie-spark-2.12_2.4.4-snapshot
-    branchName: pie-spark-2.4.4
+  - name: pie-spark-2.12_2.4.5-snapshot
+    branchName: pie-spark-2.4.5
     jenkins:
       concurrentBuild: false
       maxConcurrentTotal: 8
@@ -664,8 +664,8 @@ builds:
       reports:
         junit: false
 
-  - name: pie-spark-2.11_2.4.4-release
-    branchName: pie-spark-2.4.4-release
+  - name: pie-spark-2.11_2.4.5-release
+    branchName: pie-spark-2.4.5-release
     timeout: 90
     machine:
       env:
@@ -689,10 +689,10 @@ builds:
     finally:
       tag:
         enabled: true
-        expression: "releases_2.11/2.4.4-pie1.1.3"
+        expression: "releases_2.11/2.4.5-pie1.0.0"
 
-  - name: pie-spark-2.12_2.4.4-release
-    branchName: pie-spark-2.4.4-release
+  - name: pie-spark-2.12_2.4.5-release
+    branchName: pie-spark-2.4.5-release
     timeout: 90
     machine:
       env:
@@ -717,10 +717,10 @@ builds:
     finally:
       tag:
         enabled: true
-        expression: "releases_2.12/2.4.4-pie1.1.3"
+        expression: "releases_2.12/2.4.5-pie1.0.0"
 
-  - name: pie-spark-2.11_2.4.4-hadoop-provided-snapshot
-    branchName: pie-spark-2.4.4
+  - name: pie-spark-2.11_2.4.5-hadoop-provided-snapshot
+    branchName: pie-spark-2.4.5
     jenkins:
       concurrentBuild: false
       maxConcurrentTotal: 8
@@ -744,8 +744,8 @@ builds:
       reports:
         junit: false
 
-  - name: pie-spark-2.12_2.4.4-hadoop-provided-snapshot
-    branchName: pie-spark-2.4.4
+  - name: pie-spark-2.12_2.4.5-hadoop-provided-snapshot
+    branchName: pie-spark-2.4.5
     jenkins:
       concurrentBuild: false
       maxConcurrentTotal: 8
@@ -770,8 +770,8 @@ builds:
       reports:
         junit: false
 
-  - name: pie-spark-2.11_2.4.4-hadoop-provided-release
-    branchName: pie-spark-2.4.4-release
+  - name: pie-spark-2.11_2.4.5-hadoop-provided-release
+    branchName: pie-spark-2.4.5-release
     timeout: 90
     machine:
       env:
@@ -795,8 +795,8 @@ builds:
       tag:
         enabled: false
 
-  - name: pie-spark-2.12_2.4.4-hadoop-provided-release
-    branchName: pie-spark-2.4.4-release
+  - name: pie-spark-2.12_2.4.5-hadoop-provided-release
+    branchName: pie-spark-2.4.5-release
     timeout: 90
     machine:
       env:
