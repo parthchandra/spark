@@ -553,7 +553,7 @@ builds:
       steps:
         - curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py"
         - python get-pip.py
-        - pip2.7 install -r python/requirements_python2.txt
+        - pip2.7 install numpy==1.16.4 scipy==1.2.2 pandas==0.19.2
         - build/sbt -Phadoop-2.7 -Pflume assembly/package streaming-flume-assembly/assembly test:package
         - python/run-tests.py --python-executables python2.7
 
@@ -572,7 +572,7 @@ builds:
         - dev/change-scala-version.sh 2.12
         - curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py"
         - python get-pip.py
-        - pip2.7 install -r python/requirements_python2.txt
+        - pip2.7 install numpy==1.16.4 scipy==1.2.2 pandas==0.19.2
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 -Pflume assembly/package streaming-flume-assembly/assembly test:package
         - python/run-tests.py --python-executables python2.7
 
@@ -589,7 +589,7 @@ builds:
       template: freestyle:v2:snapshot
       steps:
         - yum install -y python3
-        - pip3.6 install -r python/requirements_python3.txt
+        - pip3.6 install numpy==1.16.4 scipy==1.2.2 pandas==0.23.2
         - build/sbt -Phadoop-2.7 -Pflume assembly/package streaming-flume-assembly/assembly test:package
         - python/run-tests.py --python-executables python3.6
 
@@ -607,7 +607,7 @@ builds:
       steps:
         - dev/change-scala-version.sh 2.12
         - yum install -y python3
-        - pip3.6 install -r python/requirements_python3.txt
+        - pip3.6 install numpy==1.16.4 scipy==1.2.2 pandas==0.23.2
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 -Pflume assembly/package streaming-flume-assembly/assembly test:package
         - python/run-tests.py --python-executables python3.6
 
