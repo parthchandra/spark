@@ -83,11 +83,8 @@ package object config {
 
   private[spark] val EVENT_LOG_STAGE_EXECUTOR_METRICS =
     ConfigBuilder("spark.eventLog.logStageExecutorMetrics.enabled")
-      .booleanConf
-      .createWithDefault(false)
-
-  private[spark] val EVENT_LOG_PROCESS_TREE_METRICS =
-    ConfigBuilder("spark.eventLog.logStageExecutorProcessTreeMetrics.enabled")
+      .doc("Whether to write per-stage peaks of executor metrics (for each executor) " +
+        "to the event log.")
       .booleanConf
       .createWithDefault(false)
 
@@ -131,6 +128,13 @@ package object config {
 
   private[spark] val EXECUTOR_HEARTBEAT_MAX_FAILURES =
     ConfigBuilder("spark.executor.heartbeat.maxFailures").internal().intConf.createWithDefault(60)
+
+  private[spark] val EXECUTOR_PROCESS_TREE_METRICS_ENABLED =
+    ConfigBuilder("spark.executor.processTreeMetrics.enabled")
+      .doc("Whether to collect process tree metrics (from the /proc filesystem) when collecting " +
+        "executor metrics.")
+      .booleanConf
+      .createWithDefault(false)
 
   private[spark] val EXECUTOR_JAVA_OPTIONS =
     ConfigBuilder(SparkLauncher.EXECUTOR_EXTRA_JAVA_OPTIONS).stringConf.createOptional
