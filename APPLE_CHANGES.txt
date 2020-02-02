@@ -1,0 +1,121 @@
+This contains the changes after v2.4.5-rc2
+
+# From Spark 3.0.0
+SPARK-20636       Add new optimization rule to transpose adjacent Window expressions.
+SPARK-25691       Use semantic equality in AliasViewChild in order to compare attributes
+SPARK-20636       Add the rule TransposeWindow to the optimization batch
+SPARK-26390       ColumnPruning rule should only do column pruning
+SPARK-27123       Improve CollapseProject to handle projects cross limit/repartition/sample
+SPARK-27123       Use isRenaming check for limit too.
+SPARK-26975       Support nested-column pruning over limit/sample/repartition
+SPARK-25407       Allow nested access for non-existent field for Parquet file when nested pruning is enabled
+SPARK-27644       Enable spark.sql.optimizer.nestedSchemaPruning.enabled by default
+SPARK-25559       Remove the unsupported predicates in Parquet when possible
+SPARK-25860       Replace Literal(null, _) with FalseLiteral whenever possible
+SPARK-27514       Skip collapsing windows with empty window expressions
+SPARK-25338       Ensure to call super.beforeAll() and super.afterAll() in test cases
+SPARK-25631       Improve the test runtime of KafkaRDDSuite
+SPARK-25632       Improve the test runtime of KafkaRDDSuite
+SPARK-25954       Upgrade to Kafka 2.1.0
+SPARK-25954       Add Zookeeper 3.4.7 test dependency to Kafka modules
+SPARK-25615       Improve the test runtime of KafkaSinkSuite: streaming write to non-existing topic
+SPARK-25618       Reduce time taken to execute KafkaContinuousSourceStressForDontFailOnDataLossSuite
+SPARK-26916       Upgrade to Kafka 2.1.1
+SPARK-27138       Remove AdminUtils calls (fixes deprecation)
+SPARK-27260       Upgrade to Kafka 2.2.0
+SPARK-28013       Upgrade to Kafka 2.2.1
+SPARK-28174       Upgrade to Kafka 2.3.0
+SPARK-29613       Upgrade to Kafka 2.3.1
+SPARK-30228       Update zstd-jni to 1.4.4-3
+SPARK-27801       Improve performance of InMemoryFileIndex.listLeafFiles for HDFS directories with many files
+SPARK-27762       Support user provided avro schema for writing fields with different ordering
+SPARK-27838       Support user provided non-nullable avro schema for nullable catalyst schema without any null record
+SPARK-27830       Show Spark version at app lists of Spark History UI
+SPARK-27684       Avoid conversion overhead for primitive types
+SPARK-27981       Remove `Illegal reflective access` warning for `java.nio.Bits.unaligned()` in JDK9+
+SPARK-28066       Optimize UTF8String.trim() for common case of no whitespace
+SPARK-26095       Disable parallelization in make-distibution.sh.
+SPARK-27839       Change UTF8String.replace() to operate on UTF8 bytes
+SPARK-28102       Avoid performance problems when lz4-java JNI libraries fail to initialize
+SPARK-28118       Add `spark.eventLog.compression.codec` configuration
+SPARK-24355       Spark external shuffle server improvement to better handle block fetch requests.
+SPARK-25641       Change the spark.shuffle.server.chunkFetchHandlerThreadsPercent default to 100
+SPARK-18364       Expose metrics for YarnShuffleService
+SPARK-25642       Adding two new metrics to record the number of registered connections as well as the number of active connections to YARN Shuffle Service
+SPARK-25692       Remove static initialization of worker eventLoop handling chunk fetch requests within TransportContext. This fixes ChunkFetchIntegrationSuite as well
+SPARK-27021       Cleanup of Netty event loop group for shuffle chunk fetch requests
+SPARK-28294       Support `spark.history.fs.cleaner.maxNum` configuration
+SPARK-28847       Annotate HiveExternalCatalogVersionsSuite with ExtendedHiveTest
+SPARK-29003       Add `start` method to ApplicationHistoryProvider to avoid deadlock on startup
+SPARK-29080       Support R file extension case-insensitively
+SPARK-29162       Simplify NOT(IsNull(x)) and NOT(IsNotNull(x))
+SPARK-29191       Add tag ExtendedSQLTest for SQLQueryTestSuite
+SPARK-29032       Add PrometheusServlet to monitor Master/Worker/Driver
+SPARK-29351       Avoid Full Synchronization in ShuffleMapStage
+SPARK-29434       Improve the MapStatuses Serialization Performance
+SPARK-29466       Show `Duration` for running drivers in Standalone master web UI
+SPARK-24421       Accessing sun.misc.Cleaner in JDK11
+SPARK-24421       Use normal direct ByteBuffer allocation if Cleaner can't be set
+SPARK-26306       More memory to de-flake SorterSuite
+SPARK-26507       Fix core tests for Java 11
+SPARK-27175       Upgrade hadoop-3 to 3.2.0
+SPARK-27467       Upgrade Maven to 3.6.1
+SPARK-28961       Upgrade Maven from 3.6.1 to 3.6.2
+SPARK-30142       Upgrade Maven to 3.6.3
+SPARK-25946       Upgrade ASM to 7.x to support JDK11
+SPARK-28111       Upgrade `xbean-asm7-shaded` to 4.14
+SPARK-27493       Upgrade ASM to 7.1 in Maven plugins
+SPARK-27493       Upgrade ASM to 7.1 in plugins.sbt
+SPARK-27620       Upgrade jetty to 9.4.18.v20190429
+SPARK-28758       Upgrade Janino to 3.0.15
+SPARK-28737       Update Jersey to 2.29
+SPARK-26124       Update plugins to latest versions
+SPARK-27608       Upgrade Surefire plugin to 3.0.0-M3
+SPARK-29470       Update plugins to latest versions
+SPARK-28759       Upgrade scala-maven-plugin to 4.2.0 and fix build profile on AppVeyor
+SPARK-26963       SizeEstimator can't make some JDK fields accessible in Java 9+
+SPARK-26966       Update to JPMML 1.4.8
+SPARK-26986       Add JAXB reference impl to build for Java 9+
+SPARK-27121       Resolve Scala compiler failure for Java 9+ in REPL
+SPARK-25891       Upgrade to Py4J 0.10.8.1
+SPARK-27180       Fix testing issues with yarn module in Hadoop-3
+SPARK-28735       Fix PySpark ML tests to pass in JDK 11
+SPARK-28736       Fix PySpark ML tests to pass in JDK 11
+SPARK-28755       Increase tolerance in 'spark.mlp' SparkR test for JDK 11
+SPARK-28756       Fix checkJavaVersion to accept JDK8+
+SPARK-28756       Specify minimum and maximum Java versions
+SPARK-28877       Make jaxb-runtime compile-time dependency
+SPARK-28932       Add scala-library test dependency to network-common module for JDK11
+SPARK-28932       Switch to scala-library compile dependency for JDK11
+SPARK-27849       Fix the testing regex in DataSourceScanRedactionTest
+SPARK-29739       Use `java` instead of `cc` in test_pipe_functions
+SPARK-29528       Upgrade scala-maven-plugin to 4.3.0 for Scala 2.13.1
+SPARK-29670       Make executor's bindAddress configurable
+SPARK-29795       Explicitly clear registered metrics on MetricSystem shutdown
+SPARK-29674       Update dropwizard metrics to 4.1.x for JDK 9+
+SPARK-17767       Support user-provided ExternalCatalog and SessionBuilder
+SPARK-25694       Make setURLStreamHandlerFactory invocation configurable
+SPARK-30199       Recover `spark.(ui|blockManager).port` from checkpoint
+SPARK-26134       Upgrading Hadoop to 2.7.4 to fix java.version problem
+SPARK-30035       Upgrade to Apache Commons Lang 3.9
+SPARK-30157       Upgrade Apache HttpCore from 4.4.10 to 4.4.12
+SPARK-30639       Upgrade Jersey to 2.30
+
+# Internal Patches
+SPARK-17636       Parquet predicate pushdown in nested fields
+SPARK-25558       Pushdown predicates for nested fields in DataSource Strategy
+MINOR             Added bindAddress in Mesos Executor Backend for now set to local host name
+MINOR             Use Utils.localHostName() for bindAddress
+MINOR             Use abstract storage as a replacement for window.localStorage
+MINOR             SparkUI patch
+MINOR             Updated state save parameter to rely on ajax enabled property
+MINOR             Add JDK11 options
+MINOR             Use reflection to reduce hive dependency
+MINOR             Remove hive test dependency
+MINOR             Support JarvisSparkHadoopUtil
+MINOR             Ignore root permission issue
+MINOR             Add rio.yml/rio-maven-custom-build.sh/.gitignore
+MINOR             Change to pie
+MINOR             Disable Hive on JDK9+
+MINOR             Update make-distribution.sh
+MINOR             Bump to 2.4.5-pie1.0.0-SNAPSHOT
