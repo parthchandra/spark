@@ -1,25 +1,4 @@
-This contains the changes after v2.4.5-rc1
-
-# From Spark 2.4.5
-SPARK-30246       OneForOneStreamManager might leak memory in connectionTerminated
-SPARK-30325       markPartitionCompleted cause task status inconsistent
-SPARK-30312       Rename conf by adding `.enabled`
-SPARK-30491       Enable dependency audit files to tell dependency classifier
-Revert            SPARK-27868 Better default value and documentation for socket server backlog
-SPARK-29450       Measure the number of output rows for streaming aggregation with append mode
-SPARK-29708       Correct aggregated values when grouping sets are duplicated
-SPARK-30333       Update sbt build together
-SPARK-30312       Add a migration guide
-SPARK-28152       Add a migration guide for MsSQLServer JDBC dialect
-MINOR             Remove note about -T for parallel build
-MINOR             Pick up HIVE-22708 HTTP transport fix
-SPARK-30572       Add a fallback Maven repository
-SPARK-30553       fix structured-streaming java example error
-SPARK-30601       Add a Google Maven Central as a primary repository
-SPARK-30556       Copy sparkContext.localproperties to child thread inSubqueryExec.executionContext
-SPARK-30630       Deprecate numTrees in GBT in 2.4.5
-SPARK-30645       Move Unicode test data to external file
-SPARK-30633       Append L to seed when type is LongType
+This contains the changes after v2.4.5-rc2
 
 # From Spark 3.0.0
 SPARK-20636       Add new optimization rule to transpose adjacent Window expressions.
@@ -157,3 +136,4 @@ MINOR             Bump to 2.4.4-jdk11-pie1.1.0-SNAPSHOT
 MINOR             Bump to 2.4.4-jdk11-pie1.1.1-SNAPSHOT
 MINOR             Publish yarn archive
 MINOR             Bump to 2.4.4-jdk11-pie1.1.2-SNAPSHOT
+MINOR             Bump to 2.4.4-jdk11-pie1.1.3-SNAPSHOT
