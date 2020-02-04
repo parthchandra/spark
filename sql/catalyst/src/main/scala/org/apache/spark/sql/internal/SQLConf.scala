@@ -1930,6 +1930,7 @@ object SQLConf {
     .createWithDefault(Deflater.DEFAULT_COMPRESSION)
 
   val LEGACY_SIZE_OF_NULL = buildConf("spark.sql.legacy.sizeOfNull")
+    .internal()
     .doc("If it is set to true, size of null returns -1. This behavior was inherited from Hive. " +
       "The size function returns null for null input if the flag is disabled.")
     .booleanConf
@@ -1937,6 +1938,7 @@ object SQLConf {
 
   val LEGACY_REPLACE_DATABRICKS_SPARK_AVRO_ENABLED =
     buildConf("spark.sql.legacy.replaceDatabricksSparkAvro.enabled")
+      .internal()
       .doc("If it is set to true, the data source provider com.databricks.spark.avro is mapped " +
         "to the built-in but external Avro data source module for backward compatibility.")
       .booleanConf
@@ -2062,10 +2064,11 @@ object SQLConf {
 
   val LEGACY_CAST_DATETIME_TO_STRING =
     buildConf("spark.sql.legacy.typeCoercion.datetimeToString.enabled")
+      .internal()
       .doc("If it is set to true, date/timestamp will cast to string in binary comparisons " +
         "with String")
-    .booleanConf
-    .createWithDefault(false)
+      .booleanConf
+      .createWithDefault(false)
 
   val DEFAULT_CATALOG = buildConf("spark.sql.defaultCatalog")
     .doc("Name of the default catalog. This will be the current catalog if users have not " +
@@ -2085,6 +2088,7 @@ object SQLConf {
       .createOptional
 
   val LEGACY_LOOSE_UPCAST = buildConf("spark.sql.legacy.looseUpcast")
+    .internal()
     .doc("When true, the upcast will be loose and allows string to atomic types.")
     .booleanConf
     .createWithDefault(false)
@@ -2097,6 +2101,7 @@ object SQLConf {
 
   val LEGACY_ARRAY_EXISTS_FOLLOWS_THREE_VALUED_LOGIC =
     buildConf("spark.sql.legacy.arrayExistsFollowsThreeValuedLogic")
+      .internal()
       .doc("When true, the ArrayExists will follow the three-valued boolean logic.")
       .booleanConf
       .createWithDefault(true)
