@@ -16,7 +16,7 @@
  */
 package org.apache.spark.deploy.k8s.features
 
-import io.fabric8.kubernetes.api.model.PodBuilder
+import io.fabric8.kubernetes.api.model._
 
 import org.apache.spark.{SparkConf, SparkFunSuite}
 import org.apache.spark.deploy.k8s._
@@ -115,7 +115,8 @@ class MountVolumesFeatureStepSuite extends SparkFunSuite {
     assert(configuredPod.pod.getSpec.getVolumes.size() === 1)
     val emptyDir = configuredPod.pod.getSpec.getVolumes.get(0).getEmptyDir
     assert(emptyDir.getMedium === "Memory")
-    assert(emptyDir.getSizeLimit.getAmount ===  "6G")
+    assert(emptyDir.getSizeLimit.getAmount ===  "6")
+    assert(emptyDir.getSizeLimit.getFormat ===  "G")
     configuredPod.containers.map{ container =>
       assert(container.getVolumeMounts.size() === 1)
       assert(container.getVolumeMounts.get(0).getMountPath === "/tmp")
@@ -138,7 +139,7 @@ class MountVolumesFeatureStepSuite extends SparkFunSuite {
     assert(configuredPod.pod.getSpec.getVolumes.size() === 1)
     val emptyDir = configuredPod.pod.getSpec.getVolumes.get(0).getEmptyDir
     assert(emptyDir.getMedium === "")
-    assert(emptyDir.getSizeLimit.getAmount === null)
+    assert(emptyDir.getSizeLimit === null)
     configuredPod.containers.map{ container =>
       assert(container.getVolumeMounts.size() === 1)
       assert(container.getVolumeMounts.get(0).getMountPath === "/tmp")

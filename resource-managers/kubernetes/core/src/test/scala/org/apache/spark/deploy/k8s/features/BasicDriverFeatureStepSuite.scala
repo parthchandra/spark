@@ -18,7 +18,7 @@ package org.apache.spark.deploy.k8s.features
 
 import scala.collection.JavaConverters._
 
-import io.fabric8.kubernetes.api.model.{ContainerPort, ContainerPortBuilder, LocalObjectReferenceBuilder}
+import io.fabric8.kubernetes.api.model.{ContainerPort, ContainerPortBuilder, LocalObjectReferenceBuilder, Quantity}
 
 import org.apache.spark.{SparkConf, SparkFunSuite}
 import org.apache.spark.deploy.k8s.{KubernetesConf, KubernetesDriverSpecificConf, SparkPod}
@@ -113,11 +113,11 @@ class BasicDriverFeatureStepSuite extends SparkFunSuite {
 
     val resourceRequirements = configuredPod.containers.head.getResources
     val requests = resourceRequirements.getRequests.asScala
-    assert(requests("cpu").getAmount === "2")
-    assert(requests("memory").getAmount === "456Mi")
+    assert(amountAndFormat(requests("cpu")) === "2")
+    assert(amountAndFormat(requests("memory")) === "456Mi")
     val limits = resourceRequirements.getLimits.asScala
-    assert(limits("memory").getAmount === "456Mi")
-    assert(limits("cpu").getAmount === "4")
+    assert(amountAndFormat(limits("memory")) === "456Mi")
+    assert(amountAndFormat(limits("cpu")) === "4")
 
     val driverPodMetadata = configuredPod.pod.getMetadata
     assert(driverPodMetadata.getName === "spark-driver-pod")
@@ -215,4 +215,6 @@ class BasicDriverFeatureStepSuite extends SparkFunSuite {
       .withContainerPort(portNumber)
       .withProtocol("TCP")
       .build()
+
+  private def amountAndFormat(quantity: Quantity): String = quantity.getAmount + quantity.getFormat
 }

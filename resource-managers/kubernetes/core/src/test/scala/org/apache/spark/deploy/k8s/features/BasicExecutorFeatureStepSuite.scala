@@ -106,8 +106,8 @@ class BasicExecutorFeatureStepSuite
       assert(container.getVolumeMounts.isEmpty)
     }
     assert(executor.containers.head.getResources.getLimits.size() === 1)
-    assert(executor.containers.head.getResources
-      .getLimits.get("memory").getAmount === "1408Mi")
+    assert(amountAndFormat(executor.containers.head.getResources
+      .getLimits.get("memory")) === "1408Mi")
 
     // The pod has no node selector, volumes.
     assert(executor.pod.getSpec.getNodeSelector.isEmpty)
@@ -184,8 +184,8 @@ class BasicExecutorFeatureStepSuite
         Seq.empty[String]))
     val executor = step.configurePod(SparkPod.initialPod())
     // This is checking that basic executor + executorMemory = 1408 + 42 = 1450
-    assert(executor.containers.head.getResources
-      .getRequests.get("memory").getAmount === "1450Mi")
+    assert(amountAndFormat(executor.containers.head.getResources
+      .getRequests.get("memory")) === "1450Mi")
   }
 
   // There is always exactly one controller reference, and it points to the driver pod.
@@ -215,4 +215,6 @@ class BasicExecutorFeatureStepSuite
       assert(containerEnvs === expectedEnvs)
     }
   }
+
+  private def amountAndFormat(quantity: Quantity): String = quantity.getAmount + quantity.getFormat
 }

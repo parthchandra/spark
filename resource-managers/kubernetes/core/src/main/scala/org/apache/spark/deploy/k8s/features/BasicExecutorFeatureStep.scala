@@ -90,12 +90,8 @@ private[spark] class BasicExecutorFeatureStep(
     // name as the hostname.  This preserves uniqueness since the end of name contains
     // executorId
     val hostname = name.substring(Math.max(0, name.length - 63))
-    val executorMemoryQuantity = new QuantityBuilder(false)
-      .withAmount(s"${executorMemoryTotal}Mi")
-      .build()
-    val executorCpuQuantity = new QuantityBuilder(false)
-      .withAmount(executorCoresRequest)
-      .build()
+    val executorMemoryQuantity = new Quantity(s"${executorMemoryTotal}Mi")
+    val executorCpuQuantity = new Quantity(executorCoresRequest)
     val executorExtraClasspathEnv = executorExtraClasspath.map { cp =>
       new EnvVarBuilder()
         .withName(ENV_CLASSPATH)
