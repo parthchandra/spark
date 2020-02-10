@@ -38,9 +38,10 @@ abstract class StringRegexExpression extends BinaryExpression
   override def dataType: DataType = BooleanType
   override def inputTypes: Seq[DataType] = Seq(StringType, StringType)
 
-  // try cache the pattern for Literal
+  // try cache foldable pattern
   private lazy val cache: Pattern = right match {
-    case Literal(value: String, StringType) => compile(value)
+    case p: Expression if p.foldable =>
+      compile(p.eval().asInstanceOf[UTF8String].toString)
     case _ => null
   }
 
