@@ -345,7 +345,7 @@ builds:
       steps:
         - curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py"
         - python get-pip.py
-        - pip2.7 install -r python/requirements.txt
+        - pip2.7 install numpy==1.16.4 scipy==1.2.2 pandas==0.23.2
         - yum install -y python3 # run-tests.py requires this
         - build/sbt -Phadoop-3.2 test:package
         - python/run-tests.py --python-executables python2.7
@@ -363,7 +363,7 @@ builds:
       template: freestyle:v2:snapshot
       steps:
         - yum install -y python3
-        - pip3.6 install -r python/requirements.txt
+        - pip3.6 install numpy==1.16.4 scipy==1.2.2 pandas==1.0.1
         - build/sbt -Phadoop-3.2 test:package
         - python/run-tests.py --python-executables python3.6
 
