@@ -3,6 +3,57 @@ This contains the changes after creating `branch-3.0` (da32d1e6b5cc409f408384576
 # From Spark 3.0.0
 SPARK-27686       Update migration guide for make Hive 2.3 dependency by default
 SPARK-30704       Use jekyll-redirect-from 0.15.0 instead of the latest
+SPARK-30697       Handle database and namespace exceptions in catalog.isView
+SPARK-29543       Move `spark.sql.streaming.ui.*` configs to StaticSQLConf
+SPARK-30718       Exclude jdk.tools dependency from hadoop-yarn-api
+SPARK-30717       AQE subquery map should cache `SubqueryExec` instead of `ExecSubqueryExpression`
+MINOR             Remove duplicate @name tags from read.df and read.stream
+SPARK-26618       Describe the behavior change of typed `TIMESTAMP`/`DATE` literals
+SPARK-30725       Make legacy SQL configs as internal configs
+SPARK-25040       Add legacy config for allowing empty strings for certain types in json parser
+Revert            SPARK-28310 Support (FIRST_VALUE|LAST_VALUE)(expr[ (IGNORE|RESPECT) NULLS]?) syntax
+SPARK-30733       Fix SparkR tests per testthat and R version upgrade, and disable CRAN
+SPARK-30594       Do not post SparkListenerBlockUpdated when updateBlockInfo returns false
+SPARK-30506       Document for generic file source options/configs
+SPARK-30668       Support `SimpleDateFormat` patterns in parsing timestamps/dates strings
+SPARK-26218       Fix the corner case when casting float to Integer
+MINOR             Add migration note for removing `org.apache.spark.ml.image.ImageSchema.readImages`
+SPARK-30738       Use specific image version in "Launcher client dependencies" test
+SPARK-29864       Reference the config for the old behavior in error message
+SPARK-30721       Fix DataFrameAggregateSuite when enabling AQE
+SPARK-27262       Reenable CRAN check with UTF-8 encoding to DESCRIPTION
+SPARK-30737       Reenable CRAN check with UTF-8 encoding to DESCRIPTION
+SPARK-30729       Eagerly filter out zombie TaskSetManager before offering resources
+SPARK-30612       Resolve qualified column name with v2 tables
+SPARK-29108       Comment out no use test case and add 'insert into' statement of window.sql (Part 2)
+SPARK-27297       Improve documentation for various Scala functions
+SPARK-26700       Add config `spark.network.maxRemoteBlockSizeFetchToMem`
+SPARK-30719       do not log warning if AQE is intentionally skipped and add a config to force apply
+SPARK-27986       window aggregate function with filter predicate is not supported
+MINOR             Enable GitHub Action in branch-3.0
+MINOR             Fix document UI left menu broken
+MINOR             Fix typos at python/pyspark/sql/types.py
+SPARK-30752       Fix `to_utc_timestamp` on daylight saving day
+SPARK-28228       Change the default behavior for name conflict in nested WITH clause
+SPARK-29587       Add `SQL` tab in the `Data Types` page
+SPARK-30510       Publicly document Spark SQL configuration options
+SPARK-30684       A new approach for SPARK-30684
+SPARK-30614       The native ALTER COLUMN syntax should change one property at a time
+SPARK-30592       Add some round-trip test cases
+SPARK-30757       Update the doc on TableCatalog.alterTable's behavior
+SPARK-30719       Add unit test to verify the log warning print when intentionally skip AQE
+SPARK-30326       Raise exception if analyzer exceed max iterations
+Revert            SPARK-29721 Prune unnecessary nested fields from Generate without Project
+SPARK-27946       Change doc and error message for SHOW CREATE TABLE
+SPARK-30556       Reset the status changed in SQLExecution.withThreadLocalCaptured
+SPARK-30779       Fix some API issues found when reviewing Structured Streaming API docs
+SPARK-30777       Fix test failures for Pandas >= 1.0.0
+SPARK-30756       Fix `ThriftServerWithSparkContextSuite` on spark-branch-3.0-test-sbt-hadoop-2.7-hive-2.3
+SPARK-29462       The data type of "array()" should be array<null>
+SPARK-27545       Update the Documentation for CACHE TABLE and UNCACHE TABLE
+MINOR             Add class document for PruneFileSourcePartitions and PruneHiveTablePartitions
+SPARK-30783       Exclude hive-service-rpc
+SPARK-29462       Add some more context and details in 'spark.sql.defaultUrlStreamHandlerFactory.enabled' documentation
 
 # Internal Patches
 SPARK-17767       Support user-provided ExternalCatalog and SessionBuilder
@@ -33,3 +84,4 @@ MINOR             Bump to 3.0.0-preview-pie1.1.2-SNAPSHOT
 MINOR             Publish yarn archive
 MINOR             Bump to 3.0.0-preview-pie1.1.3-SNAPSHOT
 MINOR             Bump to 3.0.0-preview-pie1.1.4-SNAPSHOT
+MINOR             Bump to 3.0.0-preview-pie1.1.5-SNAPSHOT
