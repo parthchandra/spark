@@ -326,15 +326,15 @@ if [ "$MAKE_TGZ" == "true" ]; then
   LOCAL_REPO_DIR="$SPARK_HOME/.dist/local-repo"
   mkdir -p "${LOCAL_REPO_DIR}"
   LOCAL_REPO="file://${LOCAL_REPO_DIR}"
-  "$MVN" deploy:deploy-file -DgroupId="com.apple.pie.spark" -DartifactId="spark-distribution_${SCALA_VERSION}" -Dversion="${TGZ_VERSION}" -Dfile="${SPARK_DISTRIBUTION_FILE_NAME}" -Durl="${LOCAL_REPO}" -Dpackaging=tgz
-  "$MVN" deploy:deploy-file -DgroupId="com.apple.pie.spark" -DartifactId="spark-distribution_${SCALA_VERSION}" -Dversion="${TGZ_VERSION}" -Dfile="${SPARK_DISTRIBUTION_YARN_ARCHIVE_FILE_NAME}" -Durl="${LOCAL_REPO}" -Dclassifier=yarn-archive
+  "$MVN" deploy:deploy-file -DgroupId="org.apache.spark" -DartifactId="spark-distribution_${SCALA_VERSION}" -Dversion="${TGZ_VERSION}" -Dfile="${SPARK_DISTRIBUTION_FILE_NAME}" -Durl="${LOCAL_REPO}" -Dpackaging=tgz
+  "$MVN" deploy:deploy-file -DgroupId="org.apache.spark" -DartifactId="spark-distribution_${SCALA_VERSION}" -Dversion="${TGZ_VERSION}" -Dfile="${SPARK_DISTRIBUTION_YARN_ARCHIVE_FILE_NAME}" -Durl="${LOCAL_REPO}" -Dclassifier=yarn-archive
 fi
 
 if [[ "$TGZ_VERSION" == *-SNAPSHOT ]]; then
-  find ./.dist/local-repo/com/apple/pie/spark/ -name "*.tgz" -exec bash -c 'mv $0 $(echo "$0" | sed -E  "s/-[[:digit:]]+\.[[:digit:]]+-[[:digit:]]+\.tgz/-SNAPSHOT.tgz/" )' '{}' \;
-  find ./.dist/local-repo/com/apple/pie/spark/ -name "*.pom" -exec bash -c 'mv $0 $(echo "$0" | sed -E  "s/-[[:digit:]]+\.[[:digit:]]+-[[:digit:]]+\.pom/-SNAPSHOT.pom/" )' '{}' \;
+  find ./.dist/local-repo/org/apache/spark/ -name "*.tgz" -exec bash -c 'mv $0 $(echo "$0" | sed -E  "s/-[[:digit:]]+\.[[:digit:]]+-[[:digit:]]+\.tgz/-SNAPSHOT.tgz/" )' '{}' \;
+  find ./.dist/local-repo/org/apache/spark/ -name "*.pom" -exec bash -c 'mv $0 $(echo "$0" | sed -E  "s/-[[:digit:]]+\.[[:digit:]]+-[[:digit:]]+\.pom/-SNAPSHOT.pom/" )' '{}' \;
 fi
 
 if [ "$PUBLISH_JARS" == "false" ]; then
-  find ./.dist/local-repo/com/apple/pie/spark/ \! -name "*spark-distribution*[pom|tgz]" -type f -exec bash -c 'rm $0' '{}' \;
+  find ./.dist/local-repo/org/apache/spark/ \! -name "*spark-distribution*[pom|tgz]" -type f -exec bash -c 'rm $0' '{}' \;
 fi
