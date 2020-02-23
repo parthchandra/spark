@@ -173,8 +173,8 @@ REPO_URL="local-release::default::file://${LOCAL_REPO_DIR}"
 execute_command "$MVN" clean deploy -DaltDeploymentRepository="${REPO_URL}" "$SKIP_TESTS_D_PARAM" $ADDITIONAL_MAVEN_PARAMS "$@"
 
 if [ $IS_RELEASE -eq 0 ] ; then
-	find "./.dist/local-repo/com/apple/pie/spark/" -name "*.jar" -exec bash -c 'mv $0 $(echo "$0" | sed -E  "s/-[[:digit:]]+\.[[:digit:]]+-[[:digit:]]+\.jar/-SNAPSHOT.jar/" )' '{}' \;
-	find "./.dist/local-repo/com/apple/pie/spark/" -name "*.pom" -exec bash -c 'mv $0 $(echo "$0" | sed -E  "s/-[[:digit:]]+\.[[:digit:]]+-[[:digit:]]+\.pom/-SNAPSHOT.pom/" )' '{}' \;
+	find "./.dist/local-repo/org/apache/spark/" -name "*.jar" -exec bash -c 'mv $0 $(echo "$0" | sed -E  "s/-[[:digit:]]+\.[[:digit:]]+-[[:digit:]]+\.jar/-SNAPSHOT.jar/" )' '{}' \;
+	find "./.dist/local-repo/org/apache/spark/" -name "*.pom" -exec bash -c 'mv $0 $(echo "$0" | sed -E  "s/-[[:digit:]]+\.[[:digit:]]+-[[:digit:]]+\.pom/-SNAPSHOT.pom/" )' '{}' \;
 fi
 
 echo -e "Build Successful"
