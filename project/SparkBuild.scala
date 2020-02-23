@@ -552,7 +552,10 @@ object DockerIntegrationTests {
 object DependencyOverrides {
   lazy val settings = Seq(
     dependencyOverrides += "com.google.guava" % "guava" % "14.0.1",
+    dependencyOverrides += "com.fasterxml.jackson.core"  % "jackson-annotations" % "2.6.7",
+    dependencyOverrides += "com.fasterxml.jackson.core"  % "jackson-core" % "2.6.7",
     dependencyOverrides += "com.fasterxml.jackson.core"  % "jackson-databind" % "2.6.7.3",
+    dependencyOverrides += "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.6.7.1",
     dependencyOverrides += "jline" % "jline" % "2.14.6")
 }
 
