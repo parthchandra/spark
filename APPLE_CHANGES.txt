@@ -1,4 +1,4 @@
-This contains the changes after v2.4.5-rc2
+This contains the changes after v2.4.5
 
 # From Spark 3.0.0
 SPARK-20636       Add new optimization rule to transpose adjacent Window expressions.
@@ -100,6 +100,29 @@ SPARK-26134       Upgrading Hadoop to 2.7.4 to fix java.version problem
 SPARK-30035       Upgrade to Apache Commons Lang 3.9
 SPARK-30157       Upgrade Apache HttpCore from 4.4.10 to 4.4.12
 SPARK-30639       Upgrade Jersey to 2.30
+SPARK-30718       Exclude jdk.tools dependency from hadoop-yarn-api
+SPARK-24434       Kubernetes pod template files
+SPARK-30743       Use JRE instead of JDK in K8S test docker image
+SPARK-30870       Column pruning shouldn't alias a nested column if it means the whole structure
+
+# From Spark 2.4.6
+SPARK-30733       Fix SparkR tests per testthat and R version upgrade, and disable CRAN
+SPARK-27262       Reenable CRAN check with UTF-8 encoding to DESCRIPTION
+SPARK-30737       Reenable CRAN check with UTF-8 encoding to DESCRIPTION
+MINOR             Fix the timestamp pattern in the example for `to_timestamp`
+SPARK-30797       Set tradition user/group/other permission to ACL entries when setting up ACLs in truncate table
+MINOR             Changed `:func:` to `:attr:` Sphinx roles, fixed links in documentation of `Data{Frame,Stream}{Reader,Writer}`
+SPARK-30823       Set `%PYTHONPATH%` when building PySpark documentation on Windows
+SPARK-30826       Respect reference case in `StringStartsWith` pushed down to parquet
+SPARK-30834       Add note for recommended pandas and pyarrow versions
+SPARK-30793       Fix truncations of timestamps before the epoch to minutes and seconds
+SPARK-30857       Fix truncations of timestamps before the epoch to hours and days
+SPARK-30811       CTE should not cause stack overflow when it refers to non-existent table with same name
+SPARK-30731       Update deprecated Mkdocs option
+SPARK-30763       Fix java.lang.IndexOutOfBoundsException No group 1 for regexp_extract
+SPARK-30556       Reset the status changed in SQLExecution withThreadLocalCaptured
+SPARK-30907       Revise the doc of spark.ui.retainedTasks
+MINOR             Fix ForEachWriter Java example
 
 # Internal Patches
 SPARK-17636       Parquet predicate pushdown in nested fields
@@ -119,3 +142,5 @@ MINOR             Change to pie
 MINOR             Disable Hive on JDK9+
 MINOR             Update make-distribution.sh
 MINOR             Bump to 2.4.5-pie1.0.0-SNAPSHOT
+MINOR             Use the same dependency in SBT test
+MINOR             Change to org.apache.spark
