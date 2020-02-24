@@ -3078,6 +3078,17 @@ class SQLQuerySuite extends QueryTest with SharedSQLContext {
       checkAnswer(df, Row(1))
     }
   }
+
+  test("SPARK-30870: Column pruning shouldn't alias a nested column if it means the whole " +
+    "structure") {
+    val df = sql(
+      """
+        |SELECT explodedvalue.field
+        |FROM VALUES array(named_struct('field', named_struct('a', 1, 'b', 2))) AS (value)
+        |LATERAL VIEW explode(value) AS explodedvalue
+      """.stripMargin)
+    checkAnswer(df, Row(Row(1, 2)) :: Nil)
+  }
 }
 
 case class Foo(bar: Option[String])
