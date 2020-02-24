@@ -228,6 +228,7 @@ object SparkBuild extends PomBuild {
       // See https://storage-download.googleapis.com/maven-central/index.html for more info.
       "gcs-maven-central-mirror" at "https://maven-central.storage-download.googleapis.com/repos/central/data/",
       DefaultMavenRepository,
+      "apple" at "https://artifacts.apple.com/libs-release",
       Resolver.mavenLocal,
       Resolver.file("local", file(Path.userHome.absolutePath + "/.ivy2/local"))(Resolver.ivyStylePatterns)
     ),
