@@ -1,5 +1,9 @@
 This contains the changes after creating `branch-3.0` (da32d1e6b5cc409f408384576002ccf63a83e9a1)
 
+# From Spark 3.1.0
+SPARK-30759       Initialize cache for foldable patterns in StringRegexExpression
+SPARK-30759       Check cache initialization in StringRegexExpression
+
 # From Spark 3.0.0
 SPARK-27686       Update migration guide for make Hive 2.3 dependency by default
 SPARK-30704       Use jekyll-redirect-from 0.15.0 instead of the latest
@@ -54,6 +58,101 @@ SPARK-27545       Update the Documentation for CACHE TABLE and UNCACHE TABLE
 MINOR             Add class document for PruneFileSourcePartitions and PruneHiveTablePartitions
 SPARK-30783       Exclude hive-service-rpc
 SPARK-29462       Add some more context and details in 'spark.sql.defaultUrlStreamHandlerFactory.enabled' documentation
+SPARK-30780       Empty LocalTableScan should use RDD without partitions
+SPARK-30722       Update documentation for Pandas UDF with Python type hints
+Revert            SPARK-30245 Add cache for Like and RLike when pattern is not static"
+Revert            SPARK-30625 Support `escape` as third parameter of the `like` function
+SPARK-30795       Spark SQL codegen's code() interpolator should treat escapes like Scala's StringContext.s()
+SPARK-29542       Keep the description of spark.sql.files.* in tuning guide be consistent with that in SQLConf
+SPARK-30788       Support `SimpleDateFormat` and `FastDateFormat` as legacy date/timestamp formatters
+SPARK-30651       Add detailed information for Aggregate operators in EXPLAIN FORMATTED
+SPARK-30760       Port `millisToDays` and `daysToMillis` on Java 8 time API
+SPARK-30797       Set tradition user/group/other permission to ACL entries when setting up ACLs in truncate table
+SPARK-30790       The dataType of map() should be map<null,null>
+SPARK-30743       Use JRE instead of JDK in K8S test docker image
+SPARK-30528       Turn off DPP subquery duplication by default
+SPARK-30758       Improve bracketed comments tests
+SPARK-30762       Add dtype=float32 support to vector_to_array UDF
+SPARK-30703       Add a document for the ANSI mode
+SPARK-30751       Combine the skewed readers into one in AQE skew join optimizations
+SPARK-30807       Support Java 11 in K8S integration tests
+SPARK-30816       Fix dev-run-integration-tests.sh to ignore empty params
+SPARK-30798       Scope Session.active in QueryExecution
+MINOR             Changed `:func:` to `:attr:` Sphinx roles, fixed links in documentation of `Data{Frame,Stream}{Reader,Writer}`
+SPARK-30801       Subqueries should not be AQE-ed if main query is not
+SPARK-30823       Set `%PYTHONPATH%` when building PySpark documentation on Windows
+SPARK-25990       ScriptTransformation should handle different data types correctly
+SPARK-30810       Parses and convert a CSV Dataset having different column from 'value' in csv(dataset) API
+SPARK-30766       Fix the timestamp truncation to the `HOUR` and `DAY` levels
+SPARK-29748       Add a note that the legacy environment variable to set in both executor and driver
+SPARK-30289       Partitioned by Nested Column for `InMemoryTable`
+SPARK-30826       Respect reference case in `StringStartsWith` pushed down to parquet
+SPARK-30691       Make link names exactly the same as the side bar names
+SPARK-30803       Fix the home page link for Scala API document
+SPARK-30703       Declare the ANSI SQL compliance options as experimental
+SPARK-30834       Add note for recommended pandas and pyarrow versions
+MINOR             Fix 2 style issues in running-on-kubernetes doc
+SPARK-30799       "spark_catalog.t" should not be resolved to temp view
+SPARK-30843       Fix getting of time components before 1582 year
+SPARK-28869       Add direct relationship between configs for rolling event log
+SPARK-30827       Document direct relationship among configurations in "spark.history.*" namespace
+SPARK-25829       Add config `spark.sql.legacy.allowDuplicatedMapKeys` and change the default behavior
+SPARK-30793       Fix truncations of timestamps before the epoch to minutes and seconds
+SPARK-30829       Define LegacyBehaviorPolicy enumeration as the common value for result change configs
+SPARK-30755       Update migration guide and add actionable exception for HIVE-15167
+SPARK-11150       Move sql/dynamicpruning to sql/execution/dynamicpruning
+SPARK-15616       Sub Optimizer should include super.postHocOptimizationBatches
+SPARK-30808       Enable Java 8 time API in Thrift server
+SPARK-22590       Copy sparkContext.localproperties to child thread in BroadcastExchangeExec.executionContext
+SPARK-30806       Evaluate once per group in UnboundedWindowFunctionFrame
+SPARK-30825       Update documents information for window function
+SPARK-30832       SQL function doc headers should link to anchors
+SPARK-30847       Take productPrefix into account in MurmurHash3.productHash
+SPARK-30859       Fixed docstring syntax issues preventing proper compilation of documentation
+SPARK-30863       Distinguish Cast and AnsiCast in toString
+SPARK-30812       Revise boolean config name to comply with new config naming policy
+Revert            SPARK-29663 and SPARK-29688
+SPARK-30861       Deprecate constructor of SQLContext and getOrCreate in SQLContext at PySpark
+SPARK-30346       Improve logging when events dropped
+SPARK-30814       ALTER TABLE ... ADD COLUMN position should be able to reference columns being added
+MINOR             Improve readability for window execution
+SPARK-30785       Create table like should keep tracksPartitionsInCatalog same with source table
+SPARK-30812       update the skew join configs by adding the prefix "skewedJoinOptimization"
+SPARK-30731       Update deprecated Mkdocs option
+SPARK-27528       improve migration guide
+MINOR             Fix fabric8 version in documentation
+SPARK-30811       CTE should not cause stack overflow when it refers to non-existent table with same name
+SPARK-30878       Improve the CREATE TABLE document
+SPARK-30881       Revise the doc of spark.sql.sources.parallelPartitionDiscovery.threshold
+SPARK-30858       Make IntegralDivide's dataType independent from SQL config changes
+SPARK-26071       Improve migration guide of disallowing map type map key
+SPARK-29930       Move deprecated/removed config checks from RuntimeConfig to SQLConf
+SPARK-30416       Move deprecated/removed config checks from RuntimeConfig to SQLConf
+SPARK-30892       Exclude `spark.sql.variable.substitute.depth` from `removedSQLConfigs`
+SPARK-30884       Upgrade to Py4J 0.10.9
+SPARK-30907       Revise the doc of spark.ui.retainedTasks
+Revert            SPARK-28093 Fix TRIM/LTRIM/RTRIM function parameter order issue
+MINOR             Fix error position of NOSCAN
+SPARK-26580       Throw exception when use untyped UDF by default
+SPARK-30894       Make Size's nullable independent from SQL config changes
+SPARK-30809       Review and fix issues in SQL API docs
+SPARK-30906       Turning off AQE in CacheManager is not thread-safe
+SPARK-30764       Improve the readability of EXPLAIN FORMATTED style
+MINOR             Mark HiveSerDeSuite as ExtendedHiveTest
+SPARK-30667       Add all gather method to BarrierTaskContext
+MINOR             Add a comment for `removedSQLConfigs`
+MINOR             Fix ForEachWriter Java example
+SPARK-30904       Thrift RowBasedSet serialization throws NullPointerException on NULL BigDecimal
+SPARK-30903       Fail fast on duplicate columns when analyze columns
+SPARK-30844       Static partition should also follow StoreAssignmentPolicy when insert into table
+SPARK-30925       Prevent overflow/round errors in conversions of milliseconds to/from microseconds
+SPARK-30922       remove the max splits config in skewed join
+SPARK-30924       Add additional checks to Merge Into
+SPARK-30897       The behavior of ArrayExists should not depend on SQLConf.get
+SPARK-30898       The behavior of MakeDecimal should not depend on SQLConf.get
+SPARK-30927       StreamingQueryManager should avoid keeping reference to terminated StreamingQuery
+SPARK-30868       Throw Exception if runHive(sql) failed
+SPARK-30870       Column pruning shouldn't alias a nested column if it means the whole structure
 
 # Internal Patches
 SPARK-17767       Support user-provided ExternalCatalog and SessionBuilder
@@ -85,3 +184,7 @@ MINOR             Publish yarn archive
 MINOR             Bump to 3.0.0-preview-pie1.1.3-SNAPSHOT
 MINOR             Bump to 3.0.0-preview-pie1.1.4-SNAPSHOT
 MINOR             Bump to 3.0.0-preview-pie1.1.5-SNAPSHOT
+MINOR             Bump to 3.0.0-preview-pie1.1.6-SNAPSHOT
+MINOR             Use Pandas 1.0.0 for Python 3 testing
+MINOR             Switch hive-metastore to 2.3.6.1-apple
+MINOR             Change to org.apache.spark
