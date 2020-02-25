@@ -318,7 +318,7 @@ builds:
     finally:
       tag:
         enabled: true
-        expression: "releases_2.12/3.0.0.1-preview-apple"
+        expression: "releases_2.12/3.0.0.2-preview-apple"
 
   - name: apple-spark-2.12_3.0.0-preview-binaries-release
     branchName: pie-spark-3.0.0-preview-release
