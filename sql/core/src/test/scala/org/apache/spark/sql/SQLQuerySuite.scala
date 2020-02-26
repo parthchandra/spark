@@ -2047,6 +2047,20 @@ class SQLQuerySuite extends QueryTest with SharedSQLContext {
     }
   }
 
+  test("SPARK-27619: Throw analysis exception when hash is used on MapType") {
+    withSQLConf(SQLConf.LEGACY_USE_HASH_ON_MAPTYPE.key -> "false") {
+      intercept[AnalysisException] {
+        spark.createDataset(Map(1 -> 10, 2 -> 20) :: Nil).selectExpr("hash(*)")
+      }
+    }
+  }
+
+  test(s"SPARK-27619: By default, hash can be used on Maptype") {
+    // Verify default behavior has not changed.
+    val df = spark.createDataset(Map() :: Nil)
+    checkAnswer(df.selectExpr("hash(*)"), sql("SELECT hash(map())"))
+  }
+
   test("join with using clause") {
     val df1 = Seq(("r1c1", "r1c2", "t1r1c3"),
       ("r2c1", "r2c2", "t1r2c3"), ("r3c1x", "r3c2", "t1r3c3")).toDF("c1", "c2", "c3")
