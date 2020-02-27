@@ -29,9 +29,11 @@ import org.apache.spark.sql.catalyst.catalog._
 import org.apache.spark.sql.catalyst.dsl.expressions._
 import org.apache.spark.sql.catalyst.expressions._
 import org.apache.spark.sql.types.{BooleanType, IntegerType, LongType, StructType}
+import org.apache.spark.tags.ExtendedHiveTest
 import org.apache.spark.util.Utils
 
 // TODO: Refactor this to `HivePartitionFilteringSuite`
+@ExtendedHiveTest
 class HiveClientSuite(version: String)
     extends HiveVersionSuite(version) with BeforeAndAfterAll {
 
