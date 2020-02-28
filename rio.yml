@@ -202,7 +202,7 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/sbt -Phadoop-2.7 -Phive "hive/test-only *.HiveSparkSubmitSuite" "hive/test-only *.VersionsSuite" "hive/test-only *.Hive_2_1_DDLSuite"
+        - build/sbt -Phadoop-2.7 -Phive "hive/test-only *.HiveSparkSubmitSuite" "hive/test-only *.VersionsSuite" "hive/test-only *.Hive_2_1_DDLSuite" "hive/test-only *.HiveQuerySuite"
 
   - name: apple-spark-2.12_2.4.5-snapshot-hive-2
     branchName: pie-spark-2.4.5
@@ -214,7 +214,7 @@ builds:
       template: freestyle:v2:snapshot
       steps:
         - dev/change-scala-version.sh 2.12
-        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 -Phive "hive/test-only *.HiveSparkSubmitSuite" "hive/test-only *.VersionsSuite" "hive/test-only *.Hive_2_1_DDLSuite"
+        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 -Phive "hive/test-only *.HiveSparkSubmitSuite" "hive/test-only *.VersionsSuite" "hive/test-only *.Hive_2_1_DDLSuite" "hive/test-only *.HiveQuerySuite"
 
   - name: apple-spark-2.11_2.4.5-snapshot-hive-3
     branchName: pie-spark-2.4.5
@@ -225,7 +225,7 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/sbt -Phadoop-2.7 -Phive "hive/test-only *.HiveCompatibilitySuite"
+        - build/sbt -Phadoop-2.7 -Phive "hive/test-only *.HiveCompatibilitySuite" "hive/testOnly *.HiveClientSuites"
 
   - name: apple-spark-2.12_2.4.5-snapshot-hive-3
     branchName: pie-spark-2.4.5
@@ -239,7 +239,7 @@ builds:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 -Phive "hive/test-only *.HiveCompatibilitySuite"
 
-  - name: apple-spark-2.11_2.4.5-snapshot-hadoop-cloud
+  - name: apple-spark-2.11_2.4.5-snapshot-launcher-repl-tools-hadoop-cloud
     branchName: pie-spark-2.4.5
     timeout: 90
     machine:
@@ -248,9 +248,9 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/sbt -Phadoop-2.7 -Phadoop-cloud "hadoop-cloud/test"
+        - build/sbt -Phadoop-2.7 -Phadoop-cloud "launcher/test" "repl/test" "tools/test" "hadoop-cloud/test"
 
-  - name: apple-spark-2.12_2.4.5-snapshot-hadoop-cloud
+  - name: apple-spark-2.12_2.4.5-snapshot-launcher-repl-tools-hadoop-cloud
     branchName: pie-spark-2.4.5
     timeout: 90
     machine:
@@ -260,30 +260,7 @@ builds:
       template: freestyle:v2:snapshot
       steps:
         - dev/change-scala-version.sh 2.12
-        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 -Phadoop-cloud "hadoop-cloud/test"
-
-  - name: apple-spark-2.11_2.4.5-snapshot-launcher-repl-tools
-    branchName: pie-spark-2.4.5
-    timeout: 90
-    machine:
-      docker:
-        baseImage: docker.apple.com/cpbuild7/applejdk-11
-    build:
-      template: freestyle:v2:snapshot
-      steps:
-        - build/sbt -Phadoop-2.7 "launcher/test" "repl/test" "tools/test"
-
-  - name: apple-spark-2.12_2.4.5-snapshot-launcher-repl-tools
-    branchName: pie-spark-2.4.5
-    timeout: 90
-    machine:
-      docker:
-        baseImage: docker.apple.com/cpbuild7/applejdk-11
-    build:
-      template: freestyle:v2:snapshot
-      steps:
-        - dev/change-scala-version.sh 2.12
-        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 "launcher/test" "repl/test" "tools/test"
+        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 -Phadoop-cloud "launcher/test" "repl/test" "tools/test" "hadoop-cloud/test"
 
   - name: apple-spark-2.11_2.4.5-snapshot-kafka
     branchName: pie-spark-2.4.5
