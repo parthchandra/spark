@@ -128,7 +128,7 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/sbt -Phadoop-3.2 -Phive "hive/test-only *.HiveExternalCatalogVersionsSuite" "hive/test-only *.HiveSparkSubmitSuite" "hive/test-only *.VersionsSuite" "hive/test-only *.Hive_2_1_DDLSuite" "hive/test-only *.HiveSerDeSuite"
+        - build/sbt -Phadoop-3.2 -Phive "hive/test-only *.HiveExternalCatalogVersionsSuite" "hive/test-only *.HiveSparkSubmitSuite" "hive/test-only *.VersionsSuite" "hive/test-only *.Hive_2_1_DDLSuite" "hive/test-only *.HiveSerDeSuite" "hive/test-only *.HiveQuerySuite"
 
   - name: apple-spark-2.12_3.0.0-preview-snapshot-hive-3
     branchName: pie-spark-3.0.0-preview
