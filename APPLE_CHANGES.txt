@@ -1,9 +1,5 @@
 This contains the changes after creating `branch-3.0` (da32d1e6b5cc409f408384576002ccf63a83e9a1)
 
-# From Spark 3.1.0
-SPARK-30759       Initialize cache for foldable patterns in StringRegexExpression
-SPARK-30759       Check cache initialization in StringRegexExpression
-
 # From Spark 3.0.0
 SPARK-27686       Update migration guide for make Hive 2.3 dependency by default
 SPARK-30704       Use jekyll-redirect-from 0.15.0 instead of the latest
@@ -153,6 +149,44 @@ SPARK-30898       The behavior of MakeDecimal should not depend on SQLConf.get
 SPARK-30927       StreamingQueryManager should avoid keeping reference to terminated StreamingQuery
 SPARK-30868       Throw Exception if runHive(sql) failed
 SPARK-30870       Column pruning shouldn't alias a nested column if it means the whole structure
+SPARK-30995       Latex doesn't work correctly in FMClassifier/FMRegressor Scala doc
+SPARK-29419       Fix Encoder thread-safety bug in createDataset(Seq)
+SPARK-30234       Rename `spark.sql.legacy.addDirectory.recursive.enabled` to `spark.sql.legacy.addSingleFileInAddFile`
+SPARK-30977       Make ResourceProfile and ResourceProfileBuilder private
+SPARK-30987       Increase the timeout on local-cluster waitUntilExecutorsUp calls
+MINOR             Remove unnecessary MiMa excludes
+SPARK-30902       Default table provider should be decided by catalog implementations
+SPARK-30972       PruneHiveTablePartitions should be executed as earlyScanPushDownRules
+SPARK-30955       Exclude Generate output when aliasing in nested column pruning
+SPARK-30968       Upgrade aws-java-sdk-sts to 1.11.655
+MINOR             Fix confusing error message in VectorAssembler
+SPARK-30956       Use intercept instead of try-catch to assert failures in IntervalUtilsSuite
+SPARK-30937       Group Hive upgrade guides together
+SPARK-23435       Remove unnecessary dependency in AppVeyor
+SPARK-30590       Untyped select API cannot take typed column expression that needs input type
+SPARK-27924       Improve ANSI SQL Boolean-Predicate
+SPARK-30963       Add GitHub Action job for document generation
+SPARK-30906       Set the configuration against TestHive explicitly in HiveSerDeSuite
+SPARK-30928       Remove unnecessary MiMa excludes
+MINOR             Fix make-distribution.sh to show usage without 'echo' cmd
+SPARK-30918       Fix typo in OptimizeSkewedJoin
+SPARK-27619       MapType should be prohibited in hash expressions
+SPARK-30782       Column resolution doesn't respect current catalog/namespace for v2 tables
+SPARK-30798       Set the configuration against the current session explicitly in HiveShowCreateTableSuite
+SPARK-30662       Put back the API changes for HasBlockSize in ALS/MLP
+SPARK-30689       Rename config name of discovery plugin
+SPARK-30943       Show "batch ID" in tool tip string for Structured Streaming UI graphs
+SPARK-30481       Document event log compaction into new section of monitoring.md
+SPARK-30918       improve the splitting of skewed partitions
+SPARK-30919       Make interval multiply and divide's overflow behavior consistent with other operations
+SPARK-28228       Refactoring for nested CTE tests
+SPARK-30944       Update URL for Google Cloud Storage mirror of Maven Central
+SPARK-30885       V1 table name should be fully qualified if catalog name is provided
+SPARK-30936       Set FAIL_ON_UNKNOWN_PROPERTIES to false by default to parse Spark events
+Revert            SPARK-30642 SPARK-30659 SPARK-30660 SPARK-30662
+SPARK-30939       Correctly set output col when StringIndexer.setOutputCols is used
+SPARK-30901       Fix doc exemple with deprecated codes
+SPARK-30763       Fix java.lang.IndexOutOfBoundsException No group 1 for regexp_extract
 
 # Internal Patches
 SPARK-17767       Support user-provided ExternalCatalog and SessionBuilder
@@ -188,3 +222,6 @@ MINOR             Bump to 3.0.0-preview-pie1.1.6-SNAPSHOT
 MINOR             Use Pandas 1.0.0 for Python 3 testing
 MINOR             Switch hive-metastore to 2.3.6.1-apple
 MINOR             Change to org.apache.spark
+MINOR             Bump to 3.0.0.2-preview-apple-SNAPSHOT
+MINOR             Move HiveQuerySuite to hive-2
+MINOR             Annotate HiveQuerySuite with ExtendedHiveTest
