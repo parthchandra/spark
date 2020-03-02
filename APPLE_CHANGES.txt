@@ -104,6 +104,17 @@ SPARK-30718       Exclude jdk.tools dependency from hadoop-yarn-api
 SPARK-24434       Kubernetes pod template files
 SPARK-30743       Use JRE instead of JDK in K8S test docker image
 SPARK-30870       Column pruning shouldn't alias a nested column if it means the whole structure
+SPARK-25893       Show a directional error message for unsupported Hive Metastore versions
+SPARK-26091       Upgrade to 2.3.4 for Hive Metastore Client 2.3
+SPARK-24360       Support Hive 3.1 metastore
+SPARK-24360       Add missing options for sql-migration-guide-hive-compatibility.md
+SPARK-27054       Remove the Calcite dependency
+SPARK-27737       Upgrade to Hive 2.3.5 for Hive Metastore Client and Hadoop-3.2 profile
+SPARK-27690       Remove materialized views first in `HiveClientImpl.reset`
+SPARK-27074       Hive 3.1 metastore support HiveClientImpl.runHive
+SPARK-27970       Support Hive 3.0 metastore
+SPARK-28723       Upgrade to Hive 2.3.6 for HiveMetastore Client and Hadoop-3.2 profile
+SPARK-28890       Upgrade Hive Metastore Client to the 3.1.2 for Hive 3.1
 
 # From Spark 2.4.6
 SPARK-30733       Fix SparkR tests per testthat and R version upgrade, and disable CRAN
@@ -123,6 +134,14 @@ SPARK-30763       Fix java.lang.IndexOutOfBoundsException No group 1 for regexp_
 SPARK-30556       Reset the status changed in SQLExecution withThreadLocalCaptured
 SPARK-30907       Revise the doc of spark.ui.retainedTasks
 MINOR             Fix ForEachWriter Java example
+SPARK-30944       Update URL for Google Cloud Storage mirror of Maven Central
+SPARK-30759       Fix cache initialization in StringRegexExpression
+MINOR             Fix make-distribution.sh to show usage without 'echo' cmd
+SPARK-23435       Remove unnecessary dependency in AppVeyor
+MINOR             Fix confusing error message in VectorAssembler
+SPARK-30968       Upgrade aws-java-sdk-sts to 1.11.655
+SPARK-30970       Fix NPE while resolving k8s master url
+SPARK-29419       Fix Encoder thread-safety bug in createDataset(Seq)
 
 # Internal Patches
 SPARK-17636       Parquet predicate pushdown in nested fields
@@ -144,3 +163,5 @@ MINOR             Update make-distribution.sh
 MINOR             Bump to 2.4.5-jdk11-pie1.0.0-SNAPSHOT
 MINOR             Use the same dependency in SBT test
 MINOR             Change to org.apache.spark
+MINOR             Bump to 2.4.5.2-jdk11-apple-SNAPSHOT
+MINOR             Annotate HiveClientSuites/HiveSparkSubmitSuite/HiveQuerySuite with ExtendedHiveTest
