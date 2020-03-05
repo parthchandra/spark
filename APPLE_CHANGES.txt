@@ -1,5 +1,8 @@
 This contains the changes after creating `branch-3.0` (da32d1e6b5cc409f408384576002ccf63a83e9a1)
 
+# From Spark 3.1.0
+SPARK-29089      Parallelize blocking FileSystem calls in DataSource#checkAndGlobPathIfNecessary
+
 # From Spark 3.0.0
 SPARK-27686       Update migration guide for make Hive 2.3 dependency by default
 SPARK-30704       Use jekyll-redirect-from 0.15.0 instead of the latest
@@ -98,7 +101,6 @@ SPARK-30829       Define LegacyBehaviorPolicy enumeration as the common value fo
 SPARK-30755       Update migration guide and add actionable exception for HIVE-15167
 SPARK-11150       Move sql/dynamicpruning to sql/execution/dynamicpruning
 SPARK-15616       Sub Optimizer should include super.postHocOptimizationBatches
-SPARK-30808       Enable Java 8 time API in Thrift server
 SPARK-22590       Copy sparkContext.localproperties to child thread in BroadcastExchangeExec.executionContext
 SPARK-30806       Evaluate once per group in UnboundedWindowFunctionFrame
 SPARK-30825       Update documents information for window function
@@ -187,6 +189,30 @@ Revert            SPARK-30642 SPARK-30659 SPARK-30660 SPARK-30662
 SPARK-30939       Correctly set output col when StringIndexer.setOutputCols is used
 SPARK-30901       Fix doc exemple with deprecated codes
 SPARK-30763       Fix java.lang.IndexOutOfBoundsException No group 1 for regexp_extract
+SPARK-30964       Accelerate InMemoryStore with a new index
+SPARK-30993       Use its sql type for UDT when checking the type of length (fixed/var) or mutable
+SPARK-30813       Fix Matrices.sprand comments
+SPARK-30969       Remove resource coordination support from Standalone
+SPARK-31003       Fix incorrect uses of assume() in tests
+SPARK-30991       Refactor AQE readers and RDDs
+SPARK-25202       Keep the old parameter name 'pattern' at split in Scala API
+SPARK-30998       ClassCastException when a generator having nested inner generators
+MINOR             ForeachBatch java example fix
+SPARK-30994       Update xerces to 2.12.0
+SPARK-30388       Mark running map stages of finished job as finished, and cancel running tasks
+SPARK-30049       SQL fails to parse when comment contains an unmatched quote character
+SPARK-31015       Star(*) expression fails when used with qualified column names for v2 tables
+SPARK-30997       Fix an analysis failure in generators with aggregate functions
+SPARK-30999       Don't cancel a QueryStageExec which failed before call doMaterialize
+SPARK-30289       Update the migration guide for `spark.sql.legacy.ctePrecedencePolicy`
+SPARK-30984       Add UI test for Structured Streaming UI
+SPARK-30960       add back the legacy date/timestamp format support in CSV/JSON parser
+SPARK-30885       Fix issues where some V1 commands allow tables that are not fully qualified
+SPARK-31017       Test for shuffle requests packaging with different size and numBlocks limit
+SPARK-27619       Rename 'spark.sql.legacy.useHashOnMapType' to 'spark.sql.legacy.allowHashOnMapType'
+SPARK-31027       Refactor DataSourceStrategy to be more extendable
+SPARK-30970       Fix NPE while resolving k8s master url
+SPARK-28998       Remove unnecessary MiMa excludes
 
 # Internal Patches
 SPARK-17767       Support user-provided ExternalCatalog and SessionBuilder
@@ -225,3 +251,6 @@ MINOR             Change to org.apache.spark
 MINOR             Bump to 3.0.0.2-preview-apple-SNAPSHOT
 MINOR             Move HiveQuerySuite to hive-2
 MINOR             Annotate HiveQuerySuite with ExtendedHiveTest
+MINOR             Bump to 3.0.0.3-preview-apple-SNAPSHOT
+MINOR             Remove change-to-pie.sh and move HiveDDLSuite/HiveCatalogedDDLSuite/SQLQuerySuite to hive-2
+MINOR             Annotate HiveDDLSuite/HiveCatalogedDDLSuite/SQLQuerySuite
