@@ -142,6 +142,13 @@ MINOR             Fix confusing error message in VectorAssembler
 SPARK-30968       Upgrade aws-java-sdk-sts to 1.11.655
 SPARK-30970       Fix NPE while resolving k8s master url
 SPARK-29419       Fix Encoder thread-safety bug in createDataset(Seq)
+SPARK-30813       Fix Matrices.sprand comments
+SPARK-31003       Fix incorrect uses of assume() in tests
+SPARK-30993       Use its sql type for UDT when checking the type of length (fixed/var) or mutable
+SPARK-30998       ClassCastException when a generator having nested inner generators
+MINOR             ForeachBatch java example fix
+MINOR             Expose the alias -c flag of --conf for spark-submit
+MINOR             Remove an ignored test from JsonSuite
 
 # Internal Patches
 SPARK-17636       Parquet predicate pushdown in nested fields
@@ -166,3 +173,4 @@ MINOR             Change to org.apache.spark
 MINOR             Bump to 2.4.5.2-apple-SNAPSHOT
 MINOR             Remove hadoop-cloud job and Move some hive tests to hive-2/3
 MINOR             Annotate HiveClientSuites/HiveSparkSubmitSuite/HiveQuerySuite with ExtendedHiveTest
+MINOR             Bump to 2.4.5.3-apple-SNAPSHOT
