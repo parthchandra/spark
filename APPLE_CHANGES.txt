@@ -2,6 +2,7 @@ This contains the changes after creating `branch-3.0` (da32d1e6b5cc409f408384576
 
 # From Spark 3.1.0
 SPARK-29089      Parallelize blocking FileSystem calls in DataSource#checkAndGlobPathIfNecessary
+SPARK-31073      Add "shuffle write time" to task metrics summary in StagePage
 
 # From Spark 3.0.0
 SPARK-27686       Update migration guide for make Hive 2.3 dependency by default
@@ -213,6 +214,37 @@ SPARK-27619       Rename 'spark.sql.legacy.useHashOnMapType' to 'spark.sql.legac
 SPARK-31027       Refactor DataSourceStrategy to be more extendable
 SPARK-30970       Fix NPE while resolving k8s master url
 SPARK-28998       Remove unnecessary MiMa excludes
+MINOR             Expose the alias -c flag of --conf for spark-submit
+SPARK-30668       Raise exception instead of silent change for new DateFormatter
+SPARK-31050       Disable flaky `Roundtrip` test in KafkaDelegationTokenSuite
+SPARK-31024       Allow specifying session catalog name `spark_catalog` in qualified column names for v1 tables
+SPARK-31046       Make more efficient and clean up AQE update UI code
+SPARK-31019       make it clear that people can deduplicate map keys
+SPARK-31038       Add checkValue for spark.sql.session.timeZone
+MINOR             fix merge mistakes
+SPARK-31005       Support time zone ids in casting strings to timestamps
+SPARK-31034       ShuffleBlockFetcherIterator should always create request for last block group
+SPARK-31037       refine AQE config names
+SPARK-31052       Fix flaky test "DAGSchedulerSuite.shuffle fetch failed on speculative task, but original task succeed"
+SPARK-31013       InMemoryStore: improve removeAllByIndexValues over natural key index
+SPARK-31058       Consolidate the implementation of `quoteIfNeeded`
+SPARK-30994       Change scope of xml-apis to include it and add xerces in SBT as dependency override
+MINOR             Fix typos and wrong phrases in docs
+SPARK-30563       Disable using commit coordinator with NoopDataSource
+SPARK-31036       Use stringArgs in Expression.toString to respect hidden parameters
+MINOR             Remove an ignored test from JsonSuite
+SPARK-31045       Add config for AQE logging level
+SPARK-30886       Deprecate two-parameter TRIM/LTRIM/RTRIM functions
+SPARK-31010       Deprecate untyped scala UDF
+SPARK-23817       Add OrcV2QuerySuite
+SPARK-31045       Fix build due to divergence between master and 3.0
+SPARK-31061       Provide ability to alter the provider of a table
+SPARK-30899       CreateArray/CreateMap's data type should not depend on SQLConf.get
+SPARK-31064       New Parquet Predicate Filter APIs with multi-part Identifier Support
+SPARK-31012       Updating ML API docs for 3.0 changes
+SPARK-31014       InMemoryStore: remove key from parentToChildrenMap when removing key from CountingRemoveIfForEach
+SPARK-30934       Update ml-guide and ml-migration-guide for 3.0 release
+SPARK-31053       mark connector APIs as Evolving
 
 # Internal Patches
 SPARK-17767       Support user-provided ExternalCatalog and SessionBuilder
