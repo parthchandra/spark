@@ -149,6 +149,11 @@ SPARK-30998       ClassCastException when a generator having nested inner genera
 MINOR             ForeachBatch java example fix
 MINOR             Expose the alias -c flag of --conf for spark-submit
 MINOR             Remove an ignored test from JsonSuite
+SPARK-30941       Add a note to asDict to document its behavior when there are duplicate fields
+SPARK-31095       Upgrade netty-all to 4.1.47.Final
+SPARK-29295       Insert overwrite to Hive external table partition should delete old data
+SPARK-31130       Use the same version of `commons-io` in SBT
+SPARK-31144       Wrap Error with QueryExecutionException to notify QueryExecutionListener
 
 # Internal Patches
 SPARK-17636       Parquet predicate pushdown in nested fields
@@ -174,3 +179,4 @@ MINOR             Bump to 2.4.5.2-apple-SNAPSHOT
 MINOR             Remove hadoop-cloud job and Move some hive tests to hive-2/3
 MINOR             Annotate HiveClientSuites/HiveSparkSubmitSuite/HiveQuerySuite with ExtendedHiveTest
 MINOR             Bump to 2.4.5.3-apple-SNAPSHOT
+MINOR             Bump to 2.4.5.4-apple-SNAPSHOT
