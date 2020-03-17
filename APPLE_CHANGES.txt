@@ -3,6 +3,7 @@ This contains the changes after creating `branch-3.0` (da32d1e6b5cc409f408384576
 # From Spark 3.1.0
 SPARK-29089      Parallelize blocking FileSystem calls in DataSource#checkAndGlobPathIfNecessary
 SPARK-31073      Add "shuffle write time" to task metrics summary in StagePage
+SPARK-25355      Add proxy user to driver if present on spark-submit
 
 # From Spark 3.0.0
 SPARK-27686       Update migration guide for make Hive 2.3 dependency by default
@@ -280,6 +281,17 @@ SPARK-31004       Show message for empty Streaming Queries instead of empty time
 SPARK-31144       Wrap Error with QueryExecutionException to notify QueryExecutionListener
 MINOR             Fix [[...]] to `...` and <code>...</code> in documentation
 SPARK-31151       Reorganize the migration guide of SQL
+SPARK-31153       Cleanup several failures in lint-python
+SPARK-31135       Upgrdade docker-client version to 8.14.1
+SPARK-30958       do not set default era for DateTimeFormatter
+SPARK-31076       Incapsulate date rebasing to `DaysWritable`
+SPARK-30864       add the user guide for Adaptive Query Execution
+SPARK-31116       Fix nested schema case-sensitivity in ParquetRowConverter
+SPARK-30930       Remove ML/MLLIB DeveloperApi annotations
+SPARK-31146       Leverage the helper method for aliasing in built-in SQL expressions
+SPARK-31163       TruncateTableCommand with acl/permission should handle non-existed path
+SPARK-31155       Remove pydocstyle tests
+SPARK-31166       UNION map<null, null> and other maps should not fail
 
 # Internal Patches
 SPARK-17767       Support user-provided ExternalCatalog and SessionBuilder
@@ -322,3 +334,4 @@ MINOR             Bump to 3.0.0.3-preview-apple-SNAPSHOT
 MINOR             Remove change-to-pie.sh and move HiveDDLSuite/HiveCatalogedDDLSuite/SQLQuerySuite to hive-2
 MINOR             Annotate HiveDDLSuite/HiveCatalogedDDLSuite/SQLQuerySuite
 MINOR             Bump to 3.0.0.4-preview-apple-SNAPSHOT
+MINOR             Bump to 3.0.0.5-preview-apple-SNAPSHOT
