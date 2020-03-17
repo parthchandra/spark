@@ -23,10 +23,15 @@ import java.net.URI
 import scala.collection.mutable
 import scala.language.reflectiveCalls
 
-import org.apache.hadoop.fs.{BlockLocation, FileStatus, LocatedFileStatus, Path, RawLocalFileSystem}
+import org.apache.hadoop.conf.Configuration
+import org.apache.hadoop.fs.{BlockLocation, FileStatus, LocatedFileStatus, Path, RawLocalFileSystem, RemoteIterator}
+import org.apache.hadoop.fs.viewfs.ViewFileSystem
+import org.mockito.Matchers.any
+import org.mockito.Mockito.{mock, when}
 
 import org.apache.spark.SparkException
 import org.apache.spark.metrics.source.HiveCatalogMetrics
+import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.catalyst.util._
 import org.apache.spark.sql.functions.col
 import org.apache.spark.sql.internal.SQLConf
@@ -35,6 +40,16 @@ import org.apache.spark.sql.types.{StringType, StructField, StructType}
 import org.apache.spark.util.{KnownSizeEstimation, SizeEstimator}
 
 class FileIndexSuite extends SharedSQLContext {
+
+  private class TestInMemoryFileIndex(
+      spark: SparkSession,
+      path: Path,
+      fileStatusCache: FileStatusCache = NoopCache)
+      extends InMemoryFileIndex(spark, Seq(path), Map.empty, None, fileStatusCache) {
+    def leafFilePaths: Seq[Path] = leafFiles.keys.toSeq
+    def leafDirPaths: Seq[Path] = leafDirToChildrenFiles.keys.toSeq
+    def leafFileStatuses: Iterable[FileStatus] = leafFiles.values
+  }
 
   test("InMemoryFileIndex: leaf files are qualified paths") {
     withTempDir { dir =>
@@ -389,6 +404,25 @@ class FileIndexSuite extends SharedSQLContext {
         }
       }
     }
+  }
+
+  test("SPARK-31047 - Improve file listing for ViewFileSystem") {
+    val path = mock(classOf[Path])
+    val dfs = mock(classOf[ViewFileSystem])
+    when(path.getFileSystem(any[Configuration])).thenReturn(dfs)
+    val statuses =
+      Seq(
+        new LocatedFileStatus(
+          new FileStatus(0, false, 0, 100, 0,
+            new Path("file")), Array(new BlockLocation()))
+      )
+    when(dfs.listLocatedStatus(path)).thenReturn(new RemoteIterator[LocatedFileStatus] {
+      val iter = statuses.toIterator
+      override def hasNext: Boolean = iter.hasNext
+      override def next(): LocatedFileStatus = iter.next
+    })
+    val fileIndex = new TestInMemoryFileIndex(spark, path)
+    assert(fileIndex.leafFileStatuses.toSeq == statuses)
   }
 }
 
