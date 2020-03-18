@@ -297,7 +297,8 @@ class SparkSubmitCommandBuilder extends AbstractCommandBuilder {
           "--add-opens java.base/java.util=ALL-UNNAMED " +
           "--add-opens java.base/jdk.internal.misc=ALL-UNNAMED " +
           "--add-opens java.base/sun.nio.ch=ALL-UNNAMED " +
-          "--add-opens java.security.jgss/sun.security.krb5=ALL-UNNAMED ";
+          "--add-opens java.security.jgss/sun.security.krb5=ALL-UNNAMED " +
+          "-Dio.netty.tryReflectionSetAccessible=true";
         addOptionString(cmd, JDK11_OPTIONS);
       }
       mergeEnvPathList(env, getLibPathEnvName(),
