@@ -15,6 +15,8 @@ builds:
     machine:
       docker:
         baseImage: docker.apple.com/cpbuild7/applejdk-11
+      env:
+        NOLINT_ON_COMPILE: "1"
     build:
       template: freestyle:v2:snapshot
       steps:
@@ -26,6 +28,8 @@ builds:
     machine:
       docker:
         baseImage: docker.apple.com/cpbuild7/applejdk-11
+      env:
+        NOLINT_ON_COMPILE: "1"
     build:
       template: freestyle:v2:snapshot
       steps:
@@ -37,6 +41,8 @@ builds:
     machine:
       docker:
         baseImage: docker.apple.com/cpbuild7/applejdk-11
+      env:
+        NOLINT_ON_COMPILE: "1"
     build:
       template: freestyle:v2:snapshot
       steps:
@@ -48,6 +54,8 @@ builds:
     machine:
       docker:
         baseImage: docker.apple.com/cpbuild7/applejdk-11
+      env:
+        NOLINT_ON_COMPILE: "1"
     build:
       template: freestyle:v2:snapshot
       steps:
@@ -59,6 +67,8 @@ builds:
     machine:
       docker:
         baseImage: docker.apple.com/cpbuild7/applejdk-11
+      env:
+        NOLINT_ON_COMPILE: "1"
     build:
       template: freestyle:v2:snapshot
       steps:
@@ -70,6 +80,8 @@ builds:
     machine:
       docker:
         baseImage: docker.apple.com/cpbuild7/applejdk-11
+      env:
+        NOLINT_ON_COMPILE: "1"
     build:
       template: freestyle:v2:snapshot
       steps:
@@ -81,6 +93,8 @@ builds:
     machine:
       docker:
         baseImage: docker.apple.com/cpbuild7/applejdk-11
+      env:
+        NOLINT_ON_COMPILE: "1"
     build:
       template: freestyle:v2:snapshot
       steps:
@@ -92,6 +106,8 @@ builds:
     machine:
       docker:
         baseImage: docker.apple.com/cpbuild7/applejdk-11
+      env:
+        NOLINT_ON_COMPILE: "1"
     build:
       template: freestyle:v2:snapshot
       steps:
@@ -103,6 +119,8 @@ builds:
     machine:
       docker:
         baseImage: docker.apple.com/cpbuild7/applejdk-11
+      env:
+        NOLINT_ON_COMPILE: "1"
     build:
       template: freestyle:v2:snapshot
       steps:
@@ -114,6 +132,8 @@ builds:
     machine:
       docker:
         baseImage: docker.apple.com/cpbuild7/applejdk-11
+      env:
+        NOLINT_ON_COMPILE: "1"
     build:
       template: freestyle:v2:snapshot
       steps:
@@ -125,6 +145,8 @@ builds:
     machine:
       docker:
         baseImage: docker.apple.com/cpbuild7/applejdk-11
+      env:
+        NOLINT_ON_COMPILE: "1"
     build:
       template: freestyle:v2:snapshot
       steps:
@@ -136,6 +158,8 @@ builds:
     machine:
       docker:
         baseImage: docker.apple.com/cpbuild7/applejdk-11
+      env:
+        NOLINT_ON_COMPILE: "1"
     build:
       template: freestyle:v2:snapshot
       steps:
@@ -147,6 +171,8 @@ builds:
     machine:
       docker:
         baseImage: docker.apple.com/cpbuild7/applejdk-11
+      env:
+        NOLINT_ON_COMPILE: "1"
     build:
       template: freestyle:v2:snapshot
       steps:
@@ -159,6 +185,8 @@ builds:
     machine:
       docker:
         baseImage: docker.apple.com/cpbuild7/applejdk-11
+      env:
+        NOLINT_ON_COMPILE: "1"
     build:
       template: freestyle:v2:snapshot
       steps:
@@ -170,6 +198,8 @@ builds:
     machine:
       docker:
         baseImage: docker.apple.com/cpbuild7/applejdk-11
+      env:
+        NOLINT_ON_COMPILE: "1"
     build:
       template: freestyle:v2:snapshot
       steps:
@@ -181,6 +211,8 @@ builds:
     machine:
       docker:
         baseImage: docker.apple.com/cpbuild7/applejdk-11
+      env:
+        NOLINT_ON_COMPILE: "1"
     build:
       template: freestyle:v2:snapshot
       steps:
@@ -192,6 +224,8 @@ builds:
     machine:
       docker:
         baseImage: docker.apple.com/cpbuild7/applejdk-11
+      env:
+        NOLINT_ON_COMPILE: "1"
     build:
       template: freestyle:v2:snapshot
       steps:
@@ -203,6 +237,8 @@ builds:
     machine:
       docker:
         baseImage: docker.apple.com/cpbuild7/applejdk-11
+      env:
+        NOLINT_ON_COMPILE: "1"
     build:
       template: freestyle:v2:snapshot
       steps:
@@ -214,6 +250,8 @@ builds:
     machine:
       docker:
         baseImage: docker.apple.com/cpbuild7/applejdk-11
+      env:
+        NOLINT_ON_COMPILE: "1"
     build:
       template: freestyle:v2:snapshot
       steps:
@@ -225,6 +263,8 @@ builds:
     machine:
       docker:
         baseImage: docker.apple.com/cpbuild7/applejdk-11
+      env:
+        NOLINT_ON_COMPILE: "1"
     build:
       template: freestyle:v2:snapshot
       steps:
@@ -241,6 +281,8 @@ builds:
     machine:
       docker:
         baseImage: docker.apple.com/cpbuild7/applejdk-11
+      env:
+        NOLINT_ON_COMPILE: "1"
     build:
       template: freestyle:v2:snapshot
       steps:
@@ -255,6 +297,7 @@ builds:
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-11
       env:
+        NOLINT_ON_COMPILE: "1"
         SCALA_BINARY_VERSION: "2.12"
         SCALA_VERSION: "2.12.10"
         HADOOP_BINARY_VERSION: "3.2"
@@ -277,6 +320,7 @@ builds:
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-11
       env:
+        NOLINT_ON_COMPILE: "1"
         SCALA_BINARY_VERSION: "2.12"
         SCALA_VERSION: "2.12.10"
         HADOOP_BINARY_VERSION: "3.2"
@@ -299,6 +343,7 @@ builds:
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-11
       env:
+        NOLINT_ON_COMPILE: "1"
         SCALA_BINARY_VERSION: "2.12"
         SCALA_VERSION: "2.12.10"
         HADOOP_BINARY_VERSION: "3.2"
@@ -326,6 +371,7 @@ builds:
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-11
       env:
+        NOLINT_ON_COMPILE: "1"
         SCALA_BINARY_VERSION: "2.12"
         SCALA_VERSION: "2.12.10"
         HADOOP_BINARY_VERSION: "3.2"
@@ -348,6 +394,7 @@ builds:
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-11
       env:
+        NOLINT_ON_COMPILE: "1"
         SCALA_BINARY_VERSION: "2.12"
         SCALA_VERSION: "2.12.10"
         HADOOP_VERSION: "3.2.0"
@@ -369,6 +416,7 @@ builds:
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-11
       env:
+        NOLINT_ON_COMPILE: "1"
         SCALA_BINARY_VERSION: "2.12"
         SCALA_VERSION: "2.12.10"
         HADOOP_VERSION: "3.2.0"
