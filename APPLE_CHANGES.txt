@@ -292,6 +292,34 @@ SPARK-31146       Leverage the helper method for aliasing in built-in SQL expres
 SPARK-31163       TruncateTableCommand with acl/permission should handle non-existed path
 SPARK-31155       Remove pydocstyle tests
 SPARK-31166       UNION map<null, null> and other maps should not fail
+SPARK-31164       Inconsistent rdd and output partitioning for bucket table when output doesn't contain all bucket columns
+SPARK-31134       optimize skew join after shuffle partitions are coalesced
+MINOR             Update the DataFrameWriter.bucketBy comment
+SPARK-31150       Parsing seconds fraction with variable length for timestamp
+SPARK-31047       Improve file listing for ViewFileSystem
+SPARK-30860       Use FileSystem.mkdirs to avoid umask at rolling event log folder and appStatusFile creation
+SPARK-31171       size(null) should return null under ansi mode
+SPARK-30954       Make file name the same as class name
+SPARK-31119       Add interval value support for extract expression as extract source
+SPARK-31176       Remove support for 'e'/'c' as datetime pattern charactar
+SPARK-30933       ML, GraphX 3.0 QA: Update user guide for new features & APIs
+SPARK-31150       handle ' as escape for text
+SPARK-31171       update document
+SPARK-31178       Prevent V2 exec nodes from executing multiple times
+SPARK-30667       Change BarrierTaskContext allGather method return type
+SPARK-31159       Rebase date/timestamp from/to Julian calendar in parquet
+SPARK-31187       Sort the whole-stage codegen debug output by codegenStageId
+SPARK-30292       ansi cast from strings to integral numbers (byte/short/int/long) should fail with fraction
+SPARK-25121       Supports multi-part table names for broadcast hint resolution
+SPARK-31181       Remove the default value assumption on CREATE TABLE test cases
+SPARK-31183       Rebase date/timestamp from/to Julian calendar in Avro
+SPARK-31195       Correct and reuse days rebase functions of `DateTimeUtils` in `DaysWritable`
+SPARK-31189       Fix errors and missing parts for datetime pattern document
+SPARK-30773       Support NativeBlas for level-1 routines
+SPARK-30541       Implement KafkaDelegationTokenSuite with testRetry
+SPARK-31189       Replace Datetime pattern links in R doc
+SPARK-31183       Move rebase tests to `AvroSuite` and check the rebase flag out of function bodies
+SPARK-30494       Fix cached data leakage during replacing an existing view
 
 # Internal Patches
 SPARK-17767       Support user-provided ExternalCatalog and SessionBuilder
@@ -335,3 +363,5 @@ MINOR             Remove change-to-pie.sh and move HiveDDLSuite/HiveCatalogedDDL
 MINOR             Annotate HiveDDLSuite/HiveCatalogedDDLSuite/SQLQuerySuite
 MINOR             Bump to 3.0.0.4-preview-apple-SNAPSHOT
 MINOR             Bump to 3.0.0.5-preview-apple-SNAPSHOT
+MINOR             Add more JDK11 options
+MINOR             Add NOLINT_ON_COMPILE
