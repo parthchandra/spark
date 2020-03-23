@@ -115,6 +115,15 @@ SPARK-27074       Hive 3.1 metastore support HiveClientImpl.runHive
 SPARK-27970       Support Hive 3.0 metastore
 SPARK-28723       Upgrade to Hive 2.3.6 for HiveMetastore Client and Hadoop-3.2 profile
 SPARK-28890       Upgrade Hive Metastore Client to the 3.1.2 for Hive 3.1
+SPARK-27155       Parameterize Oracle docker image name
+SPARK-28248       Upgrade docker image and library for PostgreSQL integration test
+SPARK-29567       Update JDBC Integration Test Docker Images
+SPARK-31135       Upgrdade docker-client version to 8.14.1
+SPARK-31116       Fix nested schema case-sensitivity in ParquetRowConverter
+SPARK-25062       Clean up BlockLocations in InMemoryFileIndex
+SPARK-27676       InMemoryFileIndex should respect spark.sql.files.ignoreMissingFiles
+SPARK-29189       Add an option to ignore block locations when listing file
+SPARK-31047       Improve file listing for ViewFileSystem
 
 # From Spark 2.4.6
 SPARK-30733       Fix SparkR tests per testthat and R version upgrade, and disable CRAN
@@ -154,6 +163,10 @@ SPARK-31095       Upgrade netty-all to 4.1.47.Final
 SPARK-29295       Insert overwrite to Hive external table partition should delete old data
 SPARK-31130       Use the same version of `commons-io` in SBT
 SPARK-31144       Wrap Error with QueryExecutionException to notify QueryExecutionListener
+SPARK-31163       TruncateTableCommand with acl/permission should handle non-existed path
+SPARK-31164       Inconsistent rdd and output partitioning for bucket table when output doesn't contain all bucket columns
+MINOR             Update the DataFrameWriter.bucketBy comment
+SPARK-26293       Cast exception when having python udf in subquery
 
 # Internal Patches
 SPARK-17636       Parquet predicate pushdown in nested fields
@@ -179,3 +192,4 @@ MINOR             Bump to 2.4.5.2-jdk11-apple-SNAPSHOT
 MINOR             Annotate HiveClientSuites/HiveSparkSubmitSuite/HiveQuerySuite with ExtendedHiveTest
 MINOR             Bump to 2.4.5.3-jdk11-apple-SNAPSHOT
 MINOR             Bump to 2.4.5.4-jdk11-apple-SNAPSHOT
+MINOR             Bump to 2.4.5.5-jdk11-apple-SNAPSHOT
