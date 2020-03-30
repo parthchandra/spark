@@ -167,6 +167,11 @@ SPARK-31163       TruncateTableCommand with acl/permission should handle non-exi
 SPARK-31164       Inconsistent rdd and output partitioning for bucket table when output doesn't contain all bucket columns
 MINOR             Update the DataFrameWriter.bucketBy comment
 SPARK-26293       Cast exception when having python udf in subquery
+SPARK-30494       Fix cached data leakage during replacing an existing view
+SPARK-31231       Set the upper bound (before 46.1.0) for setuptools in pip package test
+SPARK-31261       Avoid npe when reading bad csv input with `columnNameCorruptRecord` specified
+SPARK-31293       Fix wrong examples and help messages for Kinesis integration
+SPARK-31101       Upgrade Janino to 3.0.16
 
 # Internal Patches
 SPARK-17636       Parquet predicate pushdown in nested fields
@@ -193,3 +198,4 @@ MINOR             Annotate HiveClientSuites/HiveSparkSubmitSuite/HiveQuerySuite 
 MINOR             Bump to 2.4.5.3-jdk11-apple-SNAPSHOT
 MINOR             Bump to 2.4.5.4-jdk11-apple-SNAPSHOT
 MINOR             Bump to 2.4.5.5-jdk11-apple-SNAPSHOT
+MINOR             Bump to 2.4.5.6-jdk11-apple-SNAPSHOT
