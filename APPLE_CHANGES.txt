@@ -320,6 +320,63 @@ SPARK-30541       Implement KafkaDelegationTokenSuite with testRetry
 SPARK-31189       Replace Datetime pattern links in R doc
 SPARK-31183       Move rebase tests to `AvroSuite` and check the rebase flag out of function bodies
 SPARK-30494       Fix cached data leakage during replacing an existing view
+SPARK-31211       Fix rebasing of 29 February of Julian leap years
+SPARK-31190       ScalaReflection should not erasure user defined AnyVal type
+SPARK-31159       Move checking of the `rebaseDateTime` flag out of the loop in `VectorizedColumnReader`
+SPARK-31133       fix sql ref doc for DML
+SPARK-31205       support string literal as the second argument of date_add/date_sub functions
+SPARK-31229       Add unit tests TypeCoercion.findTypeForComplex and Cast.canCast in null <> complex types
+SPARK-31231       Explicitly setuptools version as 46.0.0 in pip package test
+SPARK-31221       Rebase any date-times in conversions to/from Java types
+SPARK-30127       Support case class parameter for typed Scala UDF
+SPARK-31081       Make display of stageId/stageAttemptId/taskId of sql metrics toggleable
+SPARK-31101       Upgrade Janino to 3.0.16
+SPARK-31207       Ensure the total number of blocks to fetch equals to the sum of local/hostLocal/remote blocks
+SPARK-30822       Remove semicolon at the end of a sql query
+SPARK-31184       Support getTablesByType API of Hive Client
+SPARK-31232       Specify formats of `spark.sql.session.timeZone`
+SPARK-25121       Add more unit tests for multi-part identifiers in join strategy hints
+SPARK-31147       Forbid CHAR type in non-Hive-Serde tables
+SPARK-31244       Use Minio instead of Ceph in K8S DepsTestsSuite
+SPARK-31161       Refactor the on-click timeline action in streagming-page.js
+SPARK-31258       Pin the avro version in SBT
+SPARK-31231       Set the upper bound (before 46.1.0) for setuptools in pip package test
+MINOR             Fix some links for python api doc
+SPARK-30623       Spark external shuffle allow disable of separate event loop group
+SPARK-31237       Replace 3-letter time zones by zone offsets
+SPARK-30934       Update ml-guide to include MulticlassClassificationEvaluator weight support in highlights
+SPARK-31234       ResetCommand should reset config to sc.conf only
+SPARK-31227       Non-nullable null type in complex types should not coerce to nullable type
+SPARK-31254       Use the current session time zone in `HiveResult.toHiveString`
+SPARK-31242       mergeSparkConf in WithTestConf should also respect spark.sql.legacy.sessionInitWithConfigDefaults
+SPARK-31201       Add an individual config for skewed partition threshold
+SPARK-31259       Fix log message about fetch request size in ShuffleBlockFetcherIterator
+SPARK-31238       Rebase dates to/from Julian calendar in write/read for ORC datasource
+SPARK-31238       Fix readResourceOrcFile to create a local file from resource
+SPARK-31262       Fix bug tests imported bracketed comments
+SPARK-31186       toPandas should not fail on duplicate column names
+SPARK-31170       Spark SQL Cli should respect hive-site.xml and spark.sql.warehouse.dir
+SPARK-31204       HiveResult compatibility for DatasourceV2 command
+SPARK-31275       Improve the metrics format in ExecutionPage for StageId
+SPARK-25556       Nested Column Predicate Pushdown for Parquet
+SPARK-25556       Fix build error due to conf version
+SPARK-17636       Nested Column Predicate Pushdown for Parquet
+SPARK-31026       Nested Column Predicate Pushdown for Parquet
+SPARK-31060       Nested Column Predicate Pushdown for Parquet
+SPARK-31086       Add Back the Deprecated SQLContext methods
+SPARK-31088       Add back HiveContext and createExternalTable
+SPARK-31225       Override sql method of OuterReference
+SPARK-31277       Migrate `DateTimeTestUtils` from `TimeZone` to `ZoneId`
+SPARK-31284       Check rebasing of timestamps in ORC datasource
+SPARK-31200       Enforce to use `https` in /etc/apt/sources.list
+MINOR             Refine comments of QueryPlan regarding subquery
+SPARK-31271       fix web ui for driver side SQL metrics
+SPARK-31292       Replace toSet.toSeq with distinct for readability
+SPARK-30722       Add Pandas Function API into the menu
+SPARK-31261       Avoid npe when reading bad csv input with `columnNameCorruptRecord` specified
+SPARK-31287       Ignore type hints in groupby.(cogroup.)applyInPandas and mapInPandas
+SPARK-31087       Add Back Multiple Removed APIs
+SPARK-30363       Fix a broken link in SQL Reference
 
 # Internal Patches
 SPARK-17767       Support user-provided ExternalCatalog and SessionBuilder
@@ -365,3 +422,4 @@ MINOR             Bump to 3.0.0.4-preview-apple-SNAPSHOT
 MINOR             Bump to 3.0.0.5-preview-apple-SNAPSHOT
 MINOR             Add more JDK11 options
 MINOR             Add NOLINT_ON_COMPILE
+MINOR             Bump to 3.0.0.6-preview-apple-SNAPSHOT
