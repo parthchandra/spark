@@ -6,7 +6,48 @@ SPARK-31073      Add "shuffle write time" to task metrics summary in StagePage
 SPARK-25355      Add proxy user to driver if present on spark-submit
 
 # From Spark 3.0.0
-SPARK-31296       Benchmark date-time rebasing in Parquet datasource
+SPARK-31296      Benchmark date-time rebasing in Parquet datasource
+SPARK-31219      Enable closeIdleConnections in YarnShuffleService
+SPARK-31306      update rand() function documentation to indicate exclusive upper bound
+SPARK-31297      Speed up dates rebasing
+SPARK-31314      Revert SPARK-29285 to fix shuffle regression caused by creating temporary file eagerly
+SPARK-31230      Use statement plans in DataFrameWriter(V2)
+SPARK-31312      Cache Class instance for the UDF instance in HiveFunctionWrapper
+SPARK-29574      Fix bash comparison error in Docker entrypoint.sh
+SPARK-30775      Improve the description of executor metrics in the monitoring documentation
+SPARK-31010      Add Java UDF suggestion in error message of untyped Scala UDF
+SPARK-31305      Add a page to list all commands in SQL Reference
+SPARK-31290      Add back the deprecated R APIs
+SPARK-31318      Split Parquet/Avro configs for rebasing dates/timestamps in read and in write
+SPARK-31311      Benchmark date-time rebasing in ORC datasource
+SPARK-31320      Fix release script for 3.0.0
+SPARK-31313      Add `m01` node name to support Minikube 1.8.x
+SPARK-31073      Add description for Shuffle Write Time metric in StagePage to web-ui.md
+SPARK-31322      rename QueryPlan.collectInPlanAndSubqueries to collectWithSubqueries
+SPARK-31324      Include stream ID in the termination timeout error message
+SPARK-31321      Remove SaveMode check in v2 FileWriteBuilder
+SPARK-31328      Fix rebasing of overlapped local timestamps during daylight saving time
+SPARK-31326      Create Function docs structure for SQL Reference
+SPARK-30840      Add version property for ConfigEntry and ConfigBuilder
+SPARK-31249      Fix flaky CoarseGrainedSchedulerBackendSuite.custom log url for Spark UI is applied
+SPARK-31327      Write Spark version into Avro file metadata
+SPARK-31231      Unset setuptools version in pip packaging test
+SPARK-30841      Add version information to the configuration of SQL
+SPARK-31002      Add version information to the configuration of Core
+SPARK-30887      Add version information to the configuration of Deploy
+SPARK-30910      Add version information to the configuration of R
+SPARK-30909      Add version information to the configuration of Python
+SPARK-30888      Add version information to the configuration of Network
+SPARK-30908      Add version information to the configuration of Kryo
+SPARK-30891      Add version information to the configuration of History
+SPARK-30912      Add version information to the configuration of Streaming.scala
+SPARK-30914      Add version information to the configuration of UI
+SPARK-30889      Add version information to the configuration of Tests.scala and Worker
+SPARK-29554      Update Auto-generated Alias Name for Version
+SPARK-30921      Predicates on python udf should not be pushdown through Aggregate
+SPARK-31002      Add version information to the configuration of Core
+SPARK-30911      Add version information to the configuration of Status
+SPARK-27963      Update requirements for spark.dynamicAllocation.enabled
 
 # Internal Patches
 SPARK-17767       Support user-provided ExternalCatalog and SessionBuilder
@@ -54,3 +95,4 @@ MINOR             Add more JDK11 options
 MINOR             Add NOLINT_ON_COMPILE
 MINOR             Bump to 3.0.0.6-preview-apple-SNAPSHOT
 MINOR             Bump to 3.0.0.7-preview-apple-SNAPSHOT
+MINOR             Bump to 3.0.0.8-preview-apple-SNAPSHOT
