@@ -4,6 +4,7 @@ This contains the changes after creating `v3.0.0-rc1`
 SPARK-29089      Parallelize blocking FileSystem calls in DataSource#checkAndGlobPathIfNecessary
 SPARK-31073      Add "shuffle write time" to task metrics summary in StagePage
 SPARK-25355      Add proxy user to driver if present on spark-submit
+SPARK-31360      Fix hung-up issue in StagePage
 
 # From Spark 3.0.0
 SPARK-31296      Benchmark date-time rebasing in Parquet datasource
@@ -22,7 +23,6 @@ SPARK-31318      Split Parquet/Avro configs for rebasing dates/timestamps in rea
 SPARK-31311      Benchmark date-time rebasing in ORC datasource
 SPARK-31320      Fix release script for 3.0.0
 SPARK-31313      Add `m01` node name to support Minikube 1.8.x
-SPARK-31073      Add description for Shuffle Write Time metric in StagePage to web-ui.md
 SPARK-31322      rename QueryPlan.collectInPlanAndSubqueries to collectWithSubqueries
 SPARK-31324      Include stream ID in the termination timeout error message
 SPARK-31321      Remove SaveMode check in v2 FileWriteBuilder
@@ -48,6 +48,13 @@ SPARK-30921      Predicates on python udf should not be pushdown through Aggrega
 SPARK-31002      Add version information to the configuration of Core
 SPARK-30911      Add version information to the configuration of Status
 SPARK-27963      Update requirements for spark.dynamicAllocation.enabled
+SPARK-31353      Set a time zone in DateTimeBenchmark and DateTimeRebaseBenchmark
+SPARK-31224      Add view support to SHOW CREATE TABLE
+SPARK-31343      Check codegen does not fail on expressions with escape chars in string parameters
+SPARK-31279      Add version information to the configuration of Hive
+SPARK-31215      Add version information to the static configuration of SQL
+SPARK-31358      Document FILTER clauses of aggregate functions in SQL references
+SPARK-31333      Document Join Hints
 
 # Internal Patches
 SPARK-17767       Support user-provided ExternalCatalog and SessionBuilder
@@ -96,3 +103,4 @@ MINOR             Add NOLINT_ON_COMPILE
 MINOR             Bump to 3.0.0.6-preview-apple-SNAPSHOT
 MINOR             Bump to 3.0.0.7-preview-apple-SNAPSHOT
 MINOR             Bump to 3.0.0.8-preview-apple-SNAPSHOT
+MINOR             Bump to 3.0.0.9-preview-apple-SNAPSHOT
