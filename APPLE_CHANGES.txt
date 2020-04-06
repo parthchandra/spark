@@ -172,6 +172,9 @@ SPARK-31231       Set the upper bound (before 46.1.0) for setuptools in pip pack
 SPARK-31261       Avoid npe when reading bad csv input with `columnNameCorruptRecord` specified
 SPARK-31293       Fix wrong examples and help messages for Kinesis integration
 SPARK-31101       Upgrade Janino to 3.0.16
+SPARK-31306       update rand() function documentation to indicate exclusive upper bound
+SPARK-31312       Cache Class instance for the UDF instance in HiveFunctionWrapper
+SPARK-31231       Unset setuptools version in pip packaging test
 
 # Internal Patches
 SPARK-17636       Parquet predicate pushdown in nested fields
@@ -199,3 +202,6 @@ MINOR             Bump to 2.4.5.3-jdk11-apple-SNAPSHOT
 MINOR             Bump to 2.4.5.4-jdk11-apple-SNAPSHOT
 MINOR             Bump to 2.4.5.5-jdk11-apple-SNAPSHOT
 MINOR             Bump to 2.4.5.6-jdk11-apple-SNAPSHOT
+MINOR             Bump to 2.4.5.7-jdk11-apple-SNAPSHOT
+rdar://58646296   ACI Spark Job with Hive should enable SSL configuration with App Identity certificate
+MINOR             Add apple repository
