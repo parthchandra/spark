@@ -212,6 +212,9 @@ abstract class BaseSessionStateBuilder(
     new SparkOptimizer(catalog, experimentalMethods) {
       override def extendedOperatorOptimizationRules: Seq[Rule[LogicalPlan]] =
         super.extendedOperatorOptimizationRules ++ customOperatorOptimizationRules
+
+      override def extendedInferPredicatesRules: Seq[Rule[LogicalPlan]] =
+        super.extendedInferPredicatesRules ++ customInferPredicatesRules
     }
   }
 
@@ -224,6 +227,11 @@ abstract class BaseSessionStateBuilder(
   protected def customOperatorOptimizationRules: Seq[Rule[LogicalPlan]] = {
     extensions.buildOptimizerRules(session)
   }
+
+  /**
+   * Custom rules for inferring new predicates.
+   */
+  protected def customInferPredicatesRules: Seq[Rule[LogicalPlan]] = Nil
 
   /**
    * Planner that converts optimized logical plans to physical plans.

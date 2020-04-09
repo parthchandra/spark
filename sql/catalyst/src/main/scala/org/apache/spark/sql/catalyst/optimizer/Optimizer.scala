@@ -104,7 +104,7 @@ abstract class Optimizer(sessionCatalog: SessionCatalog)
       Batch("Operator Optimization before Inferring Filters", fixedPoint,
         rulesWithoutInferFiltersFromConstraints: _*) ::
       Batch("Infer Filters", Once,
-        InferFiltersFromConstraints) ::
+        InferFiltersFromConstraints +: extendedInferPredicatesRules: _*) ::
       Batch("Operator Optimization after Inferring Filters", fixedPoint,
         rulesWithoutInferFiltersFromConstraints: _*) :: Nil
     }
@@ -235,6 +235,11 @@ abstract class Optimizer(sessionCatalog: SessionCatalog)
    * Override to provide additional rules for the operator optimization batch.
    */
   def extendedOperatorOptimizationRules: Seq[Rule[LogicalPlan]] = Nil
+
+  /**
+   * Override to provide additional rules that infer new predicates.
+   */
+  def extendedInferPredicatesRules: Seq[Rule[LogicalPlan]] = Nil
 
   /**
    * Returns (defaultBatches - (excludedRules - nonExcludableRules)), the rule batches that
