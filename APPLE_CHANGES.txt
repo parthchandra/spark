@@ -127,11 +127,13 @@ SPARK-29189       Add an option to ignore block locations when listing file
 MINOR             Correct date_trunc docs
 SPARK-29245       Upgrade built-in Hive 2.3.6 to 2.3.7
 SPARK-31381       Upgrade built-in Hive 2.3.6 to 2.3.7
+SPARK-28772       Upgrade breeze to 1.0
 
 # From Spark 2.4.7
 SPARK-31854       Invoke in MapElementsExec should not propagate null
 
 # Internal Patches
+rdar://63889762   Support for AWS S3 cloud storage
 SPARK-17636       Parquet predicate pushdown in nested fields
 SPARK-17767       Support user-provided ExternalCatalog and SessionBuilder
 SPARK-25558       Pushdown predicates for nested fields in DataSource Strategy

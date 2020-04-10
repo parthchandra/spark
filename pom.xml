@@ -768,7 +768,7 @@
       <dependency>
         <groupId>org.scalanlp</groupId>
         <artifactId>breeze_${scala.binary.version}</artifactId>
-        <version>0.13.2</version>
+        <version>1.0</version>
         <exclusions>
           <!-- This is included as a compile-scoped dependency by jtransforms, which is
                a dependency of breeze. -->
@@ -1076,6 +1076,29 @@
         <artifactId>activation</artifactId>
         <version>1.1.1</version>
         <scope>${hadoop.deps.scope}</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.hadoop</groupId>
+        <artifactId>hadoop-aws</artifactId>
+        <version>${hadoop.version}</version>
+        <scope>${hadoop.deps.scope}</scope>
+        <exclusions>
+          <exclusion>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-bundle</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+      <!-- Attempt to force aws sdk version to desired -->
+      <dependency>
+       <groupId>com.amazonaws</groupId>
+       <artifactId>aws-java-sdk-bundle</artifactId>
+       <version>${aws.java.sdk.version}</version>
+       <scope>${hadoop.deps.scope}</scope>
       </dependency>
       <dependency>
         <groupId>org.apache.hadoop</groupId>
