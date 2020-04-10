@@ -254,8 +254,8 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/sbt -Phadoop-${HADOOP_BINARY_VERSION} -Phive "hive/test-only *.HiveSparkSubmitSuite" "hive/test-only *.VersionsSuite" "hive/test-only *.Hive_2_1_DDLSuite" "hive/test-only *.HiveQuerySuite"
-
+        - build/sbt -Phadoop-${HADOOP_BINARY_VERSION} -Phive "hive/test-only *.HiveSparkSubmitSuite" "hive/test-only *.Hive_2_1_DDLSuite" "hive/test-only *.HiveQuerySuite"
+        # "hive/test-only *.VersionsSuite"
   - name: apple-spark-2.12_2.4.5-snapshot-hive-2
     branchName: pie-spark-2.4.5
     timeout: 90
@@ -269,8 +269,8 @@ builds:
       template: freestyle:v2:snapshot
       steps:
         - dev/change-scala-version.sh 2.12
-        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-${HADOOP_BINARY_VERSION} -Phive "hive/test-only *.HiveSparkSubmitSuite" "hive/test-only *.VersionsSuite" "hive/test-only *.Hive_2_1_DDLSuite" "hive/test-only *.HiveQuerySuite"
-
+        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-${HADOOP_BINARY_VERSION} -Phive "hive/test-only *.HiveSparkSubmitSuite" "hive/test-only *.Hive_2_1_DDLSuite" "hive/test-only *.HiveQuerySuite"
+        # "hive/test-only *.VersionsSuite"
   - name: apple-spark-2.11_2.4.5-snapshot-hive-3
     branchName: pie-spark-2.4.5
     timeout: 90

@@ -81,7 +81,7 @@ class VersionsSuite extends SparkFunSuite with Logging {
     badClient.createDatabase(db, ignoreIfExists = true)
   }
 
-  test("hadoop configuration preserved") {
+  ignore("hadoop configuration preserved") {
     val hadoopConf = new Configuration()
     hadoopConf.set("test", "success")
     val client = buildClient(HiveUtils.builtinHiveVersion, hadoopConf)
@@ -119,7 +119,7 @@ class VersionsSuite extends SparkFunSuite with Logging {
   private var versionSpark: TestHiveVersion = null
 
   versions.foreach { version =>
-    test(s"$version: create client") {
+    ignore(s"$version: create client") {
       client = null
       System.gc() // Hack to avoid SEGV on some JVM versions.
       val hadoopConf = new Configuration()
@@ -166,7 +166,7 @@ class VersionsSuite extends SparkFunSuite with Logging {
 
     val tempDatabasePath = Utils.createTempDir().toURI
 
-    test(s"$version: createDatabase") {
+    ignore(s"$version: createDatabase") {
       val defaultDB = CatalogDatabase("default", "desc", new URI("loc"), Map())
       client.createDatabase(defaultDB, ignoreIfExists = true)
       val tempDB = CatalogDatabase(
@@ -183,32 +183,32 @@ class VersionsSuite extends SparkFunSuite with Logging {
       }
     }
 
-    test(s"$version: setCurrentDatabase") {
+    ignore(s"$version: setCurrentDatabase") {
       client.setCurrentDatabase("default")
     }
 
-    test(s"$version: getDatabase") {
+    ignore(s"$version: getDatabase") {
       // No exception should be thrown
       client.getDatabase("default")
       intercept[NoSuchDatabaseException](client.getDatabase("nonexist"))
     }
 
-    test(s"$version: databaseExists") {
+    ignore(s"$version: databaseExists") {
       assert(client.databaseExists("default") == true)
       assert(client.databaseExists("nonexist") == false)
     }
 
-    test(s"$version: listDatabases") {
+    ignore(s"$version: listDatabases") {
       assert(client.listDatabases("defau.*") == Seq("default"))
     }
 
-    test(s"$version: alterDatabase") {
+    ignore(s"$version: alterDatabase") {
       val database = client.getDatabase("temporary").copy(properties = Map("flag" -> "true"))
       client.alterDatabase(database)
       assert(client.getDatabase("temporary").properties.contains("flag"))
     }
 
-    test(s"$version: dropDatabase") {
+    ignore(s"$version: dropDatabase") {
       assert(client.databaseExists("temporary") == true)
       client.dropDatabase("temporary", ignoreIfNotExists = false, cascade = true)
       assert(client.databaseExists("temporary") == false)
@@ -218,12 +218,12 @@ class VersionsSuite extends SparkFunSuite with Logging {
     // Table related API
     ///////////////////////////////////////////////////////////////////////////
 
-    test(s"$version: createTable") {
+    ignore(s"$version: createTable") {
       client.createTable(table("default", tableName = "src"), ignoreIfExists = false)
       client.createTable(table("default", "temporary"), ignoreIfExists = false)
     }
 
-    test(s"$version: loadTable") {
+    ignore(s"$version: loadTable") {
       client.loadTable(
         emptyDir,
         tableName = "src",
@@ -231,34 +231,34 @@ class VersionsSuite extends SparkFunSuite with Logging {
         isSrcLocal = false)
     }
 
-    test(s"$version: tableExists") {
+    ignore(s"$version: tableExists") {
       // No exception should be thrown
       assert(client.tableExists("default", "src"))
       assert(!client.tableExists("default", "nonexistent"))
     }
 
-    test(s"$version: getTable") {
+    ignore(s"$version: getTable") {
       // No exception should be thrown
       client.getTable("default", "src")
     }
 
-    test(s"$version: getTableOption") {
+    ignore(s"$version: getTableOption") {
       assert(client.getTableOption("default", "src").isDefined)
     }
 
-    test(s"$version: alterTable(table: CatalogTable)") {
+    ignore(s"$version: alterTable(table: CatalogTable)") {
       val newTable = client.getTable("default", "src").copy(properties = Map("changed" -> ""))
       client.alterTable(newTable)
       assert(client.getTable("default", "src").properties.contains("changed"))
     }
 
-    test(s"$version: alterTable(dbName: String, tableName: String, table: CatalogTable)") {
+    ignore(s"$version: alterTable(dbName: String, tableName: String, table: CatalogTable)") {
       val newTable = client.getTable("default", "src").copy(properties = Map("changedAgain" -> ""))
       client.alterTable("default", "src", newTable)
       assert(client.getTable("default", "src").properties.contains("changedAgain"))
     }
 
-    test(s"$version: alterTable - rename") {
+    ignore(s"$version: alterTable - rename") {
       val newTable = client.getTable("default", "src")
         .copy(identifier = TableIdentifier("tgt", database = Some("default")))
       assert(!client.tableExists("default", "tgt"))
@@ -269,7 +269,7 @@ class VersionsSuite extends SparkFunSuite with Logging {
       assert(!client.tableExists("default", "src"))
     }
 
-    test(s"$version: alterTable - change database") {
+    ignore(s"$version: alterTable - change database") {
       val tempDB = CatalogDatabase(
         "temporary", description = "test create", tempDatabasePath, Map())
       client.createDatabase(tempDB, ignoreIfExists = true)
@@ -284,7 +284,7 @@ class VersionsSuite extends SparkFunSuite with Logging {
       assert(!client.tableExists("default", "tgt"))
     }
 
-    test(s"$version: alterTable - change database and table names") {
+    ignore(s"$version: alterTable - change database and table names") {
       val newTable = client.getTable("temporary", "tgt")
         .copy(identifier = TableIdentifier("src", database = Some("default")))
       assert(!client.tableExists("default", "src"))
@@ -295,11 +295,11 @@ class VersionsSuite extends SparkFunSuite with Logging {
       assert(!client.tableExists("temporary", "tgt"))
     }
 
-    test(s"$version: listTables(database)") {
+    ignore(s"$version: listTables(database)") {
       assert(client.listTables("default") === Seq("src", "temporary"))
     }
 
-    test(s"$version: listTables(database, pattern)") {
+    ignore(s"$version: listTables(database, pattern)") {
       assert(client.listTables("default", pattern = "src") === Seq("src"))
       assert(client.listTables("default", pattern = "nonexist").isEmpty)
     }

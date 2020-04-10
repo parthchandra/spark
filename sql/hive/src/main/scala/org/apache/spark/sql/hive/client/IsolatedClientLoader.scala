@@ -94,7 +94,7 @@ private[hive] object IsolatedClientLoader extends Logging {
     case "14" | "0.14" | "0.14.0" => hive.v14
     case "1.0" | "1.0.0" => hive.v1_0
     case "1.1" | "1.1.0" => hive.v1_1
-    case "1.2" | "1.2.0" | "1.2.1" | "1.2.2" => hive.v1_2
+    case "1.2" | "1.2.0" | "1.2.1" | "1.2.1.spark2.4-apple" | "1.2.2" => hive.v1_2
     case "2.0" | "2.0.0" | "2.0.1" => hive.v2_0
     case "2.1" | "2.1.0" | "2.1.1" => hive.v2_1
     case "2.2" | "2.2.0" => hive.v2_2
@@ -120,7 +120,7 @@ private[hive] object IsolatedClientLoader extends Logging {
       SparkSubmitUtils.resolveMavenCoordinates(
         hiveArtifacts.mkString(","),
         SparkSubmitUtils.buildIvySettings(
-          Some("https://maven-central.storage-download.googleapis.com/repos/central/data/"),
+          Some(" https://artifacts.apple.com/libs-release/"),
           ivyPath),
         exclusions = version.exclusions)
     }
