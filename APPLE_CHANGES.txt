@@ -1,6 +1,7 @@
 This contains the changes after v2.4.5
 
 # From Spark 3.0.0
+SPARK-28772       Upgrade breeze to 1.0
 SPARK-20636       Add new optimization rule to transpose adjacent Window expressions.
 SPARK-25691       Use semantic equality in AliasViewChild in order to compare attributes
 SPARK-20636       Add the rule TransposeWindow to the optimization batch
@@ -126,6 +127,10 @@ SPARK-29189       Add an option to ignore block locations when listing file
 SPARK-31047       Improve file listing for ViewFileSystem
 
 # From Spark 2.4.6
+SPARK-31382       Show a better error message for different python and pip installation mistake
+SPARK-31327       Write Spark version into Avro file metadata
+SPARK-25102       Write Spark version to ORC/Parquet file metadata
+SPARK-31422       Fix NPE when BlockManagerSource is used after BlockManagerMaster stops
 SPARK-30733       Fix SparkR tests per testthat and R version upgrade, and disable CRAN
 SPARK-27262       Reenable CRAN check with UTF-8 encoding to DESCRIPTION
 SPARK-30737       Reenable CRAN check with UTF-8 encoding to DESCRIPTION
@@ -177,6 +182,7 @@ SPARK-31312       Cache Class instance for the UDF instance in HiveFunctionWrapp
 SPARK-31231       Unset setuptools version in pip packaging test
 
 # Internal Patches
+N/A               Nested schema pruning for DataSourceV2 and Enable custom rules that infer predicates in the optimizer
 SPARK-17636       Parquet predicate pushdown in nested fields
 SPARK-25558       Pushdown predicates for nested fields in DataSource Strategy
 MINOR             Added bindAddress in Mesos Executor Backend for now set to local host name
