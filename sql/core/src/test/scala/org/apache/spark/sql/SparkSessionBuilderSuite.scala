@@ -247,6 +247,7 @@ class MyExternalCatalog(conf: SparkConf, hadoopConf: Configuration) extends Exte
   override def getFunction(db: String, funcName: String): CatalogFunction = null
   override def functionExists(db: String, funcName: String): Boolean = true
   override def listFunctions(db: String, pattern: String): Seq[String] = Seq.empty
+  override def listViews(db: String, pattern: String): Seq[String] = Seq.empty
 }
 
 class MySessionStateBuilder(session: SparkSession,
