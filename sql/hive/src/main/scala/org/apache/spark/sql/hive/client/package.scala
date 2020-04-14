@@ -59,7 +59,7 @@ package object client {
         "net.hydromatic:linq4j",
         "net.hydromatic:quidem"))
 
-    case object v1_2 extends HiveVersion("1.2.1.spark2.4-apple",
+    case object v1_2 extends HiveVersion("1.2.2",
       exclusions = Seq("eigenbase:eigenbase-properties",
         "org.apache.calcite:calcite-core",
         "org.apache.calcite:calcite-avatica",

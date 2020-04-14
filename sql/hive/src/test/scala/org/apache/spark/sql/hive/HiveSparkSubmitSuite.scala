@@ -125,7 +125,7 @@ class HiveSparkSubmitSuite
     runSparkSubmit(args)
   }
 
-  ignore("SPARK-8020: set sql conf in spark conf") {
+  test("SPARK-8020: set sql conf in spark conf") {
     val unusedJar = TestUtils.createJarWithClasses(Seq.empty)
     val args = Seq(
       "--class", SparkSQLConfTest.getClass.getName.stripSuffix("$"),
@@ -161,7 +161,7 @@ class HiveSparkSubmitSuite
     runSparkSubmit(args)
   }
 
-  ignore("SPARK-9757 Persist Parquet relation with decimal column") {
+  test("SPARK-9757 Persist Parquet relation with decimal column") {
     val unusedJar = TestUtils.createJarWithClasses(Seq.empty)
     val args = Seq(
       "--class", SPARK_9757.getClass.getName.stripSuffix("$"),
@@ -252,7 +252,7 @@ class HiveSparkSubmitSuite
     runSparkSubmit(args)
   }
 
-  ignore("SPARK-16901: set javax.jdo.option.ConnectionURL") {
+  test("SPARK-16901: set javax.jdo.option.ConnectionURL") {
     // In this test, we set javax.jdo.option.ConnectionURL and set metastore version to
     // 0.13. This test will make sure that javax.jdo.option.ConnectionURL will not be
     // overridden by hive's default settings when we create a HiveConf object inside
