@@ -387,16 +387,6 @@ builds:
       freeform:
       - publish:
         - repo: oss-patched-binaries-local
-      dockerfile:
-      - dockerfilePath: ./aci-spark-runtime/Dockerfile
-        version: $(./aci-spark-runtime/get-docker-version.sh --with-hadoop)
-        perApplication: false
-        publish:
-        - repo: docker.apple.com/com.apple.aci.spark/aci-spark-core
-      mirror:
-        target: silkroad
-        artifactPackageFilters: []
-        dockerPackageFilters: ["^((?!private).)*"]
 
   - name: apple-spark-2.12_3.0.0-preview-no-hadoop-binaries-snapshot
     branchName: pie-spark-3.0.0-preview
@@ -441,13 +431,3 @@ builds:
       freeform:
       - publish:
         - repo: oss-patched-binaries-local
-      dockerfile:
-      - dockerfilePath: ./aci-spark-runtime/Dockerfile
-        version: $(./aci-spark-runtime/get-docker-version.sh)
-        perApplication: false
-        publish:
-        - repo: docker.apple.com/com.apple.aci.spark/aci-spark-core
-      mirror:
-        target: silkroad
-        artifactPackageFilters: []
-        dockerPackageFilters: ["^((?!private).)*"]
