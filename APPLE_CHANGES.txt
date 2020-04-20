@@ -1,6 +1,7 @@
 This contains the changes after v2.4.5
 
 # From Spark 3.0.0
+SPARK-31256       naFunctions on nested regression
 SPARK-28772       Upgrade breeze to 1.0
 SPARK-20636       Add new optimization rule to transpose adjacent Window expressions.
 SPARK-25691       Use semantic equality in AliasViewChild in order to compare attributes
@@ -127,6 +128,8 @@ SPARK-29189       Add an option to ignore block locations when listing file
 SPARK-31047       Improve file listing for ViewFileSystem
 
 # From Spark 2.4.6
+SPARK-31420       UI time local change to EN
+SECURITY          Security fix do not discuss yet (CVE not released)
 SPARK-31382       Show a better error message for different python and pip installation mistake
 SPARK-31327       Write Spark version into Avro file metadata
 SPARK-25102       Write Spark version to ORC/Parquet file metadata
