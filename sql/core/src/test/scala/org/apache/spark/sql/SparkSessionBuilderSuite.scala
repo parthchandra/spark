@@ -26,6 +26,7 @@ import org.apache.spark.sql.catalyst.catalog._
 import org.apache.spark.sql.catalyst.catalog.CatalogTypes.TablePartitionSpec
 import org.apache.spark.sql.catalyst.expressions.Expression
 import org.apache.spark.sql.internal.{BaseSessionStateBuilder, SessionState, SessionStateBuilder, SQLConf}
+import org.apache.spark.sql.internal.StaticSQLConf.GLOBAL_TEMP_DATABASE
 import org.apache.spark.sql.types.StructType
 
 /**
@@ -176,6 +177,21 @@ class SparkSessionBuilderSuite extends SparkFunSuite with BeforeAndAfterEach {
       .getOrCreate()
     assertThrows[SparkException](session.sharedState.externalCatalog)
     assertThrows[SparkException](session.sessionState)
+  }
+
+  test("SPARK-31234: RESET command will not change static sql configs and " +
+    "spark context conf values in SessionState") {
+    val session = SparkSession.builder()
+      .master("local")
+      .config(GLOBAL_TEMP_DATABASE.key, value = "globalTempDB-SPARK-31234")
+      .config("spark.app.name", "test-app-SPARK-31234")
+      .getOrCreate()
+
+    assert(session.sessionState.conf.getConfString("spark.app.name") === "test-app-SPARK-31234")
+    assert(session.sessionState.conf.getConf(GLOBAL_TEMP_DATABASE) === "globaltempdb-spark-31234")
+    session.sql("RESET")
+    assert(session.sessionState.conf.getConfString("spark.app.name") === "test-app-SPARK-31234")
+    assert(session.sessionState.conf.getConf(GLOBAL_TEMP_DATABASE) === "globaltempdb-spark-31234")
   }
 }
 
