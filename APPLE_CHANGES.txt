@@ -1,6 +1,7 @@
 This contains the changes after v2.4.5
 
 # From Spark 3.0.0
+MINOR DOC         Correct date_trunc docs
 SPARK-31256       naFunctions on nested regression
 SPARK-28772       Upgrade breeze to 1.0
 SPARK-20636       Add new optimization rule to transpose adjacent Window expressions.
