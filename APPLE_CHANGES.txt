@@ -1,7 +1,5 @@
 This contains the changes after v2.4.5
 
-MINOR             Force AWS SDK version
-
 # From Spark 3.0.0
 MINOR DOC         Correct date_trunc docs
 SPARK-31256       naFunctions on nested regression
@@ -131,6 +129,8 @@ SPARK-29189       Add an option to ignore block locations when listing file
 SPARK-31047       Improve file listing for ViewFileSystem
 
 # From Spark 2.4.6
+SPARK-31234       ResetCommand should not affect static SQL Configuration
+SPARK-31503       fix the SQL string of the TRIM functions
 SPARK-31420       UI time local change to EN
 SECURITY          Security fix do not discuss yet (CVE not released)
 SPARK-31382       Show a better error message for different python and pip installation mistake
@@ -188,6 +188,7 @@ SPARK-31312       Cache Class instance for the UDF instance in HiveFunctionWrapp
 SPARK-31231       Unset setuptools version in pip packaging test
 
 # Internal Patches
+MINOR             Force AWS SDK version
 N/A               Nested schema pruning for DataSourceV2 and Enable custom rules that infer predicates in the optimizer
 SPARK-17636       Parquet predicate pushdown in nested fields
 SPARK-25558       Pushdown predicates for nested fields in DataSource Strategy
