@@ -1,6 +1,10 @@
 This contains the changes after creating `v3.0.0-rc1`
 
 # From Spark 3.1.0
+SPARK-20732      Decommission cache blocks to other executors when an executor is decommissioned
+SPARK-31125      Terminating pods have a deletion timestamp but they are not yet dead
+SPARK-31062      Improve spark decommissioning k8s test reliability
+SPARK-20628      Start to improve Spark decommissioning & preemption support
 SPARK-29089      Parallelize blocking FileSystem calls in DataSource#checkAndGlobPathIfNecessary
 SPARK-31073      Add "shuffle write time" to task metrics summary in StagePage
 SPARK-25355      Add proxy user to driver if present on spark-submit
