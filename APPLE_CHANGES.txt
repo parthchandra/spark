@@ -7,6 +7,18 @@ SPARK-25355      Add proxy user to driver if present on spark-submit
 SPARK-31360      Fix hung-up issue in StagePage
 
 # From Spark 3.0.0
+SPARK-31423      Fix rebasing of not-existed dates
+SPARK-31443      Fix perf regression of toJavaDate
+SPARK-31420      Infinite timeline redraw in job details page
+SPARK-31439      Fix perf regression of fromJavaDate
+SPARK-31402      Refine code comments in RebaseDateTime
+SPARK-30953      InsertAdaptiveSparkPlan should apply AQE on child plan of write commands
+SPARK-31441      Support duplicated column names for toPandas with arrow execution
+SPARK-31392      Since 3.0.0, we make CalendarInterval public for input, it's better for it to be inferred to CalendarIntervalType.
+SPARK-31426      Fix perf regressions of toJavaTimestamp/fromJavaTimestamp
+SPARK-31319      Follow up: Add a SQL example for UDAF
+SPARK-31414      Update default datetime pattern for json/csv APIs documentations
+SPARK-31434      Drop builtin function pages from SQL references
 SPARK-31296      Benchmark date-time rebasing in Parquet datasource
 SPARK-31219      Enable closeIdleConnections in YarnShuffleService
 SPARK-31306      update rand() function documentation to indicate exclusive upper bound
