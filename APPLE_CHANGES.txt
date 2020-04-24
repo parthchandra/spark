@@ -1,6 +1,7 @@
 This contains the changes after creating `v3.0.0-rc1`
 
 # From Spark 3.1.0
+SPARK-31208      Add an expiremental cleanShuffleDependencies
 SPARK-20732      Decommission cache blocks to other executors when an executor is decommissioned
 SPARK-31125      Terminating pods have a deletion timestamp but they are not yet dead
 SPARK-31062      Improve spark decommissioning k8s test reliability
