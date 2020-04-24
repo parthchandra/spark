@@ -2,7 +2,6 @@ This contains the changes after v2.4.5
 
 # From Spark 3.0.0
 MINOR DOC         Correct date_trunc docs
-SPARK-31256       naFunctions on nested regression
 SPARK-28772       Upgrade breeze to 1.0
 SPARK-20636       Add new optimization rule to transpose adjacent Window expressions.
 SPARK-25691       Use semantic equality in AliasViewChild in order to compare attributes
@@ -129,6 +128,7 @@ SPARK-29189       Add an option to ignore block locations when listing file
 SPARK-31047       Improve file listing for ViewFileSystem
 
 # From Spark 2.4.6
+SPARK-31256       naFunctions on nested regression
 SPARK-31234       ResetCommand should not affect static SQL Configuration
 SPARK-31503       fix the SQL string of the TRIM functions
 SPARK-31420       UI time local change to EN & Infinite timeline redraw in job details page
