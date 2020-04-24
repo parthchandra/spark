@@ -7,6 +7,49 @@ SPARK-25355      Add proxy user to driver if present on spark-submit
 SPARK-31360      Fix hung-up issue in StagePage
 
 # From Spark 3.0.0
+SPARK-31522      Hive metastore client initialization related configurations should be static
+SPARK-31472      Make sure Barrier Task always return messages or exception with abortableRpcFuture check
+SPARK-16775      FOLLOW-UP: Add migration guide for removed accumulator v1 APIs
+SPARK-31344      Polish implementation of barrier() and allGather()
+SPARK-31465      Document Literal in SQL Reference
+SPARK-31476      FOLLOWUP: Add tests for extract('field', source)
+SPARK-31474      FOLLOWUP: Replace _FUNC_ placeholder with functionname in the note field of expression info
+MINOR            Add comments for filters values and return values of Row.get()/apply()
+SPARK-31495      Fix test failure of explain-aqe.sql
+MINOR            Fix a typo in ContainerPlacementStrategy's class comment
+SPARK-31495      Support formatted explain for AQE
+SPARK-31507      Remove uncommon fields support  and update some fields with meaningful names for extract function
+SPARK-31498      Dump public static sql configurations through doc generation
+SPARK-31503      fix the SQL string of the TRIM functions
+HOT-FIX          fix compilation
+SPARK-31361      Rebase datetime in parquet/avro according to file metadata
+SPARK-31504      Formatted Explain should have determined order of Output fields
+SPARK-31474      Consistency between dayofweek/dow in extract exprsession and dayofweek function
+SPARK-31501      AQE update UI should not cause deadlock
+SPARK-31429      Automatically generates a SQL document for built-in functions
+SPARK-31381 & SPARK-29245 Upgrade built-in Hive 2.3.6 to 2.3.7
+SPARK-31234      ResetCommand should not affect static SQL Configuration
+SPARK-31475      Broadcast stage in AQE did not timeout
+SPARK-31490      Benchmark conversions to/from Java 8 datetime type
+SPARK-31385      Restrict micros rebasing via switch arrays up to 2037 year
+SPARK-31256      DataFrameNaFunctions.drop should work for nested columns
+SPARK-31476      Add an ExpressionInfo entry for EXTRACT
+SPARK-29672      Recover PySpark via pip installation with deprecated Python 2, 3.4 and 3.5
+SPARK-31442      Print shuffle id at coalesce partitions target size
+SPARK-31469      Remove unsupported fields from ExtractBenchmark
+SPARK-31473      AQE should set active session during execution
+SPARK-31390      Document Window Function in SQL Syntax Section
+SPARK-31446      Make html elements for a paged table possible to have different id attribute
+SPARK-31468      Null types should be implicitly casted to Decimal types
+SPARK-31469      Make extract interval field ANSI compliance
+SPARK-31425      UnsafeKVExternalSorter/VariableLengthRowBasedKeyValueBatch should also respect UnsafeAlignedOffset
+SPARK-31450      Make ExpressionEncoder thread-safe
+SPARK-31462      The usage of getopts and case statement is wrong in do-release.sh
+SPARK-31420      Make locale of timeline-view 'en'
+SPARK-30564      Revert Block.length and use comment placeholders in HashAggregateExec
+SPARK-31455      Fix rebasing of not-existed timestamps
+SPARK-31428      Document Common Table Expression in SQL Reference
+SPARK-31018      Deprecate support of multiple workers on the same host in Standalone
 SPARK-31423      Fix rebasing of not-existed dates
 SPARK-31443      Fix perf regression of toJavaDate
 SPARK-31420      Infinite timeline redraw in job details page
