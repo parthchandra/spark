@@ -131,7 +131,7 @@ SPARK-31047       Improve file listing for ViewFileSystem
 # From Spark 2.4.6
 SPARK-31234       ResetCommand should not affect static SQL Configuration
 SPARK-31503       fix the SQL string of the TRIM functions
-SPARK-31420       UI time local change to EN
+SPARK-31420       UI time local change to EN & Infinite timeline redraw in job details page
 SECURITY          Security fix do not discuss yet (CVE not released)
 SPARK-31382       Show a better error message for different python and pip installation mistake
 SPARK-31327       Write Spark version into Avro file metadata
