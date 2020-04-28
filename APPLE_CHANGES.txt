@@ -2,7 +2,6 @@ This contains the changes after v2.4.5
 
 # From Spark 3.0.0
 MINOR DOC         Correct date_trunc docs
-SPARK-28772       Upgrade breeze to 1.0
 SPARK-20636       Add new optimization rule to transpose adjacent Window expressions.
 SPARK-25691       Use semantic equality in AliasViewChild in order to compare attributes
 SPARK-20636       Add the rule TransposeWindow to the optimization batch
@@ -188,7 +187,6 @@ SPARK-31312       Cache Class instance for the UDF instance in HiveFunctionWrapp
 SPARK-31231       Unset setuptools version in pip packaging test
 
 # Internal Patches
-MINOR             Force AWS SDK version
 N/A               Nested schema pruning for DataSourceV2 and Enable custom rules that infer predicates in the optimizer
 SPARK-17636       Parquet predicate pushdown in nested fields
 SPARK-25558       Pushdown predicates for nested fields in DataSource Strategy
