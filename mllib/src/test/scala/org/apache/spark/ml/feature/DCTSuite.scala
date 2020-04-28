@@ -19,7 +19,7 @@ package org.apache.spark.ml.feature
 
 import scala.beans.BeanInfo
 
-import org.jtransforms.dct.DoubleDCT_1D
+import edu.emory.mathcs.jtransforms.dct.DoubleDCT_1D
 
 import org.apache.spark.ml.linalg.{Vector, Vectors}
 import org.apache.spark.ml.util.{DefaultReadWriteTest, MLTest}
