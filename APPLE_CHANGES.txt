@@ -125,6 +125,8 @@ SPARK-25062       Clean up BlockLocations in InMemoryFileIndex
 SPARK-27676       InMemoryFileIndex should respect spark.sql.files.ignoreMissingFiles
 SPARK-29189       Add an option to ignore block locations when listing file
 SPARK-31047       Improve file listing for ViewFileSystem
+SPARK-31381       Upgrade built-in Hive 2.3.6 to 2.3.7
+SPARK-29245       Upgrade built-in Hive 2.3.6 to 2.3.7
 
 # From Spark 2.4.6
 SPARK-31256       naFunctions on nested regression
@@ -185,6 +187,20 @@ SPARK-31101       Upgrade Janino to 3.0.16
 SPARK-31306       update rand() function documentation to indicate exclusive upper bound
 SPARK-31312       Cache Class instance for the UDF instance in HiveFunctionWrapper
 SPARK-31231       Unset setuptools version in pip packaging test
+SPARK-31532       Builder should not propagate static sql configs to the existing active or default SparkSession
+SPARK-31532       Use lowercases for GLOBAL_TEMP_DATABASE config in SparkSessionBuilderSuite
+SPARK-31563       Fix failure of InSet.sql for collections of Catalyst's internal types
+SPARK-31552       Fix ClassCastException in ScalaReflection arrayClassFor
+SPARK-25595       Ignore corrupt Avro files if flag IGNORE_CORRUPT_FILES enabled
+SPARK-31485       Avoid application hang if only partial barrier tasks launched
+SPARK-31568       Add detail about func/key in gapply to documentation
+SPARK-31589       Use `r-lib/actions/setup-r` in GitHub Action
+SPARK-31563       Create literals directly from Catalyst's internal value in InSet.sql
+SPARK-31519       Datetime functions in having aggregate expressions returns the wrong result
+SPARK-31582       Being able to not populate Hadoop classpath
+SPARK-31449       Fix getting time zone offsets from local milliseconds
+SPARK-31601       Fix spark.kubernetes.executor.podNamePrefix to work
+SPARK-31500       collect_set() of BinaryType returns duplicate elements
 
 # Internal Patches
 N/A               Nested schema pruning for DataSourceV2 and Enable custom rules that infer predicates in the optimizer
@@ -216,3 +232,4 @@ MINOR             Bump to 2.4.5.6-jdk11-apple-SNAPSHOT
 MINOR             Bump to 2.4.5.7-jdk11-apple-SNAPSHOT
 rdar://58646296   ACI Spark Job with Hive should enable SSL configuration with App Identity certificate
 MINOR             Add apple repository
+MINOR             Bump to 2.4.5.11-jdk11-apple-SNAPSHOT
