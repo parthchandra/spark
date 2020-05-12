@@ -129,6 +129,10 @@ SPARK-31381       Upgrade built-in Hive 2.3.6 to 2.3.7
 SPARK-29245       Upgrade built-in Hive 2.3.6 to 2.3.7
 
 # From Spark 2.4.6
+SPARK-31671       Wrong error message in VectorAssembler
+SPARK-31456       Fix shutdown hook priority edge cases
+SPARK-26908       Fix DateTimeUtils.toMillis and millisToDays
+SPARK-31590       Metadata-only queries should not include subquery in partition filters
 SPARK-31256       naFunctions on nested regression
 SPARK-31234       ResetCommand should not affect static SQL Configuration
 SPARK-31503       fix the SQL string of the TRIM functions
