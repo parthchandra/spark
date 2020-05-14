@@ -11,6 +11,7 @@ SPARK-25355      Add proxy user to driver if present on spark-submit
 SPARK-31360      Fix hung-up issue in StagePage
 
 # From Spark 3.0.0
+SPARK-31526      Add a new test suite for ExpressionInfo
 SPARK-31522      Hive metastore client initialization related configurations should be static
 SPARK-31472      Make sure Barrier Task always return messages or exception with abortableRpcFuture check
 SPARK-16775      FOLLOW-UP: Add migration guide for removed accumulator v1 APIs
