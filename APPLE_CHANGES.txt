@@ -11,6 +11,65 @@ SPARK-25355      Add proxy user to driver if present on spark-submit
 SPARK-31360      Fix hung-up issue in StagePage
 
 # From Spark 3.0.0
+PARK-31489	 Fix pushing down filters with `java.time.LocalDate` values in ORC
+SPARK-31565	 Unify the font color of label among all DAG-viz
+SPARK-31497	 Fix Pyspark CrossValidator/TrainValidationSplit with pipeline estimator cannot save and load model
+SPARK-31388	 org.apache.spark.sql.hive.thriftserver.CliSuite doesn't match results correctly
+SPARK-31557	 Legacy time parser should return Gregorian days rather than Julian days
+SPARK-31527	 date add/subtract interval only allow those day precision in ansi mode
+SPARK-29664	 Add deprecation warnings for getItem instead
+SPARK-31568	 Add detail about func/key in gapply to documentation
+SPARK-31550	 Set nondeterministic configurations with general meanings in sql configuration doc
+SPARK-31485	 Avoid application hang if only partial barrier tasks launched
+SPARK-31529	 Remove extra whitespaces in formatted explain
+SPARK-31569	 Add links to subsections in SQL Reference main page
+SPARK-31565	 Add font color setting of DAG-viz for query plan
+SPARK-27340	 Alias on TimeWindow expression cause watermark metadata lost
+SPARK-31577	 Fix case-sensitivity and forward name conflict problems when check name conflicts of CTE relations
+SPARK-31580	 Upgrade Apache ORC to 1.5.10
+SPARK-31568	 Replaces paste(sep="") to paste0
+SPARK-31578	 Vectorize schema validation for arrow in types.R
+SPARK-31589	 Use `r-lib/actions/setup-r` in GitHub Action
+SPARK-31519	 Cast in having aggregate expressions returns the wrong result
+SPARK-31573	 Apply fixed=TRUE as appropriate to regex usage in R
+SPARK-31553	 Improve performance on Column.isInCollection() with a large size collection"
+SPARK-31527	 Add a benchmark test for datetime add/subtract interval operations
+SPARK-31534	 Text for tooltip should be escaped
+SPARK-29458	 Add a paragraph for scalar function in sql getting started
+SPARK-31556	 Document LIKE clause in SQL Reference
+SPARK-31584	 Fix NullPointerException when parsing event log with InMemoryStore
+SPARK-31596	 Generate SQL Configurations from hive module to configuration doc
+SPARK-31563	 Create literals directly from Catalyst's internal value in InSet.sql
+SPARK-29492	 Reset HiveSession's SessionState conf's ClassLoader when sync mode
+SPARK-31597	 extracting day from intervals should be interval.days + days in interval.microsecond
+SPARK-30282	 SHOW TBLPROPERTIES should support views
+SPARK-31557	 Check rebasing in all legacy formatters
+SPARK-29339	 Remove requireNamespace1 workaround for arrow
+SPARK-31582	 Being able to not populate Hadoop classpath
+SPARK-31553	 Tests for collection elem types of `isInCollection`
+SPARK-31601	 Fix spark.kubernetes.executor.podNamePrefix to work
+SPARK-31372	 Display expression schema for double check
+SPARK-31030	 Replace HTML Table by Markdown Table
+SPARK-27340	 Rephrase API comments and simplify tests
+SPARK-31557	 Fix timestamps rebasing in legacy parsers
+SPARK-28806	 Remove unneeded HTML from the MD file
+SPARK-31535	 Fix nested CTE substitution
+SPARK-31562      Update ExpressionDescription for substring, current_date, and current_timestamp
+SPARK-31558      Code clean up in spark-sql-viz.js
+SPARK-31564      Fix flaky AllExecutionsPageSuite for checking 1970
+SPARK-31563      Fix failure of InSet.sql for collections of Catalyst's internal types
+SPARK-31521      Correct the fetch size when merging blocks into a merged block
+SPARK-31516      Fix non-existed metric hiveClientCalls.count of CodeGenerator in DOC
+SPARK-31560      Add V1/V2 tests for TextSuite and WholeTextFileSuite
+SPARK-31552      Fix ClassCastException in ScalaReflection arrayClassFor
+SPARK-31491      Re-arrange Data Types page to document Floating Point Special Values
+SPARK-31532      Builder should not propagate static sql configs to the existing active or default SparkSession
+SPARK-31364      Benchmark Parquet Nested Field Predicate Pushdown
+SPARK-31010      Improve deprecated warning message for untyped scala udf
+SPARK-31502      Document identifier in SQL Reference
+SPARK-31510      Set setwd in R documentation build
+SPARK-30804      Measure and log elapsed time for "compact" operation in CompactibleFileStreamLog
+SPARK-31488      Support `java.time.LocalDate` in Parquet filter pushdown
 SPARK-31526      Add a new test suite for ExpressionInfo
 SPARK-31522      Hive metastore client initialization related configurations should be static
 SPARK-31472      Make sure Barrier Task always return messages or exception with abortableRpcFuture check
@@ -117,6 +176,7 @@ SPARK-31358      Document FILTER clauses of aggregate functions in SQL reference
 SPARK-31333      Document Join Hints
 
 # Internal Patches
+MINOR             Add a script for simplifying backporting
 SPARK-17767       Support user-provided ExternalCatalog and SessionBuilder
 MINOR             Support JarvisSparkHadoopUtil
 MINOR             Add JDK11 options
