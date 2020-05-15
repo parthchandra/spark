@@ -11,6 +11,77 @@ SPARK-25355      Add proxy user to driver if present on spark-submit
 SPARK-31360      Fix hung-up issue in StagePage
 
 # From Spark 3.0.0
+SPARK-31612	 SQL Reference clean up
+SPARK-31549	 Add a develop API invoking collect on Python RDD with user-specified job group
+SPARK-28424	 Add test cases for all interval units
+SPARK-31619	 Rename config "spark.dynamicAllocation.shuffleTimeout" to "spark.dynamicAllocation.shuffleTracking.timeout"
+SPARK-31549	 Remove a newline between class methods for linter check
+SPARK-31372	 Update the golden file of ExpressionsSchemaSuite
+SPARK-31500	 collect_set() of BinaryType returns duplicate elements
+MINOR            Remove two leading spaces from sql tables
+MINOR            Disable UI in SQL benchmarks by default
+SPARK-31571	 Overhaul stop/message/warning calls to be more canonical
+SPARK-31527	 Fix the number of rows in `DateTimeBenchmark`
+SPARK-31267	 Flaky test: WholeStageCodegenSparkSubmitSuite.Generated code on driver should not embed platform-specific constant
+SPARK-31626	 Port HIVE-10415: hive.start.cleanup.scratchdir configuration is not taking effect
+SPARK-31606	 Reduce the perf regression of vectorized parquet reader caused by datetime rebase
+MINOR            Fix typo in documents
+SPARK-31624      Fix SHOW TBLPROPERTIES for V2 tables that leverage the session catalog
+SPARK-31633	 Upgrade SLF4J from 1.7.16 to 1.7.30
+SPARK-31639      Revert SPARK-27528 Use Parquet logical type TIMESTAMP_MICROS by default
+SPARK-31372	 Improve ExpressionsSchemaSuite so that easy to track the diff
+SPARK-27963	 Remove `for testing` because CleanerListener is used ExecutorMonitor during dynamic allocation
+SPARK-31623	 Benchmark rebasing of INT96 and TIMESTAMP_MILLIS timestamps in read/write
+SPARK-31467	 Refactor the sql tests to prevent TableAlreadyExistsException
+SPARK-31030	 Replace HTML Table by Markdown Table
+SPARK-31621	 Fixing Spark Master UI Issue when application is waiting for workers to launch driver
+SPARK-31630	 Fix perf regression by skipping timestamps rebasing after some threshold
+SPARK-31641	 Fix days conversions by JSON legacy parser
+SPARK-31644	 Make Spark's guava version configurable from the command line
+SPARK-31643	 Fix flaky o.a.s.scheduler.BarrierTaskContextSuite.barrier task killed, interrupt
+SPARK-31590	 Metadata-only queries should not include subquery in partition filters
+SPARK-31595	 Spark sql should allow unescaped quote mark in quoted string
+SPARK-31365	 Enable nested predicate pushdown per data sources
+SPARK-31650	 Fix wrong UI in case of AdaptiveSparkPlanExec has unmanaged subqueries
+SPARK-31647	 Deprecate 'spark.sql.optimizer.metadataOnly' configuration
+SPARK-31361	 Use LEGACY_PARQUET_REBASE_DATETIME_IN_READ instead of avro config in ParquetIOSuite
+SPARK-31365	 Refine config document for nested predicate pushdown
+SPARK-31361	 Check non-vectorized Parquet reader while date/timestamp rebasing
+SPARK-31631	 Fix test flakiness caused by MiniKdc which throws 'address in use' BindException with retry
+SPARK-31646	 Remove unused registeredConnections counter from ShuffleMetrics
+SPARK-31646	 Add clean up code and disable irrelevent conf
+SPARK-31658	 Fix SQL UI not showing write commands of AQE plan
+SPARK-31662	 Fix loading of dates before 1582-10-15 from dictionary encoded Parquet columns
+SPARK-31636	 Remove HTML syntax in SQL reference
+SPARK-31669	 Fix RowEncoderSuite failures on non-existing dates/timestamps
+SPARK-31672	 Fix loading of timestamps before 1582-10-15 from dictionary encoded Parquet columns
+SPARK-31674	 Make Prometheus metric endpoints experimental
+SPARK-31665	 Check parquet dictionary encoding of random dates/timestamps
+SPARK-31456	 Fix shutdown hook priority edge cases
+SPARK-31671	 Wrong error message in VectorAssembler
+SPARK-31559	 Re-obtain tokens at the startup of AM for yarn cluster mode if principal and keytab are available
+SPARK-31393	 Show the correct alias in schema for expression
+SPARK-31678	 Print error stack trace for Spark SQL CLI when error occurs
+SPARK-31680	 Support Java 8 datetime types by Random data generator
+SPARK-31610	 Address hashingTF saving&loading bug and expose hashFunc property in HashingTF
+SPARK-31387      Handle unknown operation/session ID in HiveThriftServer2Listener
+SPARK-31683	 Make Prometheus output consistent with DropWizard 4.1 result
+SPARK-31691	 release-build.sh should ignore a fallback output from `build/mvn`
+SPARK-31697	 HistoryServer should set Content-Type
+SPARK-31701	 Bump up the minimum Arrow version as 0.15.1 in SparkR
+SPARK-31632	 Enrich the exception message when application information is unavailable
+SPARK-31692	 Pass hadoop confs  specifed via Spark confs to URLStreamHandlerfactory
+SPARK-30973	 ScriptTransformationExec should wait for the termination …
+SPARK-31676	 QuantileDiscretizer raise error parameter splits given invalid value (splits array includes -0.0 and 0.0)
+SPARK-31681	 Python multiclass logistic regression evaluate should return LogisticRegressionSummary
+SPARK-31696	 Support driver service annotation in K8S
+SPARK-31696	 Update version in documentation
+UNSET	 Revert "[SPARK-31387] Handle unknown operation/session ID in HiveThriftServer2Listener"
+SPARK-31713	 Make test-dependencies.sh detect version string correctly
+SPARK-31712	 Check casting timestamps before the epoch to Byte/Short/Int/Long types
+SPARK-31715	 Fix flaky SparkSQLEnvSuite that sometimes varies single derby instance standard
+SPARK-31716	 Use fallback versions in HiveExternalCatalogVersionsSuite
+SPARK-31620	 Fix reference binding failure in case of an final agg contains subquery
 PARK-31489	 Fix pushing down filters with `java.time.LocalDate` values in ORC
 SPARK-31565	 Unify the font color of label among all DAG-viz
 SPARK-31497	 Fix Pyspark CrossValidator/TrainValidationSplit with pipeline estimator cannot save and load model
