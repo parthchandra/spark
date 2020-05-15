@@ -1,6 +1,17 @@
 This contains the changes after creating `v3.0.0-rc1`
 
 # From Spark 3.1.0
+SPARK-31239      Increase await duration in `WorkerDecommissionSuite`.`verify a task with all workers decommissioned succeeds`
+SPARK-30715      Update k8s client version in IT as well
+SPARK-31068      Avoid IllegalArgumentException in broadcast exchange
+SPARK-31120      Support enabling maven profiles for importing InteliJ
+SPARK-3101       Log better message if SIGPWR is not supported while setting up decommissioning
+SPARK-31041      Show Maven errors from within make-distribution.sh
+SPARK-31071      Allow annotating non-null fields when encoding Java Beans
+SPARK-30856      [PYSPARK] Fix SQLContext.getOrCreate() when SparkContext is restarted
+SPARK-30786      Fix Block replication failure propogation issue in BlockManager
+SPARK-30772      avoid tuple assignment because it will circumvent the transient tag
+SPARK-30697      Handle database and namespace exceptions in catalog.isView
 SPARK-31208      Add an expiremental cleanShuffleDependencies
 SPARK-31125      Terminating pods have a deletion timestamp but they are not yet dead
 SPARK-31062      Improve spark decommissioning k8s test reliability
