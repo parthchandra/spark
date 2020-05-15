@@ -1,43 +1,62 @@
 #!/usr/bin/perl
 use warnings;
-my $other_branch = "upstream/branch-3.0";
-my $last_commit = "79444d6d6f1e63f28a27420b3165e1115c35c687";
+my $other_branch = "upstream/master";
+my $last_commit = "7ab167a9952c363306f0b9ee7402482072039d2b";
 my $other_git_log = `git log --format=oneline $other_branch...$last_commit`;
 my $long_git_log = `git log --decorate --color=always -p $other_branch...$last_commit`;
+my $current_log = `git log --format=oneline`;
 my @commits_code = reverse(split('\n\S*commit\s+', $long_git_log));
 my $commits_code_size = $#commits_code;
 my @commits_desc = reverse(split('\n', $other_git_log));
 my $commits_desc_size = $#commits_desc;
 my $new_changes = "";
+# Load existing changes
+open my $fh, '<', 'APPLE_CHANGES.txt' or die "Can't open file $!";
+my $apple_changes = do { local $/; <$fh> };
+
 # Process the commits
 if ($commits_desc_size != $commits_code_size) {
     print "Error $commits_desc_size != $commits_code_size";
     exit;
 }
-foreach my $i (0..$#commits_desc) {
+COMMIT: foreach my $i (0..$#commits_desc) {
     my $commit_desc = $commits_desc[$i];
     my $commit_code = $commits_code[$i];
     print "Code:\n$commit_code\n";
-    print "Merge commit $commit_desc? [y/n]";
+    my $commit;
+    my $jira;
+    my $desc;
+    # Extract the info we need for the log for commits of [SPARK-...]
+    if ($commit_desc =~ /([a-f0-9]{40})\s+\[(SPARK-\d+)\](.*\])\s*(.+?)$/) {
+	$commit = $1;
+	$jira = $2;
+	$desc = $4;
+	# Sometimes people don't mention the component
+    } elsif ($commit_desc =~ /([a-f0-9]{40})\s+\[(SPARK-\d+)\]\s*(.+?)$/) {
+	$commit = $1;
+	$jira = $2;
+	$desc = $3;
+	# Sometimes we have hotfixes and the like
+    } elsif ($commit_desc =~ /([a-f0-9]{40})\s+(.+)/) {
+	$commit = $1;
+	$desc = $2;
+	$jira = "UNSET";
+    } else {
+	print "Can't handle $commit_desc please merge manually";
+    }
+    my $jira_merged = "";
+    if ($apple_changes =~ /$jira/ || $current_log =~ /$jira/) {
+	$jira_merged = "JIRA ALREAD MERGED";
+	#if ($commit_desc !~ /HOTFIX/i || $commit_desc !~ /MINOR/i || $commit_desc !~ /FOLLOW\s*UP/i) {
+	#    next COMMIT;
+	#}
+    }
+    print "Merge commit $commit_desc with $jira? $jira_merged [y/n]";
     while (my $input = <>) {
 	chomp($input);
 	if ($input eq 'y') {
-	    # Extract the info we need for the log for commits of [SPARK-...]
-	    if ($commit_desc =~ /([a-f0-9]{40})\s+\[(SPARK-\d+)\](.*\])\s*(.+?)$/) {
-		my $commit = $1;
-		my $jira = $2;
-		my $desc = $4;
-		$new_changes = "$new_changes\n$jira\t $desc";
-		print `git cherry-pick $commit`;
-	    # Sometimes we have hotfixes and the like
-	    } elsif ($commit_desc =~ /([a-f0-9]{40})\s+(.+)/) {
-		my $commit = $1;
-		my $desc = $2;
-		$new_changes = "$new_changes\nUNSET\t $desc";
-		print `git cherry-pick $commit`;
-	    } else {
-		print "Can't handle $commit_desc please merge manually";
-	    }
+	    $new_changes = "$new_changes\n$jira\t $desc";
+	    print `git cherry-pick $commit`;
 	    last;
 	} elsif ($input eq 'n') {
 	    last;
