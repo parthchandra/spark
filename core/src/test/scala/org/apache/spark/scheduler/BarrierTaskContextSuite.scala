@@ -36,7 +36,8 @@ class BarrierTaskContextSuite extends SparkFunSuite with LocalSparkContext {
     sc = new SparkContext(conf)
   }
 
-  test("global sync by barrier() call") {
+  // TODO (SPARK-31730): re-enable it
+  ignore("global sync by barrier() call") {
     initLocalClusterSparkContext()
     val rdd = sc.makeRDD(1 to 10, 4)
     val rdd2 = rdd.barrier().mapPartitions { it =>
@@ -128,7 +129,8 @@ class BarrierTaskContextSuite extends SparkFunSuite with LocalSparkContext {
     assert(times2.max - times2.min <= 1000)
   }
 
-  test("support multiple barrier() call within a single task") {
+  // TODO (SPARK-31730): re-enable it
+  ignore("support multiple barrier() call within a single task") {
     initLocalClusterSparkContext()
     val rdd = sc.makeRDD(1 to 10, 4)
     val rdd2 = rdd.barrier().mapPartitions { it =>
