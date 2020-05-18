@@ -23,6 +23,8 @@ import org.eclipse.jetty.servlet.{ServletContextHandler, ServletHolder}
 import org.glassfish.jersey.server.ServerProperties
 import org.glassfish.jersey.servlet.ServletContainer
 
+import org.apache.spark.{SPARK_REVISION, SPARK_VERSION_SHORT}
+import org.apache.spark.annotation.Experimental
 import org.apache.spark.ui.SparkUI
 
 /**
@@ -39,6 +41,7 @@ private[v1] class PrometheusResource extends ApiRequestContext {
   @Produces(Array(MediaType.TEXT_PLAIN))
   def executors(): String = {
     val sb = new StringBuilder
+    sb.append(s"""spark_info{version="$SPARK_VERSION_SHORT", revision="$SPARK_REVISION"} 1.0\n""")
     val store = uiRoot.asInstanceOf[SparkUI].store
     store.executorList(true).foreach { executor =>
       val prefix = "metrics_executor_"
