@@ -1,6 +1,7 @@
 This contains the changes after creating `v3.0.0-rc1`
 
 # From Spark 3.1.0
+SPARK-20732      Decommission cache blocks to other executors when an executor is decommissioned
 SPARK-31655	 Upgrade snappy-java to 1.1.7.5
 SPARK-30385	 WebUI occasionally throw IOException on stop()
 SPARK-31102	 Spark-sql fails to parse when contains comment
@@ -25,6 +26,8 @@ SPARK-25355      Add proxy user to driver if present on spark-submit
 SPARK-31360      Fix hung-up issue in StagePage
 
 # From Spark 3.0.0
+SPARK-31740      Use github URL instead of a broken link
+SPARK-31399      Support indylambda Scala closure in ClosureCleaner
 SPARK-31612	 SQL Reference clean up
 SPARK-31549	 Add a develop API invoking collect on Python RDD with user-specified job group
 SPARK-28424	 Add test cases for all interval units
