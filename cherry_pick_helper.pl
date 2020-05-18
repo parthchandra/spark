@@ -45,11 +45,13 @@ COMMIT: foreach my $i (0..$#commits_desc) {
 	print "Can't handle $commit_desc please merge manually";
     }
     my $jira_merged = "";
+    my $default = "";
     if ($apple_changes =~ /$jira/ || $current_log =~ /$jira/) {
 	$jira_merged = "JIRA ALREAD MERGED";
-	#if ($commit_desc !~ /HOTFIX/i || $commit_desc !~ /MINOR/i || $commit_desc !~ /FOLLOW\s*UP/i) {
+	if ($commit_desc !~ /HOTFIX/i || $commit_desc !~ /MINOR/i || $commit_desc !~ /FOLLOW\s*UP/i) {
+	    $default = "n";
 	#    next COMMIT;
-	#}
+	}
     }
     print "Merge commit $commit_desc with $jira? $jira_merged [y/n]";
     while (my $input = <>) {
@@ -58,7 +60,7 @@ COMMIT: foreach my $i (0..$#commits_desc) {
 	    $new_changes = "$new_changes\n$jira\t $desc";
 	    print `git cherry-pick $commit`;
 	    last;
-	} elsif ($input eq 'n') {
+	} elsif ($input eq 'n' || ($input eq '' && $default eq 'n')) {
 	    last;
 	} else {
 	    print "Invalid answer $input\n";
