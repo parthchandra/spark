@@ -205,6 +205,15 @@ SPARK-31582       Being able to not populate Hadoop classpath
 SPARK-31449       Fix getting time zone offsets from local milliseconds
 SPARK-31601       Fix spark.kubernetes.executor.podNamePrefix to work
 SPARK-31500       collect_set() of BinaryType returns duplicate elements
+SPARK-31691       release-build.sh should ignore a fallback output from `build/mvn`
+SPARK-31632       Enrich the exception message when application information is unavailable
+SPARK-31676       QuantileDiscretizer raise error parameter splits given invalid value (splits array includes -0.0 and 0.0)
+SPARK-31713       Make test-dependencies.sh detect version string correctly
+SPARK-31716       Use fallback versions in HiveExternalCatalogVersionsSuite
+SPARK-31712       Check casting timestamps before the epoch to Byte/Short/Int/Long types
+SPARK-31663       Grouping sets with having clause returns the wrong result
+SPARK-31655       Upgrade snappy-java to 1.1.7.5
+SPARK-31740       Use github URL instead of a broken link
 
 # Internal Patches
 N/A               Nested schema pruning for DataSourceV2 and Enable custom rules that infer predicates in the optimizer
@@ -237,3 +246,4 @@ MINOR             Bump to 2.4.5.7-jdk11-apple-SNAPSHOT
 rdar://58646296   ACI Spark Job with Hive should enable SSL configuration with App Identity certificate
 MINOR             Add apple repository
 MINOR             Bump to 2.4.5.11-jdk11-apple-SNAPSHOT
+MINOR             Bump to 2.4.5.13-jdk11-apple-SNAPSHOT
