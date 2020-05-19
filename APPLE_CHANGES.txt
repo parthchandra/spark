@@ -4,7 +4,6 @@ This contains the changes after creating `v3.0.0-rc1`
 SPARK-20732      Decommission cache blocks to other executors when an executor is decommissioned
 SPARK-31655	 Upgrade snappy-java to 1.1.7.5
 SPARK-30385	 WebUI occasionally throw IOException on stop()
-SPARK-31102	 Spark-sql fails to parse when contains comment
 SPARK-31239      Increase await duration in `WorkerDecommissionSuite`.`verify a task with all workers decommissioned succeeds`
 SPARK-30715      Update k8s client version in IT as well
 SPARK-31068      Avoid IllegalArgumentException in broadcast exchange
