@@ -275,6 +275,7 @@ SPARK-31358      Document FILTER clauses of aggregate functions in SQL reference
 SPARK-31333      Document Join Hints
 
 # Internal Patches
+MINOR             Add hadoop cloud to our rio build.
 MINOR             Add a script for simplifying backporting
 SPARK-17767       Support user-provided ExternalCatalog and SessionBuilder
 MINOR             Support JarvisSparkHadoopUtil
