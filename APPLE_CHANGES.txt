@@ -26,6 +26,17 @@ SPARK-25355      Add proxy user to driver if present on spark-submit
 SPARK-31360      Fix hung-up issue in StagePage
 
 # From Spark 3.0.0
+SPARK-31289	 Eliminate org.apache.spark.sql.hive.thriftserver.CliSuite flakiness
+SPARK-31732	 Disable some flaky tests temporarily
+SPARK-31725	 Set America/Los_Angeles time zone and Locale.US in tests by default
+SPARK-31707	 Revert SPARK-30098 Use default datasource as provider for CREATE TABLE syntax
+SPARK-31405	 Fail by default when reading/writing legacy datetime values from/to Parquet/Avro files
+SPARK-31744	 Remove Hive dependency in AppVeyor build temporarily
+SPARK-31742	 Increase the eventually time limit for Mino kdc in tests to fix flakiness
+SPARK-31743	 Add spark_info metric into PrometheusResource
+SPARK-31727	 Fix error message of casting timestamp to int in ANSI non-codegen mode
+SPARK-31746	 Show the actual error message in LocalityPlacementStrategySuite
+SPARK-31738	 Describe 'L' and 'M' month pattern letters
 SPARK-31740      Use github URL instead of a broken link
 SPARK-31399      Support indylambda Scala closure in ClosureCleaner
 SPARK-31612	 SQL Reference clean up
