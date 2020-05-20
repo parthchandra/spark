@@ -46,12 +46,15 @@ COMMIT: foreach my $i (0..$#commits_desc) {
     }
     my $jira_merged = "";
     my $default = "";
-    if ($apple_changes =~ /$jira/ || $current_log =~ /$jira/) {
+    if ($current_log =~ /$jira/) {
 	$jira_merged = "JIRA ALREAD MERGED";
 	if ($commit_desc !~ /HOTFIX/i || $commit_desc !~ /MINOR/i || $commit_desc !~ /FOLLOW\s*UP/i) {
 	    $default = "n";
 	#    next COMMIT;
 	}
+    }
+    if ($apple_changes =~ /$jira/ && $jira_merged eq "") {
+	$jira_merged = "*****Present in changes but not log?****";
     }
     print "Merge commit $commit_desc with $jira? $jira_merged [y/n]";
     while (my $input = <>) {
