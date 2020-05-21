@@ -1,7 +1,8 @@
 #!/usr/bin/perl
 use warnings;
-my $other_branch = "upstream/master";
-my $last_commit = "7ab167a9952c363306f0b9ee7402482072039d2b";
+my $other_branch = "upstream/branch-3.0";
+#my $last_commit = "7ab167a9952c363306f0b9ee7402482072039d2b";
+my $last_commit = "c0632cec04e5b0f3fb3c3f27c21a2d3f3fbb4f7e";
 my $other_git_log = `git log --format=oneline $other_branch...$last_commit`;
 my $long_git_log = `git log --decorate --color=always -p $other_branch...$last_commit`;
 my $current_log = `git log --format=oneline`;
@@ -22,7 +23,6 @@ if ($commits_desc_size != $commits_code_size) {
 COMMIT: foreach my $i (0..$#commits_desc) {
     my $commit_desc = $commits_desc[$i];
     my $commit_code = $commits_code[$i];
-    print "Code:\n$commit_code\n";
     my $commit;
     my $jira;
     my $desc;
@@ -47,21 +47,32 @@ COMMIT: foreach my $i (0..$#commits_desc) {
     my $jira_merged = "";
     my $default = "";
     if ($current_log =~ /$jira/) {
-	$jira_merged = "JIRA ALREAD MERGED";
+	if ($jira ne "UNSET") {
+	    $jira_merged = "JIRA ALREAD MERGED";
+	}
 	if ($commit_desc !~ /HOTFIX/i || $commit_desc !~ /MINOR/i || $commit_desc !~ /FOLLOW\s*UP/i) {
 	    $default = "n";
-	#    next COMMIT;
+	    my $quoted_desc= quotemeta(chomp($commit_desc));
+	    if ($current_log =~ /$quoted_desc/i) {
+		next COMMIT;
+	    }
 	}
     }
     if ($apple_changes =~ /$jira/ && $jira_merged eq "") {
-	$jira_merged = "*****Present in changes but not log?****";
+	$jira_merged = "*****Present in APPLE_CHANGES.txt but not in git log?****";
     }
+    print "Code:\n$commit_code\n";
     print "Merge commit $commit_desc with $jira? $jira_merged [y/n]";
     while (my $input = <>) {
 	chomp($input);
 	if ($input eq 'y') {
 	    $new_changes = "$new_changes\n$jira\t $desc";
-	    print `git cherry-pick $commit`;
+	    my $merge_result = system("git cherry-pick $commit");
+	    print "Result:\n$merge_result";
+	    if ($merge_result != 0) {
+		print "Git merge issue. Press enter when fixed";
+		my $i = <>;
+	    }
 	    last;
 	} elsif ($input eq 'n' || ($input eq '' && $default eq 'n')) {
 	    last;

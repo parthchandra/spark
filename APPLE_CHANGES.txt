@@ -102,7 +102,7 @@ SPARK-31676	 QuantileDiscretizer raise error parameter splits given invalid valu
 SPARK-31681	 Python multiclass logistic regression evaluate should return LogisticRegressionSummary
 SPARK-31696	 Support driver service annotation in K8S
 SPARK-31696	 Update version in documentation
-UNSET	 Revert "[SPARK-31387] Handle unknown operation/session ID in HiveThriftServer2Listener"
+UNSET		 Revert "[SPARK-31387] Handle unknown operation/session ID in HiveThriftServer2Listener"
 SPARK-31713	 Make test-dependencies.sh detect version string correctly
 SPARK-31712	 Check casting timestamps before the epoch to Byte/Short/Int/Long types
 SPARK-31715	 Fix flaky SparkSQLEnvSuite that sometimes varies single derby instance standard
@@ -273,7 +273,8 @@ SPARK-31358      Document FILTER clauses of aggregate functions in SQL reference
 SPARK-31333      Document Join Hints
 
 # Internal Patches
-MINOR             Remvoe some SQL UI tests that we haven't ported in the changes for (due to non-bug change in 3.1)
+MINOR             Simplify going through a large collection of patches.
+MINOR             Remove some SQL UI tests that we haven't ported in the changes for (due to non-bug change in 3.1)
 MINOR             Add hadoop cloud to our rio build.
 MINOR             Add a script for simplifying backporting
 SPARK-17767       Support user-provided ExternalCatalog and SessionBuilder
