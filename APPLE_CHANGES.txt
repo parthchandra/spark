@@ -25,6 +25,18 @@ SPARK-25355      Add proxy user to driver if present on spark-submit
 SPARK-31360      Fix hung-up issue in StagePage
 
 # From Spark 3.0.0
+SPARK-31739      Fix docstring syntax issues and misplaced space characters
+SPARK-31440      Improve SQL Rest API
+SPARK-31651      Improve handling the case where different barrier sync types in a single sync
+SPARK-31721      Assert optimized is initialized before tracking the planning time
+SPARK-31750      Eliminate UpCast if child's dataType is DecimalType
+SPARK-31706      add back the support of streaming update mode
+SPARK-31748      Document resource module in PySpark doc and rename/move classes
+SPARK-31767      Remove ResourceInformation in pyspark module's namespace
+SPARK-31766      Add Spark version prefix to K8s UUID test image tag
+SPARK-31780      Add R test tag to exclude R K8s image building and test
+SPARK-31762      Fix perf regression of date/timestamp formatting in toHiveString
+SPARK-31354      SparkContext only register one SparkSession ApplicationEnd listener
 SPARK-31289	 Eliminate org.apache.spark.sql.hive.thriftserver.CliSuite flakiness
 SPARK-31732	 Disable some flaky tests temporarily
 SPARK-31725	 Set America/Los_Angeles time zone and Locale.US in tests by default
