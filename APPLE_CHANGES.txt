@@ -34,7 +34,6 @@ SPARK-31744	 Remove Hive dependency in AppVeyor build temporarily
 SPARK-31742	 Increase the eventually time limit for Mino kdc in tests to fix flakiness
 SPARK-31743	 Add spark_info metric into PrometheusResource
 SPARK-31727	 Fix error message of casting timestamp to int in ANSI non-codegen mode
-SPARK-31746	 Show the actual error message in LocalityPlacementStrategySuite
 SPARK-31738	 Describe 'L' and 'M' month pattern letters
 SPARK-31740      Use github URL instead of a broken link
 SPARK-31399      Support indylambda Scala closure in ClosureCleaner
@@ -274,6 +273,7 @@ SPARK-31358      Document FILTER clauses of aggregate functions in SQL reference
 SPARK-31333      Document Join Hints
 
 # Internal Patches
+MINOR             Remvoe some SQL UI tests that we haven't ported in the changes for (due to non-bug change in 3.1)
 MINOR             Add hadoop cloud to our rio build.
 MINOR             Add a script for simplifying backporting
 SPARK-17767       Support user-provided ExternalCatalog and SessionBuilder
