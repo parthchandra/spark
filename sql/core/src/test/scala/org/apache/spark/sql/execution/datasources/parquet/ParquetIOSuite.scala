@@ -1039,12 +1039,14 @@ class ParquetIOSuite extends QueryTest with ParquetTest with SharedSparkSession 
                   Seq.tabulate(N)(_ => Row(Date.valueOf("1001-01-01"))))
               }
             }
+            // Force to not rebase to prove the written datetime values are rebased and we will get
+            // wrong result if we don't rebase while reading.
+            withSQLConf("spark.test.forceNoRebase" -> "true") {
+              checkAnswer(
+                spark.read.parquet(path),
+                Seq.tabulate(N)(_ => Row(Date.valueOf("1001-01-07"))))
+            }
           }
-        }
-        // Force to not rebase to prove the written datetime values are rebased and we will get
-        // wrong result if we don't rebase while reading.
-        withSQLConf("spark.test.forceNoRebase" -> "true") {
-          checkAnswer(spark.read.parquet(path), Row(Date.valueOf("1001-01-07")))
         }
       }
     }
