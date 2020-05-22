@@ -867,7 +867,7 @@ class AdaptiveQueryExecSuite
         }
         spark.sparkContext.addSparkListener(listener)
         try {
-          sql("CREATE TABLE t1 AS SELECT 1 col").collect()
+          sql("CREATE TABLE t1 USING parquet AS SELECT 1 col").collect()
           spark.sparkContext.listenerBus.waitUntilEmpty()
           assert(checkDone)
         } finally {
