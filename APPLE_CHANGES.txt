@@ -1,42 +1,42 @@
 This contains the changes after creating `v3.0.0-rc1`
 
 # From Spark 3.1.0
-SPARK-20732      Decommission cache blocks to other executors when an executor is decommissioned
+SPARK-20732	 Decommission cache blocks to other executors when an executor is decommissioned
 SPARK-31655	 Upgrade snappy-java to 1.1.7.5
 SPARK-30385	 WebUI occasionally throw IOException on stop()
-SPARK-31239      Increase await duration in `WorkerDecommissionSuite`.`verify a task with all workers decommissioned succeeds`
-SPARK-30715      Update k8s client version in IT as well
-SPARK-31068      Avoid IllegalArgumentException in broadcast exchange
-SPARK-31120      Support enabling maven profiles for importing InteliJ
-SPARK-3101       Log better message if SIGPWR is not supported while setting up decommissioning
-SPARK-31041      Show Maven errors from within make-distribution.sh
-SPARK-31071      Allow annotating non-null fields when encoding Java Beans
-SPARK-30856      [PYSPARK] Fix SQLContext.getOrCreate() when SparkContext is restarted
-SPARK-30786      Fix Block replication failure propogation issue in BlockManager
-SPARK-30772      avoid tuple assignment because it will circumvent the transient tag
-SPARK-30697      Handle database and namespace exceptions in catalog.isView
-SPARK-31208      Add an expiremental cleanShuffleDependencies
-SPARK-31125      Terminating pods have a deletion timestamp but they are not yet dead
-SPARK-31062      Improve spark decommissioning k8s test reliability
-SPARK-20628      Start to improve Spark decommissioning & preemption support
-SPARK-29089      Parallelize blocking FileSystem calls in DataSource#checkAndGlobPathIfNecessary
-SPARK-31073      Add "shuffle write time" to task metrics summary in StagePage
-SPARK-25355      Add proxy user to driver if present on spark-submit
-SPARK-31360      Fix hung-up issue in StagePage
+SPARK-31239	 Increase await duration in `WorkerDecommissionSuite`.`verify a task with all workers decommissioned succeeds`
+SPARK-30715	 Update k8s client version in IT as well
+SPARK-31068	 Avoid IllegalArgumentException in broadcast exchange
+SPARK-31120	 Support enabling maven profiles for importing InteliJ
+SPARK-3101	 Log better message if SIGPWR is not supported while setting up decommissioning
+SPARK-31041	 Show Maven errors from within make-distribution.sh
+SPARK-31071	 Allow annotating non-null fields when encoding Java Beans
+SPARK-30856	 [PYSPARK] Fix SQLContext.getOrCreate() when SparkContext is restarted
+SPARK-30786	 Fix Block replication failure propogation issue in BlockManager
+SPARK-30772	 avoid tuple assignment because it will circumvent the transient tag
+SPARK-30697	 Handle database and namespace exceptions in catalog.isView
+SPARK-31208	 Add an expiremental cleanShuffleDependencies
+SPARK-31125	 Terminating pods have a deletion timestamp but they are not yet dead
+SPARK-31062	 Improve spark decommissioning k8s test reliability
+SPARK-20628	 Start to improve Spark decommissioning & preemption support
+SPARK-29089	 Parallelize blocking FileSystem calls in DataSource#checkAndGlobPathIfNecessary
+SPARK-31073	 Add "shuffle write time" to task metrics summary in StagePage
+SPARK-25355	 Add proxy user to driver if present on spark-submit
+SPARK-31360	 Fix hung-up issue in StagePage
 
 # From Spark 3.0.0
-SPARK-31739      Fix docstring syntax issues and misplaced space characters
-SPARK-31440      Improve SQL Rest API
-SPARK-31651      Improve handling the case where different barrier sync types in a single sync
-SPARK-31721      Assert optimized is initialized before tracking the planning time
-SPARK-31750      Eliminate UpCast if child's dataType is DecimalType
-SPARK-31706      add back the support of streaming update mode
-SPARK-31748      Document resource module in PySpark doc and rename/move classes
-SPARK-31767      Remove ResourceInformation in pyspark module's namespace
-SPARK-31766      Add Spark version prefix to K8s UUID test image tag
-SPARK-31780      Add R test tag to exclude R K8s image building and test
-SPARK-31762      Fix perf regression of date/timestamp formatting in toHiveString
-SPARK-31354      SparkContext only register one SparkSession ApplicationEnd listener
+SPARK-31739	 Fix docstring syntax issues and misplaced space characters
+SPARK-31440	 Improve SQL Rest API
+SPARK-31651	 Improve handling the case where different barrier sync types in a single sync
+SPARK-31721	 Assert optimized is initialized before tracking the planning time
+SPARK-31750	 Eliminate UpCast if child's dataType is DecimalType
+SPARK-31706	 add back the support of streaming update mode
+SPARK-31748	 Document resource module in PySpark doc and rename/move classes
+SPARK-31767	 Remove ResourceInformation in pyspark module's namespace
+SPARK-31766	 Add Spark version prefix to K8s UUID test image tag
+SPARK-31780	 Add R test tag to exclude R K8s image building and test
+SPARK-31762	 Fix perf regression of date/timestamp formatting in toHiveString
+SPARK-31354	 SparkContext only register one SparkSession ApplicationEnd listener
 SPARK-31289	 Eliminate org.apache.spark.sql.hive.thriftserver.CliSuite flakiness
 SPARK-31732	 Disable some flaky tests temporarily
 SPARK-31725	 Set America/Los_Angeles time zone and Locale.US in tests by default
@@ -47,8 +47,8 @@ SPARK-31742	 Increase the eventually time limit for Mino kdc in tests to fix fla
 SPARK-31743	 Add spark_info metric into PrometheusResource
 SPARK-31727	 Fix error message of casting timestamp to int in ANSI non-codegen mode
 SPARK-31738	 Describe 'L' and 'M' month pattern letters
-SPARK-31740      Use github URL instead of a broken link
-SPARK-31399      Support indylambda Scala closure in ClosureCleaner
+SPARK-31740	 Use github URL instead of a broken link
+SPARK-31399	 Support indylambda Scala closure in ClosureCleaner
 SPARK-31612	 SQL Reference clean up
 SPARK-31549	 Add a develop API invoking collect on Python RDD with user-specified job group
 SPARK-28424	 Add test cases for all interval units
@@ -56,17 +56,17 @@ SPARK-31619	 Rename config "spark.dynamicAllocation.shuffleTimeout" to "spark.dy
 SPARK-31549	 Remove a newline between class methods for linter check
 SPARK-31372	 Update the golden file of ExpressionsSchemaSuite
 SPARK-31500	 collect_set() of BinaryType returns duplicate elements
-MINOR            Remove two leading spaces from sql tables
-MINOR            Disable UI in SQL benchmarks by default
+MINOR		 Remove two leading spaces from sql tables
+MINOR		 Disable UI in SQL benchmarks by default
 SPARK-31571	 Overhaul stop/message/warning calls to be more canonical
 SPARK-31527	 Fix the number of rows in `DateTimeBenchmark`
 SPARK-31267	 Flaky test: WholeStageCodegenSparkSubmitSuite.Generated code on driver should not embed platform-specific constant
 SPARK-31626	 Port HIVE-10415: hive.start.cleanup.scratchdir configuration is not taking effect
 SPARK-31606	 Reduce the perf regression of vectorized parquet reader caused by datetime rebase
-MINOR            Fix typo in documents
-SPARK-31624      Fix SHOW TBLPROPERTIES for V2 tables that leverage the session catalog
+MINOR		 Fix typo in documents
+SPARK-31624	 Fix SHOW TBLPROPERTIES for V2 tables that leverage the session catalog
 SPARK-31633	 Upgrade SLF4J from 1.7.16 to 1.7.30
-SPARK-31639      Revert SPARK-27528 Use Parquet logical type TIMESTAMP_MICROS by default
+SPARK-31639	 Revert SPARK-27528 Use Parquet logical type TIMESTAMP_MICROS by default
 SPARK-31372	 Improve ExpressionsSchemaSuite so that easy to track the diff
 SPARK-27963	 Remove `for testing` because CleanerListener is used ExecutorMonitor during dynamic allocation
 SPARK-31623	 Benchmark rebasing of INT96 and TIMESTAMP_MILLIS timestamps in read/write
@@ -102,7 +102,7 @@ SPARK-31393	 Show the correct alias in schema for expression
 SPARK-31678	 Print error stack trace for Spark SQL CLI when error occurs
 SPARK-31680	 Support Java 8 datetime types by Random data generator
 SPARK-31610	 Address hashingTF saving&loading bug and expose hashFunc property in HashingTF
-SPARK-31387      Handle unknown operation/session ID in HiveThriftServer2Listener
+SPARK-31387	 Handle unknown operation/session ID in HiveThriftServer2Listener
 SPARK-31683	 Make Prometheus output consistent with DropWizard 4.1 result
 SPARK-31691	 release-build.sh should ignore a fallback output from `build/mvn`
 SPARK-31697	 HistoryServer should set Content-Type
@@ -163,176 +163,176 @@ SPARK-27340	 Rephrase API comments and simplify tests
 SPARK-31557	 Fix timestamps rebasing in legacy parsers
 SPARK-28806	 Remove unneeded HTML from the MD file
 SPARK-31535	 Fix nested CTE substitution
-SPARK-31562      Update ExpressionDescription for substring, current_date, and current_timestamp
-SPARK-31558      Code clean up in spark-sql-viz.js
-SPARK-31564      Fix flaky AllExecutionsPageSuite for checking 1970
-SPARK-31563      Fix failure of InSet.sql for collections of Catalyst's internal types
-SPARK-31521      Correct the fetch size when merging blocks into a merged block
-SPARK-31516      Fix non-existed metric hiveClientCalls.count of CodeGenerator in DOC
-SPARK-31560      Add V1/V2 tests for TextSuite and WholeTextFileSuite
-SPARK-31552      Fix ClassCastException in ScalaReflection arrayClassFor
-SPARK-31491      Re-arrange Data Types page to document Floating Point Special Values
-SPARK-31532      Builder should not propagate static sql configs to the existing active or default SparkSession
-SPARK-31364      Benchmark Parquet Nested Field Predicate Pushdown
-SPARK-31010      Improve deprecated warning message for untyped scala udf
-SPARK-31502      Document identifier in SQL Reference
-SPARK-31510      Set setwd in R documentation build
-SPARK-30804      Measure and log elapsed time for "compact" operation in CompactibleFileStreamLog
-SPARK-31488      Support `java.time.LocalDate` in Parquet filter pushdown
-SPARK-31526      Add a new test suite for ExpressionInfo
-SPARK-31522      Hive metastore client initialization related configurations should be static
-SPARK-31472      Make sure Barrier Task always return messages or exception with abortableRpcFuture check
-SPARK-16775      FOLLOW-UP: Add migration guide for removed accumulator v1 APIs
-SPARK-31344      Polish implementation of barrier() and allGather()
-SPARK-31465      Document Literal in SQL Reference
-SPARK-31476      FOLLOWUP: Add tests for extract('field', source)
-SPARK-31474      FOLLOWUP: Replace _FUNC_ placeholder with functionname in the note field of expression info
-MINOR            Add comments for filters values and return values of Row.get()/apply()
-SPARK-31495      Fix test failure of explain-aqe.sql
-MINOR            Fix a typo in ContainerPlacementStrategy's class comment
-SPARK-31495      Support formatted explain for AQE
-SPARK-31507      Remove uncommon fields support  and update some fields with meaningful names for extract function
-SPARK-31498      Dump public static sql configurations through doc generation
-SPARK-31503      fix the SQL string of the TRIM functions
-HOT-FIX          fix compilation
-SPARK-31361      Rebase datetime in parquet/avro according to file metadata
-SPARK-31504      Formatted Explain should have determined order of Output fields
-SPARK-31474      Consistency between dayofweek/dow in extract exprsession and dayofweek function
-SPARK-31501      AQE update UI should not cause deadlock
-SPARK-31429      Automatically generates a SQL document for built-in functions
+SPARK-31562	 Update ExpressionDescription for substring, current_date, and current_timestamp
+SPARK-31558	 Code clean up in spark-sql-viz.js
+SPARK-31564	 Fix flaky AllExecutionsPageSuite for checking 1970
+SPARK-31563	 Fix failure of InSet.sql for collections of Catalyst's internal types
+SPARK-31521	 Correct the fetch size when merging blocks into a merged block
+SPARK-31516	 Fix non-existed metric hiveClientCalls.count of CodeGenerator in DOC
+SPARK-31560	 Add V1/V2 tests for TextSuite and WholeTextFileSuite
+SPARK-31552	 Fix ClassCastException in ScalaReflection arrayClassFor
+SPARK-31491	 Re-arrange Data Types page to document Floating Point Special Values
+SPARK-31532	 Builder should not propagate static sql configs to the existing active or default SparkSession
+SPARK-31364	 Benchmark Parquet Nested Field Predicate Pushdown
+SPARK-31010	 Improve deprecated warning message for untyped scala udf
+SPARK-31502	 Document identifier in SQL Reference
+SPARK-31510	 Set setwd in R documentation build
+SPARK-30804	 Measure and log elapsed time for "compact" operation in CompactibleFileStreamLog
+SPARK-31488	 Support `java.time.LocalDate` in Parquet filter pushdown
+SPARK-31526	 Add a new test suite for ExpressionInfo
+SPARK-31522	 Hive metastore client initialization related configurations should be static
+SPARK-31472	 Make sure Barrier Task always return messages or exception with abortableRpcFuture check
+SPARK-16775	 FOLLOW-UP: Add migration guide for removed accumulator v1 APIs
+SPARK-31344	 Polish implementation of barrier() and allGather()
+SPARK-31465	 Document Literal in SQL Reference
+SPARK-31476	 FOLLOWUP: Add tests for extract('field', source)
+SPARK-31474	 FOLLOWUP: Replace _FUNC_ placeholder with functionname in the note field of expression info
+MINOR		 Add comments for filters values and return values of Row.get()/apply()
+SPARK-31495	 Fix test failure of explain-aqe.sql
+MINOR		 Fix a typo in ContainerPlacementStrategy's class comment
+SPARK-31495	 Support formatted explain for AQE
+SPARK-31507	 Remove uncommon fields support	 and update some fields with meaningful names for extract function
+SPARK-31498	 Dump public static sql configurations through doc generation
+SPARK-31503	 fix the SQL string of the TRIM functions
+HOT-FIX		 fix compilation
+SPARK-31361	 Rebase datetime in parquet/avro according to file metadata
+SPARK-31504	 Formatted Explain should have determined order of Output fields
+SPARK-31474	 Consistency between dayofweek/dow in extract exprsession and dayofweek function
+SPARK-31501	 AQE update UI should not cause deadlock
+SPARK-31429	 Automatically generates a SQL document for built-in functions
 SPARK-31381 & SPARK-29245 Upgrade built-in Hive 2.3.6 to 2.3.7
-SPARK-31234      ResetCommand should not affect static SQL Configuration
-SPARK-31475      Broadcast stage in AQE did not timeout
-SPARK-31490      Benchmark conversions to/from Java 8 datetime type
-SPARK-31385      Restrict micros rebasing via switch arrays up to 2037 year
-SPARK-31256      DataFrameNaFunctions.drop should work for nested columns
-SPARK-31476      Add an ExpressionInfo entry for EXTRACT
-SPARK-29672      Recover PySpark via pip installation with deprecated Python 2, 3.4 and 3.5
-SPARK-31442      Print shuffle id at coalesce partitions target size
-SPARK-31469      Remove unsupported fields from ExtractBenchmark
-SPARK-31473      AQE should set active session during execution
-SPARK-31390      Document Window Function in SQL Syntax Section
-SPARK-31446      Make html elements for a paged table possible to have different id attribute
-SPARK-31468      Null types should be implicitly casted to Decimal types
-SPARK-31469      Make extract interval field ANSI compliance
-SPARK-31425      UnsafeKVExternalSorter/VariableLengthRowBasedKeyValueBatch should also respect UnsafeAlignedOffset
-SPARK-31450      Make ExpressionEncoder thread-safe
-SPARK-31462      The usage of getopts and case statement is wrong in do-release.sh
-SPARK-31420      Make locale of timeline-view 'en'
-SPARK-30564      Revert Block.length and use comment placeholders in HashAggregateExec
-SPARK-31455      Fix rebasing of not-existed timestamps
-SPARK-31428      Document Common Table Expression in SQL Reference
-SPARK-31018      Deprecate support of multiple workers on the same host in Standalone
-SPARK-31423      Fix rebasing of not-existed dates
-SPARK-31443      Fix perf regression of toJavaDate
-SPARK-31420      Infinite timeline redraw in job details page
-SPARK-31439      Fix perf regression of fromJavaDate
-SPARK-31402      Refine code comments in RebaseDateTime
-SPARK-30953      InsertAdaptiveSparkPlan should apply AQE on child plan of write commands
-SPARK-31441      Support duplicated column names for toPandas with arrow execution
-SPARK-31392      Since 3.0.0, we make CalendarInterval public for input, it's better for it to be inferred to CalendarIntervalType.
-SPARK-31426      Fix perf regressions of toJavaTimestamp/fromJavaTimestamp
-SPARK-31319      Follow up: Add a SQL example for UDAF
-SPARK-31414      Update default datetime pattern for json/csv APIs documentations
-SPARK-31434      Drop builtin function pages from SQL references
-SPARK-31296      Benchmark date-time rebasing in Parquet datasource
-SPARK-31219      Enable closeIdleConnections in YarnShuffleService
-SPARK-31306      update rand() function documentation to indicate exclusive upper bound
-SPARK-31297      Speed up dates rebasing
-SPARK-31314      Revert SPARK-29285 to fix shuffle regression caused by creating temporary file eagerly
-SPARK-31230      Use statement plans in DataFrameWriter(V2)
-SPARK-31312      Cache Class instance for the UDF instance in HiveFunctionWrapper
-SPARK-29574      Fix bash comparison error in Docker entrypoint.sh
-SPARK-30775      Improve the description of executor metrics in the monitoring documentation
-SPARK-31010      Add Java UDF suggestion in error message of untyped Scala UDF
-SPARK-31305      Add a page to list all commands in SQL Reference
-SPARK-31290      Add back the deprecated R APIs
-SPARK-31318      Split Parquet/Avro configs for rebasing dates/timestamps in read and in write
-SPARK-31311      Benchmark date-time rebasing in ORC datasource
-SPARK-31320      Fix release script for 3.0.0
-SPARK-31313      Add `m01` node name to support Minikube 1.8.x
-SPARK-31322      rename QueryPlan.collectInPlanAndSubqueries to collectWithSubqueries
-SPARK-31324      Include stream ID in the termination timeout error message
-SPARK-31321      Remove SaveMode check in v2 FileWriteBuilder
-SPARK-31328      Fix rebasing of overlapped local timestamps during daylight saving time
-SPARK-31326      Create Function docs structure for SQL Reference
-SPARK-30840      Add version property for ConfigEntry and ConfigBuilder
-SPARK-31249      Fix flaky CoarseGrainedSchedulerBackendSuite.custom log url for Spark UI is applied
-SPARK-31327      Write Spark version into Avro file metadata
-SPARK-31231      Unset setuptools version in pip packaging test
-SPARK-30841      Add version information to the configuration of SQL
-SPARK-31002      Add version information to the configuration of Core
-SPARK-30887      Add version information to the configuration of Deploy
-SPARK-30910      Add version information to the configuration of R
-SPARK-30909      Add version information to the configuration of Python
-SPARK-30888      Add version information to the configuration of Network
-SPARK-30908      Add version information to the configuration of Kryo
-SPARK-30891      Add version information to the configuration of History
-SPARK-30912      Add version information to the configuration of Streaming.scala
-SPARK-30914      Add version information to the configuration of UI
-SPARK-30889      Add version information to the configuration of Tests.scala and Worker
-SPARK-29554      Update Auto-generated Alias Name for Version
-SPARK-30921      Predicates on python udf should not be pushdown through Aggregate
-SPARK-31002      Add version information to the configuration of Core
-SPARK-30911      Add version information to the configuration of Status
-SPARK-27963      Update requirements for spark.dynamicAllocation.enabled
-SPARK-31353      Set a time zone in DateTimeBenchmark and DateTimeRebaseBenchmark
-SPARK-31224      Add view support to SHOW CREATE TABLE
-SPARK-31343      Check codegen does not fail on expressions with escape chars in string parameters
-SPARK-31279      Add version information to the configuration of Hive
-SPARK-31215      Add version information to the static configuration of SQL
-SPARK-31358      Document FILTER clauses of aggregate functions in SQL references
-SPARK-31333      Document Join Hints
+SPARK-31234	 ResetCommand should not affect static SQL Configuration
+SPARK-31475	 Broadcast stage in AQE did not timeout
+SPARK-31490	 Benchmark conversions to/from Java 8 datetime type
+SPARK-31385	 Restrict micros rebasing via switch arrays up to 2037 year
+SPARK-31256	 DataFrameNaFunctions.drop should work for nested columns
+SPARK-31476	 Add an ExpressionInfo entry for EXTRACT
+SPARK-29672	 Recover PySpark via pip installation with deprecated Python 2, 3.4 and 3.5
+SPARK-31442	 Print shuffle id at coalesce partitions target size
+SPARK-31469	 Remove unsupported fields from ExtractBenchmark
+SPARK-31473	 AQE should set active session during execution
+SPARK-31390	 Document Window Function in SQL Syntax Section
+SPARK-31446	 Make html elements for a paged table possible to have different id attribute
+SPARK-31468	 Null types should be implicitly casted to Decimal types
+SPARK-31469	 Make extract interval field ANSI compliance
+SPARK-31425	 UnsafeKVExternalSorter/VariableLengthRowBasedKeyValueBatch should also respect UnsafeAlignedOffset
+SPARK-31450	 Make ExpressionEncoder thread-safe
+SPARK-31462	 The usage of getopts and case statement is wrong in do-release.sh
+SPARK-31420	 Make locale of timeline-view 'en'
+SPARK-30564	 Revert Block.length and use comment placeholders in HashAggregateExec
+SPARK-31455	 Fix rebasing of not-existed timestamps
+SPARK-31428	 Document Common Table Expression in SQL Reference
+SPARK-31018	 Deprecate support of multiple workers on the same host in Standalone
+SPARK-31423	 Fix rebasing of not-existed dates
+SPARK-31443	 Fix perf regression of toJavaDate
+SPARK-31420	 Infinite timeline redraw in job details page
+SPARK-31439	 Fix perf regression of fromJavaDate
+SPARK-31402	 Refine code comments in RebaseDateTime
+SPARK-30953	 InsertAdaptiveSparkPlan should apply AQE on child plan of write commands
+SPARK-31441	 Support duplicated column names for toPandas with arrow execution
+SPARK-31392	 Since 3.0.0, we make CalendarInterval public for input, it's better for it to be inferred to CalendarIntervalType.
+SPARK-31426	 Fix perf regressions of toJavaTimestamp/fromJavaTimestamp
+SPARK-31319	 Follow up: Add a SQL example for UDAF
+SPARK-31414	 Update default datetime pattern for json/csv APIs documentations
+SPARK-31434	 Drop builtin function pages from SQL references
+SPARK-31296	 Benchmark date-time rebasing in Parquet datasource
+SPARK-31219	 Enable closeIdleConnections in YarnShuffleService
+SPARK-31306	 update rand() function documentation to indicate exclusive upper bound
+SPARK-31297	 Speed up dates rebasing
+SPARK-31314	 Revert SPARK-29285 to fix shuffle regression caused by creating temporary file eagerly
+SPARK-31230	 Use statement plans in DataFrameWriter(V2)
+SPARK-31312	 Cache Class instance for the UDF instance in HiveFunctionWrapper
+SPARK-29574	 Fix bash comparison error in Docker entrypoint.sh
+SPARK-30775	 Improve the description of executor metrics in the monitoring documentation
+SPARK-31010	 Add Java UDF suggestion in error message of untyped Scala UDF
+SPARK-31305	 Add a page to list all commands in SQL Reference
+SPARK-31290	 Add back the deprecated R APIs
+SPARK-31318	 Split Parquet/Avro configs for rebasing dates/timestamps in read and in write
+SPARK-31311	 Benchmark date-time rebasing in ORC datasource
+SPARK-31320	 Fix release script for 3.0.0
+SPARK-31313	 Add `m01` node name to support Minikube 1.8.x
+SPARK-31322	 rename QueryPlan.collectInPlanAndSubqueries to collectWithSubqueries
+SPARK-31324	 Include stream ID in the termination timeout error message
+SPARK-31321	 Remove SaveMode check in v2 FileWriteBuilder
+SPARK-31328	 Fix rebasing of overlapped local timestamps during daylight saving time
+SPARK-31326	 Create Function docs structure for SQL Reference
+SPARK-30840	 Add version property for ConfigEntry and ConfigBuilder
+SPARK-31249	 Fix flaky CoarseGrainedSchedulerBackendSuite.custom log url for Spark UI is applied
+SPARK-31327	 Write Spark version into Avro file metadata
+SPARK-31231	 Unset setuptools version in pip packaging test
+SPARK-30841	 Add version information to the configuration of SQL
+SPARK-31002	 Add version information to the configuration of Core
+SPARK-30887	 Add version information to the configuration of Deploy
+SPARK-30910	 Add version information to the configuration of R
+SPARK-30909	 Add version information to the configuration of Python
+SPARK-30888	 Add version information to the configuration of Network
+SPARK-30908	 Add version information to the configuration of Kryo
+SPARK-30891	 Add version information to the configuration of History
+SPARK-30912	 Add version information to the configuration of Streaming.scala
+SPARK-30914	 Add version information to the configuration of UI
+SPARK-30889	 Add version information to the configuration of Tests.scala and Worker
+SPARK-29554	 Update Auto-generated Alias Name for Version
+SPARK-30921	 Predicates on python udf should not be pushdown through Aggregate
+SPARK-31002	 Add version information to the configuration of Core
+SPARK-30911	 Add version information to the configuration of Status
+SPARK-27963	 Update requirements for spark.dynamicAllocation.enabled
+SPARK-31353	 Set a time zone in DateTimeBenchmark and DateTimeRebaseBenchmark
+SPARK-31224	 Add view support to SHOW CREATE TABLE
+SPARK-31343	 Check codegen does not fail on expressions with escape chars in string parameters
+SPARK-31279	 Add version information to the configuration of Hive
+SPARK-31215	 Add version information to the static configuration of SQL
+SPARK-31358	 Document FILTER clauses of aggregate functions in SQL references
+SPARK-31333	 Document Join Hints
 
 # Internal Patches
-MINOR             Simplify going through a large collection of patches.
-MINOR             Remove some SQL UI tests that we haven't ported in the changes for (due to non-bug change in 3.1)
-MINOR             Add hadoop cloud to our rio build.
-MINOR             Add a script for simplifying backporting
-SPARK-17767       Support user-provided ExternalCatalog and SessionBuilder
-MINOR             Support JarvisSparkHadoopUtil
-MINOR             Add JDK11 options
-MINOR             Ignore permission-based test due to RIO limitation
-MINOR             Add rio.yml/rio-maven-custom-build.sh/change-to-pie.sh/tag-name.sh
-MINOR             Update make-distribution.sh
-MINOR             Bump to 3.0.0-preview-pie1.0.0-SNAPSHOT
-MINOR             Disable publish in hadoop-provided release
-MINOR             Bump to 3.0.0-preview-pie1.0.1-SNAPSHOT
-MINOR             Bump to 3.0.0-preview-pie1.0.2-SNAPSHOT
-MINOR             Bump to 3.0.0-preview-pie1.0.3-SNAPSHOT
-MINOR             Bump to 3.0.0-preview-pie1.0.4-SNAPSHOT
-MINOR             Remove duplicated graphx test
-MINOR             Bump to 3.0.0-preview-pie1.0.5-SNAPSHOT
-MINOR             Use abstract storage as a replacement for window.localStorage
-MINOR             Added bindAddress in Mesos Executor Backend for now set to local host name
-MINOR             Use Utils.localHostName() for bindAddress
-MINOR             SparkUI patch
-MINOR             Add mesos, yarn, kubernetes
-MINOR             Bump to 3.0.0-preview-pie1.0.6-SNAPSHOT
-rdar://57766589   Updated state save parameter to rely on ajax enabled property
-MINOR             Bump to 3.0.0-preview-pie1.1.0-SNAPSHOT
-MINOR             Disable concurrent build
-MINOR             Bump to 3.0.0-preview-pie1.1.1-SNAPSHOT
-MINOR             Bump to 3.0.0-preview-pie1.1.2-SNAPSHOT
-MINOR             Publish yarn archive
-MINOR             Bump to 3.0.0-preview-pie1.1.3-SNAPSHOT
-MINOR             Bump to 3.0.0-preview-pie1.1.4-SNAPSHOT
-MINOR             Bump to 3.0.0-preview-pie1.1.5-SNAPSHOT
-MINOR             Bump to 3.0.0-preview-pie1.1.6-SNAPSHOT
-MINOR             Use Pandas 1.0.0 for Python 3 testing
-MINOR             Switch hive-metastore to 2.3.6.1-apple
-MINOR             Change to org.apache.spark
-MINOR             Bump to 3.0.0.2-preview-apple-SNAPSHOT
-MINOR             Move HiveQuerySuite to hive-2
-MINOR             Annotate HiveQuerySuite with ExtendedHiveTest
-MINOR             Bump to 3.0.0.3-preview-apple-SNAPSHOT
-MINOR             Remove change-to-pie.sh and move HiveDDLSuite/HiveCatalogedDDLSuite/SQLQuerySuite to hive-2
-MINOR             Annotate HiveDDLSuite/HiveCatalogedDDLSuite/SQLQuerySuite
-MINOR             Bump to 3.0.0.4-preview-apple-SNAPSHOT
-MINOR             Bump to 3.0.0.5-preview-apple-SNAPSHOT
-MINOR             Add more JDK11 options
-MINOR             Add NOLINT_ON_COMPILE
-MINOR             Bump to 3.0.0.6-preview-apple-SNAPSHOT
-MINOR             Bump to 3.0.0.7-preview-apple-SNAPSHOT
-MINOR             Bump to 3.0.0.8-preview-apple-SNAPSHOT
-MINOR             Bump to 3.0.0.9-preview-apple-SNAPSHOT
+MINOR		  Simplify going through a large collection of patches.
+MINOR		  Remove some SQL UI tests that we haven't ported in the changes for (due to non-bug change in 3.1)
+MINOR		  Add hadoop cloud to our rio build.
+MINOR		  Add a script for simplifying backporting
+SPARK-17767	  Support user-provided ExternalCatalog and SessionBuilder
+MINOR		  Support JarvisSparkHadoopUtil
+MINOR		  Add JDK11 options
+MINOR		  Ignore permission-based test due to RIO limitation
+MINOR		  Add rio.yml/rio-maven-custom-build.sh/change-to-pie.sh/tag-name.sh
+MINOR		  Update make-distribution.sh
+MINOR		  Bump to 3.0.0-preview-pie1.0.0-SNAPSHOT
+MINOR		  Disable publish in hadoop-provided release
+MINOR		  Bump to 3.0.0-preview-pie1.0.1-SNAPSHOT
+MINOR		  Bump to 3.0.0-preview-pie1.0.2-SNAPSHOT
+MINOR		  Bump to 3.0.0-preview-pie1.0.3-SNAPSHOT
+MINOR		  Bump to 3.0.0-preview-pie1.0.4-SNAPSHOT
+MINOR		  Remove duplicated graphx test
+MINOR		  Bump to 3.0.0-preview-pie1.0.5-SNAPSHOT
+MINOR		  Use abstract storage as a replacement for window.localStorage
+MINOR		  Added bindAddress in Mesos Executor Backend for now set to local host name
+MINOR		  Use Utils.localHostName() for bindAddress
+MINOR		  SparkUI patch
+MINOR		  Add mesos, yarn, kubernetes
+MINOR		  Bump to 3.0.0-preview-pie1.0.6-SNAPSHOT
+rdar://57766589	  Updated state save parameter to rely on ajax enabled property
+MINOR		  Bump to 3.0.0-preview-pie1.1.0-SNAPSHOT
+MINOR		  Disable concurrent build
+MINOR		  Bump to 3.0.0-preview-pie1.1.1-SNAPSHOT
+MINOR		  Bump to 3.0.0-preview-pie1.1.2-SNAPSHOT
+MINOR		  Publish yarn archive
+MINOR		  Bump to 3.0.0-preview-pie1.1.3-SNAPSHOT
+MINOR		  Bump to 3.0.0-preview-pie1.1.4-SNAPSHOT
+MINOR		  Bump to 3.0.0-preview-pie1.1.5-SNAPSHOT
+MINOR		  Bump to 3.0.0-preview-pie1.1.6-SNAPSHOT
+MINOR		  Use Pandas 1.0.0 for Python 3 testing
+MINOR		  Switch hive-metastore to 2.3.6.1-apple
+MINOR		  Change to org.apache.spark
+MINOR		  Bump to 3.0.0.2-preview-apple-SNAPSHOT
+MINOR		  Move HiveQuerySuite to hive-2
+MINOR		  Annotate HiveQuerySuite with ExtendedHiveTest
+MINOR		  Bump to 3.0.0.3-preview-apple-SNAPSHOT
+MINOR		  Remove change-to-pie.sh and move HiveDDLSuite/HiveCatalogedDDLSuite/SQLQuerySuite to hive-2
+MINOR		  Annotate HiveDDLSuite/HiveCatalogedDDLSuite/SQLQuerySuite
+MINOR		  Bump to 3.0.0.4-preview-apple-SNAPSHOT
+MINOR		  Bump to 3.0.0.5-preview-apple-SNAPSHOT
+MINOR		  Add more JDK11 options
+MINOR		  Add NOLINT_ON_COMPILE
+MINOR		  Bump to 3.0.0.6-preview-apple-SNAPSHOT
+MINOR		  Bump to 3.0.0.7-preview-apple-SNAPSHOT
+MINOR		  Bump to 3.0.0.8-preview-apple-SNAPSHOT
+MINOR		  Bump to 3.0.0.9-preview-apple-SNAPSHOT
