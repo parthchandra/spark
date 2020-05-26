@@ -136,7 +136,6 @@ SPARK-31590       Metadata-only queries should not include subquery in partition
 SPARK-31256       naFunctions on nested regression
 SPARK-31234       ResetCommand should not affect static SQL Configuration
 SPARK-31503       fix the SQL string of the TRIM functions
-SPARK-31420       UI time local change to EN
 SECURITY          Security fix do not discuss yet (CVE not released)
 SPARK-31382       Show a better error message for different python and pip installation mistake
 SPARK-31327       Write Spark version into Avro file metadata
@@ -211,11 +210,11 @@ SPARK-31676       QuantileDiscretizer raise error parameter splits given invalid
 SPARK-31713       Make test-dependencies.sh detect version string correctly
 SPARK-31716       Use fallback versions in HiveExternalCatalogVersionsSuite
 SPARK-31712       Check casting timestamps before the epoch to Byte/Short/Int/Long types
-SPARK-31663       Grouping sets with having clause returns the wrong result
 SPARK-31655       Upgrade snappy-java to 1.1.7.5
 SPARK-31740       Use github URL instead of a broken link
 
 # Internal Patches
+N/A               Reverted SPARK-31663 & SPARK-31420 previously cherry-picked in from 2.4.6
 N/A               Nested schema pruning for DataSourceV2 and Enable custom rules that infer predicates in the optimizer
 SPARK-17636       Parquet predicate pushdown in nested fields
 SPARK-25558       Pushdown predicates for nested fields in DataSource Strategy
