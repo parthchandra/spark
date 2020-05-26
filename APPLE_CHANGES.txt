@@ -136,7 +136,7 @@ SPARK-31590       Metadata-only queries should not include subquery in partition
 SPARK-31256       naFunctions on nested regression
 SPARK-31234       ResetCommand should not affect static SQL Configuration
 SPARK-31503       fix the SQL string of the TRIM functions
-SPARK-31420       UI time local change to EN & Infinite timeline redraw in job details page
+SPARK-31420       UI time local change to EN
 SECURITY          Security fix do not discuss yet (CVE not released)
 SPARK-31382       Show a better error message for different python and pip installation mistake
 SPARK-31327       Write Spark version into Avro file metadata
