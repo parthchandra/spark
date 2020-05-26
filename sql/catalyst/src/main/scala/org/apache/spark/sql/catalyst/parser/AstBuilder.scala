@@ -401,7 +401,12 @@ class AstBuilder(conf: SQLConf) extends SqlBaseBaseVisitor[AnyRef] with Logging 
         case p: Predicate => p
         case e => Cast(e, BooleanType)
       }
-      UnresolvedHaving(predicate, plan)
+      plan match {
+        case aggregate: Aggregate =>
+          AggregateWithHaving(predicate, aggregate)
+        case _ =>
+          Filter(predicate, plan)
+      }
     }
 
 
