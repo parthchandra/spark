@@ -360,7 +360,7 @@ package object dsl {
           groupingExprs: Expression*)(
           aggregateExprs: Expression*)(
           havingCondition: Expression): LogicalPlan = {
-        UnresolvedHaving(havingCondition,
+        AggregateWithHaving(havingCondition,
           groupBy(groupingExprs: _*)(aggregateExprs: _*).asInstanceOf[Aggregate])
       }
 
