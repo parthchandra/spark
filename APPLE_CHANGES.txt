@@ -129,6 +129,11 @@ SPARK-31381       Upgrade built-in Hive 2.3.6 to 2.3.7
 SPARK-29245       Upgrade built-in Hive 2.3.6 to 2.3.7
 
 # From Spark 2.4.6
+SPARK-25649       Rationalize our internal change to match OSS
+SPARK-31692       Pass hadoop confs  specifed via Spark confs to URLStreamHandlerfactory
+SPARK-31787       Fix Minikube.getIfNewMinikubeStatus to understand 1.5+
+SPARK-31819       Add a workaround for Java 8u251+/K8s 1.17 and update integration test cases
+SPARK-31839       Delete duplicate code in castsuit
 SPARK-31671       Wrong error message in VectorAssembler
 SPARK-31456       Fix shutdown hook priority edge cases
 SPARK-26908       Fix DateTimeUtils.toMillis and millisToDays
