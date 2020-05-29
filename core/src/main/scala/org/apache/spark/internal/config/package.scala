@@ -25,6 +25,8 @@ import org.apache.spark.unsafe.array.ByteArrayMethods
 import org.apache.spark.util.Utils
 
 package object config {
+  private[spark] val SPARK_CALL_HOME_LISTENER_CLASS =
+    "com.apple.aci.data.spark.callhome.listener.v1.SparkCallHomeListenerV1"
 
   private[spark] val DRIVER_CLASS_PATH =
     ConfigBuilder(SparkLauncher.DRIVER_EXTRA_CLASSPATH).stringConf.createOptional
@@ -659,4 +661,9 @@ package object config {
       .stringConf
       .toSequence
       .createWithDefault(Nil)
+
+  private[spark] val SPARK_CALL_HOME_ENABLED =
+    ConfigBuilder("spark.aci.callhome.enabled")
+      .booleanConf
+      .createWithDefault(false)
 }
