@@ -179,6 +179,7 @@
     <antlr4.version>4.7</antlr4.version>
     <jpam.version>1.1</jpam.version>
     <selenium.version>2.52.0</selenium.version>
+    <acispark.callhome.version>0.1.0</acispark.callhome.version>
     <!--
     Managed up from older version from Avro; sync with jackson-module-paranamer dependency version
     -->
@@ -2030,6 +2031,17 @@
           <exclusion>
             <groupId>io.netty</groupId>
             <artifactId>netty-handler</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>com.apple.pie.data</groupId>
+        <artifactId>spark-call-home-listener_${scala.binary.version}</artifactId>
+        <version>${acispark.callhome.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-core_${scala.binary.version}</artifactId>
           </exclusion>
         </exclusions>
       </dependency>
