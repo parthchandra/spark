@@ -27,10 +27,8 @@ d3.min.js
 dagre-d3.min.js
 graphlib-dot.min.js
 sorttable.js
-vis-timeline-graph2d.min.js
-vis-timeline-graph2d.min.js.map
-vis-timeline-graph2d.min.css
-vis-timeline-graph2d.min.css.map
+vis.min.js
+vis.min.css
 dataTables.bootstrap.css
 dataTables.bootstrap.min.js
 dataTables.rowsGroup.js
