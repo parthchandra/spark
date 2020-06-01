@@ -9,8 +9,8 @@ machine:
     version: 11-applejdk
 
 builds:
-  - name: apple-spark-2.11_2.4.5-snapshot-common
-    branchName: pie-spark-2.4.5
+  - name: apple-spark-2.11_2.4.6-snapshot-common
+    branchName: pie-spark-2.4.6
     timeout: 90
     machine:
       docker:
@@ -20,8 +20,8 @@ builds:
       steps:
         - build/sbt -Phadoop-2.7 "sketch/test" "kvstore/test" "network-common/test" "network-shuffle/test" "unsafe/test"
 
-  - name: apple-spark-2.12_2.4.5-snapshot-common
-    branchName: pie-spark-2.4.5
+  - name: apple-spark-2.12_2.4.6-snapshot-common
+    branchName: pie-spark-2.4.6
     timeout: 90
     machine:
       docker:
@@ -32,8 +32,8 @@ builds:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 "sketch/test" "kvstore/test" "network-common/test" "network-shuffle/test" "unsafe/test"
 
-  - name: apple-spark-2.11_2.4.5-snapshot-core
-    branchName: pie-spark-2.4.5
+  - name: apple-spark-2.11_2.4.6-snapshot-core
+    branchName: pie-spark-2.4.6
     timeout: 90
     machine:
       docker:
@@ -43,8 +43,8 @@ builds:
       steps:
         - build/sbt -Phadoop-2.7 "core/test"
 
-  - name: apple-spark-2.12_2.4.5-snapshot-core
-    branchName: pie-spark-2.4.5
+  - name: apple-spark-2.12_2.4.6-snapshot-core
+    branchName: pie-spark-2.4.6
     timeout: 90
     machine:
       docker:
@@ -55,8 +55,8 @@ builds:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 "core/test"
 
-  - name: apple-spark-2.11_2.4.5-snapshot-streaming
-    branchName: pie-spark-2.4.5
+  - name: apple-spark-2.11_2.4.6-snapshot-streaming
+    branchName: pie-spark-2.4.6
     timeout: 90
     machine:
       docker:
@@ -66,8 +66,8 @@ builds:
       steps:
         - build/sbt -Phadoop-2.7 "streaming/test"
 
-  - name: apple-spark-2.12_2.4.5-snapshot-streaming
-    branchName: pie-spark-2.4.5
+  - name: apple-spark-2.12_2.4.6-snapshot-streaming
+    branchName: pie-spark-2.4.6
     timeout: 90
     machine:
       docker:
@@ -78,8 +78,8 @@ builds:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 "streaming/test"
 
-  - name: apple-spark-2.11_2.4.5-snapshot-mllib
-    branchName: pie-spark-2.4.5
+  - name: apple-spark-2.11_2.4.6-snapshot-mllib
+    branchName: pie-spark-2.4.6
     timeout: 90
     machine:
       docker:
@@ -89,8 +89,8 @@ builds:
       steps:
         - build/sbt -Phadoop-2.7 "mllib/test" "mllib-local/test" "graphx/test"
 
-  - name: apple-spark-2.12_2.4.5-snapshot-mllib
-    branchName: pie-spark-2.4.5
+  - name: apple-spark-2.12_2.4.6-snapshot-mllib
+    branchName: pie-spark-2.4.6
     timeout: 90
     machine:
       docker:
@@ -101,8 +101,8 @@ builds:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 "mllib/test" "mllib-local/test" "graphx/test"
 
-  - name: apple-spark-2.11_2.4.5-snapshot-catalyst
-    branchName: pie-spark-2.4.5
+  - name: apple-spark-2.11_2.4.6-snapshot-catalyst
+    branchName: pie-spark-2.4.6
     timeout: 90
     machine:
       docker:
@@ -112,8 +112,8 @@ builds:
       steps:
         - build/sbt -Phadoop-2.7 "catalyst/test"
 
-  - name: apple-spark-2.12_2.4.5-snapshot-catalyst
-    branchName: pie-spark-2.4.5
+  - name: apple-spark-2.12_2.4.6-snapshot-catalyst
+    branchName: pie-spark-2.4.6
     timeout: 90
     machine:
       docker:
@@ -124,8 +124,8 @@ builds:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 "catalyst/test"
 
-  - name: apple-spark-2.11_2.4.5-snapshot-sql-1
-    branchName: pie-spark-2.4.5
+  - name: apple-spark-2.11_2.4.6-snapshot-sql-1
+    branchName: pie-spark-2.4.6
     timeout: 90
     machine:
       docker:
@@ -135,8 +135,8 @@ builds:
       steps:
         - build/sbt -Phadoop-2.7 "sql/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedSQLTest
 
-  - name: apple-spark-2.12_2.4.5-snapshot-sql-1
-    branchName: pie-spark-2.4.5
+  - name: apple-spark-2.12_2.4.6-snapshot-sql-1
+    branchName: pie-spark-2.4.6
     timeout: 90
     machine:
       docker:
@@ -147,8 +147,8 @@ builds:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 "sql/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedSQLTest
 
-  - name: apple-spark-2.11_2.4.5-snapshot-sql-2
-    branchName: pie-spark-2.4.5
+  - name: apple-spark-2.11_2.4.6-snapshot-sql-2
+    branchName: pie-spark-2.4.6
     timeout: 90
     machine:
       docker:
@@ -158,8 +158,8 @@ builds:
       steps:
         - build/sbt -Phadoop-2.7 "sql/test-only *.SQLQueryTestSuite"
 
-  - name: apple-spark-2.12_2.4.5-snapshot-sql-2
-    branchName: pie-spark-2.4.5
+  - name: apple-spark-2.12_2.4.6-snapshot-sql-2
+    branchName: pie-spark-2.4.6
     timeout: 90
     machine:
       docker:
@@ -170,8 +170,8 @@ builds:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 "sql/test-only *.SQLQueryTestSuite"
 
-  - name: apple-spark-2.11_2.4.5-snapshot-hive-1
-    branchName: pie-spark-2.4.5
+  - name: apple-spark-2.11_2.4.6-snapshot-hive-1
+    branchName: pie-spark-2.4.6
     timeout: 90
     machine:
       docker:
@@ -181,8 +181,8 @@ builds:
       steps:
         - build/sbt -Phadoop-2.7 -Phive "hive/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedHiveTest
 
-  - name: apple-spark-2.12_2.4.5-snapshot-hive-1
-    branchName: pie-spark-2.4.5
+  - name: apple-spark-2.12_2.4.6-snapshot-hive-1
+    branchName: pie-spark-2.4.6
     timeout: 90
     machine:
       docker:
@@ -193,8 +193,8 @@ builds:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 -Phive "hive/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedHiveTest
 
-  - name: apple-spark-2.11_2.4.5-snapshot-hive-2
-    branchName: pie-spark-2.4.5
+  - name: apple-spark-2.11_2.4.6-snapshot-hive-2
+    branchName: pie-spark-2.4.6
     timeout: 90
     machine:
       docker:
@@ -204,8 +204,8 @@ builds:
       steps:
         - build/sbt -Phadoop-2.7 -Phive "hive/test-only *.HiveSparkSubmitSuite" "hive/test-only *.VersionsSuite" "hive/test-only *.Hive_2_1_DDLSuite" "hive/test-only *.HiveQuerySuite"
 
-  - name: apple-spark-2.12_2.4.5-snapshot-hive-2
-    branchName: pie-spark-2.4.5
+  - name: apple-spark-2.12_2.4.6-snapshot-hive-2
+    branchName: pie-spark-2.4.6
     timeout: 90
     machine:
       docker:
@@ -216,8 +216,8 @@ builds:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 -Phive "hive/test-only *.HiveSparkSubmitSuite" "hive/test-only *.VersionsSuite" "hive/test-only *.Hive_2_1_DDLSuite" "hive/test-only *.HiveQuerySuite"
 
-  - name: apple-spark-2.11_2.4.5-snapshot-hive-3
-    branchName: pie-spark-2.4.5
+  - name: apple-spark-2.11_2.4.6-snapshot-hive-3
+    branchName: pie-spark-2.4.6
     timeout: 90
     machine:
       docker:
@@ -227,8 +227,8 @@ builds:
       steps:
         - build/sbt -Phadoop-2.7 -Phive "hive/test-only *.HiveCompatibilitySuite" "hive/testOnly *.HiveClientSuites"
 
-  - name: apple-spark-2.12_2.4.5-snapshot-hive-3
-    branchName: pie-spark-2.4.5
+  - name: apple-spark-2.12_2.4.6-snapshot-hive-3
+    branchName: pie-spark-2.4.6
     timeout: 90
     machine:
       docker:
@@ -239,8 +239,8 @@ builds:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 -Phive "hive/test-only *.HiveCompatibilitySuite"
 
-  - name: apple-spark-2.11_2.4.5-snapshot-launcher-repl-tools-hadoop-cloud
-    branchName: pie-spark-2.4.5
+  - name: apple-spark-2.11_2.4.6-snapshot-launcher-repl-tools-hadoop-cloud
+    branchName: pie-spark-2.4.6
     timeout: 90
     machine:
       docker:
@@ -250,8 +250,8 @@ builds:
       steps:
         - build/sbt -Phadoop-2.7 -Phadoop-cloud "launcher/test" "repl/test" "tools/test" "hadoop-cloud/test"
 
-  - name: apple-spark-2.12_2.4.5-snapshot-launcher-repl-tools-hadoop-cloud
-    branchName: pie-spark-2.4.5
+  - name: apple-spark-2.12_2.4.6-snapshot-launcher-repl-tools-hadoop-cloud
+    branchName: pie-spark-2.4.6
     timeout: 90
     machine:
       docker:
@@ -262,8 +262,8 @@ builds:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 -Phadoop-cloud "launcher/test" "repl/test" "tools/test" "hadoop-cloud/test"
 
-  - name: apple-spark-2.11_2.4.5-snapshot-kafka
-    branchName: pie-spark-2.4.5
+  - name: apple-spark-2.11_2.4.6-snapshot-kafka
+    branchName: pie-spark-2.4.6
     timeout: 90
     machine:
       docker:
@@ -273,8 +273,8 @@ builds:
       steps:
         - build/sbt -Phadoop-2.7 "streaming-kafka-0-10/test" "sql-kafka-0-10/test"
 
-  - name: apple-spark-2.12_2.4.5-snapshot-kafka
-    branchName: pie-spark-2.4.5
+  - name: apple-spark-2.12_2.4.6-snapshot-kafka
+    branchName: pie-spark-2.4.6
     timeout: 90
     machine:
       docker:
@@ -285,8 +285,8 @@ builds:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 "streaming-kafka-0-10/test" "sql-kafka-0-10/test"
 
-  - name: apple-spark-2.11_2.4.5-snapshot-kinesis
-    branchName: pie-spark-2.4.5
+  - name: apple-spark-2.11_2.4.6-snapshot-kinesis
+    branchName: pie-spark-2.4.6
     timeout: 90
     machine:
       docker:
@@ -296,8 +296,8 @@ builds:
       steps:
         - build/sbt -Phadoop-2.7 -Pkinesis-asl "streaming-kinesis-asl/test"
 
-  - name: apple-spark-2.12_2.4.5-snapshot-kinesis
-    branchName: pie-spark-2.4.5
+  - name: apple-spark-2.12_2.4.6-snapshot-kinesis
+    branchName: pie-spark-2.4.6
     timeout: 90
     machine:
       docker:
@@ -308,8 +308,8 @@ builds:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 -Pkinesis-asl "streaming-kinesis-asl/test"
 
-  - name: apple-spark-2.11_2.4.5-snapshot-avro
-    branchName: pie-spark-2.4.5
+  - name: apple-spark-2.11_2.4.6-snapshot-avro
+    branchName: pie-spark-2.4.6
     timeout: 90
     machine:
       docker:
@@ -319,8 +319,8 @@ builds:
       steps:
         - build/sbt -Phadoop-2.7 "avro/test" -Pavro
 
-  - name: apple-spark-2.12_2.4.5-snapshot-avro
-    branchName: pie-spark-2.4.5
+  - name: apple-spark-2.12_2.4.6-snapshot-avro
+    branchName: pie-spark-2.4.6
     timeout: 90
     machine:
       docker:
@@ -331,8 +331,8 @@ builds:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 "avro/test" -Pavro
 
-  - name: apple-spark-2.11_2.4.5-snapshot-yarn-mesos-k8s
-    branchName: pie-spark-2.4.5
+  - name: apple-spark-2.11_2.4.6-snapshot-yarn-mesos-k8s
+    branchName: pie-spark-2.4.6
     timeout: 90
     machine:
       docker:
@@ -342,8 +342,8 @@ builds:
       steps:
         - build/sbt -Phadoop-2.7 -Pyarn -Pmesos -Pkubernetes "yarn/test" "mesos/test" "kubernetes/test"
 
-  - name: apple-spark-2.12_2.4.5-snapshot-yarn-mesos-k8s
-    branchName: pie-spark-2.4.5
+  - name: apple-spark-2.12_2.4.6-snapshot-yarn-mesos-k8s
+    branchName: pie-spark-2.4.6
     timeout: 90
     machine:
       docker:
@@ -354,8 +354,8 @@ builds:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 -Pyarn -Pmesos -Pkubernetes "yarn/test" "mesos/test" "kubernetes/test"
 
-  - name: apple-spark-2.11_2.4.5-snapshot-python27
-    branchName: pie-spark-2.4.5
+  - name: apple-spark-2.11_2.4.6-snapshot-python27
+    branchName: pie-spark-2.4.6
     timeout: 90
     machine:
       docker:
@@ -369,8 +369,8 @@ builds:
         - build/sbt -Phadoop-2.7 -Pflume assembly/package streaming-flume-assembly/assembly test:package
         - python/run-tests.py --python-executables python2.7
 
-  - name: apple-spark-2.12_2.4.5-snapshot-python27
-    branchName: pie-spark-2.4.5
+  - name: apple-spark-2.12_2.4.6-snapshot-python27
+    branchName: pie-spark-2.4.6
     timeout: 90
     machine:
       docker:
@@ -385,8 +385,8 @@ builds:
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 -Pflume assembly/package streaming-flume-assembly/assembly test:package
         - python/run-tests.py --python-executables python2.7
 
-  - name: apple-spark-2.11_2.4.5-snapshot-python36
-    branchName: pie-spark-2.4.5
+  - name: apple-spark-2.11_2.4.6-snapshot-python36
+    branchName: pie-spark-2.4.6
     timeout: 90
     machine:
       docker:
@@ -399,8 +399,8 @@ builds:
         - build/sbt -Phadoop-2.7 -Pflume assembly/package streaming-flume-assembly/assembly test:package
         - python/run-tests.py --python-executables python3.6
 
-  - name: apple-spark-2.12_2.4.5-snapshot-python36
-    branchName: pie-spark-2.4.5
+  - name: apple-spark-2.12_2.4.6-snapshot-python36
+    branchName: pie-spark-2.4.6
     timeout: 90
     machine:
       docker:
@@ -414,8 +414,8 @@ builds:
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.7 -Pflume assembly/package streaming-flume-assembly/assembly test:package
         - python/run-tests.py --python-executables python3.6
 
-  - name: apple-spark-2.11_2.4.5-snapshot
-    branchName: pie-spark-2.4.5
+  - name: apple-spark-2.11_2.4.6-snapshot
+    branchName: pie-spark-2.4.6
     timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
@@ -436,8 +436,8 @@ builds:
       - publish:
         - repo: m2:oss-patched
 
-  - name: apple-spark-2.12_2.4.5-snapshot
-    branchName: pie-spark-2.4.5
+  - name: apple-spark-2.12_2.4.6-snapshot
+    branchName: pie-spark-2.4.6
     timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
@@ -459,8 +459,8 @@ builds:
       - publish:
         - repo: m2:oss-patched
 
-  - name: apple-spark-2.11_2.4.5-binaries-snapshot
-    branchName: pie-spark-2.4.5
+  - name: apple-spark-2.11_2.4.6-binaries-snapshot
+    branchName: pie-spark-2.4.6
     timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
@@ -481,8 +481,8 @@ builds:
       - publish:
         - repo: oss-patched-binaries-local
 
-  - name: apple-spark-2.12_2.4.5-binaries-snapshot
-    branchName: pie-spark-2.4.5
+  - name: apple-spark-2.12_2.4.6-binaries-snapshot
+    branchName: pie-spark-2.4.6
     timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
@@ -504,8 +504,8 @@ builds:
       - publish:
         - repo: oss-patched-binaries-local
 
-  - name: apple-spark-2.11_2.4.5-release
-    branchName: pie-spark-2.4.5-release
+  - name: apple-spark-2.11_2.4.6-release
+    branchName: pie-spark-2.4.6-release
     timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
@@ -529,10 +529,10 @@ builds:
     finally:
       tag:
         enabled: true
-        expression: "releases_2.11/2.4.5.15-apple"
+        expression: "releases_2.11/2.4.6.1-apple"
 
-  - name: apple-spark-2.12_2.4.5-release
-    branchName: pie-spark-2.4.5-release
+  - name: apple-spark-2.12_2.4.6-release
+    branchName: pie-spark-2.4.6-release
     timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
@@ -557,10 +557,10 @@ builds:
     finally:
       tag:
         enabled: true
-        expression: "releases_2.12/2.4.5.15-apple"
+        expression: "releases_2.12/2.4.6.1-apple"
 
-  - name: apple-spark-2.11_2.4.5-binaries-release
-    branchName: pie-spark-2.4.5-release
+  - name: apple-spark-2.11_2.4.6-binaries-release
+    branchName: pie-spark-2.4.6-release
     timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
@@ -582,8 +582,8 @@ builds:
       - publish:
         - repo: oss-patched-binaries-local
 
-  - name: apple-spark-2.12_2.4.5-binaries-release
-    branchName: pie-spark-2.4.5-release
+  - name: apple-spark-2.12_2.4.6-binaries-release
+    branchName: pie-spark-2.4.6-release
     timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
@@ -606,8 +606,8 @@ builds:
       - publish:
         - repo: oss-patched-binaries-local
 
-  - name: apple-spark-2.11_2.4.5-no-hadoop-binaries-snapshot
-    branchName: pie-spark-2.4.5
+  - name: apple-spark-2.11_2.4.6-no-hadoop-binaries-snapshot
+    branchName: pie-spark-2.4.6
     timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
@@ -627,8 +627,8 @@ builds:
       - publish:
         - repo: oss-patched-binaries-local
 
-  - name: apple-spark-2.12_2.4.5-no-hadoop-binaries-snapshot
-    branchName: pie-spark-2.4.5
+  - name: apple-spark-2.12_2.4.6-no-hadoop-binaries-snapshot
+    branchName: pie-spark-2.4.6
     timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
@@ -649,8 +649,8 @@ builds:
       - publish:
         - repo: oss-patched-binaries-local
 
-  - name: apple-spark-2.11_2.4.5-no-hadoop-binaries-release
-    branchName: pie-spark-2.4.5-release
+  - name: apple-spark-2.11_2.4.6-no-hadoop-binaries-release
+    branchName: pie-spark-2.4.6-release
     timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
@@ -671,8 +671,8 @@ builds:
       - publish:
         - repo: oss-patched-binaries-local
 
-  - name: apple-spark-2.12_2.4.5-no-hadoop-binaries-release
-    branchName: pie-spark-2.4.5-release
+  - name: apple-spark-2.12_2.4.6-no-hadoop-binaries-release
+    branchName: pie-spark-2.4.6-release
     timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
