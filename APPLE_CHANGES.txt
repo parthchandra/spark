@@ -23,10 +23,13 @@ SPARK-29089	 Parallelize blocking FileSystem calls in DataSource#checkAndGlobPat
 SPARK-31073	 Add "shuffle write time" to task metrics summary in StagePage
 SPARK-25355	 Add proxy user to driver if present on spark-submit
 SPARK-31360	 Fix hung-up issue in StagePage
+SPARK-31394      Adds support for Kubernetes NFS volume mounts
+SPARK-31394      Add nfs volume type description
+SPARK-31464      Upgrade Kafka to 2.5.0
+SPARK-29905      Improve pod lifecycle manager behavior with dynamic allocation
 
 # From Spark 3.0.0
 SPARK-31739	 Fix docstring syntax issues and misplaced space characters
-SPARK-31440	 Improve SQL Rest API
 SPARK-31651	 Improve handling the case where different barrier sync types in a single sync
 SPARK-31721	 Assert optimized is initialized before tracking the planning time
 SPARK-31750	 Eliminate UpCast if child's dataType is DecimalType
@@ -283,6 +286,55 @@ SPARK-31279	 Add version information to the configuration of Hive
 SPARK-31215	 Add version information to the static configuration of SQL
 SPARK-31358	 Document FILTER clauses of aggregate functions in SQL references
 SPARK-31333	 Document Join Hints
+SPARK-30689      Add @since annotation for ResourceDiscoveryScriptPlugin/ResourceInformation
+SPARK-31785      Add a helper function to test all parquet readers
+SPARK-31784      Fix test BarrierTaskContextSuite."share messages with allGather() call"
+SPARK-31790      cast(long as timestamp) show different result between Hive and Spark
+SPARK-31612      Fix a few issues in SQL ref
+SPARK-29854      Add tests to check lpad/rpad throw an exception for invalid length input
+SPARK-29854      Regenerate string-functions.sql.out
+SPARK-31786      Upgrade kubernetes-client to 4.9.2
+SPARK-31755      allow missing year/hour when parsing date/timestamp string
+SPARK-31761      cast integer to Long to avoid IntegerOverflow for IntegralDivide operator
+SPARK-31807      Use python 3 style in release-build.sh
+SPARK-31802      Format Java date-time types in `Row.jsonValue` directly
+SPARK-31755      Update date-time, CSV and JSON benchmark results
+SPARK-31818      Fix pushing down filters with `java.time.Instant` values in ORC
+SPARK-31808      Makes struct function's output name and class name pretty
+SPARK-31810      Fix AlterTableRecoverPartitions test using incorrect api to modify RDD_PARALLEL_LISTING_THRESHOLD
+SPARK-31806      Check reading date/timestamp from legacy parquet: dictionary encoding, w/o Spark version
+SPARK-31792      Introduce the structured streaming UI in the Web UI doc
+SPARK-31771      Disable Narrow TextStyle for datetime pattern 'G/M/L/E/u/Q/q'
+SPARK-31820      Fix flaky JavaBeanDeserializationSuite
+SPARK-31821      Remove mssql-jdbc dependencies from Hadoop 3.2 profile
+SPARK-31393      Show the correct alias in schema for expression
+SPARK-31835      Add zoneId to codegen related tests in DateExpressionsSuite
+SPARK-31827      fail datetime parsing/formatting if detect the Java 8 bug of stand-alone form
+SPARK-31839      Delete duplicate code in castsuit
+MINOR            bump the timeout to match the jenkins PRB
+SPARK-31730      Fix flaky tests in BarrierTaskContextSuite
+SPARK-31833      Set HiveThriftServer2 with actual port while configured 0
+SPARK-31862      Remove exception wrapping in AQE
+SPARK-31855      Check reading date/timestamp from Avro files w/ and w/o Spark version
+SPARK-31859      Fix Thriftserver session timezone issues
+SPARK-31861      Fix Thriftserver session timezone issues
+SPARK-31863      Fix Thriftserver session timezone issues
+SPARK-31864      Adjust AQE skew join trigger condition
+SPARK-31866      Add COALESCE/REPARTITION/REPARTITION_BY_RANGE Hints to SQL Reference
+SPARK-31867      Disable year type datetime patterns which are longer than 10
+SPARK-31874      Use `FastDateFormat` as the legacy fractional formatter
+SPARK-31788      Recover the support of union for different types of RDD and DStreams
+SPARK-31849      Make PySpark SQL exceptions more Pythonic
+SPARK-31854      Invoke in MapElementsExec should not propagate null
+SPARK-31881      Support Hadoop 3.2 K8s integration tests
+SPARK-31764      JsonProtocol doesn't write RDDInfo#isBarrier
+SPARK-31889      Docker release script does not allocate enough memory to reliably publish
+SPARK-28344      Check the ambiguous self-join only if there is a join in the plan
+SPARK-31870      Fix "Do not optimize skew join if additional shuffle" test having no skew join
+SPARK-31885      Fix filter push down for old millis timestamps to Parquet
+SPARK-29137      Increase the timeout for StreamingLinearRegressionWithTests.test_train_prediction
+SPARK-31834      Improve error message for incompatible data types
+SPARK-31888      Support `java.time.Instant` in Parquet filter pushdown
 
 # Internal Patches
 MINOR		  Simplify going through a large collection of patches.
@@ -336,3 +388,6 @@ MINOR		  Bump to 3.0.0.6-preview-apple-SNAPSHOT
 MINOR		  Bump to 3.0.0.7-preview-apple-SNAPSHOT
 MINOR		  Bump to 3.0.0.8-preview-apple-SNAPSHOT
 MINOR		  Bump to 3.0.0.9-preview-apple-SNAPSHOT
+MINOR             Bump to 3.0.0.12-preview-apple-SNAPSHOT
+MINOR             Integrate ACI spark call home service listener
+MINOR             Update spark call home version to 0.1.1 (#617)
