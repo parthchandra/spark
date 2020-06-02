@@ -217,6 +217,10 @@ SPARK-31716       Use fallback versions in HiveExternalCatalogVersionsSuite
 SPARK-31712       Check casting timestamps before the epoch to Byte/Short/Int/Long types
 SPARK-31655       Upgrade snappy-java to 1.1.7.5
 SPARK-31740       Use github URL instead of a broken link
+MINOR             bump the timeout to match the jenkins PRB
+SPARK-31653       Setuptools is needed before installing any other python packages
+MINOR             Log minikube version when running integration tests.
+SPARK-31854       Invoke in MapElementsExec should not propagate null
 
 # Internal Patches
 N/A               Reverted SPARK-31663 & SPARK-31420 previously cherry-picked in from 2.4.6
@@ -251,3 +255,6 @@ rdar://58646296   ACI Spark Job with Hive should enable SSL configuration with A
 MINOR             Add apple repository
 MINOR             Bump to 2.4.5.11-jdk11-apple-SNAPSHOT
 MINOR             Bump to 2.4.5.13-jdk11-apple-SNAPSHOT
+MINOR             Integrate spark call home listener
+MINOR             Update spark call home version to 0.1.1
+MINOR             Bump to 2.4.5.15-jdk11-apple-SNAPSHOT
