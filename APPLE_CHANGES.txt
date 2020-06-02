@@ -133,6 +133,7 @@ SPARK-28772       Upgrade breeze to 1.0
 SPARK-31854       Invoke in MapElementsExec should not propagate null
 
 # Internal Patches
+rdar://63686227   Support Twitter's Hadoop LZO library
 rdar://63889762   Support for AWS S3 cloud storage
 SPARK-17636       Parquet predicate pushdown in nested fields
 SPARK-17767       Support user-provided ExternalCatalog and SessionBuilder
