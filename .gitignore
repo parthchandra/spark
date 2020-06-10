@@ -100,3 +100,7 @@ spark-warehouse/
 
 # For SBT
 .jvmopts
+
+# For RIO
+.dist
+.library
