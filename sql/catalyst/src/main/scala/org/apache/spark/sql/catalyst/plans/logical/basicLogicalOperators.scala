@@ -17,8 +17,8 @@
 
 package org.apache.spark.sql.catalyst.plans.logical
 
-import org.apache.spark.sql.catalyst.{AliasIdentifier}
-import org.apache.spark.sql.catalyst.analysis.{MultiInstanceRelation, NamedRelation}
+import org.apache.spark.sql.catalyst.AliasIdentifier
+import org.apache.spark.sql.catalyst.analysis.{MultiInstanceRelation, NamedRelation, UnresolvedException}
 import org.apache.spark.sql.catalyst.catalog.{CatalogStorageFormat, CatalogTable}
 import org.apache.spark.sql.catalyst.expressions._
 import org.apache.spark.sql.catalyst.expressions.aggregate.AggregateExpression
@@ -392,6 +392,68 @@ object AppendData {
   def byPosition(table: NamedRelation, query: LogicalPlan): AppendData = {
     new AppendData(table, query, false)
   }
+}
+
+/**
+ * The logical plan of the DELETE FROM command that works for v2 tables.
+ */
+case class DeleteFromTable(
+    table: LogicalPlan,
+    condition: Option[Expression]) extends Command with SupportsSubquery {
+  override def children: Seq[LogicalPlan] = table :: Nil
+}
+
+/**
+ * The logical plan of the UPDATE TABLE command that works for v2 tables.
+ */
+case class UpdateTable(
+    table: LogicalPlan,
+    assignments: Seq[Assignment],
+    condition: Option[Expression]) extends Command with SupportsSubquery {
+  override def children: Seq[LogicalPlan] = table :: Nil
+}
+
+/**
+ * The logical plan of the MERGE INTO command that works for v2 tables.
+ */
+case class MergeIntoTable(
+    targetTable: LogicalPlan,
+    sourceTable: LogicalPlan,
+    mergeCondition: Expression,
+    matchedActions: Seq[MergeAction],
+    notMatchedActions: Seq[MergeAction]) extends Command with SupportsSubquery {
+  override def children: Seq[LogicalPlan] = Seq(targetTable, sourceTable)
+  // this is a temporary logic in 2.4.x because ResolveRelations works differently in 3.x
+  def duplicateResolved: Boolean = targetTable.outputSet.intersect(sourceTable.outputSet).isEmpty
+}
+
+sealed abstract class MergeAction(
+    condition: Option[Expression]) extends Expression with Unevaluable {
+  override def foldable: Boolean = false
+  override def nullable: Boolean = false
+  override def dataType: DataType = throw new UnresolvedException(this, "nullable")
+  override def children: Seq[Expression] = condition.toSeq
+}
+
+case class DeleteAction(condition: Option[Expression]) extends MergeAction(condition)
+
+case class UpdateAction(
+    condition: Option[Expression],
+    assignments: Seq[Assignment]) extends MergeAction(condition) {
+  override def children: Seq[Expression] = condition.toSeq ++ assignments
+}
+
+case class InsertAction(
+    condition: Option[Expression],
+    assignments: Seq[Assignment]) extends MergeAction(condition) {
+  override def children: Seq[Expression] = condition.toSeq ++ assignments
+}
+
+case class Assignment(key: Expression, value: Expression) extends Expression with Unevaluable {
+  override def foldable: Boolean = false
+  override def nullable: Boolean = false
+  override def dataType: DataType = throw new UnresolvedException(this, "nullable")
+  override def children: Seq[Expression] = key ::  value :: Nil
 }
 
 /**
@@ -1006,3 +1068,9 @@ case class Deduplicate(
 
   override def output: Seq[Attribute] = child.output
 }
+
+/**
+ * A trait to represent the commands that support subqueries.
+ * This is used to whitelist such commands in the subquery-related checks.
+ */
+trait SupportsSubquery extends LogicalPlan

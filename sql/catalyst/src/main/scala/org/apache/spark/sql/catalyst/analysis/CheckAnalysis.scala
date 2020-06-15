@@ -497,18 +497,19 @@ trait CheckAnalysis extends PredicateHelper {
           // Only certain operators are allowed to host subquery expression containing
           // outer references.
           plan match {
-            case _: Filter | _: Aggregate | _: Project => // Ok
+            case _: Filter | _: Aggregate | _: Project | _: SupportsSubquery => // Ok
             case other => failAnalysis(
               "Correlated scalar sub-queries can only be used in a " +
-                s"Filter/Aggregate/Project: $plan")
+                s"Filter/Aggregate/Project and a few commands: $plan")
           }
         }
 
       case inSubqueryOrExistsSubquery =>
         plan match {
-          case _: Filter => // Ok
+          case _: Filter | _: SupportsSubquery => // Ok
           case _ =>
-            failAnalysis(s"IN/EXISTS predicate sub-queries can only be used in a Filter: $plan")
+            failAnalysis(s"IN/EXISTS predicate sub-queries can only be used in" +
+              s" Filter and a few commands: $plan")
         }
     }
 
