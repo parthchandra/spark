@@ -633,6 +633,12 @@ abstract class SparkStrategies extends QueryPlanner[SparkPlan] {
       case r: LogicalRDD =>
         RDDScanExec(r.output, r.rdd, "ExistingRDD", r.outputPartitioning, r.outputOrdering) :: Nil
       case h: ResolvedHint => planLater(h.child) :: Nil
+      case _: DeleteFromTable =>
+        throw new UnsupportedOperationException(s"DELETE FROM TABLE is not supported temporarily.")
+      case _: UpdateTable =>
+        throw new UnsupportedOperationException(s"UPDATE TABLE is not supported temporarily.")
+      case _: MergeIntoTable =>
+        throw new UnsupportedOperationException(s"MERGE INTO TABLE is not supported temporarily.")
       case _ => Nil
     }
   }

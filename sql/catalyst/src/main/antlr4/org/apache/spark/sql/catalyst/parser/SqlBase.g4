@@ -173,6 +173,14 @@ statement
     | SET ROLE .*?                                                     #failNativeCommand
     | SET .*?                                                          #setConfiguration
     | RESET                                                            #resetConfiguration
+    | DELETE FROM tableIdentifier tableAlias whereClause?              #deleteFromTable
+    | UPDATE tableIdentifier tableAlias setClause whereClause?         #updateTable
+    | MERGE INTO target=tableIdentifier targetAlias=tableAlias
+        USING (source=tableIdentifier |
+          '(' sourceQuery=query')') sourceAlias=tableAlias
+        ON mergeCondition=booleanExpression
+        matchedClause*
+        notMatchedClause*                                              #mergeIntoTable
     | unsupportedHiveNativeCommands .*?                                #failNativeCommand
     ;
 
@@ -221,7 +229,6 @@ unsupportedHiveNativeCommands
     | kw1=COMMIT
     | kw1=ROLLBACK
     | kw1=DFS
-    | kw1=DELETE kw2=FROM
     ;
 
 createTableHeader
@@ -397,6 +404,46 @@ querySpecification
        aggregation?
        (HAVING having=booleanExpression)?
        windows?)
+    ;
+
+whereClause
+    : WHERE booleanExpression
+    ;
+
+setClause
+    : SET assignmentList
+    ;
+
+matchedClause
+    : WHEN MATCHED (AND matchedCond=booleanExpression)? THEN matchedAction
+    ;
+
+notMatchedClause
+    : WHEN NOT MATCHED (AND notMatchedCond=booleanExpression)? THEN notMatchedAction
+    ;
+
+matchedAction
+    : DELETE
+    | UPDATE SET ASTERISK
+    | UPDATE SET assignmentList
+    ;
+
+notMatchedAction
+    : INSERT ASTERISK
+    | INSERT '(' columns=qualifiedNameList ')'
+        VALUES '(' expression (',' expression)* ')'
+    ;
+
+qualifiedNameList
+    : qualifiedName (',' qualifiedName)*
+    ;
+
+assignmentList
+    : assignment (',' assignment)*
+    ;
+
+assignment
+    : key=qualifiedName EQ value=expression
     ;
 
 hint
@@ -776,6 +823,7 @@ nonReserved
     | DATABASE | SELECT | FROM | WHERE | HAVING | TO | TABLE | WITH | NOT
     | DIRECTORY
     | BOTH | LEADING | TRAILING
+    | UPDATE | MERGE | MATCHED
     ;
 
 SELECT: 'SELECT';
@@ -1012,6 +1060,10 @@ OPTION: 'OPTION';
 ANTI: 'ANTI';
 LOCAL: 'LOCAL';
 INPATH: 'INPATH';
+
+UPDATE: 'UPDATE';
+MERGE: 'MERGE';
+MATCHED: 'MATCHED';
 
 STRING
     : '\'' ( ~('\''|'\\') | ('\\' .) )* '\''

@@ -265,6 +265,148 @@ class AstBuilder(conf: SQLConf) extends SqlBaseBaseVisitor[AnyRef] with Logging 
     throw new ParseException("INSERT OVERWRITE DIRECTORY is not supported", ctx)
   }
 
+  private def getTableAliasWithoutColumnAlias(
+      ctx: TableAliasContext, op: String): Option[String] = {
+    if (ctx == null) {
+      None
+    } else {
+      val ident = ctx.strictIdentifier()
+      if (ctx.identifierList() != null) {
+        throw new ParseException(s"Columns aliases are not allowed in $op.", ctx.identifierList())
+      }
+      if (ident != null) Some(ident.getText) else None
+    }
+  }
+
+  override def visitDeleteFromTable(
+      ctx: DeleteFromTableContext): LogicalPlan = withOrigin(ctx) {
+    val table = UnresolvedRelation(visitTableIdentifier(ctx.tableIdentifier))
+    val tableAlias = getTableAliasWithoutColumnAlias(ctx.tableAlias(), "DELETE")
+    val aliasedTable = tableAlias.map(SubqueryAlias(_, table)).getOrElse(table)
+    val predicate = if (ctx.whereClause() != null) {
+      Some(expression(ctx.whereClause().booleanExpression()))
+    } else {
+      None
+    }
+    DeleteFromTable(aliasedTable, predicate)
+  }
+
+  override def visitUpdateTable(ctx: UpdateTableContext): LogicalPlan = withOrigin(ctx) {
+    val table = UnresolvedRelation(visitTableIdentifier(ctx.tableIdentifier))
+    val tableAlias = getTableAliasWithoutColumnAlias(ctx.tableAlias(), "UPDATE")
+    val aliasedTable = tableAlias.map(SubqueryAlias(_, table)).getOrElse(table)
+    val assignments = withAssignments(ctx.setClause().assignmentList())
+    val predicate = if (ctx.whereClause() != null) {
+      Some(expression(ctx.whereClause().booleanExpression()))
+    } else {
+      None
+    }
+
+    UpdateTable(aliasedTable, assignments, predicate)
+  }
+
+  private def withAssignments(assignCtx: SqlBaseParser.AssignmentListContext): Seq[Assignment] =
+    withOrigin(assignCtx) {
+      assignCtx.assignment().asScala.map { assign =>
+        val colName = assign.key.identifier.asScala.map(i => s"`${i.getText}`").mkString(".")
+        Assignment(UnresolvedAttribute.quotedString(colName), expression(assign.value))
+      }
+    }
+
+  override def visitMergeIntoTable(ctx: MergeIntoTableContext): LogicalPlan = withOrigin(ctx) {
+    val targetTable = UnresolvedRelation(visitTableIdentifier(ctx.target))
+    val targetTableAlias = getTableAliasWithoutColumnAlias(ctx.targetAlias, "MERGE")
+    val aliasedTarget = targetTableAlias.map(SubqueryAlias(_, targetTable)).getOrElse(targetTable)
+
+    val sourceTableOrQuery = if (ctx.source != null) {
+      UnresolvedRelation(visitTableIdentifier(ctx.source))
+    } else if (ctx.sourceQuery != null) {
+      visitQuery(ctx.sourceQuery)
+    } else {
+      throw new ParseException("Empty source for merge: you should specify a source" +
+          " table/subquery in merge.", ctx.source)
+    }
+    val sourceTableAlias = getTableAliasWithoutColumnAlias(ctx.sourceAlias, "MERGE")
+    val aliasedSource =
+      sourceTableAlias.map(SubqueryAlias(_, sourceTableOrQuery)).getOrElse(sourceTableOrQuery)
+
+    val mergeCondition = expression(ctx.mergeCondition)
+
+    val matchedClauses = ctx.matchedClause()
+    if (matchedClauses.size() > 2) {
+      throw new ParseException("There should be at most 2 'WHEN MATCHED' clauses.",
+        matchedClauses.get(2))
+    }
+    val matchedActions = matchedClauses.asScala.map {
+      clause => {
+        if (clause.matchedAction().DELETE() != null) {
+          DeleteAction(Option(clause.matchedCond).map(expression))
+        } else if (clause.matchedAction().UPDATE() != null) {
+          val condition = Option(clause.matchedCond).map(expression)
+          if (clause.matchedAction().ASTERISK() != null) {
+            UpdateAction(condition, Seq())
+          } else {
+            UpdateAction(condition, withAssignments(clause.matchedAction().assignmentList()))
+          }
+        } else {
+          // It should not be here.
+          throw new ParseException(
+            s"Unrecognized matched action: ${clause.matchedAction().getText}",
+            clause.matchedAction())
+        }
+      }
+    }
+    val notMatchedClauses = ctx.notMatchedClause()
+    if (notMatchedClauses.size() > 1) {
+      throw new ParseException("There should be at most 1 'WHEN NOT MATCHED' clause.",
+        notMatchedClauses.get(1))
+    }
+    val notMatchedActions = notMatchedClauses.asScala.map {
+      clause => {
+        if (clause.notMatchedAction().INSERT() != null) {
+          val condition = Option(clause.notMatchedCond).map(expression)
+          if (clause.notMatchedAction().ASTERISK() != null) {
+            InsertAction(condition, Seq())
+          } else {
+            val columns = clause.notMatchedAction().columns.qualifiedName.asScala
+              .map(name => name.identifier.asScala.map(i => s"`${i.getText}`").mkString("."))
+              .map(UnresolvedAttribute.quotedString)
+            val values = clause.notMatchedAction().expression().asScala.map(expression)
+            if (columns.size != values.size) {
+              throw new ParseException("The number of inserted values cannot match the fields.",
+                clause.notMatchedAction())
+            }
+            InsertAction(condition, columns.zip(values).map(kv => Assignment(kv._1, kv._2)))
+          }
+        } else {
+          // It should not be here.
+          throw new ParseException(
+            s"Unrecognized not matched action: ${clause.notMatchedAction().getText}",
+            clause.notMatchedAction())
+        }
+      }
+    }
+    if (matchedActions.isEmpty && notMatchedActions.isEmpty) {
+      throw new ParseException("There must be at least one WHEN clause in a MERGE statement", ctx)
+    }
+    // children being empty means that the condition is not set
+    if (matchedActions.length == 2 && matchedActions.head.children.isEmpty) {
+      throw new ParseException("When there are 2 MATCHED clauses in a MERGE statement, " +
+        "the first MATCHED clause must have a condition", ctx)
+    }
+    if (matchedActions.groupBy(_.getClass).mapValues(_.size).exists(_._2 > 1)) {
+      throw new ParseException(
+        "UPDATE and DELETE can appear at most once in MATCHED clauses in a MERGE statement", ctx)
+    }
+
+    MergeIntoTable(
+      aliasedTarget,
+      aliasedSource,
+      mergeCondition,
+      matchedActions,
+      notMatchedActions)
+  }
+
   /**
    * Create a partition specification map.
    */

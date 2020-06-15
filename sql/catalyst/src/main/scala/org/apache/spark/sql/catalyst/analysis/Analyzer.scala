@@ -1041,6 +1041,8 @@ class Analyzer(
         i.copy(right = dedupRight(left, right))
       case e @ Except(left, right, _) if !e.duplicateResolved =>
         e.copy(right = dedupRight(left, right))
+      case m @ MergeIntoTable(target, source, _, _, _) if !m.duplicateResolved =>
+        m.copy(sourceTable = dedupRight(target, source))
       // When resolve `SortOrder`s in Sort based on child, don't report errors as
       // we still have chance to resolve it based on its descendants
       case s @ Sort(ordering, global, child) if child.resolved && !s.resolved =>
@@ -1067,9 +1069,69 @@ class Analyzer(
       // Skip the having clause here, this will be handled in ResolveAggregateFunctions.
       case h: UnresolvedHaving => h
 
+      case m @ MergeIntoTable(targetTable, sourceTable, _, _, _)
+        if !m.resolved && targetTable.resolved && sourceTable.resolved =>
+        val newMatchedActions = m.matchedActions.map {
+          case DeleteAction(deleteCondition) =>
+            val resolvedDeleteCondition = deleteCondition.map(resolve(_, m))
+            DeleteAction(resolvedDeleteCondition)
+          case UpdateAction(updateCondition, assignments) =>
+            val resolvedUpdateCondition = updateCondition.map(resolve(_, m))
+            // The update value can access columns from both target and source tables.
+            UpdateAction(
+              resolvedUpdateCondition,
+              resolveAssignments(assignments, m, resolveValuesWithSourceOnly = false))
+          case o => o
+        }
+        val newNotMatchedActions = m.notMatchedActions.map {
+          case InsertAction(insertCondition, assignments) =>
+            // The insert action is used when not matched, so its condition and value can only
+            // access columns from the source table.
+            val resolvedInsertCondition =
+              insertCondition.map(resolve(_, Project(Nil, m.sourceTable)))
+            InsertAction(
+              resolvedInsertCondition,
+              resolveAssignments(assignments, m, resolveValuesWithSourceOnly = true))
+          case o => o
+        }
+        val resolvedMergeCondition = resolve(m.mergeCondition, m)
+        m.copy(mergeCondition = resolvedMergeCondition,
+          matchedActions = newMatchedActions,
+          notMatchedActions = newNotMatchedActions)
+
       case q: LogicalPlan =>
         logTrace(s"Attempting to resolve ${q.simpleString}")
         q.mapExpressions(resolve(_, q))
+    }
+
+    def resolveAssignments(
+        assignments: Seq[Assignment],
+        mergeInto: MergeIntoTable,
+        resolveValuesWithSourceOnly: Boolean): Seq[Assignment] = {
+      if (assignments.isEmpty) {
+        val expandedColumns = mergeInto.targetTable.output
+        val expandedValues = mergeInto.sourceTable.output
+        expandedColumns.zip(expandedValues).map(kv => Assignment(kv._1, kv._2))
+      } else {
+        assignments.map { assign =>
+          val resolvedKey = assign.key match {
+            case c if !c.resolved =>
+              resolve(c, Project(Nil, mergeInto.targetTable))
+            case o => o
+          }
+          val resolvedValue = assign.value match {
+            // The update values may contain target and/or source references.
+            case c if !c.resolved =>
+              if (resolveValuesWithSourceOnly) {
+                resolve(c, Project(Nil, mergeInto.sourceTable))
+              } else {
+                resolve(c, mergeInto)
+              }
+            case o => o
+          }
+          Assignment(resolvedKey, resolvedValue)
+        }
+      }
     }
 
     def newAliases(expressions: Seq[NamedExpression]): Seq[NamedExpression] = {
@@ -1582,6 +1644,8 @@ class Analyzer(
       // Only a few unary nodes (Project/Filter/Aggregate) can contain subqueries.
       case q: UnaryNode if q.childrenResolved =>
         resolveSubQueries(q, q.children)
+      case s: SupportsSubquery if s.childrenResolved =>
+        resolveSubQueries(s, s.children)
     }
   }
 
