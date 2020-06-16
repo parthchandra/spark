@@ -335,6 +335,58 @@ SPARK-31885      Fix filter push down for old millis timestamps to Parquet
 SPARK-29137      Increase the timeout for StreamingLinearRegressionWithTests.test_train_prediction
 SPARK-31834      Improve error message for incompatible data types
 SPARK-31888      Support `java.time.Instant` in Parquet filter pushdown
+SPARK-31778      Support cross-building docker images
+SPARK-31756      Add real headless browser support for UI test
+SPARK-31882      DAG-viz is not rendered correctly with pagination
+SPARK-31895      Support DataFrame.explain(extended: str) case to be consistent with Scala side
+SPARK-31892      Disable week-based date filed for parsing
+SPARK-31886      Fix the wrong coloring of nodes in DAG-viz
+SPARK-31881      Activate hadoop-2.7 by default in K8S IT
+SPARK-31878      Create date formatter only once in `HiveResult`
+SPARK-31896      Handle am-pm timestamp parsing when hour is missing
+SPARK-29947      ResolveRelations should return relations with fresh attribute IDs
+SPARK-31853      Mention removal of params mixins setter in migration guide
+SPARK-31903      Fix toPandas with Arrow enabled to show metrics in Query UI
+MINOR            Add one more newline between JVM and Python tracebacks
+SPARK-31879      Make week-based pattern invalid for formatting too
+SPARK-31859      Fix typo in tests
+SPARK-31861      Fix typo in tests
+SPARK-31867      Check result differences for datetime formatting
+SPARK-31904      Fix case sensitive problem of char and varchar partition columns
+MINOR            fileNameOnly parameter description re-unite
+SPARK-31849      Deduplicate and reuse Utils.exceptionString in Python exception handling
+SPARK-31923      Ignore internal accumulators that use unrecognized types rather than crashing
+SPARK-31934      Remove set -x from docker image tool
+SPARK-31849      More correct error message in Python UDF exception message
+SPARK-28199      Mention the change of into the SS migration guide
+SPARK-31932      Add date/timestamp benchmarks for `HiveResult.hiveResultString()`
+SPARK-31940      Document the default JVM time zone in to/fromJavaDate and legacy date formatters
+SPARK-29295      Dynamic partition map parsed from partition path should be case insensitive
+SPARK-31220      repartition obeys initialPartitionNum when adaptiveExecutionEnabled
+SPARK-31921      Fix the wrong warning: "App app-xxx requires more resource than any of Workers could have"
+SPARK-31791      Improve cache block migration test reliability
+SPARK-31746      Show the actual error message in LocalityPlacementStrategySuite
+SPARK-31102      Spark-sql fails to parse when contains comment
+SPARK-26905      Add `TYPE` in the ANSI non-reserved list
+SPARK-31941      Replace SparkException to NoSuchElementException for applicationInfo in AppStatusStore
+SPARK-31956      Do not fail if there is no ambiguous self join
+SPARK-31915      Resolve the grouping column properly per the case sensitivity in grouped and cogrouped pandas UDFs
+SPARK-31965      Move doctests related to Java function registration to test conditionally
+SPARK-28199      Remove package private in class/object in sql.execution package
+SPARK-31966      Increase the timeout for StreamingLogisticRegressionWithSGDTests.test_training_and_prediction
+SPARK-31958      normalize special floating numbers in subquery
+SPARK-31954      Delete duplicate testcase in HiveQuerySuite
+SPARK-31935      Hadoop file system config should be effective in data source options
+SPARK-31916      StringConcat can lead to StringIndexOutOfBoundsException
+SPARK-31939      Fix Parsing day of year when year field pattern is missing
+SPARK-31979      Release script should not fail when remove non-existing files
+SPARK-31967      Downgrade to vis.js 4.21.0 to fix Jobs UI loading time regression
+SPARK-31644      Make Spark's guava version configurable from the command line for sbt
+SPARK-31632      Enrich the exception message when application summary is unavailable
+SPARK-31968      Duplicate partition columns check when writing data
+SPARK-31593      Remove unnecessary streaming query progress update
+SPARK-31983      Fix sorting for duration column in structured streaming tab
+SPARK-31990      Use toSet.toSeq in Dataset.dropDuplicates
 
 # Internal Patches
 MINOR		  Simplify going through a large collection of patches.
@@ -391,3 +443,4 @@ MINOR		  Bump to 3.0.0.9-preview-apple-SNAPSHOT
 MINOR             Bump to 3.0.0.12-preview-apple-SNAPSHOT
 MINOR             Integrate ACI spark call home service listener
 MINOR             Update spark call home version to 0.1.1 (#617)
+MINOR             Bump to 3.0.0.13-preview-apple-SNAPSHOT
