@@ -175,7 +175,7 @@ builds:
     timeout: 90
     machine:
       docker:
-        baseImage: docker.apple.com/cpbuild7/applejdk-11
+        baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
       template: freestyle:v2:snapshot
       steps:
@@ -186,7 +186,7 @@ builds:
     timeout: 90
     machine:
       docker:
-        baseImage: docker.apple.com/cpbuild7/applejdk-11
+        baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
       template: freestyle:v2:snapshot
       steps:
@@ -198,7 +198,7 @@ builds:
     timeout: 90
     machine:
       docker:
-        baseImage: docker.apple.com/cpbuild7/applejdk-11
+        baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
       template: freestyle:v2:snapshot
       steps:
@@ -209,7 +209,7 @@ builds:
     timeout: 90
     machine:
       docker:
-        baseImage: docker.apple.com/cpbuild7/applejdk-11
+        baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
       template: freestyle:v2:snapshot
       steps:
@@ -221,7 +221,7 @@ builds:
     timeout: 90
     machine:
       docker:
-        baseImage: docker.apple.com/cpbuild7/applejdk-11
+        baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
       template: freestyle:v2:snapshot
       steps:
@@ -232,7 +232,7 @@ builds:
     timeout: 90
     machine:
       docker:
-        baseImage: docker.apple.com/cpbuild7/applejdk-11
+        baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
       template: freestyle:v2:snapshot
       steps:
