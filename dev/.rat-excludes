@@ -115,3 +115,4 @@ vote.tmpl
 SessionManager.java
 SessionHandler.java
 GangliaReporter.java
+config.properties
