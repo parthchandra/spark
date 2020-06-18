@@ -509,7 +509,7 @@ class InMemoryColumnarQuerySuite extends QueryTest with SharedSQLContext {
             case plan: InMemoryRelation => plan
           }.head
           // InMemoryRelation's stats is file size before the underlying RDD is materialized
-          assert(inMemoryRelation.computeStats().sizeInBytes === 868)
+          assert(inMemoryRelation.computeStats().sizeInBytes === 884)
 
           // InMemoryRelation's stats is updated after materializing RDD
           dfFromFile.collect()
