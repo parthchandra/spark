@@ -18,7 +18,7 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/sbt -Phadoop-3.2 "sketch/test" "kvstore/test" "network-common/test" "network-shuffle/test" "unsafe/test"
+        - build/sbt -Phadoop-2.10 "sketch/test" "kvstore/test" "network-common/test" "network-shuffle/test" "unsafe/test"
 
   - name: apple-spark-2.12_2.4.6-snapshot-common
     branchName: pie-spark-2.4.6
@@ -30,7 +30,7 @@ builds:
       template: freestyle:v2:snapshot
       steps:
         - dev/change-scala-version.sh 2.12
-        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 "sketch/test" "kvstore/test" "network-common/test" "network-shuffle/test" "unsafe/test"
+        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.10 "sketch/test" "kvstore/test" "network-common/test" "network-shuffle/test" "unsafe/test"
 
   - name: apple-spark-2.11_2.4.6-snapshot-core
     branchName: pie-spark-2.4.6
@@ -41,7 +41,7 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/sbt -Phadoop-3.2 "core/test"
+        - build/sbt -Phadoop-2.10 "core/test"
 
   - name: apple-spark-2.12_2.4.6-snapshot-core
     branchName: pie-spark-2.4.6
@@ -53,7 +53,7 @@ builds:
       template: freestyle:v2:snapshot
       steps:
         - dev/change-scala-version.sh 2.12
-        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 "core/test"
+        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.10 "core/test"
 
   - name: apple-spark-2.11_2.4.6-snapshot-streaming
     branchName: pie-spark-2.4.6
@@ -64,7 +64,7 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/sbt -Phadoop-3.2 "streaming/test"
+        - build/sbt -Phadoop-2.10 "streaming/test"
 
   - name: apple-spark-2.12_2.4.6-snapshot-streaming
     branchName: pie-spark-2.4.6
@@ -76,7 +76,7 @@ builds:
       template: freestyle:v2:snapshot
       steps:
         - dev/change-scala-version.sh 2.12
-        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 "streaming/test"
+        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.10 "streaming/test"
 
   - name: apple-spark-2.11_2.4.6-snapshot-mllib
     branchName: pie-spark-2.4.6
@@ -87,7 +87,7 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/sbt -Phadoop-3.2 "mllib/test" "mllib-local/test" "graphx/test"
+        - build/sbt -Phadoop-2.10 "mllib/test" "mllib-local/test" "graphx/test"
 
   - name: apple-spark-2.12_2.4.6-snapshot-mllib
     branchName: pie-spark-2.4.6
@@ -99,7 +99,7 @@ builds:
       template: freestyle:v2:snapshot
       steps:
         - dev/change-scala-version.sh 2.12
-        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 "mllib/test" "mllib-local/test" "graphx/test"
+        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.10 "mllib/test" "mllib-local/test" "graphx/test"
 
   - name: apple-spark-2.11_2.4.6-snapshot-catalyst
     branchName: pie-spark-2.4.6
@@ -110,7 +110,7 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/sbt -Phadoop-3.2 "catalyst/test"
+        - build/sbt -Phadoop-2.10 "catalyst/test"
 
   - name: apple-spark-2.12_2.4.6-snapshot-catalyst
     branchName: pie-spark-2.4.6
@@ -122,7 +122,7 @@ builds:
       template: freestyle:v2:snapshot
       steps:
         - dev/change-scala-version.sh 2.12
-        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 "catalyst/test"
+        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.10 "catalyst/test"
 
   - name: apple-spark-2.11_2.4.6-snapshot-sql-1
     branchName: pie-spark-2.4.6
@@ -133,7 +133,7 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/sbt -Phadoop-3.2 "sql/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedSQLTest
+        - build/sbt -Phadoop-2.10 "sql/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedSQLTest
 
   - name: apple-spark-2.12_2.4.6-snapshot-sql-1
     branchName: pie-spark-2.4.6
@@ -145,7 +145,7 @@ builds:
       template: freestyle:v2:snapshot
       steps:
         - dev/change-scala-version.sh 2.12
-        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 "sql/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedSQLTest
+        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.10 "sql/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedSQLTest
 
   - name: apple-spark-2.11_2.4.6-snapshot-sql-2
     branchName: pie-spark-2.4.6
@@ -156,7 +156,7 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/sbt -Phadoop-3.2 "sql/test-only *.SQLQueryTestSuite"
+        - build/sbt -Phadoop-2.10 "sql/test-only *.SQLQueryTestSuite"
 
   - name: apple-spark-2.12_2.4.6-snapshot-sql-2
     branchName: pie-spark-2.4.6
@@ -168,7 +168,7 @@ builds:
       template: freestyle:v2:snapshot
       steps:
         - dev/change-scala-version.sh 2.12
-        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 "sql/test-only *.SQLQueryTestSuite"
+        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.10 "sql/test-only *.SQLQueryTestSuite"
 
   - name: apple-spark-2.11_2.4.6-snapshot-hive-1
     branchName: pie-spark-2.4.6
@@ -179,7 +179,7 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/sbt -Phadoop-3.2 -Phive "hive/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedHiveTest
+        - build/sbt -Phadoop-2.10 -Phive "hive/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedHiveTest
 
   - name: apple-spark-2.12_2.4.6-snapshot-hive-1
     branchName: pie-spark-2.4.6
@@ -191,7 +191,7 @@ builds:
       template: freestyle:v2:snapshot
       steps:
         - dev/change-scala-version.sh 2.12
-        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 -Phive "hive/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedHiveTest
+        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.10 -Phive "hive/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedHiveTest
 
   - name: apple-spark-2.11_2.4.6-snapshot-hive-2
     branchName: pie-spark-2.4.6
@@ -202,7 +202,7 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/sbt -Phadoop-3.2 -Phive "hive/test-only *.HiveSparkSubmitSuite" "hive/test-only *.VersionsSuite" "hive/test-only *.Hive_2_1_DDLSuite" "hive/test-only *.HiveQuerySuite"
+        - build/sbt -Phadoop-2.10 -Phive "hive/test-only *.HiveSparkSubmitSuite" "hive/test-only *.VersionsSuite" "hive/test-only *.Hive_2_1_DDLSuite" "hive/test-only *.HiveQuerySuite"
 
   - name: apple-spark-2.12_2.4.6-snapshot-hive-2
     branchName: pie-spark-2.4.6
@@ -214,7 +214,7 @@ builds:
       template: freestyle:v2:snapshot
       steps:
         - dev/change-scala-version.sh 2.12
-        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 -Phive "hive/test-only *.HiveSparkSubmitSuite" "hive/test-only *.VersionsSuite" "hive/test-only *.Hive_2_1_DDLSuite" "hive/test-only *.HiveQuerySuite"
+        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.10 -Phive "hive/test-only *.HiveSparkSubmitSuite" "hive/test-only *.VersionsSuite" "hive/test-only *.Hive_2_1_DDLSuite" "hive/test-only *.HiveQuerySuite"
 
   - name: apple-spark-2.11_2.4.6-snapshot-hive-3
     branchName: pie-spark-2.4.6
@@ -225,7 +225,7 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/sbt -Phadoop-3.2 -Phive "hive/test-only *.HiveCompatibilitySuite" "hive/testOnly *.HiveClientSuites"
+        - build/sbt -Phadoop-2.10 -Phive "hive/test-only *.HiveCompatibilitySuite" "hive/testOnly *.HiveClientSuites"
 
   - name: apple-spark-2.12_2.4.6-snapshot-hive-3
     branchName: pie-spark-2.4.6
@@ -237,7 +237,7 @@ builds:
       template: freestyle:v2:snapshot
       steps:
         - dev/change-scala-version.sh 2.12
-        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 -Phive "hive/test-only *.HiveCompatibilitySuite"
+        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.10 -Phive "hive/test-only *.HiveCompatibilitySuite"
 
   - name: apple-spark-2.11_2.4.6-snapshot-launcher-repl-tools-hadoop-cloud
     branchName: pie-spark-2.4.6
@@ -248,7 +248,7 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/sbt -Phadoop-3.2 -Phadoop-cloud "launcher/test" "repl/test" "tools/test" "hadoop-cloud/test"
+        - build/sbt -Phadoop-2.10 -Phadoop-cloud "launcher/test" "repl/test" "tools/test" "hadoop-cloud/test"
 
   - name: apple-spark-2.12_2.4.6-snapshot-launcher-repl-tools-hadoop-cloud
     branchName: pie-spark-2.4.6
@@ -260,7 +260,7 @@ builds:
       template: freestyle:v2:snapshot
       steps:
         - dev/change-scala-version.sh 2.12
-        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 -Phadoop-cloud "launcher/test" "repl/test" "tools/test" "hadoop-cloud/test"
+        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.10 -Phadoop-cloud "launcher/test" "repl/test" "tools/test" "hadoop-cloud/test"
 
   - name: apple-spark-2.11_2.4.6-snapshot-kafka
     branchName: pie-spark-2.4.6
@@ -271,7 +271,7 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/sbt -Phadoop-3.2 "streaming-kafka-0-10/test" "sql-kafka-0-10/test"
+        - build/sbt -Phadoop-2.10 "streaming-kafka-0-10/test" "sql-kafka-0-10/test"
 
   - name: apple-spark-2.12_2.4.6-snapshot-kafka
     branchName: pie-spark-2.4.6
@@ -283,7 +283,7 @@ builds:
       template: freestyle:v2:snapshot
       steps:
         - dev/change-scala-version.sh 2.12
-        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 "streaming-kafka-0-10/test" "sql-kafka-0-10/test"
+        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.10 "streaming-kafka-0-10/test" "sql-kafka-0-10/test"
 
   - name: apple-spark-2.11_2.4.6-snapshot-kinesis
     branchName: pie-spark-2.4.6
@@ -294,7 +294,7 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/sbt -Phadoop-3.2 -Pkinesis-asl "streaming-kinesis-asl/test"
+        - build/sbt -Phadoop-2.10 -Pkinesis-asl "streaming-kinesis-asl/test"
 
   - name: apple-spark-2.12_2.4.6-snapshot-kinesis
     branchName: pie-spark-2.4.6
@@ -306,7 +306,7 @@ builds:
       template: freestyle:v2:snapshot
       steps:
         - dev/change-scala-version.sh 2.12
-        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 -Pkinesis-asl "streaming-kinesis-asl/test"
+        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.10 -Pkinesis-asl "streaming-kinesis-asl/test"
 
   - name: apple-spark-2.11_2.4.6-snapshot-avro
     branchName: pie-spark-2.4.6
@@ -317,7 +317,7 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/sbt -Phadoop-3.2 "avro/test" -Pavro
+        - build/sbt -Phadoop-2.10 "avro/test" -Pavro
 
   - name: apple-spark-2.12_2.4.6-snapshot-avro
     branchName: pie-spark-2.4.6
@@ -329,7 +329,7 @@ builds:
       template: freestyle:v2:snapshot
       steps:
         - dev/change-scala-version.sh 2.12
-        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 "avro/test" -Pavro
+        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.10 "avro/test" -Pavro
 
   - name: apple-spark-2.11_2.4.6-snapshot-yarn-mesos-k8s
     branchName: pie-spark-2.4.6
@@ -340,7 +340,7 @@ builds:
     build:
       template: freestyle:v2:snapshot
       steps:
-        - build/sbt -Phadoop-3.2 -Pyarn -Pmesos -Pkubernetes "yarn/test" "mesos/test" "kubernetes/test"
+        - build/sbt -Phadoop-2.10 -Pyarn -Pmesos -Pkubernetes "yarn/test" "mesos/test" "kubernetes/test"
 
   - name: apple-spark-2.12_2.4.6-snapshot-yarn-mesos-k8s
     branchName: pie-spark-2.4.6
@@ -352,7 +352,7 @@ builds:
       template: freestyle:v2:snapshot
       steps:
         - dev/change-scala-version.sh 2.12
-        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 -Pyarn -Pmesos -Pkubernetes "yarn/test" "mesos/test" "kubernetes/test"
+        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.10 -Pyarn -Pmesos -Pkubernetes "yarn/test" "mesos/test" "kubernetes/test"
 
   - name: apple-spark-2.11_2.4.6-snapshot-python27
     branchName: pie-spark-2.4.6
@@ -366,7 +366,7 @@ builds:
         - curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py"
         - python get-pip.py
         - pip2.7 install numpy==1.16.4 scipy==1.2.2 pandas==0.19.2
-        - build/sbt -Phadoop-3.2 -Pflume assembly/package streaming-flume-assembly/assembly test:package
+        - build/sbt -Phadoop-2.10 -Pflume assembly/package streaming-flume-assembly/assembly test:package
         - python/run-tests.py --python-executables python2.7
 
   - name: apple-spark-2.12_2.4.6-snapshot-python27
@@ -382,7 +382,7 @@ builds:
         - curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py"
         - python get-pip.py
         - pip2.7 install numpy==1.16.4 scipy==1.2.2 pandas==0.19.2
-        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 -Pflume assembly/package streaming-flume-assembly/assembly test:package
+        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.10 -Pflume assembly/package streaming-flume-assembly/assembly test:package
         - python/run-tests.py --python-executables python2.7
 
   - name: apple-spark-2.11_2.4.6-snapshot-python36
@@ -396,7 +396,7 @@ builds:
       steps:
         - yum install -y python3
         - pip3.6 install numpy==1.16.4 scipy==1.2.2 pandas==0.23.2
-        - build/sbt -Phadoop-3.2 -Pflume assembly/package streaming-flume-assembly/assembly test:package
+        - build/sbt -Phadoop-2.10 -Pflume assembly/package streaming-flume-assembly/assembly test:package
         - python/run-tests.py --python-executables python3.6
 
   - name: apple-spark-2.12_2.4.6-snapshot-python36
@@ -411,7 +411,7 @@ builds:
         - dev/change-scala-version.sh 2.12
         - yum install -y python3
         - pip3.6 install numpy==1.16.4 scipy==1.2.2 pandas==0.23.2
-        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 -Pflume assembly/package streaming-flume-assembly/assembly test:package
+        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-2.10 -Pflume assembly/package streaming-flume-assembly/assembly test:package
         - python/run-tests.py --python-executables python3.6
 
   - name: apple-spark-2.11_2.4.6-snapshot
@@ -423,7 +423,7 @@ builds:
         SCALA_BINARY_VERSION: "2.11"
         SCALA_VERSION: "2.11.12"
         HADOOP_BINARY_VERSION: "2.10"
-        HADOOP_VERSION: "3.2.0"
+        HADOOP_VERSION: "2.10.0"
         PUBLISH_JARS: true
     build:
       template: freestyle:v4:publish
@@ -445,7 +445,7 @@ builds:
         SCALA_BINARY_VERSION: "2.12"
         SCALA_VERSION: "2.12.10"
         HADOOP_BINARY_VERSION: "2.10"
-        HADOOP_VERSION: "3.2.0"
+        HADOOP_VERSION: "2.10.0"
         PUBLISH_JARS: true
     build:
       template: freestyle:v4:publish
@@ -468,7 +468,7 @@ builds:
         SCALA_BINARY_VERSION: "2.11"
         SCALA_VERSION: "2.11.12"
         HADOOP_BINARY_VERSION: "2.10"
-        HADOOP_VERSION: "3.2.0"
+        HADOOP_VERSION: "2.10.0"
         PUBLISH_JARS: false
     build:
       template: freestyle:v4:publish
@@ -490,7 +490,7 @@ builds:
         SCALA_BINARY_VERSION: "2.12"
         SCALA_VERSION: "2.12.10"
         HADOOP_BINARY_VERSION: "2.10"
-        HADOOP_VERSION: "3.2.0"
+        HADOOP_VERSION: "2.10.0"
         PUBLISH_JARS: false
     build:
       template: freestyle:v4:publish
@@ -513,7 +513,7 @@ builds:
         SCALA_BINARY_VERSION: "2.11"
         SCALA_VERSION: "2.11.12"
         HADOOP_BINARY_VERSION: "2.10"
-        HADOOP_VERSION: "3.2.0"
+        HADOOP_VERSION: "2.10.0"
         PUBLISH_JARS: true
     build:
       template: freestyle:v4:publish
@@ -540,7 +540,7 @@ builds:
         SCALA_BINARY_VERSION: "2.12"
         SCALA_VERSION: "2.12.10"
         HADOOP_BINARY_VERSION: "2.10"
-        HADOOP_VERSION: "3.2.0"
+        HADOOP_VERSION: "2.10.0"
         PUBLISH_JARS: true
     build:
       template: freestyle:v4:publish
@@ -568,7 +568,7 @@ builds:
         SCALA_BINARY_VERSION: "2.11"
         SCALA_VERSION: "2.11.12"
         HADOOP_BINARY_VERSION: "2.10"
-        HADOOP_VERSION: "3.2.0"
+        HADOOP_VERSION: "2.10.0"
         PUBLISH_JARS: false
     build:
       template: freestyle:v4:publish
@@ -591,7 +591,7 @@ builds:
         SCALA_BINARY_VERSION: "2.12"
         SCALA_VERSION: "2.12.10"
         HADOOP_BINARY_VERSION: "2.10"
-        HADOOP_VERSION: "3.2.0"
+        HADOOP_VERSION: "2.10.0"
         PUBLISH_JARS: false
     build:
       template: freestyle:v4:publish
@@ -614,7 +614,7 @@ builds:
       env:
         SCALA_BINARY_VERSION: "2.11"
         SCALA_VERSION: "2.11.12"
-        HADOOP_VERSION: "3.2.0"
+        HADOOP_VERSION: "2.10.0"
         PUBLISH_JARS: false
     build:
       template: freestyle:v4:publish
@@ -635,7 +635,7 @@ builds:
       env:
         SCALA_BINARY_VERSION: "2.12"
         SCALA_VERSION: "2.12.10"
-        HADOOP_VERSION: "3.2.0"
+        HADOOP_VERSION: "2.10.0"
         PUBLISH_JARS: false
     build:
       template: freestyle:v4:publish
@@ -657,7 +657,7 @@ builds:
       env:
         SCALA_BINARY_VERSION: "2.11"
         SCALA_VERSION: "2.11.12"
-        HADOOP_VERSION: "3.2.0"
+        HADOOP_VERSION: "2.10.0"
         PUBLISH_JARS: false
     build:
       template: freestyle:v4:publish
@@ -679,7 +679,7 @@ builds:
       env:
         SCALA_BINARY_VERSION: "2.12"
         SCALA_VERSION: "2.12.10"
-        HADOOP_VERSION: "3.2.0"
+        HADOOP_VERSION: "2.10.0"
         PUBLISH_JARS: false
     build:
       template: freestyle:v4:publish
