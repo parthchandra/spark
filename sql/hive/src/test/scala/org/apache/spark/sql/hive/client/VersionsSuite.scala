@@ -112,7 +112,7 @@ class VersionsSuite extends SparkFunSuite with Logging {
   }
 
   private val versions =
-    Seq("0.12", "0.13", "0.14", "1.0", "1.1", "1.2", "2.0", "2.1", "2.2", "2.3", "3.0", "3.1")
+    Seq("1.2", "2.3", "3.0", "3.1")
 
   private var client: HiveClient = null
 
@@ -305,19 +305,7 @@ class VersionsSuite extends SparkFunSuite with Logging {
     }
 
     test(s"$version: dropTable") {
-      val versionsWithoutPurge = versions.takeWhile(_ != "0.14")
-      // First try with the purge option set. This should fail if the version is < 0.14, in which
-      // case we check the version and try without it.
-      try {
-        client.dropTable("default", tableName = "temporary", ignoreIfNotExists = false,
-          purge = true)
-        assert(!versionsWithoutPurge.contains(version))
-      } catch {
-        case _: UnsupportedOperationException =>
-          assert(versionsWithoutPurge.contains(version))
-          client.dropTable("default", tableName = "temporary", ignoreIfNotExists = false,
-            purge = false)
-      }
+      client.dropTable("default", tableName = "temporary", ignoreIfNotExists = false, purge = true)
       assert(client.listTables("default") === Seq("src"))
     }
 

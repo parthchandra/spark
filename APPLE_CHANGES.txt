@@ -4,6 +4,8 @@ This contains the changes after v2.4.6-rc8
 SPARK-31047       Improve file listing for ViewFileSystem
 
 # From Spark 3.0.0
+SPARK-26839       Work around classloader changes in Java 9 for Hive isolation
+SPARK-28708       IsolatedClientLoader will not load hive classes from application jars on JDK9+
 SPARK-20636       Add new optimization rule to transpose adjacent Window expressions.
 SPARK-25691       Use semantic equality in AliasViewChild in order to compare attributes
 SPARK-20636       Add the rule TransposeWindow to the optimization batch

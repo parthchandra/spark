@@ -22,7 +22,7 @@ import scala.collection.immutable.IndexedSeq
 import org.apache.spark.SparkFunSuite
 
 private[client] trait HiveClientVersions {
-  protected val versions =
-    IndexedSeq("0.12", "0.13", "0.14", "1.0", "1.1", "1.2", "2.0", "2.1", "2.2", "2.3", "3.0",
-      "3.1")
+  // "0.12", "0.13", "0.14", "1.0", "1.1", "2.0", "2.1", "2.2", "2.3"
+  // Older versions of Hive doesn't support Hadoop 3.2
+  protected val versions = IndexedSeq("1.2", "2.3", "3.0", "3.1")
 }
