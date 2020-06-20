@@ -90,15 +90,7 @@ private[hive] object IsolatedClientLoader extends Logging {
   }
 
   def hiveVersion(version: String): HiveVersion = version match {
-    case "12" | "0.12" | "0.12.0" => hive.v12
-    case "13" | "0.13" | "0.13.0" | "0.13.1" => hive.v13
-    case "14" | "0.14" | "0.14.0" => hive.v14
-    case "1.0" | "1.0.0" => hive.v1_0
-    case "1.1" | "1.1.0" => hive.v1_1
     case "1.2" | "1.2.0" | "1.2.1" | "1.2.2" => hive.v1_2
-    case "2.0" | "2.0.0" | "2.0.1" => hive.v2_0
-    case "2.1" | "2.1.0" | "2.1.1" => hive.v2_1
-    case "2.2" | "2.2.0" => hive.v2_2
     case "2.3" | "2.3.0" | "2.3.1" | "2.3.2" | "2.3.3" | "2.3.4" | "2.3.5" | "2.3.6" | "2.3.7" =>
       hive.v2_3
     case "3.0" | "3.0.0" => hive.v3_0
@@ -122,7 +114,8 @@ private[hive] object IsolatedClientLoader extends Logging {
       SparkSubmitUtils.resolveMavenCoordinates(
         hiveArtifacts.mkString(","),
         SparkSubmitUtils.buildIvySettings(
-          Some("https://maven-central.storage-download.googleapis.com/repos/central/data/"),
+          Some("https://maven-central.storage-download.googleapis.com/repos/central/data/," +
+            "https://artifacts.apple.com/libs-release"),
           ivyPath),
         exclusions = version.exclusions)
     }
