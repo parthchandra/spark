@@ -19,7 +19,7 @@ builds:
     build:
       template: freestyle:v4:build
       steps:
-        - build/sbt -Phadoop-3.2 -Phadoop-cloud "sketch/test" "kvstore/test" "network-common/test" "network-shuffle/test" "unsafe/test"
+        - build/sbt -Phadoop-3.2 -Phadoop-cloud "sketch/test" "kvstore/test" "network-common/test" "network-shuffle/test" "unsafe/test" "storage-shim/test"
 
   - name: apple-spark-2.12_3.0.0-snapshot-core
     branchName: branch-3.0.0-apple
