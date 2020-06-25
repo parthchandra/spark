@@ -600,7 +600,7 @@ class SparkContext(config: SparkConf) extends Logging {
       }
     _executorAllocationManager.foreach(_.start())
 
-    if (conf.get(SPARK_CALL_HOME_ENABLED)) {
+    if (conf.get(SPARK_CALL_HOME_ENABLED) || isACISparkJob()) {
       setupSparkCallHomeListener()
     }
     setupAndStartListenerBus()
@@ -2408,6 +2408,13 @@ class SparkContext(config: SparkConf) extends Logging {
 
   /** Register a new RDD, returning its RDD ID */
   private[spark] def newRddId(): Int = nextRddId.getAndIncrement()
+
+  /**
+   *  Check if the current spark job is ACI spark
+   */
+  private def isACISparkJob(): Boolean = {
+    System.getenv("PLATFORM_JOB_INSTANCE_ID") != null
+  }
 
   /**
    * Registers spark call home listener
