@@ -1140,13 +1140,9 @@ object SparkSession extends Logging {
    */
   private[spark] def hiveClassesArePresent: Boolean = {
     try {
-      if (System.getProperty("java.version").split("\\D+")(0).toInt < 9) {
-        Utils.classForName(HIVE_SESSION_STATE_BUILDER_CLASS_NAME)
-        Utils.classForName("org.apache.hadoop.hive.conf.HiveConf")
-        true
-      } else {
-        false
-      }
+      Utils.classForName(HIVE_SESSION_STATE_BUILDER_CLASS_NAME)
+      Utils.classForName("org.apache.hadoop.hive.conf.HiveConf")
+      true
     } catch {
       case _: ClassNotFoundException | _: NoClassDefFoundError => false
     }
