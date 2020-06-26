@@ -375,6 +375,7 @@ class SparkContext(config: SparkConf) extends Logging {
   try {
     _conf = config.clone()
     _conf.validateSettings()
+    ess.ExternalShuffleStorage.validateSettings(_conf)
 
     if (!_conf.contains("spark.master")) {
       throw new SparkException("A master URL must be set in your configuration")
@@ -557,6 +558,8 @@ class SparkContext(config: SparkConf) extends Logging {
     }
     _ui.foreach(_.setAppId(_applicationId))
     _env.blockManager.initialize(_applicationId)
+    ess.ExternalShuffleStorage.initialize(_applicationId, _conf)
+    ess.ExternalShuffleStorage.registerBlockManager(_env.blockManager.master, _conf)
 
     // The metrics system for Driver need to be set spark.app.id to app ID.
     // So it should start after we get app ID from the task scheduler and set spark.app.id.
@@ -1980,6 +1983,8 @@ class SparkContext(config: SparkConf) extends Logging {
     Utils.tryLogNonFatalError {
       _plugins.foreach(_.shutdown())
     }
+    ess.ExternalShuffleStorage.cleanUpAll(_conf)
+    ess.ExternalShuffleStorage.shutdown()
     Utils.tryLogNonFatalError {
       _eventLogger.foreach(_.stop())
     }

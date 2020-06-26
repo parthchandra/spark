@@ -83,17 +83,28 @@ private[storage] class BlockManagerDecommissioner(
               val blocks =
                 bm.migratableResolver.getMigrationBlocks(shuffleBlockInfo)
               logInfo(s"Got migration sub-blocks ${blocks}")
-              blocks.foreach { case (blockId, buffer) =>
-                logInfo(s"Migrating sub-block ${blockId}")
-                bm.blockTransferService.uploadBlockSync(
-                  peer.host,
-                  peer.port,
-                  peer.executorId,
-                  blockId,
-                  buffer,
-                  StorageLevel.DISK_ONLY,
-                  null)// class tag, we don't need for shuffle
-                logDebug(s"Migrated sub block ${blockId}")
+              if (ess.ExternalShuffleStorage.isEnabled(conf) &&
+                  peer == ess.ExternalShuffleStorage.EXTERNAL_BLOCK_MANAGER_ID) {
+                logInfo(s"Migrating $shuffleBlockInfo to external shuffle storage")
+                if (ess.ExternalShuffleStorage.upload(conf, bm, shuffleBlockInfo)) {
+                  logInfo(s"Migrated $shuffleBlockInfo to external shuffle storage")
+                } else {
+                  logError(s"Fail to migrate $shuffleBlockInfo to external shuffle storage")
+                  throw new SparkException("Fail to use external shuffle storage")
+                }
+              } else {
+                blocks.foreach { case (blockId, buffer) =>
+                  logInfo(s"Migrating sub-block ${blockId}")
+                  bm.blockTransferService.uploadBlockSync(
+                    peer.host,
+                    peer.port,
+                    peer.executorId,
+                    blockId,
+                    buffer,
+                    StorageLevel.DISK_ONLY,
+                    null) // class tag, we don't need for shuffle
+                  logDebug(s"Migrated sub block ${blockId}")
+                }
               }
               logInfo(s"Migrated ${shuffleBlockInfo}")
               numMigratedShuffles.incrementAndGet()

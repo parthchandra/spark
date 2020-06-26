@@ -600,11 +600,16 @@ class BlockManagerMasterEndpoint(
   private def getPeers(blockManagerId: BlockManagerId): Seq[BlockManagerId] = {
     val blockManagerIds = blockManagerInfo.keySet
     if (blockManagerIds.contains(blockManagerId)) {
-      blockManagerIds
+      val Ids = blockManagerIds
         .filterNot { _.isDriver }
         .filterNot { _ == blockManagerId }
+        .filterNot { _ == org.apache.spark.ess.ExternalShuffleStorage.EXTERNAL_BLOCK_MANAGER_ID }
         .diff(decommissioningBlockManagerSet)
-        .toSeq
+      if (Ids.nonEmpty) {
+        Ids.toSeq
+      } else {
+        Seq(org.apache.spark.ess.ExternalShuffleStorage.EXTERNAL_BLOCK_MANAGER_ID)
+      }
     } else {
       Seq.empty
     }
