@@ -23,7 +23,6 @@ import org.scalatest.concurrent.Eventually.{eventually, interval, timeout}
 
 import org.apache.spark.{LocalSparkContext, SparkContext, SparkFunSuite, TestUtils}
 import org.apache.spark.LocalSparkContext.withSpark
-import org.apache.spark.scheduler.cluster.StandaloneSchedulerBackend
 
 /** This test suite aims to test worker decommission with various configurations. */
 class WorkerDecommissionExtendedSuite extends SparkFunSuite with LocalSparkContext {
@@ -54,34 +53,6 @@ class WorkerDecommissionExtendedSuite extends SparkFunSuite with LocalSparkConte
       eventually(timeout(10.seconds), interval(1.seconds)) {
         assert(sc.getExecutorIds().length < 5)
       }
-    }
-  }
-
-  /**
-   * This is not a resource leak. This is a hang issue.
-   */
-  test("Decommission 19 executors from 20 executors in total") {
-    val conf = new org.apache.spark.SparkConf()
-      .setAppName(getClass.getName)
-      .set("spark.master", "local-cluster[20,1,1024]")
-      .set("spark.dynamicAllocation.enabled", "true")
-      .set("spark.dynamicAllocation.shuffleTracking.enabled", "true")
-      .set("spark.dynamicAllocation.initialExecutors", "20")
-      .set("spark.worker.decommission.enabled", "true")
-    sc = new SparkContext(conf)
-
-    withSpark(sc) { sc =>
-      TestUtils.waitUntilExecutorsUp(sc, 20, 60000)
-      val rdd1 = sc.parallelize(1 to 100000, 200)
-      val rdd2 = rdd1.map(x => (x % 100, x))
-      val rdd3 = rdd2.reduceByKey(_ + _)
-      assert(rdd3.count() === 100)
-
-      val sched = sc.schedulerBackend.asInstanceOf[StandaloneSchedulerBackend]
-      sc.getExecutorIds().tail.foreach { id =>
-        assert(sched.decommissionExecutor(id))
-      }
-      assert(rdd3.sortByKey().collect().length === 100)
     }
   }
 }
