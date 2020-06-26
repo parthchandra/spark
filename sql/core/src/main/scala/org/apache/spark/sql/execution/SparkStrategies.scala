@@ -639,6 +639,8 @@ abstract class SparkStrategies extends QueryPlanner[SparkPlan] {
         throw new UnsupportedOperationException(s"UPDATE TABLE is not supported temporarily.")
       case _: MergeIntoTable =>
         throw new UnsupportedOperationException(s"MERGE INTO TABLE is not supported temporarily.")
+      case _: OptimizeTable =>
+        throw new UnsupportedOperationException(s"OPTIMIZE is only supported by ACI Data Tables.")
       case _ => Nil
     }
   }

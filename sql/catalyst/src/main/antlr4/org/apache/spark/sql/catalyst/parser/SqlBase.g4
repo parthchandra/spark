@@ -181,6 +181,10 @@ statement
         ON mergeCondition=booleanExpression
         matchedClause*
         notMatchedClause*                                              #mergeIntoTable
+    | OPTIMIZE tableIdentifier
+        whereClause?
+        (sortByClause ignoreOptimalFiles?)?
+        (OPTIONS options=tablePropertyList)?                           #optimizeTable
     | unsupportedHiveNativeCommands .*?                                #failNativeCommand
     ;
 
@@ -444,6 +448,22 @@ assignmentList
 
 assignment
     : key=qualifiedName EQ value=expression
+    ;
+
+sortByClause
+    : SORT BY sortColumns=orderedQualifiedNameList
+    ;
+
+orderedQualifiedNameList
+    : '(' orderedQualifiedName (',' orderedQualifiedName)* ')'
+    ;
+
+orderedQualifiedName
+    : qualifiedName ordering=(ASC | DESC)?
+    ;
+
+ignoreOptimalFiles
+    : IGNORE OPTIMAL FILES
     ;
 
 hint
@@ -824,6 +844,7 @@ nonReserved
     | DIRECTORY
     | BOTH | LEADING | TRAILING
     | UPDATE | MERGE | MATCHED
+    | OPTIMIZE | OPTIMAL | FILES
     ;
 
 SELECT: 'SELECT';
@@ -1064,6 +1085,10 @@ INPATH: 'INPATH';
 UPDATE: 'UPDATE';
 MERGE: 'MERGE';
 MATCHED: 'MATCHED';
+
+OPTIMIZE: 'OPTIMIZE';
+OPTIMAL: 'OPTIMAL';
+FILES: 'FILES';
 
 STRING
     : '\'' ( ~('\''|'\\') | ('\\' .) )* '\''

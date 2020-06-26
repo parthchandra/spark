@@ -26,8 +26,9 @@ import org.antlr.v4.runtime.tree.TerminalNode
 
 import org.apache.spark.sql.SaveMode
 import org.apache.spark.sql.catalyst.{FunctionIdentifier, TableIdentifier}
+import org.apache.spark.sql.catalyst.analysis.UnresolvedRelation
 import org.apache.spark.sql.catalyst.catalog._
-import org.apache.spark.sql.catalyst.expressions.Expression
+import org.apache.spark.sql.catalyst.expressions.{Ascending, Descending, Expression}
 import org.apache.spark.sql.catalyst.parser._
 import org.apache.spark.sql.catalyst.parser.SqlBaseParser._
 import org.apache.spark.sql.catalyst.plans.logical._
@@ -1633,5 +1634,30 @@ class SparkSqlAstBuilder(conf: SQLConf) extends AstBuilder(conf) {
       properties = rowStorage.properties ++ fileStorage.properties)
 
     (ctx.LOCAL != null, storage, Some(DDLUtils.HIVE_PROVIDER))
+  }
+
+  /**
+   * Create an [[OptimizeTable]] logical plan.
+   *
+   * @param ctx the parse tree
+   */
+  override def visitOptimizeTable(ctx: OptimizeTableContext): LogicalPlan = withOrigin(ctx) {
+    val targetTable = UnresolvedRelation(visitTableIdentifier(ctx.tableIdentifier))
+    val predicate = Option(ctx.whereClause).map(_.booleanExpression).map(expression)
+    val options = Option(ctx.options).map(visitPropertyKeyValues).getOrElse(Map.empty)
+    val sortColumns =
+      Option(ctx.sortByClause).map(_.sortColumns).toSeq
+        .flatMap(_.orderedQualifiedName.asScala)
+        .map { ctx =>
+          val sortColumn = ctx.qualifiedName.identifier.asScala
+            .map(a => s"`${a.getText}`")
+            .mkString(".")
+          val direction = Option(ctx.ordering)
+            .map(_.getText.toLowerCase(Locale.ROOT))
+            .getOrElse("asc")
+          (sortColumn, if (direction == "asc") Ascending else Descending)
+        }
+
+    OptimizeTable(targetTable, predicate, sortColumns, ctx.ignoreOptimalFiles != null, options)
   }
 }

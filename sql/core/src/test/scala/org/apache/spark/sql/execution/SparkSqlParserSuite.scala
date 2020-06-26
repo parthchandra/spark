@@ -21,9 +21,9 @@ import org.apache.spark.sql.SaveMode
 import org.apache.spark.sql.catalyst.{FunctionIdentifier, TableIdentifier}
 import org.apache.spark.sql.catalyst.analysis.{AnalysisTest, UnresolvedAlias, UnresolvedAttribute, UnresolvedRelation, UnresolvedStar}
 import org.apache.spark.sql.catalyst.catalog.{BucketSpec, CatalogStorageFormat, CatalogTable, CatalogTableType}
-import org.apache.spark.sql.catalyst.expressions.{Ascending, Concat, SortOrder}
+import org.apache.spark.sql.catalyst.expressions.{Ascending, Concat, EqualTo, GreaterThan, Like, Literal, SortOrder}
 import org.apache.spark.sql.catalyst.parser.ParseException
-import org.apache.spark.sql.catalyst.plans.logical.{LogicalPlan, Project, RepartitionByExpression, Sort}
+import org.apache.spark.sql.catalyst.plans.logical.{LogicalPlan, OptimizeTable, Project, RepartitionByExpression, Sort}
 import org.apache.spark.sql.execution.command._
 import org.apache.spark.sql.execution.datasources.{CreateTable, RefreshResource}
 import org.apache.spark.sql.internal.{HiveSerDe, SQLConf}
@@ -376,5 +376,82 @@ class SparkSqlParserSuite extends AnalysisTest {
     intercept("ALTER VIEW testView AS FROM jt INSERT INTO tbl1 SELECT * WHERE jt.id < 5 " +
       "INSERT INTO tbl2 SELECT * WHERE jt.id > 4",
       "Operation not allowed: ALTER VIEW ... AS FROM ... [INSERT INTO ...]+")
+  }
+
+  test("bin-pack all") {
+    assertEqual(
+      "OPTIMIZE db.tbl",
+      OptimizeTable(
+        UnresolvedRelation(TableIdentifier("tbl", Some("db"))),
+        predicate = None,
+        sortColumns = Seq.empty,
+        nonOptimalFilesOnly = false,
+        options = Map.empty))
+  }
+
+  test("bin-pack with an equality predicate") {
+    assertEqual(
+      "OPTIMIZE db.tbl WHERE p = '10'",
+      OptimizeTable(
+        UnresolvedRelation(TableIdentifier("tbl", Some("db"))),
+        predicate = Some(EqualTo(UnresolvedAttribute("p"), Literal("10"))),
+        sortColumns = Seq.empty,
+        nonOptimalFilesOnly = false,
+        options = Map.empty))
+  }
+
+  test("bin-pack with a greaterThan predicate") {
+    assertEqual(
+      "OPTIMIZE db.tbl WHERE p > '10'",
+      OptimizeTable(
+        UnresolvedRelation(TableIdentifier("tbl", Some("db"))),
+        predicate = Some(GreaterThan(UnresolvedAttribute("p"), Literal("10"))),
+        sortColumns = Seq.empty,
+        nonOptimalFilesOnly = false,
+        options = Map.empty))
+  }
+
+  test("bin-pack with a startsWith predicate") {
+    assertEqual(
+      "OPTIMIZE db.tbl WHERE p LIKE '10%'",
+      OptimizeTable(
+        UnresolvedRelation(TableIdentifier("tbl", Some("db"))),
+        predicate = Some(Like(UnresolvedAttribute("p"), Literal("10%"))),
+        sortColumns = Seq.empty,
+        nonOptimalFilesOnly = false,
+        options = Map.empty))
+  }
+
+  test("sort with a greaterThan predicate") {
+    assertEqual(
+      "OPTIMIZE db.tbl WHERE p > '10' SORT BY (c1, c2)",
+      OptimizeTable(
+        UnresolvedRelation(TableIdentifier("tbl", Some("db"))),
+        predicate = Some(GreaterThan(UnresolvedAttribute("p"), Literal("10"))),
+        sortColumns = Seq(("`c1`", Ascending), ("`c2`", Ascending)),
+        nonOptimalFilesOnly = false,
+        options = Map.empty))
+  }
+
+  test("sort with ignore optimal files") {
+    assertEqual(
+      "OPTIMIZE db.tbl WHERE p > '10' SORT BY (c1, c2) IGNORE OPTIMAL FILES",
+      OptimizeTable(
+        UnresolvedRelation(TableIdentifier("tbl", Some("db"))),
+        predicate = Some(GreaterThan(UnresolvedAttribute("p"), Literal("10"))),
+        sortColumns = Seq(("`c1`", Ascending), ("`c2`", Ascending)),
+        nonOptimalFilesOnly = true,
+        options = Map.empty))
+  }
+
+  test("sort with options") {
+    assertEqual(
+      "OPTIMIZE db.tbl WHERE p > '10' SORT BY (c1, c2) IGNORE OPTIMAL FILES OPTIONS('k' 'v')",
+      OptimizeTable(
+        UnresolvedRelation(TableIdentifier("tbl", Some("db"))),
+        predicate = Some(GreaterThan(UnresolvedAttribute("p"), Literal("10"))),
+        sortColumns = Seq(("`c1`", Ascending), ("`c2`", Ascending)),
+        nonOptimalFilesOnly = true,
+        options = Map("k" -> "v")))
   }
 }
