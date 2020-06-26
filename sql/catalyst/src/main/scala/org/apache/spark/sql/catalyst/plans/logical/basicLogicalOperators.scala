@@ -1074,3 +1074,16 @@ case class Deduplicate(
  * This is used to whitelist such commands in the subquery-related checks.
  */
 trait SupportsSubquery extends LogicalPlan
+
+/**
+ * A plan that represents an optimization job on a table.
+ */
+case class OptimizeTable(
+    child: LogicalPlan,
+    predicate: Option[Expression],
+    sortColumns: Seq[(String, SortDirection)],
+    nonOptimalFilesOnly: Boolean,
+    options: Map[String, String]) extends UnaryNode {
+
+  override def output: Seq[Attribute] = Seq.empty
+}
