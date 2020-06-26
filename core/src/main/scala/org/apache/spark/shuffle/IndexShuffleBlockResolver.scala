@@ -115,6 +115,7 @@ private[spark] class IndexShuffleBlockResolver(
       if (!file.delete()) {
         logWarning(s"Error deleting data ${file.getPath()}")
       }
+      org.apache.spark.ess.ExternalShuffleStorage.delete(conf, file)
     }
 
     file = getIndexFile(shuffleId, mapId)
@@ -122,6 +123,7 @@ private[spark] class IndexShuffleBlockResolver(
       if (!file.delete()) {
         logWarning(s"Error deleting index ${file.getPath()}")
       }
+      org.apache.spark.ess.ExternalShuffleStorage.delete(conf, file)
     }
   }
 
@@ -245,6 +247,14 @@ private[spark] class IndexShuffleBlockResolver(
     List((indexBlockId, indexBlockData), (dataBlockId, dataBlockData))
   }
 
+  /**
+   * Get the index & data files for migration.
+   */
+  def getMigrationFiles(shuffleBlockInfo: ShuffleBlockInfo): (File, File) = {
+    val shuffleId = shuffleBlockInfo.shuffleId
+    val mapId = shuffleBlockInfo.mapId
+    (getIndexFile(shuffleId, mapId), getDataFile(shuffleId, mapId))
+  }
 
   /**
    * Write an index file with the offsets of each block, plus a final offset at the end for the

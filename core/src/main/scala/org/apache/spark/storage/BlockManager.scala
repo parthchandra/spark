@@ -257,7 +257,7 @@ private[spark] class BlockManager(
 
   // This is a lazy val so someone can migrating RDDs even if they don't have a MigratableResolver
   // for shuffles. Used in BlockManagerDecommissioner & block puts.
-  private[storage] lazy val migratableResolver: MigratableResolver = {
+  private[spark] lazy val migratableResolver: MigratableResolver = {
     shuffleManager.shuffleBlockResolver.asInstanceOf[MigratableResolver]
   }
 
@@ -625,7 +625,7 @@ private[spark] class BlockManager(
   override def getLocalBlockData(blockId: BlockId): ManagedBuffer = {
     if (blockId.isShuffle) {
       logDebug(s"Getting local shuffle block ${blockId}")
-      shuffleManager.shuffleBlockResolver.getBlockData(blockId)
+      ess.ExternalShuffleStorage.read(shuffleManager.shuffleBlockResolver, blockId)
     } else {
       getLocalBytes(blockId) match {
         case Some(blockData) =>

@@ -17,6 +17,8 @@
 
 package org.apache.spark.storage
 
+import java.io.File
+
 import scala.concurrent.duration._
 
 import org.mockito.{ArgumentMatchers => mc}
@@ -30,6 +32,7 @@ import org.apache.spark.network.BlockTransferService
 import org.apache.spark.network.buffer.ManagedBuffer
 import org.apache.spark.shuffle.{MigratableResolver, ShuffleBlockInfo}
 import org.apache.spark.storage.BlockManagerMessages.ReplicateBlock
+import org.apache.spark.util.Utils.createTempDir
 
 class BlockManagerDecommissionUnitSuite extends SparkFunSuite with Matchers {
 
@@ -54,6 +57,24 @@ class BlockManagerDecommissionUnitSuite extends SparkFunSuite with Matchers {
         .thenReturn(List(
           (ShuffleIndexBlockId(shuffleId, mapId, reduceId), mock(classOf[ManagedBuffer])),
           (ShuffleDataBlockId(shuffleId, mapId, reduceId), mock(classOf[ManagedBuffer]))))
+    }
+
+    ids.foreach { case (shuffleId: Int, mapId: Long, reduceId: Int) =>
+      val indexFile = new File(s"shuffle_${shuffleId}_${mapId}_0.index")
+      val dataFile = new File(s"shuffle_${shuffleId}_${mapId}_0.data")
+      indexFile.createNewFile()
+      dataFile.createNewFile()
+      when(mockMigratableShuffleResolver.getMigrationFiles(mc.any()))
+        .thenReturn((indexFile, dataFile))
+    }
+  }
+
+  def deleteShuffleFiles(ids: Set[(Int, Long, Int)]): Unit = {
+    ids.foreach { case (shuffleId: Int, mapId: Long, reduceId: Int) =>
+      val indexFile = new File(s"shuffle_${shuffleId}_${mapId}_0.index")
+      val dataFile = new File(s"shuffle_${shuffleId}_${mapId}_0.data")
+      indexFile.delete()
+      dataFile.delete()
     }
   }
 
@@ -90,9 +111,49 @@ class BlockManagerDecommissionUnitSuite extends SparkFunSuite with Matchers {
             mc.eq(StorageLevel.DISK_ONLY), mc.isNull())
       }
     } finally {
-        bmDecomManager.stop()
+      bmDecomManager.stop()
+      deleteShuffleFiles(Set((1, 1L, 1)))
     }
 
     bmDecomManager.stop()
+  }
+
+  test("migrate shuffle data to external shuffle storage") {
+    val conf = ess.ExternalShuffleStorage.enableExternalShuffleStorage(sparkConf.clone)
+      .set("spark.app.id", getClass.getSimpleName)
+      .set(config.SPARK_SHUFFLE_EXTERNAL_STORAGE_BACKEND, "efs")
+      .set(config.SPARK_SHUFFLE_EXTERNAL_STORAGE_BUCKET, createTempDir().getAbsolutePath)
+    val prefix = ess.ExternalShuffleStorage.getAppIdPrefix(conf)
+
+    val blockTransferService = mock(classOf[BlockTransferService])
+    val bm = mock(classOf[BlockManager])
+    val bmm = mock(classOf[BlockManagerMaster])
+    val migratableShuffleBlockResolver = mock(classOf[MigratableResolver])
+    registerShuffleBlocks(migratableShuffleBlockResolver, Set((1, 1L, 1)))
+    val files = Seq("shuffle_1_1_0.index", "shuffle_1_1_0.data")
+
+    when(bmm.updateBlockInfo(mc.any(), mc.any(), mc.any(), mc.any(), mc.any())).thenReturn(true)
+    when(bm.getPeers(mc.any()))
+      .thenReturn(Seq(ess.ExternalShuffleStorage.EXTERNAL_BLOCK_MANAGER_ID))
+    when(bm.master).thenReturn(bmm)
+    when(bm.blockTransferService).thenReturn(blockTransferService)
+    when(bm.migratableResolver).thenReturn(migratableShuffleBlockResolver)
+    when(bm.getMigratableRDDBlocks()).thenReturn(Seq())
+
+    val bmDecomManager = new BlockManagerDecommissioner(conf, bm)
+
+    try {
+      bmDecomManager.start()
+      eventually(timeout(10.second), interval(1.seconds)) {
+        files.foreach { file =>
+          assert(ess.ExternalShuffleStorage.doesObjectExist(conf, prefix + file), file)
+        }
+        verify(blockTransferService, times(0))
+          .uploadBlockSync(mc.any(), mc.any(), mc.any(), mc.any(), mc.any(), mc.any(), mc.any())
+      }
+    } finally {
+      bmDecomManager.stop()
+      deleteShuffleFiles(Set((1, 1L, 1)))
+    }
   }
 }

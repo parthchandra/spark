@@ -464,6 +464,60 @@ package object config {
         "cache block replication should be positive.")
       .createWithDefaultString("30s")
 
+  private[spark] val SPARK_SHUFFLE_EXTERNAL_STORAGE_ENABLED =
+    ConfigBuilder("spark.shuffle.externalStorage.enabled")
+      .doc("When true, we will copy the old shuffle data to external shuffle storage")
+      .version("3.1.0")
+      .booleanConf
+      .createWithDefault(false)
+
+  private[spark] val SPARK_SHUFFLE_EXTERNAL_STORAGE_ENDPOINT =
+    ConfigBuilder("spark.shuffle.externalStorage.endpoint")
+      .doc("The endpoint of external shuffle storage")
+      .version("3.1.0")
+      .stringConf
+      .createWithDefault("http://minio:9000")
+
+  private[spark] val SPARK_SHUFFLE_EXTERNAL_STORAGE_BUCKET =
+    ConfigBuilder("spark.shuffle.externalStorage.bucket")
+      .doc("The bucket name for external shuffle storage")
+      .version("3.1.0")
+      .stringConf
+      .createWithDefault("spark-ess")
+
+  private[spark] val SPARK_SHUFFLE_EXTERNAL_STORAGE_ACCESS_KEY =
+    ConfigBuilder("spark.shuffle.externalStorage.access.key")
+      .doc("The access key for external shuffle storage. " +
+        "We use a separate credential for security enforcement.")
+      .version("3.1.0")
+      .stringConf
+      .createWithDefault("minioadmin")
+
+  private[spark] val SPARK_SHUFFLE_EXTERNAL_STORAGE_SECRET_KEY =
+    ConfigBuilder("spark.shuffle.externalStorage.secret.key")
+      .doc("The secret key for external shuffle storage. " +
+        "We use a separate credential for security enforcement.")
+      .version("3.1.0")
+      .stringConf
+      .createWithDefault("minioadmin")
+
+  private[spark] val SPARK_SHUFFLE_EXTERNAL_STORAGE_BACKEND =
+    ConfigBuilder("spark.shuffle.externalStorage.backend")
+      .doc("The backend for external shuffle storage")
+      .version("3.1.0")
+      .stringConf
+      .transform(_.toLowerCase(java.util.Locale.ROOT))
+      .checkValues(Set("minio", "s3", "efs"))
+      .createWithDefault("minio")
+
+  private[spark] val SPARK_SHUFFLE_EXTERNAL_STORAGE_SEPARATOR =
+    ConfigBuilder("spark.shuffle.externalStorage.separator")
+      .doc("The separator for external shuffle storage")
+      .version("3.1.0")
+      .stringConf
+      .checkValues(Set("/", "_"))
+      .createWithDefault("/")
+
   private[spark] val STORAGE_REPLICATION_TOPOLOGY_FILE =
     ConfigBuilder("spark.storage.replication.topologyFile")
       .version("2.1.0")
