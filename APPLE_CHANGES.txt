@@ -26,6 +26,7 @@ SPARK-31041      Show Maven errors from within make-distribution.sh
 SPARK-31071      Allow annotating non-null fields when encoding Java Beans
 SPARK-31120      Support enabling maven profiles for importing vi…
 SPARK-31125      Terminating pods have a deletion timestamp but they are not yet dead
+SPARK-32100      Add WorkerDecommissionExtendedSuite
 
 # From Spark 3.0.1
 SPARK-32020      Better error message when SPARK_HOME or spark.test.home is not set
@@ -68,6 +69,23 @@ SPARK-31968      Duplicate partition columns check when writing data
 SPARK-31593      Remove unnecessary streaming query progress update
 SPARK-31983      Fix sorting for duration column in structured streaming tab
 SPARK-31990      Use toSet.toSeq in Dataset.dropDuplicates
+MINOR            Update running-on-kubernetes.md
+MINOR            Emphasize the Streaming tab is for DStream API
+SPARK-31980      Function sequence() fails if start and end of range are equal dates
+SPARK-32021      Increase precision of seconds and fractions of `make_interval`
+SPARK-32034      Port HIVE-14817: Shutdown the SessionManager timeoutChecker thread properly upon shutdown
+SPARK-32038      NormalizeFloatingNumbers should also work on distinct aggregate
+MINOR            Add `IS [NOT] NULL` examples to ArrayFilter/ArrayExists
+SPARK-31918      Ignore S4 generic methods under SparkR namespace in closure cleaning to support R 4.0.0+
+SPARK-32073      Drop R < 3.5 support
+SPARK-32028      fix app id link for multi attempts app in history summary page
+SPARK-32075      Fix a few issues in parameters table
+SPARK-31998      Simplify ArrowColumnVector ListArray accessor
+SPARK-32080      Simplify ArrowColumnVector ListArray accessor
+SPARK-32089      Upgrade R version to 4.0.2 in the release DockerFiile
+SPARK-32078      Add a redirect to sql-ref from sql-reference
+SPARK-32098      Use iloc for positional slicing instead of direct slicing in createDataFrame with Arrow
+SPARK-32099      Remove broken link in cloud integration documentation
 
 # Internal Patches
 rdar://64257783   Use parquet-1.10.1.1-apple to support ZSTD Parquet
@@ -84,3 +102,8 @@ MINOR            Use Utils.localHostName() for bindAddress
 MINOR            Integrate ACI spark call home service listener v0.1.1
 MINOR            Add rio.yml and dev scripts
 MINOR            Bump to 3.0.0.2-apple-SNAPSHOT
+MINOR            Bump to 3.0.0.4-apple-SNAPSHOT
+rdar://64647311  Integrate Call home to spark Core and enable it by default for ACI spark jobs
+MINOR            Fix our exiting and cleanup thread for better debugging next time. Cleanup the locks we use in decommissioning and clarify some more bits.
+MINOR            Add storage-shim module
+MINOR            Add external shuffle storage
