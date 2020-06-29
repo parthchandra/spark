@@ -103,7 +103,6 @@ MINOR            Integrate ACI spark call home service listener v0.1.1
 MINOR            Add rio.yml and dev scripts
 MINOR            Bump to 3.0.0.2-apple-SNAPSHOT
 MINOR            Bump to 3.0.0.4-apple-SNAPSHOT
-rdar://64647311  Integrate Call home to spark Core and enable it by default for ACI spark jobs
 MINOR            Fix our exiting and cleanup thread for better debugging next time. Cleanup the locks we use in decommissioning and clarify some more bits.
 MINOR            Add storage-shim module
 MINOR            Add external shuffle storage
