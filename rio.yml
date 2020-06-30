@@ -13,10 +13,9 @@ builds:
     branchName: pie-spark-2.4.6
     timeout: 90
     machine:
-      docker:
-        baseImage: docker.apple.com/cpbuild7/applejdk-8
+      baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
-      template: freestyle:v4:snapshot
+      template: freestyle:v4:build
       steps:
         - build/sbt -Phadoop-3.2 "sketch/test" "kvstore/test" "network-common/test" "network-shuffle/test" "unsafe/test"
     reports:
@@ -29,10 +28,9 @@ builds:
     branchName: pie-spark-2.4.6
     timeout: 90
     machine:
-      docker:
-        baseImage: docker.apple.com/cpbuild7/applejdk-11
+      baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
-      template: freestyle:v4:snapshot
+      template: freestyle:v4:build
       steps:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 "sketch/test" "kvstore/test" "network-common/test" "network-shuffle/test" "unsafe/test"
@@ -46,10 +44,9 @@ builds:
     branchName: pie-spark-2.4.6
     timeout: 90
     machine:
-      docker:
-        baseImage: docker.apple.com/cpbuild7/applejdk-8
+      baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
-      template: freestyle:v4:snapshot
+      template: freestyle:v4:build
       steps:
         - build/sbt -Phadoop-3.2 "core/test"
     reports:
@@ -62,10 +59,9 @@ builds:
     branchName: pie-spark-2.4.6
     timeout: 90
     machine:
-      docker:
-        baseImage: docker.apple.com/cpbuild7/applejdk-11
+      baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
-      template: freestyle:v4:snapshot
+      template: freestyle:v4:build
       steps:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 "core/test"
@@ -79,10 +75,9 @@ builds:
     branchName: pie-spark-2.4.6
     timeout: 90
     machine:
-      docker:
-        baseImage: docker.apple.com/cpbuild7/applejdk-8
+      baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
-      template: freestyle:v4:snapshot
+      template: freestyle:v4:build
       steps:
         - build/sbt -Phadoop-3.2 "streaming/test"
     reports:
@@ -95,10 +90,9 @@ builds:
     branchName: pie-spark-2.4.6
     timeout: 90
     machine:
-      docker:
-        baseImage: docker.apple.com/cpbuild7/applejdk-11
+      baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
-      template: freestyle:v4:snapshot
+      template: freestyle:v4:build
       steps:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 "streaming/test"
@@ -112,10 +106,9 @@ builds:
     branchName: pie-spark-2.4.6
     timeout: 90
     machine:
-      docker:
-        baseImage: docker.apple.com/cpbuild7/applejdk-8
+      baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
-      template: freestyle:v4:snapshot
+      template: freestyle:v4:build
       steps:
         - build/sbt -Phadoop-3.2 "mllib/test" "mllib-local/test" "graphx/test"
     reports:
@@ -128,10 +121,9 @@ builds:
     branchName: pie-spark-2.4.6
     timeout: 90
     machine:
-      docker:
-        baseImage: docker.apple.com/cpbuild7/applejdk-11
+      baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
-      template: freestyle:v4:snapshot
+      template: freestyle:v4:build
       steps:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 "mllib/test" "mllib-local/test" "graphx/test"
@@ -145,10 +137,9 @@ builds:
     branchName: pie-spark-2.4.6
     timeout: 90
     machine:
-      docker:
-        baseImage: docker.apple.com/cpbuild7/applejdk-8
+      baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
-      template: freestyle:v4:snapshot
+      template: freestyle:v4:build
       steps:
         - build/sbt -Phadoop-3.2 "catalyst/test"
     reports:
@@ -161,10 +152,9 @@ builds:
     branchName: pie-spark-2.4.6
     timeout: 90
     machine:
-      docker:
-        baseImage: docker.apple.com/cpbuild7/applejdk-11
+      baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
-      template: freestyle:v4:snapshot
+      template: freestyle:v4:build
       steps:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 "catalyst/test"
@@ -178,10 +168,9 @@ builds:
     branchName: pie-spark-2.4.6
     timeout: 90
     machine:
-      docker:
-        baseImage: docker.apple.com/cpbuild7/applejdk-8
+      baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
-      template: freestyle:v4:snapshot
+      template: freestyle:v4:build
       steps:
         - build/sbt -Phadoop-3.2 "sql/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedSQLTest
     reports:
@@ -194,10 +183,9 @@ builds:
     branchName: pie-spark-2.4.6
     timeout: 90
     machine:
-      docker:
-        baseImage: docker.apple.com/cpbuild7/applejdk-11
+      baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
-      template: freestyle:v4:snapshot
+      template: freestyle:v4:build
       steps:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 "sql/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedSQLTest
@@ -211,10 +199,9 @@ builds:
     branchName: pie-spark-2.4.6
     timeout: 90
     machine:
-      docker:
-        baseImage: docker.apple.com/cpbuild7/applejdk-8
+      baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
-      template: freestyle:v4:snapshot
+      template: freestyle:v4:build
       steps:
         - build/sbt -Phadoop-3.2 "sql/test-only *.SQLQueryTestSuite"
     reports:
@@ -227,10 +214,9 @@ builds:
     branchName: pie-spark-2.4.6
     timeout: 90
     machine:
-      docker:
-        baseImage: docker.apple.com/cpbuild7/applejdk-11
+      baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
-      template: freestyle:v4:snapshot
+      template: freestyle:v4:build
       steps:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 "sql/test-only *.SQLQueryTestSuite"
@@ -244,10 +230,9 @@ builds:
     branchName: pie-spark-2.4.6
     timeout: 90
     machine:
-      docker:
-        baseImage: docker.apple.com/cpbuild7/applejdk-8
+      baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
-      template: freestyle:v4:snapshot
+      template: freestyle:v4:build
       steps:
         - build/sbt -Phadoop-3.2 -Phive "hive/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedHiveTest
     reports:
@@ -260,10 +245,9 @@ builds:
     branchName: pie-spark-2.4.6
     timeout: 90
     machine:
-      docker:
-        baseImage: docker.apple.com/cpbuild7/applejdk-11
+      baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
-      template: freestyle:v4:snapshot
+      template: freestyle:v4:build
       steps:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 -Phive "hive/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedHiveTest
@@ -277,10 +261,9 @@ builds:
     branchName: pie-spark-2.4.6
     timeout: 90
     machine:
-      docker:
-        baseImage: docker.apple.com/cpbuild7/applejdk-8
+      baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
-      template: freestyle:v4:snapshot
+      template: freestyle:v4:build
       steps:
         - build/sbt -Phadoop-3.2 -Phive "hive/test-only *.HiveSparkSubmitSuite" "hive/test-only *.VersionsSuite" "hive/test-only *.Hive_2_1_DDLSuite" "hive/test-only *.HiveQuerySuite"
     reports:
@@ -293,10 +276,9 @@ builds:
     branchName: pie-spark-2.4.6
     timeout: 90
     machine:
-      docker:
-        baseImage: docker.apple.com/cpbuild7/applejdk-11
+      baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
-      template: freestyle:v4:snapshot
+      template: freestyle:v4:build
       steps:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 -Phive "hive/test-only *.HiveSparkSubmitSuite" "hive/test-only *.VersionsSuite" "hive/test-only *.Hive_2_1_DDLSuite" "hive/test-only *.HiveQuerySuite"
@@ -310,10 +292,9 @@ builds:
     branchName: pie-spark-2.4.6
     timeout: 90
     machine:
-      docker:
-        baseImage: docker.apple.com/cpbuild7/applejdk-8
+      baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
-      template: freestyle:v4:snapshot
+      template: freestyle:v4:build
       steps:
         - build/sbt -Phadoop-3.2 -Phive "hive/test-only *.HiveCompatibilitySuite" "hive/testOnly *.HiveClientSuites"
     reports:
@@ -326,10 +307,9 @@ builds:
     branchName: pie-spark-2.4.6
     timeout: 90
     machine:
-      docker:
-        baseImage: docker.apple.com/cpbuild7/applejdk-11
+      baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
-      template: freestyle:v4:snapshot
+      template: freestyle:v4:build
       steps:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 -Phive "hive/test-only *.HiveCompatibilitySuite"
@@ -343,10 +323,9 @@ builds:
     branchName: pie-spark-2.4.6
     timeout: 90
     machine:
-      docker:
-        baseImage: docker.apple.com/cpbuild7/applejdk-8
+      baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
-      template: freestyle:v4:snapshot
+      template: freestyle:v4:build
       steps:
         - build/sbt -Phadoop-3.2 -Phadoop-cloud "launcher/test" "repl/test" "tools/test" "hadoop-cloud/test"
     reports:
@@ -359,10 +338,9 @@ builds:
     branchName: pie-spark-2.4.6
     timeout: 90
     machine:
-      docker:
-        baseImage: docker.apple.com/cpbuild7/applejdk-11
+      baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
-      template: freestyle:v4:snapshot
+      template: freestyle:v4:build
       steps:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 -Phadoop-cloud "launcher/test" "repl/test" "tools/test" "hadoop-cloud/test"
@@ -376,10 +354,9 @@ builds:
     branchName: pie-spark-2.4.6
     timeout: 90
     machine:
-      docker:
-        baseImage: docker.apple.com/cpbuild7/applejdk-8
+      baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
-      template: freestyle:v4:snapshot
+      template: freestyle:v4:build
       steps:
         - build/sbt -Phadoop-3.2 "streaming-kafka-0-10/test" "sql-kafka-0-10/test"
     reports:
@@ -392,10 +369,9 @@ builds:
     branchName: pie-spark-2.4.6
     timeout: 90
     machine:
-      docker:
-        baseImage: docker.apple.com/cpbuild7/applejdk-11
+      baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
-      template: freestyle:v4:snapshot
+      template: freestyle:v4:build
       steps:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 "streaming-kafka-0-10/test" "sql-kafka-0-10/test"
@@ -409,10 +385,9 @@ builds:
     branchName: pie-spark-2.4.6
     timeout: 90
     machine:
-      docker:
-        baseImage: docker.apple.com/cpbuild7/applejdk-8
+      baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
-      template: freestyle:v4:snapshot
+      template: freestyle:v4:build
       steps:
         - build/sbt -Phadoop-3.2 -Pkinesis-asl "streaming-kinesis-asl/test"
     reports:
@@ -425,10 +400,9 @@ builds:
     branchName: pie-spark-2.4.6
     timeout: 90
     machine:
-      docker:
-        baseImage: docker.apple.com/cpbuild7/applejdk-11
+      baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
-      template: freestyle:v4:snapshot
+      template: freestyle:v4:build
       steps:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 -Pkinesis-asl "streaming-kinesis-asl/test"
@@ -442,10 +416,9 @@ builds:
     branchName: pie-spark-2.4.6
     timeout: 90
     machine:
-      docker:
-        baseImage: docker.apple.com/cpbuild7/applejdk-8
+      baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
-      template: freestyle:v4:snapshot
+      template: freestyle:v4:build
       steps:
         - build/sbt -Phadoop-3.2 "avro/test" -Pavro
     reports:
@@ -458,10 +431,9 @@ builds:
     branchName: pie-spark-2.4.6
     timeout: 90
     machine:
-      docker:
-        baseImage: docker.apple.com/cpbuild7/applejdk-11
+      baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
-      template: freestyle:v4:snapshot
+      template: freestyle:v4:build
       steps:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 "avro/test" -Pavro
@@ -475,10 +447,9 @@ builds:
     branchName: pie-spark-2.4.6
     timeout: 90
     machine:
-      docker:
-        baseImage: docker.apple.com/cpbuild7/applejdk-8
+      baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
-      template: freestyle:v4:snapshot
+      template: freestyle:v4:build
       steps:
         - build/sbt -Phadoop-3.2 -Pyarn -Pmesos -Pkubernetes "yarn/test" "mesos/test" "kubernetes/test"
     reports:
@@ -491,10 +462,9 @@ builds:
     branchName: pie-spark-2.4.6
     timeout: 90
     machine:
-      docker:
-        baseImage: docker.apple.com/cpbuild7/applejdk-11
+      baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
-      template: freestyle:v4:snapshot
+      template: freestyle:v4:build
       steps:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 -Pyarn -Pmesos -Pkubernetes "yarn/test" "mesos/test" "kubernetes/test"
@@ -508,10 +478,9 @@ builds:
     branchName: pie-spark-2.4.6
     timeout: 90
     machine:
-      docker:
-        baseImage: docker.apple.com/cpbuild7/applejdk-8
+      baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
-      template: freestyle:v4:snapshot
+      template: freestyle:v4:build
       steps:
         - curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py"
         - python get-pip.py
@@ -528,10 +497,9 @@ builds:
     branchName: pie-spark-2.4.6
     timeout: 90
     machine:
-      docker:
-        baseImage: docker.apple.com/cpbuild7/applejdk-11
+      baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
-      template: freestyle:v4:snapshot
+      template: freestyle:v4:build
       steps:
         - dev/change-scala-version.sh 2.12
         - curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py"
@@ -549,10 +517,9 @@ builds:
     branchName: pie-spark-2.4.6
     timeout: 90
     machine:
-      docker:
-        baseImage: docker.apple.com/cpbuild7/applejdk-8
+      baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
-      template: freestyle:v4:snapshot
+      template: freestyle:v4:build
       steps:
         - yum install -y python3
         - pip3.6 install numpy==1.16.4 scipy==1.2.2 pandas==0.23.2
@@ -568,10 +535,9 @@ builds:
     branchName: pie-spark-2.4.6
     timeout: 90
     machine:
-      docker:
-        baseImage: docker.apple.com/cpbuild7/applejdk-11
+      baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
-      template: freestyle:v4:snapshot
+      template: freestyle:v4:build
       steps:
         - dev/change-scala-version.sh 2.12
         - yum install -y python3
