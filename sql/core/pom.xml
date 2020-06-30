@@ -120,6 +120,10 @@
       <artifactId>xbean-asm7-shaded</artifactId>
     </dependency>
     <dependency>
+      <groupId>com.apple.pie.datatables</groupId>
+      <artifactId>adt-spark_${scala.binary.version}</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.scalacheck</groupId>
       <artifactId>scalacheck_${scala.binary.version}</artifactId>
       <scope>test</scope>
