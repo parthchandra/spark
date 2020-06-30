@@ -180,6 +180,7 @@
     <jpam.version>1.1</jpam.version>
     <selenium.version>2.52.0</selenium.version>
     <acispark.callhome.version>0.1.1</acispark.callhome.version>
+    <adt.version>0.6.0-preview</adt.version>
     <!--
     Managed up from older version from Avro; sync with jackson-module-paranamer dependency version
     -->
@@ -2088,6 +2089,17 @@
           <exclusion>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-core_${scala.binary.version}</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>com.apple.pie.datatables</groupId>
+        <artifactId>adt-spark_${scala.binary.version}</artifactId>
+        <version>${adt.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>org.antlr</groupId>
+            <artifactId>antlr4</artifactId>
           </exclusion>
         </exclusions>
       </dependency>
