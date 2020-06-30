@@ -49,11 +49,6 @@ builds:
       template: freestyle:v4:build
       steps:
         - build/sbt -Phadoop-3.2 "core/test"
-    reports:
-      junit:
-        trim: true
-        paths:
-          - "**/target/test-reports/*.xml"
 
   - name: apple-spark-2.12_2.4.6-snapshot-core
     branchName: pie-spark-2.4.6
@@ -65,11 +60,6 @@ builds:
       steps:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 "core/test"
-    reports:
-      junit:
-        trim: true
-        paths:
-          - "**/target/test-reports/*.xml"
 
   - name: apple-spark-2.11_2.4.6-snapshot-streaming
     branchName: pie-spark-2.4.6
@@ -173,11 +163,6 @@ builds:
       template: freestyle:v4:build
       steps:
         - build/sbt -Phadoop-3.2 "sql/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedSQLTest
-    reports:
-      junit:
-        trim: true
-        paths:
-          - "**/target/test-reports/*.xml"
 
   - name: apple-spark-2.12_2.4.6-snapshot-sql-1
     branchName: pie-spark-2.4.6
@@ -189,11 +174,6 @@ builds:
       steps:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 "sql/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedSQLTest
-    reports:
-      junit:
-        trim: true
-        paths:
-          - "**/target/test-reports/*.xml"
 
   - name: apple-spark-2.11_2.4.6-snapshot-sql-2
     branchName: pie-spark-2.4.6
@@ -235,27 +215,17 @@ builds:
       template: freestyle:v4:build
       steps:
         - build/sbt -Phadoop-3.2 -Phive "hive/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedHiveTest
-    reports:
-      junit:
-        trim: true
-        paths:
-          - "**/target/test-reports/*.xml"
 
   - name: apple-spark-2.12_2.4.6-snapshot-hive-1
     branchName: pie-spark-2.4.6
     timeout: 90
     machine:
-      baseImage: docker.apple.com/cpbuild7/applejdk-11
+        baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
       template: freestyle:v4:build
       steps:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 -Phive "hive/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedHiveTest
-    reports:
-      junit:
-        trim: true
-        paths:
-          - "**/target/test-reports/*.xml"
 
   - name: apple-spark-2.11_2.4.6-snapshot-hive-2
     branchName: pie-spark-2.4.6
@@ -266,11 +236,6 @@ builds:
       template: freestyle:v4:build
       steps:
         - build/sbt -Phadoop-3.2 -Phive "hive/test-only *.HiveSparkSubmitSuite" "hive/test-only *.VersionsSuite" "hive/test-only *.Hive_2_1_DDLSuite" "hive/test-only *.HiveQuerySuite"
-    reports:
-      junit:
-        trim: true
-        paths:
-          - "**/target/test-reports/*.xml"
 
   - name: apple-spark-2.12_2.4.6-snapshot-hive-2
     branchName: pie-spark-2.4.6
@@ -282,11 +247,6 @@ builds:
       steps:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 -Phive "hive/test-only *.HiveSparkSubmitSuite" "hive/test-only *.VersionsSuite" "hive/test-only *.Hive_2_1_DDLSuite" "hive/test-only *.HiveQuerySuite"
-    reports:
-      junit:
-        trim: true
-        paths:
-          - "**/target/test-reports/*.xml"
 
   - name: apple-spark-2.11_2.4.6-snapshot-hive-3
     branchName: pie-spark-2.4.6
@@ -297,11 +257,6 @@ builds:
       template: freestyle:v4:build
       steps:
         - build/sbt -Phadoop-3.2 -Phive "hive/test-only *.HiveCompatibilitySuite" "hive/testOnly *.HiveClientSuites"
-    reports:
-      junit:
-        trim: true
-        paths:
-          - "**/target/test-reports/*.xml"
 
   - name: apple-spark-2.12_2.4.6-snapshot-hive-3
     branchName: pie-spark-2.4.6
@@ -313,11 +268,6 @@ builds:
       steps:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 -Phive "hive/test-only *.HiveCompatibilitySuite"
-    reports:
-      junit:
-        trim: true
-        paths:
-          - "**/target/test-reports/*.xml"
 
   - name: apple-spark-2.11_2.4.6-snapshot-launcher-repl-tools-hadoop-cloud
     branchName: pie-spark-2.4.6
@@ -487,11 +437,6 @@ builds:
         - pip2.7 install numpy==1.16.4 scipy==1.2.2 pandas==0.19.2
         - build/sbt -Phadoop-3.2 -Pflume assembly/package streaming-flume-assembly/assembly test:package
         - python/run-tests.py --python-executables python2.7
-    reports:
-      junit:
-        trim: true
-        paths:
-          - "**/target/test-reports/*.xml"
 
   - name: apple-spark-2.12_2.4.6-snapshot-python27
     branchName: pie-spark-2.4.6
@@ -507,11 +452,6 @@ builds:
         - pip2.7 install numpy==1.16.4 scipy==1.2.2 pandas==0.19.2
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 -Pflume assembly/package streaming-flume-assembly/assembly test:package
         - python/run-tests.py --python-executables python2.7
-    reports:
-      junit:
-        trim: true
-        paths:
-          - "**/target/test-reports/*.xml"
 
   - name: apple-spark-2.11_2.4.6-snapshot-python36
     branchName: pie-spark-2.4.6
@@ -525,11 +465,6 @@ builds:
         - pip3.6 install numpy==1.16.4 scipy==1.2.2 pandas==0.23.2
         - build/sbt -Phadoop-3.2 -Pflume assembly/package streaming-flume-assembly/assembly test:package
         - python/run-tests.py --python-executables python3.6
-    reports:
-      junit:
-        trim: true
-        paths:
-          - "**/target/test-reports/*.xml"
 
   - name: apple-spark-2.12_2.4.6-snapshot-python36
     branchName: pie-spark-2.4.6
@@ -544,11 +479,6 @@ builds:
         - pip3.6 install numpy==1.16.4 scipy==1.2.2 pandas==0.23.2
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 -Pflume assembly/package streaming-flume-assembly/assembly test:package
         - python/run-tests.py --python-executables python3.6
-    reports:
-      junit:
-        trim: true
-        paths:
-          - "**/target/test-reports/*.xml"
 
   - name: apple-spark-2.11_2.4.6-snapshot
     branchName: pie-spark-2.4.6
