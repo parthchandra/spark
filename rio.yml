@@ -220,7 +220,7 @@ builds:
     branchName: pie-spark-2.4.6
     timeout: 90
     machine:
-        baseImage: docker.apple.com/cpbuild7/applejdk-11
+        baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
       template: freestyle:v4:build
       steps:
@@ -241,7 +241,7 @@ builds:
     branchName: pie-spark-2.4.6
     timeout: 90
     machine:
-      baseImage: docker.apple.com/cpbuild7/applejdk-11
+      baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
       template: freestyle:v4:build
       steps:
@@ -262,7 +262,7 @@ builds:
     branchName: pie-spark-2.4.6
     timeout: 90
     machine:
-      baseImage: docker.apple.com/cpbuild7/applejdk-11
+      baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
       template: freestyle:v4:build
       steps:
