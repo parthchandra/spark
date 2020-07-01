@@ -56,7 +56,7 @@ class FilterPushdownBenchmark extends SparkFunSuite with BenchmarkBeforeAndAfter
   // For Parquet/ORC, we will use the same value for block size and compression size
   private val blockSize = org.apache.parquet.hadoop.ParquetWriter.DEFAULT_PAGE_SIZE
 
-  private val spark = SparkSession.builder().config(conf).getOrCreate()
+  private lazy val spark = SparkSession.builder().config(conf).getOrCreate()
 
   private var out: OutputStream = _
 
