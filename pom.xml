@@ -118,12 +118,12 @@
     <sbt.project.name>spark</sbt.project.name>
     <slf4j.version>1.7.16</slf4j.version>
     <log4j.version>1.2.17</log4j.version>
-    <hadoop.version>2.6.5</hadoop.version>
+    <hadoop.version>3.2.0</hadoop.version>
     <protobuf.version>2.5.0</protobuf.version>
     <yarn.version>${hadoop.version}</yarn.version>
     <flume.version>1.6.0</flume.version>
-    <zookeeper.version>3.4.6</zookeeper.version>
-    <curator.version>2.6.0</curator.version>
+    <zookeeper.version>3.4.13</zookeeper.version>
+    <curator.version>2.13.0</curator.version>
     <hive.group>org.spark-project.hive</hive.group>
     <!-- Version used in Maven Hive dependency -->
     <hive.version>1.2.1.spark2</hive.version>
@@ -2762,24 +2762,25 @@
 
     <profile>
       <id>hadoop-2.6</id>
-      <!-- Default hadoop profile. Uses global properties. -->
+      <properties>
+        <hadoop.version>2.6.5</hadoop.version>
+        <zookeeper.version>3.4.6</zookeeper.version>
+        <curator.version>2.6.0</curator.version>
+      </properties>
     </profile>
 
     <profile>
       <id>hadoop-2.7</id>
       <properties>
         <hadoop.version>2.7.4</hadoop.version>
+        <zookeeper.version>3.4.6</zookeeper.version>
         <curator.version>2.7.1</curator.version>
       </properties>
     </profile>
 
     <profile>
       <id>hadoop-3.2</id>
-      <properties>
-        <hadoop.version>3.2.0</hadoop.version>
-        <curator.version>2.13.0</curator.version>
-        <zookeeper.version>3.4.13</zookeeper.version>
-      </properties>
+      <!-- Default hadoop profile. Uses global properties. -->
     </profile>
 
     <profile>
