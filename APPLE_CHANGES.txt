@@ -27,6 +27,7 @@ SPARK-31071      Allow annotating non-null fields when encoding Java Beans
 SPARK-31120      Support enabling maven profiles for importing vi…
 SPARK-31125      Terminating pods have a deletion timestamp but they are not yet dead
 SPARK-32100      Add WorkerDecommissionExtendedSuite
+SPARK-32058      Use Apache Hadoop 3.2.0 dependency by default
 
 # From Spark 3.0.1
 SPARK-32020      Better error message when SPARK_HOME or spark.test.home is not set
@@ -86,6 +87,25 @@ SPARK-32089      Upgrade R version to 4.0.2 in the release DockerFiile
 SPARK-32078      Add a redirect to sql-ref from sql-reference
 SPARK-32098      Use iloc for positional slicing instead of direct slicing in createDataFrame with Arrow
 SPARK-32099      Remove broken link in cloud integration documentation
+SPARK-32115      Fix SUBSTRING to handle integer overflows
+SPARK-32124      Fix taskEndReasonFromJson to handle event logs from old Spark versions
+SPARK-32126      Scope Session.active in IncrementalExecution
+SPARK-32038      Make the alias name pretty after float/double normalization
+SPARK-32127      Check rules for MERGE INTO should use MergeAction.conditition other than MergeAction.children
+SPARK-29999      Fix test to check the actual metadata log directory
+SPARK-32068      Correct task lauchtime show issue due to timezone in stage tab
+MINOR            Fix a typo for a configuration property of resources allocation
+SPARK-32142      Keep the original tests and codes to avoid potential conflicts in dev
+SPARK-32131      Fix AnalysisException messages at UNION/EXCEPT/MINUS operations
+SPARK-32095      Update documentation to reflect usage of updated statistics
+SPARK-31935      Hadoop file system config should be effective in data source options
+SPARK-32130      Disable the JSON option `inferTimestamp` by default
+SPARK-32136      NormalizeFloatingNumbers should work on null struct
+SPARK-32121      Support Windows OS in ExecutorDiskUtils
+MINOR            Pyspark getActiveSession docstring
+MINOR            Make in-limit.sql more robust
+SPARK-32130      Enable timestamps inference in JsonBenchmark
+SPARK-32171      Change file locations for use db and refresh table
 
 # Internal Patches
 rdar://64257783   Use parquet-1.10.1.1-apple to support ZSTD Parquet
@@ -106,3 +126,4 @@ MINOR            Bump to 3.0.0.4-apple-SNAPSHOT
 MINOR            Fix our exiting and cleanup thread for better debugging next time. Cleanup the locks we use in decommissioning and clarify some more bits.
 MINOR            Add storage-shim module
 MINOR            Add external shuffle storage
+MINOR            Bump to 3.0.0.6-apple-SNAPSHOT
