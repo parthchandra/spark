@@ -2,6 +2,7 @@ This contains the changes after v2.4.6-rc8
 
 # From Spark 3.1.0
 SPARK-31047       Improve file listing for ViewFileSystem
+SPARK-32058       Use Apache Hadoop 3.2.0 dependency by default
 
 # From Spark 3.0.0
 SPARK-26839       Work around classloader changes in Java 9 for Hive isolation
@@ -191,3 +192,5 @@ MINOR             Update spark call home version to 0.1.1
 MINOR             Bump to 2.4.6.1-apple-SNAPSHOT
 MINOR             Use lazy val in FilterPushdownBenchmark
 MINOR             Bump up the version to 2.4.6.4-apple-SNAPSHOT
+MINOR             Bump to 2.4.6.6-apple-SNAPSHOT
+MINOR             Regenerate dependency manifest
