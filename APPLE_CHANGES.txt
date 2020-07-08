@@ -163,6 +163,7 @@ MINOR             Make in-limit.sql more robust
 # Internal Patches
 rdar://64257783   Use parquet-1.10.1.1-apple to support ZSTD Parquet
 rdar://63889762   Support for AWS S3 cloud storage
+rdar://63686227   Support Aircompressor's LZO library which is Apache v2 licensed
 SPARK-17636       Parquet predicate pushdown in nested fields
 SPARK-17767       Support user-provided ExternalCatalog and SessionBuilder
 SPARK-25558       Pushdown predicates for nested fields in DataSource Strategy
