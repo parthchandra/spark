@@ -28,6 +28,8 @@ SPARK-31120      Support enabling maven profiles for importing vi…
 SPARK-31125      Terminating pods have a deletion timestamp but they are not yet dead
 SPARK-32100      Add WorkerDecommissionExtendedSuite
 SPARK-32058      Use Apache Hadoop 3.2.0 dependency by default
+SPARK-31876      Upgrade to Zstd 1.4.5
+SPARK-32150      Upgrade to ZStd 1.4.5-4
 
 # From Spark 3.0.1
 SPARK-32020      Better error message when SPARK_HOME or spark.test.home is not set
@@ -106,6 +108,28 @@ MINOR            Pyspark getActiveSession docstring
 MINOR            Make in-limit.sql more robust
 SPARK-32130      Enable timestamps inference in JsonBenchmark
 SPARK-32171      Change file locations for use db and refresh table
+SPARK-32162      Improve error message of Pandas grouped map test with window
+SPARK-32167      Fix GetArrayStructFields to respect inner field's nullability together
+SPARK-32057      ExecuteStatement: cancel and close should not transiently ERROR
+SPARK-32124      Use the invalid value Int.MinValue to fill the map index when the event logs from the old Spark version
+SPARK-32163      Nested pruning should work even with cosmetic variations
+SPARK-30703      Update SqlBase.g4 invalid comment
+SPARK-32214      The type conversion function generated in makeFromJava for "other"  type uses a wrong variable
+SPARK-32024      Update ApplicationStoreInfo.size during HistoryServerDiskManager initializing
+SPARK-32168      Fix hidden partitioning correctness bug in SQL overwrite
+SPARK-32024      Quick fix on test failure on missing when statements
+SPARK-32160      Disallow to create SparkContext in executors
+SPARK-32193      Update regexp usage in SQL docs
+SPARK-32148      Fix stream-stream join issue on missing to copy reused unsafe row
+SPARK-32159      Fix integration between Aggregator[Array[_], _, _] and UnresolvedMapObjects
+SPARK-32035      Fixed typos involving AWS Access, Secret, & Sessions tokens
+SPARK-32256      Force to initialize Hadoop VersionInfo in HiveExternalCatalog
+SPARK-26905      Follow the SQL:2016 reserved keywords
+SPARK-32251      Fix SQL keyword document
+SPARK-32220      SHUFFLE_REPLICATE_NL Hint should not change Non-Cartesian Product join result
+SPARK-32238      Use Utils.getSimpleName to avoid hitting Malformed class name in ScalaUDF
+SPARK-32232      Make sure ML has the same default solver values between Scala and Python
+MINOR            Fix typo in PySpark example in ml-datasource.md
 
 # Internal Patches
 rdar://64257783   Use parquet-1.10.1.1-apple to support ZSTD Parquet
@@ -127,3 +151,6 @@ MINOR            Fix our exiting and cleanup thread for better debugging next ti
 MINOR            Add storage-shim module
 MINOR            Add external shuffle storage
 MINOR            Bump to 3.0.0.6-apple-SNAPSHOT
+MINOR            Bump to 3.0.0.7-apple-SNAPSHOT
+rdar://64257964  add back http support so it works without hadoop configuration
+MINOR            Switch to zstd
