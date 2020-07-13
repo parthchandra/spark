@@ -203,5 +203,5 @@ MINOR             Use lazy val in FilterPushdownBenchmark
 MINOR             Bump up the version to 2.4.6.4-apple-SNAPSHOT
 MINOR             Bump to 2.4.6.6-apple-SNAPSHOT
 MINOR             Regenerate dependency manifest
-rdar://63686227   Support Aircompressor's LZO library which is Apache v2 licensed
 MINOR             Use zstd as default shuffle compression
+MINOR             Bump to 2.4.6.7-apple-SNAPSHOT
