@@ -17,6 +17,7 @@
 
 package org.apache.spark.sql.catalyst.plans.logical
 
+import org.apache.spark.rdd.PartitionCoalescer
 import org.apache.spark.sql.catalyst.AliasIdentifier
 import org.apache.spark.sql.catalyst.analysis.{MultiInstanceRelation, NamedRelation, UnresolvedException}
 import org.apache.spark.sql.catalyst.catalog.{CatalogStorageFormat, CatalogTable}
@@ -1047,6 +1048,16 @@ case class RepartitionByExpression(
 
   override def maxRows: Option[Long] = child.maxRows
   override def shuffle: Boolean = true
+}
+
+// we don't extend RepartitionOperation on purpose to keep this rule isolated
+// and ignore it in any optimizer rule such as CollapseRepartition
+case class OrderAwareCoalesce(
+    numPartitions: Int,
+    coalescer: PartitionCoalescer,
+    child: LogicalPlan) extends OrderPreservingUnaryNode {
+
+  override def output: Seq[Attribute] = child.output
 }
 
 /**
