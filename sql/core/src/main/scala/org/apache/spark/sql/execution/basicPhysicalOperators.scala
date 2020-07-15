@@ -22,7 +22,7 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration.Duration
 
 import org.apache.spark.{InterruptibleIterator, Partition, SparkContext, TaskContext}
-import org.apache.spark.rdd.{EmptyRDD, PartitionwiseSampledRDD, RDD}
+import org.apache.spark.rdd.{EmptyRDD, PartitionCoalescer, PartitionwiseSampledRDD, RDD}
 import org.apache.spark.sql.catalyst.InternalRow
 import org.apache.spark.sql.catalyst.expressions._
 import org.apache.spark.sql.catalyst.expressions.codegen._
@@ -638,6 +638,31 @@ object CoalesceExec {
   }
 
   case class EmptyPartition(index: Int) extends Partition
+}
+
+case class OrderAwareCoalesceExec(
+    numPartitions: Int,
+    coalescer: PartitionCoalescer,
+    child: SparkPlan) extends UnaryExecNode {
+
+  override def output: Seq[Attribute] = child.output
+  override def outputOrdering: Seq[SortOrder] = child.outputOrdering
+
+  override def outputPartitioning: Partitioning = {
+    if (numPartitions == 1) SinglePartition
+    else UnknownPartitioning(numPartitions)
+  }
+
+  protected override def doExecute(): RDD[InternalRow] = {
+    val result = child.execute()
+    if (numPartitions == 1 && result.getNumPartitions < 1) {
+      // Make sure we don't output an RDD with 0 partitions, when claiming that we have a
+      // `SinglePartition`.
+      new CoalesceExec.EmptyRDDWithPartitions(sparkContext, numPartitions)
+    } else {
+      result.coalesce(numPartitions, shuffle = false, Some(coalescer))
+    }
+  }
 }
 
 /**
