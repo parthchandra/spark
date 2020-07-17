@@ -1,6 +1,12 @@
 This contains the changes after creating `v3.0.0`
 
 # From Spark 3.1.0
+SPARK-32270      Use TextFileFormat in CSV's schema inference with a different encoding
+SPARK-32149      Improve file path name normalisation at block resolution within the external shuffle service
+SPARK-32031      Fix the wrong references of the PartialMerge/Final AggregateExpression
+SPARK-32033      Use new poll API in Kafka connector executor side to avoid infinite wait
+SPARK-31993      Build arrays for passing variables generated from children for 'concat_ws' with columns having at least one of array type
+SPARK-31926      Fix concurrency issue for ThriftCLIService to getPortNumber
 SPARK-31960      Only populate Hadoop classpath for no-hadoop by default
 SPARK-31208      Add an expiremental cleanShuffleDependencies
 SPARK-31394      Adds support for Kubernetes NFS volume mounts
@@ -32,11 +38,11 @@ SPARK-31876      Upgrade to Zstd 1.4.5
 SPARK-32150      Upgrade to ZStd 1.4.5-4
 
 # From Spark 3.0.1
-SPARK-32018	 UnsafeRow.setDecimal should set null with overflowed value
-SPARK-32234	 Spark sql commands are failing on selecting the orc tables
-SPARK-32318	 Add a test case to EliminateSortsSuite for ORDER BY in DISTRIBUTE BY
-SPARK-32301	 Add a test case for toPandas to work with empty partitioned Spark DataFrame
-SPARK-32307	 ScalaUDF's canonicalized expression should exclude inputEncoders
+SPARK-32018      UnsafeRow.setDecimal should set null with overflowed value
+SPARK-32234      Spark sql commands are failing on selecting the orc tables
+SPARK-32318      Add a test case to EliminateSortsSuite for ORDER BY in DISTRIBUTE BY
+SPARK-32301      Add a test case for toPandas to work with empty partitioned Spark DataFrame
+SPARK-32307      ScalaUDF's canonicalized expression should exclude inputEncoders
 SPARK-32020      Better error message when SPARK_HOME or spark.test.home is not set
 SPARK-32000      Fix the flaky test for partially launched task in barrier-mode
 SPARK-32011      Remove warnings about pin-thread modes and guide to use collectWithJobGroup
