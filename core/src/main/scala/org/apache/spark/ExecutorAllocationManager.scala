@@ -201,7 +201,8 @@ private[spark] class ExecutorAllocationManager(
       // storage shuffle decommissioning is enabled we have *experimental* support for
       // decommissioning without a shuffle service.
       if (conf.get(config.DYN_ALLOCATION_SHUFFLE_TRACKING_ENABLED) ||
-        (conf.get(WORKER_DECOMMISSION_ENABLED) && conf.get(STORAGE_SHUFFLE_DECOMMISSION_ENABLED))) {
+          (conf.get(WORKER_DECOMMISSION_ENABLED) &&
+            conf.get(config.STORAGE_DECOMMISSION_SHUFFLE_BLOCKS_ENABLED))) {
         logWarning("Dynamic allocation without a shuffle service is an experimental feature.")
       } else if (!testing) {
         throw new SparkException("Dynamic allocation of executors requires the external " +
@@ -458,9 +459,11 @@ private[spark] class ExecutorAllocationManager(
       // We don't want to change our target number of executors, because we already did that
       // when the task backlog decreased.
       if (conf.get(WORKER_DECOMMISSION_ENABLED)) {
-        client.decommissionExecutors(executorIdsToBeRemoved, adjustTargetNumExecutors = false)
+        val executorIdsWithoutHostLoss = executorIdsToBeRemoved.toSeq.map(
+          id => (id, ExecutorDecommissionInfo("spark scale down", false)))
+        client.decommissionExecutors(executorIdsWithoutHostLoss, adjustTargetNumExecutors = false)
       } else {
-        client.killExecutors(executorIdsToBeRemoved, adjustTargetNumExecutors = false,
+        client.killExecutors(executorIdsToBeRemoved.toSeq, adjustTargetNumExecutors = false,
           countFailures = false, force = false)
       }
     }
