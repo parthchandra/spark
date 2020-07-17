@@ -93,16 +93,8 @@ private[spark] class TaskSetManager(
   // the worker. Therefore, CPUS_PER_TASK is okay to be greater than 1 without setting #cores.
   // To handle this case, we assume the minimum number of slots is 1.
   // TODO: use the actual number of slots for standalone mode.
-  val speculationTasksLessEqToSlots = {
-    val rpId = taskSet.resourceProfileId
-    val resourceProfile = sched.sc.resourceProfileManager.resourceProfileFromId(rpId)
-    val slots = if (!resourceProfile.isCoresLimitKnown) {
-      1
-    } else {
-      resourceProfile.maxTasksPerExecutor(conf)
-    }
-    numTasks <= slots
-  }
+  val speculationTasksLessEqToSlots =
+    numTasks <= Math.max(conf.get(EXECUTOR_CORES) / sched.CPUS_PER_TASK, 1)
   val executorDecommissionKillInterval = conf.get(EXECUTOR_DECOMMISSION_KILL_INTERVAL).map(
     TimeUnit.SECONDS.toMillis)
 

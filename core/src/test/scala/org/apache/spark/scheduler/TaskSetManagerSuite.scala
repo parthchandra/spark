@@ -1944,17 +1944,17 @@ class TaskSetManagerSuite
 
     // Start TASK 0,1 on exec1, TASK 2 on exec2
     (0 until 2).foreach { _ =>
-      val taskOption = manager.resourceOffer("exec1", "host1", NO_PREF)._1
+      val taskOption = manager.resourceOffer("exec1", "host1", NO_PREF)
       assert(taskOption.isDefined)
       assert(taskOption.get.executorId === "exec1")
     }
-    val taskOption2 = manager.resourceOffer("exec2", "host2", NO_PREF)._1
+    val taskOption2 = manager.resourceOffer("exec2", "host2", NO_PREF)
     assert(taskOption2.isDefined)
     assert(taskOption2.get.executorId === "exec2")
 
     clock.advance(6*1000) // time = 6s
     // Start TASK 3 on exec2 after some delay
-    val taskOption3 = manager.resourceOffer("exec2", "host2", NO_PREF)._1
+    val taskOption3 = manager.resourceOffer("exec2", "host2", NO_PREF)
     assert(taskOption3.isDefined)
     assert(taskOption3.get.executorId === "exec2")
 
@@ -1989,9 +1989,9 @@ class TaskSetManagerSuite
     assert(manager.copiesRunning(3) === 1)
 
     // Offer resource to start the speculative attempt for the running task
-    val taskOption3New = manager.resourceOffer("exec3", "host3", NO_PREF)._1
+    val taskOption3New = manager.resourceOffer("exec3", "host3", NO_PREF)
     // Offer more resources. Nothing should get scheduled now.
-    assert(manager.resourceOffer("exec3", "host3", NO_PREF)._1.isEmpty)
+    assert(manager.resourceOffer("exec3", "host3", NO_PREF).isEmpty)
     assert(taskOption3New.isDefined)
 
     // Assert info about the newly launched speculative task
@@ -2017,7 +2017,7 @@ class TaskSetManagerSuite
     assert(sched.speculativeTasks.toSet === Set(2, 3))
     assert(manager.copiesRunning(2) === 1)
     assert(manager.copiesRunning(3) === 2)
-    val taskOption2New = manager.resourceOffer("exec3", "host3", NO_PREF)._1
+    val taskOption2New = manager.resourceOffer("exec3", "host3", NO_PREF)
     assert(taskOption2New.isDefined)
     val speculativeTask2 = taskOption2New.get
     // Ensure that TASK 2 is re-launched on exec3, host3
@@ -2030,7 +2030,7 @@ class TaskSetManagerSuite
     assert(manager.copiesRunning(3) === 2)
 
     // Offering additional resources should not lead to any speculative tasks being respawned
-    assert(manager.resourceOffer("exec1", "host1", ANY)._1.isEmpty)
+    assert(manager.resourceOffer("exec1", "host1", ANY).isEmpty)
   }
 
   test("SPARK-29976 Regular speculation configs should still take effect even when a " +
