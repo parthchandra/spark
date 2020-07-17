@@ -36,6 +36,7 @@ SPARK-32100      Add WorkerDecommissionExtendedSuite
 SPARK-32058      Use Apache Hadoop 3.2.0 dependency by default
 SPARK-31876      Upgrade to Zstd 1.4.5
 SPARK-32150      Upgrade to ZStd 1.4.5-4
+SPARK-21040      Speculate tasks which are running on decommission executors
 
 # From Spark 3.0.1
 SPARK-32018      UnsafeRow.setDecimal should set null with overflowed value
