@@ -168,6 +168,8 @@ SPARK-32024       Quick fix on test failure on missing when statements
 SPARK-32035       Fixed typos involving AWS Access, Secret, & Sessions tokens
 SPARK-32238       Use Utils.getSimpleName to avoid hitting Malformed class name in ScalaUDF
 MINOR             Fix typo in PySpark example in ml-datasource.md
+SPARK-32318       Add a test case to EliminateSortsSuite for ORDER BY in DISTRIBUTE BY
+SPARK-32300       toPandas should work from a Spark DataFrame with no partitions
 
 # Internal Patches
 rdar://64257783   Use parquet-1.10.1.1-apple to support ZSTD Parquet
