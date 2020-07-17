@@ -42,7 +42,6 @@ SPARK-32018      UnsafeRow.setDecimal should set null with overflowed value
 SPARK-32234      Spark sql commands are failing on selecting the orc tables
 SPARK-32318      Add a test case to EliminateSortsSuite for ORDER BY in DISTRIBUTE BY
 SPARK-32301      Add a test case for toPandas to work with empty partitioned Spark DataFrame
-SPARK-32307      ScalaUDF's canonicalized expression should exclude inputEncoders
 SPARK-32020      Better error message when SPARK_HOME or spark.test.home is not set
 SPARK-32000      Fix the flaky test for partially launched task in barrier-mode
 SPARK-32011      Remove warnings about pin-thread modes and guide to use collectWithJobGroup
