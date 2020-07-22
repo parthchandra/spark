@@ -5,7 +5,7 @@ set -eux -o pipefail
 export PATH=$PATH:$JAVA_HOME/bin
 
 # Figure out where the Spark framework is installed
-SPARK_HOME="$(cd "`dirname "$0"`/.."; pwd)"
+SPARK_HOME="$(cd "$(dirname "$0")/.."; pwd)"
 MVN="$SPARK_HOME/build/mvn"
 VALID_SCALA_VERSIONS=(2.12)
 
@@ -16,7 +16,7 @@ function exit_with_usage {
   exit 1
 }
 function check_scala_version() {
-  for i in ${VALID_SCALA_VERSIONS[*]}; do [ $i = "$1" ] && return 0; done
+  for i in ${VALID_SCALA_VERSIONS[*]}; do [ "$i" = "$1" ] && return 0; done
   echo "Invalid Scala version: $1. Valid versions: ${VALID_VERSIONS[*]}" 1>&2
   exit 1
 }
@@ -25,7 +25,7 @@ function execute_command () {
   declare -a COMMAND_WITH_ARGS=("$@")
 
   # Actually build the jar
-  echo -e "\nExecuting: ${COMMAND_WITH_ARGS[@]}"
+  echo -e "\nExecuting: ${COMMAND_WITH_ARGS[*]}"
 
   "${COMMAND_WITH_ARGS[@]}"
 }
@@ -100,7 +100,7 @@ echo -e "====================================="
 
 if [ -z "$JAVA_HOME" ]; then
   # Fall back on JAVA_HOME from rpm, if found
-  if [ $(command -v  rpm) ]; then
+  if command -v  rpm; then
     RPM_JAVA_HOME="$(rpm -E %java_home 2>/dev/null)"
     if [ "$RPM_JAVA_HOME" != "%java_home" ]; then
       JAVA_HOME="$RPM_JAVA_HOME"
@@ -114,7 +114,7 @@ if [ -z "$JAVA_HOME" ]; then
   exit -1
 fi
 
-if [ ! $(command -v "$MVN") ] ; then
+if ! command -v "$MVN" ; then
     echo -e "Could not locate Maven command: '$MVN'."
     echo -e "Specify the Maven command with the --mvn flag"
     exit -1;
@@ -129,52 +129,24 @@ fi
 cd "$SPARK_HOME"
 
 ##Set MAVEN_OPTS
-export MAVEN_OPTS="${ADDITIONAL_MAVEN_OPTS} ${SKIP_TEST_PACKAGE_D_PARAM} $SKIP_TESTS_D_PARAM -Dscala-${SCALA_VERSION}=enabled -Dhive-thriftserver=enabled ${HADOOP_VERSION_D_PARAM} -DdeployAtEnd=true -DinstallAtEnd=true"
+time_stamp=$(date '+%Y%m%d%H%M%S')
+export MAVEN_OPTS="${ADDITIONAL_MAVEN_OPTS} ${SKIP_TEST_PACKAGE_D_PARAM} $SKIP_TESTS_D_PARAM -Dscala-${SCALA_VERSION}=enabled -Dhive-thriftserver=enabled ${HADOOP_VERSION_D_PARAM} -DdeployAtEnd=true -DinstallAtEnd=true -Dcurrent.time=${time_stamp}"
 
 echo -e "MAVEN_OPTS exported: ${MAVEN_OPTS}"
 
 ##Update the maven pom files with the input SCALA_VERSION
-execute_command "./dev/change-scala-version.sh" $SCALA_VERSION "$@"
-
-##Get POM Variables
-
-POM_PROJECT_ARTIFACT_ID=$("$MVN" help:evaluate -Dexpression=project.artifactId $@ 2>/dev/null | grep -v "INFO" | tail -n 1)
-POM_PROJECT_VERSION=$("$MVN" help:evaluate -Dexpression=project.version $@ 2>/dev/null | grep -v "INFO" | tail -n 1)
-POM_SCALA_VERSION=$("$MVN" help:evaluate -Dexpression=scala.binary.version $@ 2>/dev/null\
-    | grep -v "INFO"\
-    | tail -n 1)
-
-##Scala Version Validation
-if  [[ $POM_SCALA_VERSION != $SCALA_VERSION ]] || [[ $POM_PROJECT_ARTIFACT_ID != *$SCALA_VERSION ]] ; then
-    echo -e "Scala version from the POM file does not match with the input. This command may have some problems. ./dev/change-scala-version.sh $SCALA_VERSION $@"
-    exit -1;
-fi
-
-POM_SPARK_HADOOP_VERSION=$("$MVN" help:evaluate -Dexpression=hadoop.version -Phadoop-3.2 $@ 2>/dev/null\
-    | grep -v "INFO"\
-    | tail -n 1)
-POM_SPARK_HIVE=$("$MVN" help:evaluate -Dexpression=project.activeProfiles -Phadoop-3.2 -pl sql/hive $@ 2>/dev/null\
-    | grep -v "INFO"\
-    | fgrep --count "<id>hive</id>";\
-    # Reset exit status to 0, otherwise the script stops here if the last grep finds nothing\
-    # because we use "set -o pipefail"
-    echo -n)
+execute_command "./dev/change-scala-version.sh" "$SCALA_VERSION" "$@"
 
 
 ##Maven Command Executions
 execute_command "$MVN" com.apple.cie.rio:rio-maven-plugin:create-marker "$SKIP_TESTS_D_PARAM" "$@"
 if [ $IS_RELEASE -eq 1 ] ; then
-	execute_command "$MVN" com.apple.cie.rio:rio-maven-plugin:remove-snapshot org.codehaus.mojo:versions-maven-plugin:set "$@"
+        execute_command "$MVN" com.apple.cie.rio:rio-maven-plugin:remove-snapshot org.codehaus.mojo:versions-maven-plugin:set "$@"
 fi
 
 mkdir -p "${LOCAL_REPO_DIR}"
 REPO_URL="local-release::default::file://${LOCAL_REPO_DIR}"
 
 execute_command "$MVN" clean deploy -DaltDeploymentRepository="${REPO_URL}" "$SKIP_TESTS_D_PARAM" $ADDITIONAL_MAVEN_PARAMS "$@"
-
-if [ $IS_RELEASE -eq 0 ] ; then
-	find "./.dist/local-repo/org/apache/spark/" -name "*.jar" -exec bash -c 'mv $0 $(echo "$0" | sed -E  "s/-[[:digit:]]+\.[[:digit:]]+-[[:digit:]]+\.jar/-SNAPSHOT.jar/" )' '{}' \;
-	find "./.dist/local-repo/org/apache/spark/" -name "*.pom" -exec bash -c 'mv $0 $(echo "$0" | sed -E  "s/-[[:digit:]]+\.[[:digit:]]+-[[:digit:]]+\.pom/-SNAPSHOT.pom/" )' '{}' \;
-fi
 
 echo -e "Build Successful"
