@@ -115,15 +115,15 @@ if [ -z "$JAVA_HOME" ]; then
 fi
 
 if ! command -v "$MVN" ; then
-    echo -e "Could not locate Maven command: '$MVN'."
-    echo -e "Specify the Maven command with the --mvn flag"
-    exit -1;
+  echo -e "Could not locate Maven command: '$MVN'."
+  echo -e "Specify the Maven command with the --mvn flag"
+  exit -1;
 fi
 
 ##Scala Version Validation
 if  [[ $SKIP_TEST_PACKAGE == "true" ]] && [[ $SKIP_TESTS == "false" ]] ; then
-    echo -e "Contradicting parameters. Only one of the two options, --do-not-skip-tests and --skip-test-package should be provided"
-    exit -1;
+  echo -e "Contradicting parameters. Only one of the two options, --do-not-skip-tests and --skip-test-package should be provided"
+  exit -1;
 fi
 
 cd "$SPARK_HOME"
@@ -141,12 +141,17 @@ execute_command "./dev/change-scala-version.sh" "$SCALA_VERSION" "$@"
 ##Maven Command Executions
 execute_command "$MVN" com.apple.cie.rio:rio-maven-plugin:create-marker "$SKIP_TESTS_D_PARAM" "$@"
 if [ $IS_RELEASE -eq 1 ] ; then
-        execute_command "$MVN" com.apple.cie.rio:rio-maven-plugin:remove-snapshot org.codehaus.mojo:versions-maven-plugin:set "$@"
+  execute_command "$MVN" com.apple.cie.rio:rio-maven-plugin:remove-snapshot org.codehaus.mojo:versions-maven-plugin:set "$@"
 fi
 
 mkdir -p "${LOCAL_REPO_DIR}"
 REPO_URL="local-release::default::file://${LOCAL_REPO_DIR}"
 
 execute_command "$MVN" clean deploy -DaltDeploymentRepository="${REPO_URL}" "$SKIP_TESTS_D_PARAM" $ADDITIONAL_MAVEN_PARAMS "$@"
+
+if [ $IS_RELEASE -eq 0 ] ; then
+  find "./.dist/local-repo/org/apache/spark/" -name "*.jar" -exec bash -c 'mv $0 $(echo "$0" | sed -E  "s/-[[:digit:]]+\.[[:digit:]]+-[[:digit:]]+/-SNAPSHOT/" )' '{}' \;
+  find "./.dist/local-repo/org/apache/spark/" -name "*.pom" -exec bash -c 'mv $0 $(echo "$0" | sed -E  "s/-[[:digit:]]+\.[[:digit:]]+-[[:digit:]]+/-SNAPSHOT/" )' '{}' \;
+fi
 
 echo -e "Build Successful"
