@@ -28,6 +28,7 @@ import com.amazonaws.services.s3.{AmazonS3, AmazonS3ClientBuilder}
 import com.amazonaws.services.s3.model.{DeleteObjectsRequest, GetObjectRequest}
 import io.minio.{MinioClient, PutObjectOptions}
 import org.apache.commons.io.FileUtils
+import org.apache.hadoop.fs.{FileSystem, Path}
 import org.slf4j.LoggerFactory
 
 /**
@@ -38,12 +39,14 @@ import org.slf4j.LoggerFactory
  * - AWS S3
  * - MINIO
  * - AWS EFS
+ * - HDFS
  */
 object StorageShim {
   private val logger = LoggerFactory.getLogger(this.getClass)
 
   private var s3Client: Option[AmazonS3] = None
   private var minioClient: Option[MinioClient] = None
+  private var fs: Option[FileSystem] = None
 
   private def getOrCreateS3Client(access_key: String, secret_key: String) = {
     s3Client.getOrElse {
@@ -64,6 +67,12 @@ object StorageShim {
       minioClient.get
     }
   }
+
+  /** Set FileSystem for hdfs backend */
+  def setFileSystem(fs: FileSystem): Unit = this.fs = Some(fs)
+
+  /** Get FileSystem for hdfs backend */
+  def getFileSystem(): Option[FileSystem] = fs
 
   /** Remove all objects starting with the given prefix */
   def cleanUp(
@@ -107,6 +116,20 @@ object StorageShim {
             list.filter(_.getAbsolutePath.startsWith(s"$bucket/$prefix")).foreach(_.delete)
           }
         }
+
+      case "hdfs" =>
+        logger.debug(s"Clean up HDFS $endpoint/$bucket/$prefix")
+        val path = new Path(s"$endpoint/$bucket/$prefix")
+        val hdfs = fs.get
+        if (hdfs.exists(path)) {
+          hdfs.delete(path, true)
+        } else {
+          val prefix = path.toString
+          hdfs
+            .listStatus(path.getParent)
+            .filter(_.getPath.toString.startsWith(prefix))
+            .foreach { s => hdfs.delete(s.getPath, true) }
+        }
     }
   }
 
@@ -149,6 +172,17 @@ object StorageShim {
         path.getParent.toFile.mkdirs()
         // To be consistent with S3, StandardCopyOption.REPLACE_EXISTING is used.
         Files.copy(file.toPath, path, StandardCopyOption.REPLACE_EXISTING)
+
+      case "hdfs" =>
+        logger.error(s"Upload to HDFS $endpoint/$bucket/$key")
+        val hdfs = fs.get
+
+        val path = new Path(s"$endpoint/$bucket/$key")
+        // To be consistent with S3, replace the existing file
+        hdfs.delete(path, true)
+        val os = hdfs.create(path, true)
+        Files.copy(file.toPath, os)
+        os.close()
     }
   }
 
@@ -174,6 +208,10 @@ object StorageShim {
       case "efs" =>
         logger.debug(s"Delete $bucket/$key")
         new File(s"$bucket/$key").delete()
+
+      case "hdfs" =>
+        logger.debug(s"Delete HDFS $endpoint/$bucket/$key")
+        fs.get.delete(new Path(s"$endpoint/$bucket/$key"), true)
     }
   }
 
@@ -209,6 +247,10 @@ object StorageShim {
       case "efs" =>
         logger.debug(s"Check $bucket/$key")
         new File(s"$bucket/$key").exists()
+
+      case "hdfs" =>
+        logger.debug(s"Check HDFS $endpoint/$bucket/$key")
+        fs.get.exists(new Path(s"$endpoint/$bucket/$key"))
     }
   }
 
@@ -237,6 +279,12 @@ object StorageShim {
       case "efs" =>
         logger.debug(s"Read [$start:$end] from $bucket/$key")
         val fis = new FileInputStream(s"$bucket/$key")
+        fis.skip(start)
+        fis
+
+      case "hdfs" =>
+        logger.debug(s"Read [$start:$end] from HDFS $endpoint/$bucket/$key")
+        val fis = fs.get.open(new Path(s"$endpoint/$bucket/$key"))
         fis.skip(start)
         fis
     }

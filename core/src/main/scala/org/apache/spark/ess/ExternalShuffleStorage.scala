@@ -21,8 +21,11 @@ import java.io._
 import java.util.concurrent.TimeUnit
 
 import org.apache.commons.io.IOUtils.toByteArray
+import org.apache.hadoop.conf.Configuration
+import org.apache.hadoop.fs.{FileSystem, Path}
 
 import org.apache.spark.{SparkConf, SparkEnv, SparkException}
+import org.apache.spark.deploy.SparkHadoopUtil
 import org.apache.spark.internal.Logging
 import org.apache.spark.internal.config._
 import org.apache.spark.internal.config.Worker.WORKER_DECOMMISSION_ENABLED
@@ -64,6 +67,14 @@ object ExternalShuffleStorage extends Logging {
     if (isEnabled(conf)) f else false
   private def withCheckOrException[T](conf: SparkConf)(f: => T): T =
     if (isEnabled(conf)) f else throw new UnsupportedOperationException("Not initialized")
+  private def setFileSystemIfNeeded(conf: SparkConf) = {
+    if (conf.get(SPARK_SHUFFLE_EXTERNAL_STORAGE_BACKEND).equals("hdfs") &&
+      StorageShim.getFileSystem().isEmpty) {
+      StorageShim.setFileSystem(
+        FileSystem.get(new Path(conf.get(SPARK_SHUFFLE_EXTERNAL_STORAGE_ENDPOINT)).toUri,
+          SparkHadoopUtil.get.newConfiguration(conf)))
+    }
+  }
 
   // --------------------------------------------------------------------------
   // Wrapper functions for StorageShim API
@@ -74,6 +85,7 @@ object ExternalShuffleStorage extends Logging {
     val secretKey = conf.get(SPARK_SHUFFLE_EXTERNAL_STORAGE_SECRET_KEY)
     val endpoint = conf.get(SPARK_SHUFFLE_EXTERNAL_STORAGE_ENDPOINT)
     val bucket = conf.get(SPARK_SHUFFLE_EXTERNAL_STORAGE_BUCKET)
+    setFileSystemIfNeeded(conf)
     StorageShim.putObject(backend, accessKey, secretKey, endpoint, bucket, key, file)
   }
 
@@ -83,6 +95,7 @@ object ExternalShuffleStorage extends Logging {
     val secretKey = conf.get(SPARK_SHUFFLE_EXTERNAL_STORAGE_SECRET_KEY)
     val endpoint = conf.get(SPARK_SHUFFLE_EXTERNAL_STORAGE_ENDPOINT)
     val bucket = conf.get(SPARK_SHUFFLE_EXTERNAL_STORAGE_BUCKET)
+    setFileSystemIfNeeded(conf)
     StorageShim.deleteObject(backend, accessKey, secretKey, endpoint, bucket, key)
   }
 
@@ -92,6 +105,7 @@ object ExternalShuffleStorage extends Logging {
     val secretKey = conf.get(SPARK_SHUFFLE_EXTERNAL_STORAGE_SECRET_KEY)
     val endpoint = conf.get(SPARK_SHUFFLE_EXTERNAL_STORAGE_ENDPOINT)
     val bucket = conf.get(SPARK_SHUFFLE_EXTERNAL_STORAGE_BUCKET)
+    setFileSystemIfNeeded(conf)
     StorageShim.doesObjectExist(backend, accessKey, secretKey, endpoint, bucket, key)
   }
 
@@ -102,6 +116,7 @@ object ExternalShuffleStorage extends Logging {
     val secretKey = conf.get(SPARK_SHUFFLE_EXTERNAL_STORAGE_SECRET_KEY)
     val endpoint = conf.get(SPARK_SHUFFLE_EXTERNAL_STORAGE_ENDPOINT)
     val bucket = conf.get(SPARK_SHUFFLE_EXTERNAL_STORAGE_BUCKET)
+    setFileSystemIfNeeded(conf)
     StorageShim.getObject(backend, accessKey, secretKey, endpoint, bucket, key, start, end)
   }
 
@@ -111,6 +126,7 @@ object ExternalShuffleStorage extends Logging {
     val secretKey = conf.get(SPARK_SHUFFLE_EXTERNAL_STORAGE_SECRET_KEY)
     val endpoint = conf.get(SPARK_SHUFFLE_EXTERNAL_STORAGE_ENDPOINT)
     val bucket = conf.get(SPARK_SHUFFLE_EXTERNAL_STORAGE_BUCKET)
+    setFileSystemIfNeeded(conf)
     StorageShim.cleanUp(backend, accessKey, secretKey, endpoint, bucket, prefix)
   }
 
@@ -220,6 +236,7 @@ object ExternalShuffleStorage extends Logging {
   /** Upload to external storage synchronously. */
   def upload(conf: SparkConf, bm: BlockManager, shuffleBlockInfo: ShuffleBlockInfo)
     : Boolean = withCheckOrFalse(conf) {
+    setFileSystemIfNeeded(conf)
     val shuffleId = shuffleBlockInfo.shuffleId
     val mapId = shuffleBlockInfo.mapId
     val (indexFile, dataFile) = bm.migratableResolver.getMigrationFiles(shuffleBlockInfo)
