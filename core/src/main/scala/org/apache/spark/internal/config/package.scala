@@ -509,7 +509,7 @@ package object config {
       .version("3.1.0")
       .stringConf
       .transform(_.toLowerCase(java.util.Locale.ROOT))
-      .checkValues(Set("minio", "s3", "efs", "hdfs"))
+      .checkValues(Set("minio", "s3", "efs"))
       .createWithDefault("minio")
 
   private[spark] val SPARK_SHUFFLE_EXTERNAL_STORAGE_SEPARATOR =
