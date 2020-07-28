@@ -141,6 +141,21 @@ SPARK-32220      SHUFFLE_REPLICATE_NL Hint should not change Non-Cartesian Produ
 SPARK-32238      Use Utils.getSimpleName to avoid hitting Malformed class name in ScalaUDF
 SPARK-32232      Make sure ML has the same default solver values between Scala and Python
 MINOR            Fix typo in PySpark example in ml-datasource.md
+SPARK-32353      Update docker/spark-test and clean up unused stuff
+SPARK-32344      Unevaluable expr is set to FIRST/LAST ignoreNullsExpr in distinct aggregates
+MINOR            Fix links to Cloud Storage connectors docs
+SPARK-32366      Fix doc link of datetime pattern in 3.0 migration guide
+SPARK-32367      Correct the spelling of parameter in KubernetesTestComponents
+SPARK-32368      pathGlobFilter, recursiveFileLookup and basePath should respect case insensitivity
+SPARK-32365      Add a boundary condition for negative index in regexp_extract
+SPARK-32362      AdaptiveQueryExecSuite misses verifying AE results
+MINOR            add link for Debugging your Application in running-on-yarn.html#launching-spark-on-yarn
+SPARK-32377      CaseInsensitiveMap should be deterministic for addition
+SPARK-32364      Use CaseInsensitiveMap for DataFrameReader/Writer options
+SPARK-32364      Add toMap to return originalMap and documentation
+SPARK-32251      improve SQL keyword test
+SPARK-32280      ResolveReferences.dedupRight should only rewrite attributes for ancestor nodes of the conflict plan
+SPARK-32237      Resolve hint in CTE
 
 # Internal Patches
 rdar://64257783   Use parquet-1.10.1.1-apple to support ZSTD Parquet
