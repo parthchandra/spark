@@ -129,7 +129,8 @@ fi
 cd "$SPARK_HOME"
 
 ##Set MAVEN_OPTS
-export MAVEN_OPTS="${ADDITIONAL_MAVEN_OPTS} ${SKIP_TEST_PACKAGE_D_PARAM} $SKIP_TESTS_D_PARAM -Dscala-${SCALA_VERSION}=enabled -Dhive-thriftserver=enabled ${HADOOP_VERSION_D_PARAM} -DdeployAtEnd=true -DinstallAtEnd=true"
+time_stamp=$(date '+%Y%m%d%H%M%S')
+export MAVEN_OPTS="${ADDITIONAL_MAVEN_OPTS} ${SKIP_TEST_PACKAGE_D_PARAM} $SKIP_TESTS_D_PARAM -Dscala-${SCALA_VERSION}=enabled -Dhive-thriftserver=enabled ${HADOOP_VERSION_D_PARAM} -DdeployAtEnd=true -DinstallAtEnd=true -Dcurrent.time=${time_stamp}"
 
 echo -e "MAVEN_OPTS exported: ${MAVEN_OPTS}"
 
