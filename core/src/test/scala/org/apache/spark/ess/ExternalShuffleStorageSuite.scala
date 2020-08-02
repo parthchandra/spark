@@ -36,7 +36,7 @@ import org.apache.spark.util.Utils.{createTempDir, tryWithResource}
 class ExternalShuffleStorageSuite
   extends SparkFunSuite with LocalSparkContext with PrivateMethodTester {
 
-  private val conf = ExternalShuffleStorage.enableExternalShuffleStorage(new SparkConf(false))
+  protected val conf = ExternalShuffleStorage.enableExternalShuffleStorage(new SparkConf(false))
     .set(SPARK_SHUFFLE_EXTERNAL_STORAGE_BACKEND, "efs")
     .set(SPARK_SHUFFLE_EXTERNAL_STORAGE_BUCKET, createTempDir().getAbsolutePath)
 
