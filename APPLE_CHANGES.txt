@@ -5,6 +5,7 @@ SPARK-31047       Improve file listing for ViewFileSystem
 SPARK-32058       Use Apache Hadoop 3.2.0 dependency by default
 SPARK-31876       Upgrade to Zstd 1.4.5
 SPARK-32150       Upgrade to ZStd 1.4.5-4
+SPARK-32437       Improve MapStatus deserialization speed with RoaringBitmap 0.9.0
 
 # From Spark 3.0.0
 SPARK-24540       Support for multiple character delimiter in Spark CSV read
@@ -178,6 +179,12 @@ MINOR             add link for Debugging your Application in running-on-yarn.htm
 SPARK-32379       docker based spark release script should use correct CRAN repo
 SPARK-32377       CaseInsensitiveMap should be deterministic for addition
 SPARK-32364       Use CaseInsensitiveMap for DataFrameReader/Writer options
+SPARK-32397       Allow specifying of time for build to keep time consistent between modules
+SPARK-32280       ResolveReferences.dedupRight should only rewrite attributes for ancestor nodes of the conflict plan
+SPARK-32372       ResolveReferences.dedupRight should only rewrite attributes for ancestor nodes of the conflict plan
+SPARK-32428       Make BinaryClassificationMetricsExample cons…
+MINOR             Fix spacing in error message
+SPARK-28818       Respect source column nullability in the arrays created by `freqItems()`
 
 # Internal Patches
 rdar://64257783   Use parquet-1.10.1.1-apple to support ZSTD Parquet
@@ -215,3 +222,5 @@ MINOR             Bump to 2.4.6.6-apple-SNAPSHOT
 MINOR             Regenerate dependency manifest
 MINOR             Use zstd as default shuffle compression
 MINOR             Bump to 2.4.6.7-apple-SNAPSHOT
+MINOR             Bump to 2.4.6.10-apple-SNAPSHOT
+MINOR             Set timestamp for publishing snapshot jar
