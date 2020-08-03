@@ -37,6 +37,9 @@ SPARK-32058      Use Apache Hadoop 3.2.0 dependency by default
 SPARK-31876      Upgrade to Zstd 1.4.5
 SPARK-32150      Upgrade to ZStd 1.4.5-4
 SPARK-21040      Speculate tasks which are running on decommission executors
+SPARK-32490      Upgrade netty-all to 4.1.51.Final
+SPARK-32437      Improve MapStatus deserialization speed with RoaringBitmap 0.9.0
+SPARK-32437      Update dependency manifest for RoaringBitmap 0.9.0
 
 # From Spark 3.0.1
 SPARK-32018      UnsafeRow.setDecimal should set null with overflowed value
@@ -156,6 +159,26 @@ SPARK-32364      Add toMap to return originalMap and documentation
 SPARK-32251      improve SQL keyword test
 SPARK-32280      ResolveReferences.dedupRight should only rewrite attributes for ancestor nodes of the conflict plan
 SPARK-32237      Resolve hint in CTE
+SPARK-32363      Fix flakiness in pip package testing in Jenkins
+SPARK-32310      ML params default value parity
+SPARK-32430      Extend SparkSessionExtensions to inject rules into AQE query stage preparation
+SPARK-32287      Flaky Test: ExecutorAllocationManagerSuite.add executors default profile
+SPARK-32428      Make BinaryClassificationMetricsExample cons…
+SPARK-32448      Use single version for exec-maven-plugin/scalatest-maven-plugin
+SPARK-31753      Add missing keywords in the SQL docs
+MINOR            Fix spacing in error message
+SPARK-32424      Fix silent data change for timestamp parsing if f overflow happens
+SPARK-32339      Improve MLlib BLAS native acceleration docs
+SPARK-32283      Kryo should support multiple user registrators
+SPARK-32175      Fix the order between initialization for ExecutorPlugin and starting heartbeat thread
+SPARK-32397      Allow specifying of time for build to keep time consistent between modules
+SPARK-32478      Error message to show the schema mismatch in gapply with Arrow vectorization
+SPARK-32227      Fix regression bug in load-spark-env.cmd with Spark 3.0.0
+SPARK-32175      Remove flaky test added in
+SPARK-32332      Support columnar exchanges
+SPARK-32467      Avoid encoding URL twice on https redirect
+SPARK-32509      Ignore unused DPP True Filter in Canonicalization
+SPARK-32083      AQE should not coalesce partitions for SinglePartition
 
 # Internal Patches
 rdar://64257783   Use parquet-1.10.1.1-apple to support ZSTD Parquet
@@ -180,3 +203,5 @@ MINOR            Bump to 3.0.0.6-apple-SNAPSHOT
 MINOR            Bump to 3.0.0.7-apple-SNAPSHOT
 rdar://64257964  add back http support so it works without hadoop configuration
 MINOR            Switch to zstd
+MINOR            Bump to 3.0.0.11-apple-SNAPSHOT after releasing 3.0.0.10-apple
+MINOR            Support HDFS as external shuffle storage backend
