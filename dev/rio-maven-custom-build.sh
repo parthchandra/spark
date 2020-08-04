@@ -129,8 +129,7 @@ fi
 cd "$SPARK_HOME"
 
 ##Set MAVEN_OPTS
-time_stamp=$(date '+%Y%m%d%H%M%S')
-export MAVEN_OPTS="${ADDITIONAL_MAVEN_OPTS} ${SKIP_TEST_PACKAGE_D_PARAM} $SKIP_TESTS_D_PARAM -Dscala-${SCALA_VERSION}=enabled -Dhive-thriftserver=enabled ${HADOOP_VERSION_D_PARAM} -DdeployAtEnd=true -DinstallAtEnd=true -Dcurrent.time=${time_stamp}"
+export MAVEN_OPTS="${ADDITIONAL_MAVEN_OPTS} ${SKIP_TEST_PACKAGE_D_PARAM} $SKIP_TESTS_D_PARAM -Dscala-${SCALA_VERSION}=enabled -Dhive-thriftserver=enabled ${HADOOP_VERSION_D_PARAM} -DdeployAtEnd=true -DinstallAtEnd=true"
 
 echo -e "MAVEN_OPTS exported: ${MAVEN_OPTS}"
 
@@ -149,9 +148,17 @@ REPO_URL="local-release::default::file://${LOCAL_REPO_DIR}"
 
 execute_command "$MVN" clean deploy -DaltDeploymentRepository="${REPO_URL}" "$SKIP_TESTS_D_PARAM" $ADDITIONAL_MAVEN_PARAMS "$@"
 
-#if [ $IS_RELEASE -eq 0 ] ; then
-#  find "./.dist/local-repo/org/apache/spark/" -name "*.jar" -exec bash -c 'mv $0 $(echo "$0" | sed -E  "s/-[[:digit:]]+\.[[:digit:]]+-[[:digit:]]+/-SNAPSHOT/" )' '{}' \;
-#  find "./.dist/local-repo/org/apache/spark/" -name "*.pom" -exec bash -c 'mv $0 $(echo "$0" | sed -E  "s/-[[:digit:]]+\.[[:digit:]]+-[[:digit:]]+/-SNAPSHOT/" )' '{}' \;
-#fi
+t=$(date '+%H%M%S')
+if [ $IS_RELEASE -eq 0 ] ; then
+  shopt -s globstar
+  for file in  ./.dist/local-repo/org/apache/spark/*/**.jar; do
+    new_name=$(echo "$file" | sed -E  "s/-([[:digit:]]+)\.[[:digit:]]+-([[:digit:]]+)/-SNAPSHOT-\1-${t}-\2/")
+    mv "$file" "$new_name"
+  done
+  for file in  ./.dist/local-repo/org/apache/spark/*/**.pom; do
+    new_name=$(echo "$file" | sed -E  "s/-([[:digit:]]+)\.[[:digit:]]+-([[:digit:]]+)/-SNAPSHOT-\1-${t}-\2/")
+    mv "$file" "$new_name"
+  done
+fi
 
 echo -e "Build Successful"
