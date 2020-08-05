@@ -307,7 +307,7 @@ builds:
     build:
       template: freestyle:v4:publish
       steps:
-        - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --hadoop "$HADOOP_VERSION" --snapshot --maven-opts "-Xmx6g" --maven-params "-P hive,hadoop-cloud,hadoop-${HADOOP_BINARY_VERSION},hive-thriftserver,kinesis-asl,mesos,yarn,kubernetes"
+        - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --hadoop "$HADOOP_VERSION" --snapshot --maven-opts "-Xmx6g" --maven-params "-P hive,hadoop-cloud,hadoop-${HADOOP_BINARY_VERSION},hive-thriftserver,kinesis-asl,mesos,yarn,kubernetes,avro"
         - ./dev/make-distribution.sh --tgz --use-existing-build --with-hadoop --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION" -Phadoop-${HADOOP_BINARY_VERSION} -Dhadoop.version="$HADOOP_VERSION"
         - ci stage-lib ".dist/local-repo/**/*.tgz,snapshot"
     package:
@@ -357,7 +357,7 @@ builds:
     build:
       template: freestyle:v4:publish
       steps:
-        - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --hadoop "$HADOOP_VERSION" --release --maven-opts "-Xmx6g" --maven-params "-P hive,hadoop-cloud,hadoop-${HADOOP_BINARY_VERSION},hive-thriftserver,kinesis-asl,mesos,yarn,kubernetes"
+        - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --hadoop "$HADOOP_VERSION" --release --maven-opts "-Xmx6g" --maven-params "-P hive,hadoop-cloud,hadoop-${HADOOP_BINARY_VERSION},hive-thriftserver,kinesis-asl,mesos,yarn,kubernetes,avro"
         - ./dev/make-distribution.sh --tgz --use-existing-build --with-hadoop --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION" -Phadoop-${HADOOP_BINARY_VERSION} -Dhadoop.version="$HADOOP_VERSION"
         - ci stage-lib ".dist/local-repo/**/*.tgz"
     package:
@@ -379,7 +379,7 @@ builds:
     build:
       template: freestyle:v4:publish
       steps:
-        - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --snapshot --maven-opts "-Xmx6g" --maven-params "-P hadoop-provided,kinesis-asl,mesos,yarn,kubernetes --fail-at-end"
+        - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --snapshot --maven-opts "-Xmx6g" --maven-params "-P hadoop-provided,kinesis-asl,mesos,yarn,kubernetes,avro --fail-at-end"
         - ./dev/make-distribution.sh --tgz --use-existing-build --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION"
         - ci stage-lib ".dist/local-repo/**/*.tgz,snapshot"
     package:
@@ -401,7 +401,7 @@ builds:
     build:
       template: freestyle:v4:publish
       steps:
-        - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --release --maven-opts "-Xmx6g" --maven-params "-P hadoop-provided,kinesis-asl,mesos,yarn,kubernetes --fail-at-end"
+        - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --release --maven-opts "-Xmx6g" --maven-params "-P hadoop-provided,kinesis-asl,mesos,yarn,kubernetes,avro --fail-at-end"
         - ./dev/make-distribution.sh --tgz --use-existing-build --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION"
         - ci stage-lib ".dist/local-repo/**/*.tgz"
     package:
