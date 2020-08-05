@@ -150,12 +150,11 @@ execute_command "$MVN" clean deploy -DaltDeploymentRepository="${REPO_URL}" "$SK
 
 t=$(date '+%H%M%S')
 if [ $IS_RELEASE -eq 0 ] ; then
-  shopt -s globstar
-  for file in  ./.dist/local-repo/org/apache/spark/*/**.jar; do
+  find "./.dist/local-repo/org/apache/spark/" -name "*.jar" -print0 | while read -d $'\0' file; do
     new_name=$(echo "$file" | sed -E  "s/-([[:digit:]]+)\.[[:digit:]]+-([[:digit:]]+)/-SNAPSHOT-\1-${t}-\2/")
     mv "$file" "$new_name"
   done
-  for file in  ./.dist/local-repo/org/apache/spark/*/**.pom; do
+  find "./.dist/local-repo/org/apache/spark/" -name "*.pom" -print0 | while read -d $'\0' file; do
     new_name=$(echo "$file" | sed -E  "s/-([[:digit:]]+)\.[[:digit:]]+-([[:digit:]]+)/-SNAPSHOT-\1-${t}-\2/")
     mv "$file" "$new_name"
   done
