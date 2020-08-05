@@ -165,7 +165,7 @@ POM_SPARK_HIVE=$("$MVN" help:evaluate -Dexpression=project.activeProfiles -Phado
 ##Maven Command Executions
 execute_command "$MVN" com.apple.cie.rio:rio-maven-plugin:create-marker "$SKIP_TESTS_D_PARAM" "$@"
 if [ $IS_RELEASE -eq 1 ] ; then
-	execute_command "$MVN" com.apple.cie.rio:rio-maven-plugin:remove-snapshot org.codehaus.mojo:versions-maven-plugin:set "$@"
+        execute_command "$MVN" com.apple.cie.rio:rio-maven-plugin:remove-snapshot org.codehaus.mojo:versions-maven-plugin:set "$@"
 fi
 
 mkdir -p "${LOCAL_REPO_DIR}"
@@ -173,9 +173,15 @@ REPO_URL="local-release::default::file://${LOCAL_REPO_DIR}"
 
 execute_command "$MVN" clean deploy -DaltDeploymentRepository="${REPO_URL}" "$SKIP_TESTS_D_PARAM" $ADDITIONAL_MAVEN_PARAMS "$@"
 
+t=$(date '+%H%M%S')
 if [ $IS_RELEASE -eq 0 ] ; then
-	find "./.dist/local-repo/org/apache/spark/" -name "*.jar" -exec bash -c 'mv $0 $(echo "$0" | sed -E  "s/-[[:digit:]]+\.[[:digit:]]+-[[:digit:]]+\.jar/-SNAPSHOT.jar/" )' '{}' \;
-	find "./.dist/local-repo/org/apache/spark/" -name "*.pom" -exec bash -c 'mv $0 $(echo "$0" | sed -E  "s/-[[:digit:]]+\.[[:digit:]]+-[[:digit:]]+\.pom/-SNAPSHOT.pom/" )' '{}' \;
+  find "./.dist/local-repo/org/apache/spark/" -name "*.jar" -print0 | while read -d $'\0' file; do
+    new_name=$(echo "$file" | sed -E  "s/-([[:digit:]]+)\.[[:digit:]]+-([[:digit:]]+)/-SNAPSHOT-\1.${t}-\2/")
+    mv "$file" "$new_name"
+  done
+  find "./.dist/local-repo/org/apache/spark/" -name "*.pom" -print0 | while read -d $'\0' file; do
+    new_name=$(echo "$file" | sed -E  "s/-([[:digit:]]+)\.[[:digit:]]+-([[:digit:]]+)/-SNAPSHOT-\1.${t}-\2/")
+    mv "$file" "$new_name"
+  done
 fi
-
 echo -e "Build Successful"
