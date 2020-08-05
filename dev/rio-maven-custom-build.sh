@@ -149,6 +149,7 @@ REPO_URL="local-release::default::file://${LOCAL_REPO_DIR}"
 execute_command "$MVN" clean deploy -DaltDeploymentRepository="${REPO_URL}" "$SKIP_TESTS_D_PARAM" $ADDITIONAL_MAVEN_PARAMS "$@"
 
 t=$(date '+%H%M%S')
+set -x
 if [ $IS_RELEASE -eq 0 ] ; then
   find "./.dist/local-repo/org/apache/spark/" -name "*.jar" -print0 | while read -d $'\0' file; do
     new_name=$(echo "$file" | sed -E  "s/-([[:digit:]]+)\.[[:digit:]]+-([[:digit:]]+)/-SNAPSHOT-\1.${t}-\2/")
