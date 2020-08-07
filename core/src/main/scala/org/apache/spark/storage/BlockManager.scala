@@ -244,7 +244,6 @@ private[spark] class BlockManager(
 
   private var blockReplicationPolicy: BlockReplicationPolicy = _
 
-  // This is volatile since if it's defined we should not accept remote blocks.
   @volatile private var decommissioner: Option[BlockManagerDecommissioner] = None
 
   // A DownloadFileManager used to track all the files of remote blocks which are above the
@@ -256,13 +255,9 @@ private[spark] class BlockManager(
 
   var hostLocalDirManager: Option[HostLocalDirManager] = None
 
-  @inline final private def isDecommissioning() = {
-    decommissioner.isDefined
-  }
-
   // This is a lazy val so someone can migrating RDDs even if they don't have a MigratableResolver
   // for shuffles. Used in BlockManagerDecommissioner & block puts.
-  private[storage] lazy val migratableResolver: MigratableResolver = {
+  private[spark] lazy val migratableResolver: MigratableResolver = {
     shuffleManager.shuffleBlockResolver.asInstanceOf[MigratableResolver]
   }
 
@@ -630,7 +625,7 @@ private[spark] class BlockManager(
   override def getLocalBlockData(blockId: BlockId): ManagedBuffer = {
     if (blockId.isShuffle) {
       logInfo(s"Getting local shuffle block ${blockId}")
-      shuffleManager.shuffleBlockResolver.getBlockData(blockId)
+      ess.ExternalShuffleStorage.read(shuffleManager.shuffleBlockResolver, blockId)
     } else {
       getLocalBytes(blockId) match {
         case Some(blockData) =>
@@ -664,12 +659,12 @@ private[spark] class BlockManager(
       level: StorageLevel,
       classTag: ClassTag[_]): StreamCallbackWithID = {
 
-    if (isDecommissioning()) {
+    if (decommissioner.isDefined) {
        throw new BlockSavedOnDecommissionedBlockManagerException(blockId)
     }
 
-    if (blockId.isShuffle) {
-      logDebug(s"Putting shuffle block ${blockId}")
+    if (blockId.isShuffle || blockId.isInternalShuffle) {
+      logInfo(s"Putting shuffle block ${blockId}")
       try {
         return migratableResolver.putShuffleBlockAsStream(blockId, serializerManager)
       } catch {
@@ -678,7 +673,7 @@ private[spark] class BlockManager(
           s"resolver ${shuffleManager.shuffleBlockResolver}")
       }
     }
-    logDebug(s"Putting regular block ${blockId}")
+    logInfo(s"Putting regular block ${blockId}")
     // All other blocks
     val (_, tmpFile) = diskBlockManager.createTempLocalBlock()
     val channel = new CountingWritableChannel(
@@ -1315,7 +1310,7 @@ private[spark] class BlockManager(
 
     require(blockId != null, "BlockId is null")
     require(level != null && level.isValid, "StorageLevel is null or invalid")
-    if (isDecommissioning()) {
+    if (decommissioner.isDefined) {
       throw new BlockSavedOnDecommissionedBlockManagerException(blockId)
     }
 
@@ -1823,8 +1818,8 @@ private[spark] class BlockManager(
     }
   }
 
-  /**
-   *  Returns the last migration time and a boolean denoting if all the blocks have been migrated.
+  /*
+   *  Returns the last migration time and a boolean for if all blocks have been migrated.
    *  If there are any tasks running since that time the boolean may be incorrect.
    */
   private[spark] def lastMigrationInfo(): (Long, Boolean) = {

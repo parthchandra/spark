@@ -65,8 +65,7 @@ class WorkerDecommissionExtendedSuite extends SparkFunSuite with LocalSparkConte
 
       val sched = sc.schedulerBackend.asInstanceOf[StandaloneSchedulerBackend]
       sc.getExecutorIds().tail.foreach { id =>
-        sched.decommissionExecutor(id, ExecutorDecommissionInfo("", false),
-          adjustTargetNumExecutors = false)
+        sched.decommissionExecutor(id)
         assert(rdd3.sortByKey().collect().length === 100)
       }
     }

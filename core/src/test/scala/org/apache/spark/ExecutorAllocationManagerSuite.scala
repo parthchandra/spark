@@ -1192,7 +1192,7 @@ class ExecutorAllocationManagerSuite extends SparkFunSuite {
       maxExecutors: Int = 5,
       initialExecutors: Int = 1,
       decommissioningEnabled: Boolean = false): SparkConf = {
-    val sparkConf = new SparkConf()
+    new SparkConf()
       .set(config.DYN_ALLOCATION_ENABLED, true)
       .set(config.DYN_ALLOCATION_MIN_EXECUTORS, minExecutors)
       .set(config.DYN_ALLOCATION_MAX_EXECUTORS, maxExecutors)
@@ -1208,7 +1208,6 @@ class ExecutorAllocationManagerSuite extends SparkFunSuite {
       // really long value.
       .set(TEST_SCHEDULE_INTERVAL, 30000L)
       .set(WORKER_DECOMMISSION_ENABLED, decommissioningEnabled)
-    sparkConf
   }
 
   private def createManager(

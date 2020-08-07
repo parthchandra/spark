@@ -42,8 +42,7 @@ import org.apache.spark.internal.config._
 class KubernetesSuite extends SparkFunSuite
   with BeforeAndAfterAll with BeforeAndAfter with BasicTestsSuite with SecretsTestsSuite
   with PythonTestsSuite with ClientModeTestsSuite with PodTemplateSuite with PVTestsSuite
-  // TODO(SPARK-32354): Fix and re-enable the R tests.
-  with DepsTestsSuite with DecommissionSuite /* with RTestsSuite */ with Logging with Eventually
+  with DepsTestsSuite with DecommissionSuite with RTestsSuite with Logging with Eventually
   with Matchers {
 
 
@@ -278,7 +277,6 @@ class KubernetesSuite extends SparkFunSuite
       appArgs = appArgs)
 
     val execPods = scala.collection.mutable.Map[String, Pod]()
-    val podsDeleted = scala.collection.mutable.HashSet[String]()
     val (patienceInterval, patienceTimeout) = {
       executorPatience match {
         case Some(patience) => (patience._1.getOrElse(INTERVAL), patience._2.getOrElse(TIMEOUT))
@@ -339,21 +337,27 @@ class KubernetesSuite extends SparkFunSuite
                 }
                 // Delete the pod to simulate cluster scale down/migration.
                 // This will allow the pod to remain up for the grace period
-                kubernetesTestComponents.kubernetesClient.pods()
-                  .withName(name).delete()
+                val pod = kubernetesTestComponents.kubernetesClient.pods()
+                  .withName(name)
+                pod.delete()
                 logDebug(s"Triggered pod decom/delete: $name deleted")
-                // Make sure this pod is deleted
+                // Look for the string that indicates we should force kill the first
+                // Executor. This simulates the pod being fully lost.
+                logDebug("Waiting for second collect...")
                 Eventually.eventually(TIMEOUT, INTERVAL) {
-                  assert(podsDeleted.contains(name))
+                  assert(kubernetesTestComponents.kubernetesClient
+                    .pods()
+                    .withName(driverPodName)
+                    .getLog
+                    .contains("Waiting some more, please kill exec 1."),
+                    "Decommission test did not complete second collect.")
                 }
-                // Then make sure this pod is replaced
-                Eventually.eventually(TIMEOUT, INTERVAL) {
-                  assert(execPods.size == 3)
-                }
+                logDebug("Force deleting")
+                val podNoGrace = pod.withGracePeriod(0)
+                podNoGrace.delete()
               }
             case Action.DELETED | Action.ERROR =>
               execPods.remove(name)
-              podsDeleted += name
           }
         }
       })
@@ -382,6 +386,7 @@ class KubernetesSuite extends SparkFunSuite
     Eventually.eventually(TIMEOUT, patienceInterval) {
       execPods.values.nonEmpty should be (true)
     }
+    execWatcher.close()
     execPods.values.foreach(executorPodChecker(_))
     Eventually.eventually(patienceTimeout, patienceInterval) {
       expectedLogOnCompletion.foreach { e =>
@@ -393,7 +398,6 @@ class KubernetesSuite extends SparkFunSuite
           s"The application did not complete, did not find str ${e}")
       }
     }
-    execWatcher.close()
   }
 
   protected def doBasicDriverPodCheck(driverPod: Pod): Unit = {

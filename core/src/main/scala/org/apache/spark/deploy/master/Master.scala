@@ -871,10 +871,7 @@ private[deploy] class Master(
         logInfo("Telling app of decommission executors")
         exec.application.driver.send(ExecutorUpdated(
           exec.id, ExecutorState.DECOMMISSIONED,
-          Some("worker decommissioned"), None,
-          // workerLost is being set to true here to let the driver know that the host (aka. worker)
-          // is also being decommissioned.
-          workerLost = true))
+          Some("worker decommissioned"), None, workerLost = false))
         exec.state = ExecutorState.DECOMMISSIONED
         exec.application.removeExecutor(exec)
       }

@@ -30,14 +30,13 @@ import org.apache.spark.util.Utils
 
 /**
  * Result returned by a ShuffleMapTask to a scheduler. Includes the block manager address that the
- * task has shuffle files stored on as well as the sizes of outputs for each reducer, for passing
- * on to the reduce tasks.
+ * task ran on as well as the sizes of outputs for each reducer, for passing on to the reduce tasks.
  */
 private[spark] sealed trait MapStatus {
   /** Location where this task output is. */
   def location: BlockManagerId
 
-  def updateLocation(newLoc: BlockManagerId): Unit
+  def updateLocation(bm: BlockManagerId): Unit
 
   /**
    * Estimated size for the reduce block, in bytes.
@@ -129,8 +128,8 @@ private[spark] class CompressedMapStatus(
 
   override def location: BlockManagerId = loc
 
-  override def updateLocation(newLoc: BlockManagerId): Unit = {
-    loc = newLoc
+  override def updateLocation(bm: BlockManagerId): Unit = {
+    loc = bm
   }
 
   override def getSizeForBlock(reduceId: Int): Long = {
@@ -185,8 +184,8 @@ private[spark] class HighlyCompressedMapStatus private (
 
   override def location: BlockManagerId = loc
 
-  override def updateLocation(newLoc: BlockManagerId): Unit = {
-    loc = newLoc
+  override def updateLocation(bm: BlockManagerId): Unit = {
+    loc = bm
   }
 
   override def getSizeForBlock(reduceId: Int): Long = {
