@@ -29,7 +29,6 @@ import org.apache.spark.ess.ExternalShuffleStorage.{cleanUp, deleteObject, doesO
 import org.apache.spark.internal.config._
 import org.apache.spark.launcher.SparkLauncher.{EXECUTOR_MEMORY, SPARK_MASTER}
 import org.apache.spark.network.buffer.ManagedBuffer
-import org.apache.spark.scheduler.ExecutorDecommissionInfo
 import org.apache.spark.scheduler.cluster.StandaloneSchedulerBackend
 import org.apache.spark.storage.ShuffleBlockId
 import org.apache.spark.util.Utils.{createTempDir, tryWithResource}
@@ -56,7 +55,7 @@ class ExternalShuffleStorageSuite
     val errorMsg = s"should be used only when ${DYN_ALLOCATION_ENABLED.key} and " +
       s"${Worker.WORKER_DECOMMISSION_ENABLED.key} and " +
       s"${STORAGE_DECOMMISSION_ENABLED.key} and " +
-      s"${STORAGE_DECOMMISSION_SHUFFLE_BLOCKS_ENABLED.key} and " +
+      s"${STORAGE_SHUFFLE_DECOMMISSION_ENABLED.key} and " +
       s"${SPARK_SHUFFLE_EXTERNAL_STORAGE_ENABLED.key} are true"
 
     // Every settings are correctly enabled.
@@ -193,9 +192,7 @@ class ExternalShuffleStorageSuite
 
       // Decommission all
       val sched = sc.schedulerBackend.asInstanceOf[StandaloneSchedulerBackend]
-      sc.getExecutorIds().foreach {
-        sched.decommissionExecutor(_, ExecutorDecommissionInfo("", false), false)
-      }
+      sc.getExecutorIds().foreach(sched.decommissionExecutor)
 
       // Uploading is not started yet.
       files.foreach { key => assert(!doesObjectExist(conf, prefix + key)) }
@@ -230,9 +227,7 @@ class ExternalShuffleStorageSuite
 
       // Decommission all
       val sched = sc.schedulerBackend.asInstanceOf[StandaloneSchedulerBackend]
-      sc.getExecutorIds().foreach {
-        sched.decommissionExecutor(_, ExecutorDecommissionInfo("", false), false)
-      }
+      sc.getExecutorIds().foreach(sched.decommissionExecutor)
 
       eventually(timeout(10.seconds), interval(1.seconds)) {
         files.foreach { key => assert(doesObjectExist(conf, prefix + key), key) }
@@ -254,9 +249,7 @@ class ExternalShuffleStorageSuite
 
       // Decommission all
       val sched = sc.schedulerBackend.asInstanceOf[StandaloneSchedulerBackend]
-      sc.getExecutorIds().foreach {
-        sched.decommissionExecutor(_, ExecutorDecommissionInfo("", false), false)
-      }
+      sc.getExecutorIds().foreach(sched.decommissionExecutor)
 
       // Make it sure that external storage are ready
       eventually(timeout(10.seconds), interval(1.seconds)) {
@@ -282,3 +275,4 @@ class ExternalShuffleStorageSuite
     }
   }
 }
+

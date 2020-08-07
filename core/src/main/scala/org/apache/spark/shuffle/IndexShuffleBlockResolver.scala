@@ -73,16 +73,6 @@ private[spark] class IndexShuffleBlockResolver(
   }
 
   /**
-   * Get the index & data files for migration.
-   */
-  def getMigrationFiles(shuffleBlockInfo: ShuffleBlockInfo): (File, File) = {
-    val shuffleId = shuffleBlockInfo.shuffleId
-    val mapId = shuffleBlockInfo.mapId
-    (getIndexFile(shuffleId, mapId), getDataFile(shuffleId, mapId))
-  }
-
-
-  /**
    * Get the shuffle data file.
    *
    * When the dirs parameter is None then use the disk manager's local directories. Otherwise,

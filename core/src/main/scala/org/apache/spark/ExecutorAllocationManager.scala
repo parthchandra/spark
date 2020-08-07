@@ -432,7 +432,7 @@ private[spark] class ExecutorAllocationManager(
 
     logDebug(s"Request to remove executorIds: ${executors.mkString(", ")}")
     val numExistingExecutors = (executorMonitor.executorCount
-      - executorMonitor.pendingRemovalCount - executorMonitor.decommissioningCount)
+      - executorMonitor.pendingRemovalCount - executorMonitor.pendingDecommissioningCount)
 
     var newExecutorTotal = numExistingExecutors
     executors.foreach { executorIdToBeRemoved =>

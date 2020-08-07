@@ -776,9 +776,9 @@ private[spark] class TaskSchedulerImpl(
     var failedExecutor: Option[String] = None
     val reason = givenReason match {
       // Handle executor process loss due to decommissioning
-      case SlaveLost(message, origWorkerLost, origCausedByApp) =>
+      case ExecutorProcessLost(message, origWorkerLost, origCausedByApp) =>
         val executorDecommissionInfo = getExecutorDecommissionInfo(executorId)
-        SlaveLost(
+        ExecutorProcessLost(
           message,
           // Also mark the worker lost if we know that the host was decommissioned
           origWorkerLost || executorDecommissionInfo.exists(_.isHostDecommissioned),
