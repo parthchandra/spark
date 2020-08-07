@@ -532,28 +532,28 @@ class CoarseGrainedSchedulerBackend(scheduler: TaskSchedulerImpl, val rpcEnv: Rp
           false
         }
       }
-
-      // If we don't want to replace the executors we are decommissioning
-      if (adjustTargetNumExecutors) {
-        requestedTotalExecutors = math.max(
-          requestedTotalExecutors - executorsToDecommission.size, 0)
-        doRequestTotalExecutors(requestedTotalExecutors)
-      }
-
-      val decommissioned = executorsToDecommission.filter{executorId =>
-        doDecommission(executorId)
-      }
-      decommissioned
     }
+
+    // If we don't want to replace the executors we are decommissioning
+    if (adjustTargetNumExecutors) {
+      requestedTotalExecutors = math.max(
+        requestedTotalExecutors - executorsToDecommission.size, 0)
+      doRequestTotalExecutors(requestedTotalExecutors)
+    }
+
+    val decommissioned = executorsToDecommission.filter{case (executorId, decomInfo) =>
+      doDecommission(executorId, decomInfo)
+    }.map(_._1)
+    decommissioned
   }
 
-  private def doDecommission(executorId: String): Boolean = {
+  private def doDecommission(executorId: String, decomInfo: ExecutorDecommissionInfo): Boolean = {
     logInfo(s"Starting decommissioning executor $executorId.")
     try {
-      scheduler.executorDecommission(executorId)
+      scheduler.executorDecommission(executorId, decomInfo)
       if (driverEndpoint != null) {
         logInfo("Propagating executor decommission to driver.")
-        driverEndpoint.send(DecommissionExecutor(executorId))
+        driverEndpoint.send(DecommissionExecutor(executorId, decomInfo))
       }
     } catch {
       case e: Exception =>

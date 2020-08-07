@@ -105,12 +105,6 @@ class BlockManagerSuite extends SparkFunSuite with Matchers with BeforeAndAfterE
     newMgr
   }
 
-  private def makeSortShuffleManager(): SortShuffleManager = {
-    val newMgr = new SortShuffleManager(new SparkConf(false))
-    sortShuffleManagers += newMgr
-    newMgr
-  }
-
   private def makeBlockManager(
       maxMem: Long,
       name: String = SparkContext.DRIVER_IDENTIFIER,
@@ -279,11 +273,6 @@ class BlockManagerSuite extends SparkFunSuite with Matchers with BeforeAndAfterE
       assert(driverEndpoint.askSync[Boolean](
         CoarseGrainedClusterMessages.IsExecutorAlive(bm2Id.executorId)) === !withLost)
     }
-  }
-
-  private def stopBlockManager(blockManager: BlockManager): Unit = {
-    allStores -= blockManager
-    blockManager.stop()
   }
 
   test("StorageLevel object caching") {

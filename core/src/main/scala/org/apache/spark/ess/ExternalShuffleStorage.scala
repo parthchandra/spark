@@ -56,7 +56,7 @@ object ExternalShuffleStorage extends Logging {
     conf.get(DYN_ALLOCATION_ENABLED) &&
       conf.get(WORKER_DECOMMISSION_ENABLED) &&
       conf.get(STORAGE_DECOMMISSION_ENABLED) &&
-      conf.get(STORAGE_SHUFFLE_DECOMMISSION_ENABLED) &&
+      conf.get(STORAGE_DECOMMISSION_SHUFFLE_BLOCKS_ENABLED) &&
       conf.get(SPARK_SHUFFLE_EXTERNAL_STORAGE_ENABLED)
   }
 
@@ -156,7 +156,7 @@ object ExternalShuffleStorage extends Logging {
         s"${DYN_ALLOCATION_ENABLED.key} and " +
         s"${WORKER_DECOMMISSION_ENABLED.key} and " +
         s"${STORAGE_DECOMMISSION_ENABLED.key} and " +
-        s"${STORAGE_SHUFFLE_DECOMMISSION_ENABLED.key} and " +
+        s"${STORAGE_DECOMMISSION_SHUFFLE_BLOCKS_ENABLED.key} and " +
         s"${SPARK_SHUFFLE_EXTERNAL_STORAGE_ENABLED.key} are true.")
     }
     if (!conf.get(SHUFFLE_MANAGER).equals(SHUFFLE_MANAGER.defaultValueString)) {
@@ -175,7 +175,7 @@ object ExternalShuffleStorage extends Logging {
       .set(DYN_ALLOCATION_ENABLED, true)
       .set(WORKER_DECOMMISSION_ENABLED, true)
       .set(STORAGE_DECOMMISSION_ENABLED, true)
-      .set(STORAGE_SHUFFLE_DECOMMISSION_ENABLED, true)
+      .set(STORAGE_DECOMMISSION_SHUFFLE_BLOCKS_ENABLED, true)
       .set(SPARK_SHUFFLE_EXTERNAL_STORAGE_ENABLED, true)
   }
 

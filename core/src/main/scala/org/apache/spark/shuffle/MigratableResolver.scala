@@ -17,6 +17,8 @@
 
 package org.apache.spark.shuffle
 
+import java.io.File
+
 import org.apache.spark.annotation.{Experimental, Since}
 import org.apache.spark.network.buffer.ManagedBuffer
 import org.apache.spark.network.client.StreamCallbackWithID
@@ -45,4 +47,9 @@ trait MigratableResolver {
    * Get the blocks for migration for a particular shuffle and map.
    */
   def getMigrationBlocks(shuffleBlockInfo: ShuffleBlockInfo): List[(BlockId, ManagedBuffer)]
+
+  /**
+   * Apple specific extension to get files for transfer outside of storage code.
+   */
+  def getMigrationFiles(shuffleBlockInfo: ShuffleBlockInfo): (File, File)
 }

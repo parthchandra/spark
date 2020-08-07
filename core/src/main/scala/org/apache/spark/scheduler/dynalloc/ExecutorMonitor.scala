@@ -181,10 +181,6 @@ private[spark] class ExecutorMonitor(
 
   def pendingRemovalCount: Int = executors.asScala.count { case (_, exec) => exec.pendingRemoval }
 
-  def pendingDecommissioningCount: Int = executors.asScala.count { case (_, exec) =>
-    exec.pendingDecommissioning
-  }
-
   def pendingRemovalCountPerResourceProfileId(id: Int): Int = {
     executors.asScala.filter { case (k, v) => v.resourceProfileId == id && v.pendingRemoval }.size
   }

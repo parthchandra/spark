@@ -58,8 +58,8 @@ private [spark] object LossReasonPending extends ExecutorLossReason("Pending los
  *                    (assumed true by default unless known explicitly otherwise)
  */
 private[spark]
-case class ExecutorProcessLost(
-    _message: String = "Executor Process Lost",
+case class SlaveLost(
+    _message: String = "SlaveLost",
     workerLost: Boolean = false,
     causedByApp: Boolean = true)
   extends ExecutorLossReason(_message)
