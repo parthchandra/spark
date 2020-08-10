@@ -40,6 +40,8 @@ SPARK-21040      Speculate tasks which are running on decommission executors
 SPARK-32490      Upgrade netty-all to 4.1.51.Final
 SPARK-32437      Improve MapStatus deserialization speed with RoaringBitmap 0.9.0
 SPARK-32437      Update dependency manifest for RoaringBitmap 0.9.0
+SPARK-32485      Fix endianness issues in tests in RecordBinaryComparatorSuite
+
 
 # From Spark 3.0.1
 SPARK-32018      UnsafeRow.setDecimal should set null with overflowed value
@@ -179,10 +181,10 @@ SPARK-32332      Support columnar exchanges
 SPARK-32467      Avoid encoding URL twice on https redirect
 SPARK-32509      Ignore unused DPP True Filter in Canonicalization
 SPARK-32083      AQE should not coalesce partitions for SinglePartition
-SPARK-32538	 Use local time zone for the timestamp logged in unit-tests.log
-SPARK-32506	 Flaky test: StreamingLinearRegressionWithTests
-SPARK-32546	 Get table names directly from Hive tables
-SPARK-32529	 Fix Historyserver log scan aborted by application status change
+SPARK-32538      Use local time zone for the timestamp logged in unit-tests.log
+SPARK-32506      Flaky test: StreamingLinearRegressionWithTests
+SPARK-32546      Get table names directly from Hive tables
+SPARK-32529      Fix Historyserver log scan aborted by application status change
 
 # Internal Patches
 rdar://66526854  Update rio build script to handle new maven plugin ignoring mojo timestamps (improve dev from snapshot experience).
