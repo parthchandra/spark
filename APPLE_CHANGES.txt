@@ -6,6 +6,7 @@ SPARK-32058       Use Apache Hadoop 3.2.0 dependency by default
 SPARK-31876       Upgrade to Zstd 1.4.5
 SPARK-32150       Upgrade to ZStd 1.4.5-4
 SPARK-32437       Improve MapStatus deserialization speed with RoaringBitmap 0.9.0
+SPARK-32467       Avoid encoding URL twice on https redirect
 
 # From Spark 3.0.0
 SPARK-24540       Support for multiple character delimiter in Spark CSV read
@@ -185,6 +186,7 @@ SPARK-32372       ResolveReferences.dedupRight should only rewrite attributes fo
 SPARK-32428       Make BinaryClassificationMetricsExample cons…
 MINOR             Fix spacing in error message
 SPARK-28818       Respect source column nullability in the arrays created by `freqItems()`
+SPARK-32560       Improve exception message at InsertIntoHiveTable.processInsert
 
 # Internal Patches
 rdar://64257783   Use parquet-1.10.1.1-apple to support ZSTD Parquet
