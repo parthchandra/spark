@@ -6,7 +6,6 @@ SPARK-32058       Use Apache Hadoop 3.2.0 dependency by default
 SPARK-31876       Upgrade to Zstd 1.4.5
 SPARK-32150       Upgrade to ZStd 1.4.5-4
 SPARK-32437       Improve MapStatus deserialization speed with RoaringBitmap 0.9.0
-SPARK-32467       Avoid encoding URL twice on https redirect
 
 # From Spark 3.0.0
 SPARK-24540       Support for multiple character delimiter in Spark CSV read
