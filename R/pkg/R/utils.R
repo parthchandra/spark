@@ -377,6 +377,7 @@ varargsToStrEnv <- function(...) {
 
 getStorageLevel <- function(newLevel = c("DISK_ONLY",
                                          "DISK_ONLY_2",
+                                         "DISK_ONLY_3",
                                          "MEMORY_AND_DISK",
                                          "MEMORY_AND_DISK_2",
                                          "MEMORY_AND_DISK_SER",
@@ -391,6 +392,7 @@ getStorageLevel <- function(newLevel = c("DISK_ONLY",
   storageLevel <- switch(newLevel,
                          "DISK_ONLY" = callJStatic(storageLevelClass, "DISK_ONLY"),
                          "DISK_ONLY_2" = callJStatic(storageLevelClass, "DISK_ONLY_2"),
+                         "DISK_ONLY_3" = callJStatic(storageLevelClass, "DISK_ONLY_3"),
                          "MEMORY_AND_DISK" = callJStatic(storageLevelClass, "MEMORY_AND_DISK"),
                          "MEMORY_AND_DISK_2" = callJStatic(storageLevelClass, "MEMORY_AND_DISK_2"),
                          "MEMORY_AND_DISK_SER" = callJStatic(storageLevelClass,
@@ -416,6 +418,8 @@ storageLevelToString <- function(levelObj) {
     "DISK_ONLY"
   } else if (useDisk && !useMemory && !useOffHeap && !deserialized && replication == 2) {
     "DISK_ONLY_2"
+  } else if (useDisk && !useMemory && !useOffHeap && !deserialized && replication == 3) {
+    "DISK_ONLY_3"
   } else if (!useDisk && useMemory && !useOffHeap && deserialized && replication == 1) {
     "MEMORY_ONLY"
   } else if (!useDisk && useMemory && !useOffHeap && deserialized && replication == 2) {
