@@ -231,59 +231,6 @@ class UISuite extends SparkFunSuite {
     assert(newHeader === null)
   }
 
-  test("add and remove handlers with custom user filter") {
-    val (conf, securityMgr, sslOptions) = sslDisabledConf()
-    conf.set("spark.ui.filters", classOf[TestFilter].getName())
-    conf.set(s"spark.${classOf[TestFilter].getName()}.param.responseCode",
-      HttpServletResponse.SC_NOT_ACCEPTABLE.toString)
-
-    val serverInfo = JettyUtils.startJettyServer("0.0.0.0", 0, sslOptions, conf)
-    try {
-      val path = "/test"
-      val url = new URL(s"http://localhost:${serverInfo.boundPort}$path/root")
-
-      assert(TestUtils.httpResponseCode(url) === HttpServletResponse.SC_NOT_FOUND)
-
-      val (servlet, ctx) = newContext(path)
-      serverInfo.addHandler(ctx, securityMgr)
-      assert(TestUtils.httpResponseCode(url) === HttpServletResponse.SC_NOT_ACCEPTABLE)
-
-      // Try a request with bad content in a parameter to make sure the security filter
-      // is being added to new handlers.
-      val badRequest = new URL(
-        s"http://localhost:${serverInfo.boundPort}$path/root?bypass&invalid<=foo")
-      assert(TestUtils.httpResponseCode(badRequest) === HttpServletResponse.SC_OK)
-      assert(servlet.lastRequest.getParameter("invalid<") === null)
-      assert(servlet.lastRequest.getParameter("invalid&lt;") !== null)
-
-      serverInfo.removeHandler(ctx)
-      assert(TestUtils.httpResponseCode(url) === HttpServletResponse.SC_NOT_FOUND)
-    } finally {
-      stopServer(serverInfo)
-    }
-  }
-
-  test("SPARK-32467: Avoid encoding URL twice on https redirect") {
-    val (conf, securityMgr, sslOptions) = sslEnabledConf()
-    val serverInfo = JettyUtils.startJettyServer("0.0.0.0", 0, sslOptions, conf)
-    try {
-      val serverAddr = s"http://localhost:${serverInfo.boundPort}"
-
-      val (_, ctx) = newContext("/ctx1")
-      serverInfo.addHandler(ctx, securityMgr)
-
-      TestUtils.withHttpConnection(new URL(s"$serverAddr/ctx%281%29?a%5B0%5D=b")) { conn =>
-        assert(conn.getResponseCode() === HttpServletResponse.SC_FOUND)
-        val location = Option(conn.getHeaderFields().get("Location"))
-          .map(_.get(0)).orNull
-        val expectedLocation = s"https://localhost:${serverInfo.securePort.get}/ctx(1)?a[0]=b"
-        assert(location == expectedLocation)
-      }
-    } finally {
-      stopServer(serverInfo)
-    }
-  }
-
   test("http -> https redirect applies to all URIs") {
     var serverInfo: ServerInfo = null
     try {
