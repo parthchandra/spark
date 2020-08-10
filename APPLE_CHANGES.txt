@@ -185,6 +185,12 @@ SPARK-32538      Use local time zone for the timestamp logged in unit-tests.log
 SPARK-32506      Flaky test: StreamingLinearRegressionWithTests
 SPARK-32546      Get table names directly from Hive tables
 SPARK-32529      Fix Historyserver log scan aborted by application status change
+SPARK-32576	 Support PostgreSQL `bpchar` type and array of char type
+SPARK-32393	 Add tests for all the character types in PostgresIntegrationSuite
+SPARK-32559	 Fix the trim logic in UTF8String.toInt/toLong did't handle non-ASCII characters correctly
+SPARK-32564	 Re-enable TPCDSQuerySuite with empty tables
+SPARK-32564	 Inject data statistics to simulate plan generation on actual TPCDS data
+SPARK-32560	 Improve exception message at InsertIntoHiveTable.processInsert
 
 # Internal Patches
 rdar://66526854  Update rio build script to handle new maven plugin ignoring mojo timestamps (improve dev from snapshot experience).
