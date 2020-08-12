@@ -198,9 +198,9 @@ class CoarseGrainedSchedulerBackend(scheduler: TaskSchedulerImpl, val rpcEnv: Rp
         executorDataMap.get(executorId).foreach(_.executorEndpoint.send(StopExecutor))
         removeExecutor(executorId, reason)
 
-      case DecommissionExecutor(executorId) =>
-        logError(s"Received decommission executor message ${executorId}.")
-        decommissionExecutor(executorId)
+      case DecommissionExecutor(executorId, decommissionInfo) =>
+        logError(s"Received decommission executor message ${executorId}: $decommissionInfo")
+        decommissionExecutor(executorId, decommissionInfo, adjustTargetNumExecutors = false)
 
       case RemoveWorker(workerId, host, message) =>
         removeWorker(workerId, host, message)
@@ -282,10 +282,10 @@ class CoarseGrainedSchedulerBackend(scheduler: TaskSchedulerImpl, val rpcEnv: Rp
         removeWorker(workerId, host, message)
         context.reply(true)
 
-      case DecommissionExecutor(executorId) =>
-        logError(s"Received decommission executor message ${executorId}.")
-        decommissionExecutor(executorId)
-        context.reply(true)
+      case DecommissionExecutor(executorId, decommissionInfo) =>
+        logError(s"Received decommission executor message ${executorId}: ${decommissionInfo}.")
+        context.reply(decommissionExecutor(executorId, decommissionInfo,
+          adjustTargetNumExecutors = false))
 
       case RetrieveSparkAppConfig(resourceProfileId) =>
         // note this will be updated in later prs to get the ResourceProfile from a
@@ -459,16 +459,17 @@ class CoarseGrainedSchedulerBackend(scheduler: TaskSchedulerImpl, val rpcEnv: Rp
   /**
    * Request that the cluster manager decommission the specified executors.
    *
-   * @param executorIds identifiers of executors to decommission
+   * @param executorsAndDecomInfo Identifiers of executors & decommission info.
    * @param adjustTargetNumExecutors whether the target number of executors will be adjusted down
    *                                 after these executors have been decommissioned.
    * @return the ids of the executors acknowledged by the cluster manager to be removed.
    */
-  override def decommissionExecutors(executorIds: Seq[String],
-    adjustTargetNumExecutors: Boolean): Seq[String] = {
+  override def decommissionExecutors(
+      executorsAndDecomInfo: Array[(String, ExecutorDecommissionInfo)],
+      adjustTargetNumExecutors: Boolean): Seq[String] = {
 
-    CoarseGrainedSchedulerBackend.this.synchronized {
-      val executorsToDecommission = executorIds.filter{executorId =>
+    val executorsToDecommission = executorsAndDecomInfo.filter { case (executorId, _) =>
+      CoarseGrainedSchedulerBackend.this.synchronized {
         // Only bother decommissioning executors which are alive.
         if (isExecutorActive(executorId)) {
           executorsPendingDecommission += executorId
@@ -477,28 +478,26 @@ class CoarseGrainedSchedulerBackend(scheduler: TaskSchedulerImpl, val rpcEnv: Rp
           false
         }
       }
-
-      // If we don't want to replace the executors we are decommissioning
-      if (adjustTargetNumExecutors) {
-        requestedTotalExecutors = math.max(
-          requestedTotalExecutors - executorsToDecommission.size, 0)
-        doRequestTotalExecutors(requestedTotalExecutors)
-      }
-
-      val decommissioned = executorsToDecommission.filter{executorId =>
-        doDecommission(executorId)
-      }
-      decommissioned
     }
+
+    // If we don't want to replace the executors we are decommissioning
+    if (adjustTargetNumExecutors) {
+      adjustExecutors(executorsToDecommission.map(_._1))
+    }
+
+    val decommissioned = executorsToDecommission.filter{case (executorId, decomInfo) =>
+      doDecommission(executorId, decomInfo)
+    }.map(_._1)
+    decommissioned
   }
 
-  private def doDecommission(executorId: String): Boolean = {
+  private def doDecommission(executorId: String, decomInfo: ExecutorDecommissionInfo): Boolean = {
     logInfo(s"Starting decommissioning executor $executorId.")
     try {
-      scheduler.executorDecommission(executorId)
+      scheduler.executorDecommission(executorId, decomInfo)
       if (driverEndpoint != null) {
         logInfo("Propagating executor decommission to driver.")
-        driverEndpoint.send(DecommissionExecutor(executorId))
+        driverEndpoint.send(DecommissionExecutor(executorId, decomInfo))
       }
     } catch {
       case e: Exception =>
@@ -517,12 +516,12 @@ class CoarseGrainedSchedulerBackend(scheduler: TaskSchedulerImpl, val rpcEnv: Rp
           return false
       }
     }
-    logInfo(s"Finished decommissioning executor $executorId.")
+
+    logInfo(s"Asked executor $executorId to decommission.")
 
     if (conf.get(STORAGE_DECOMMISSION_ENABLED)) {
       try {
-        logInfo("Starting decommissioning block manager corresponding to " +
-          s"executor $executorId.")
+        logInfo(s"Asking block manager corresponding to executor $executorId to decommission.")
         scheduler.sc.env.blockManager.master.decommissionBlockManagers(Seq(executorId))
       } catch {
         case e: Exception =>
@@ -770,6 +769,15 @@ class CoarseGrainedSchedulerBackend(scheduler: TaskSchedulerImpl, val rpcEnv: Rp
     Future.successful(false)
 
   /**
+   * Adjust the number of executors being requested to no longer include the provided executors.
+   */
+  private def adjustExecutors(executorIds: Seq[String]) = {
+    requestedTotalExecutors = math.max(
+      requestedTotalExecutors - executorIds.size, 0)
+    doRequestTotalExecutors(requestedTotalExecutors)
+  }
+
+  /**
    * Request that the cluster manager kill the specified executors.
    *
    * @param executorIds identifiers of executors to kill
@@ -807,18 +815,7 @@ class CoarseGrainedSchedulerBackend(scheduler: TaskSchedulerImpl, val rpcEnv: Rp
       // take into account executors that are pending to be added or removed.
       val adjustTotalExecutors =
         if (adjustTargetNumExecutors) {
-          requestedTotalExecutors = math.max(requestedTotalExecutors - executorsToKill.size, 0)
-          if (requestedTotalExecutors !=
-              (numExistingExecutors + numPendingExecutors - executorsPendingToRemove.size)) {
-            logDebug(
-              s"""killExecutors($executorIds, $adjustTargetNumExecutors, $countFailures, $force):
-                 |Executor counts do not match:
-                 |requestedTotalExecutors  = $requestedTotalExecutors
-                 |numExistingExecutors     = $numExistingExecutors
-                 |numPendingExecutors      = $numPendingExecutors
-                 |executorsPendingToRemove = ${executorsPendingToRemove.size}""".stripMargin)
-          }
-          doRequestTotalExecutors(requestedTotalExecutors)
+          adjustExecutors(executorsToKill)
         } else {
           numPendingExecutors += executorsToKill.size
           Future.successful(true)

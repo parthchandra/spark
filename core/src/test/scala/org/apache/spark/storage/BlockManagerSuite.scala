@@ -50,8 +50,9 @@ import org.apache.spark.network.netty.{NettyBlockTransferService, SparkTransport
 import org.apache.spark.network.server.{NoOpRpcHandler, TransportServer, TransportServerBootstrap}
 import org.apache.spark.network.shuffle.{BlockFetchingListener, DownloadFileManager, ExecutorDiskUtils, ExternalBlockStoreClient}
 import org.apache.spark.network.shuffle.protocol.{BlockTransferMessage, RegisterExecutor}
-import org.apache.spark.rpc.RpcEnv
+import org.apache.spark.rpc.{RpcCallContext, RpcEndpoint, RpcEnv}
 import org.apache.spark.scheduler.{LiveListenerBus, MapStatus, SparkListenerBlockUpdated}
+import org.apache.spark.scheduler.cluster.{CoarseGrainedClusterMessages, CoarseGrainedSchedulerBackend}
 import org.apache.spark.security.{CryptoStreamUtils, EncryptionFunSuite}
 import org.apache.spark.serializer.{JavaSerializer, KryoSerializer, SerializerManager}
 import org.apache.spark.shuffle.{ShuffleBlockResolver, ShuffleManager}
@@ -198,6 +199,80 @@ class BlockManagerSuite extends SparkFunSuite with Matchers with BeforeAndAfterE
   private def stopBlockManager(blockManager: BlockManager): Unit = {
     allStores -= blockManager
     blockManager.stop()
+  }
+
+  /**
+   * Setup driverEndpoint, executor-1(BlockManager), executor-2(BlockManager) to simulate
+   * the real cluster before the tests. Any requests from driver to executor-1 will be responded
+   * in time. However, any requests from driver to executor-2 will be timeouted, in order to test
+   * the specific handling of `TimeoutException`, which is raised at driver side.
+   *
+   * And, when `withLost` is true, we will not register the executor-2 to the driver. Therefore,
+   * it behaves like a lost executor in terms of driver's view. When `withLost` is false, we'll
+   * register the executor-2 normally.
+   */
+  private def setupBlockManagerMasterWithBlocks(withLost: Boolean): Unit = {
+    // set up a simple DriverEndpoint which simply adds executorIds and
+    // checks whether a certain executorId has been added before.
+    val driverEndpoint = rpcEnv.setupEndpoint(CoarseGrainedSchedulerBackend.ENDPOINT_NAME,
+      new RpcEndpoint {
+        private val executorSet = mutable.HashSet[String]()
+        override val rpcEnv: RpcEnv = this.rpcEnv
+        override def receiveAndReply(context: RpcCallContext): PartialFunction[Any, Unit] = {
+          case CoarseGrainedClusterMessages.RegisterExecutor(executorId, _, _, _, _, _, _, _) =>
+            executorSet += executorId
+            context.reply(true)
+          case CoarseGrainedClusterMessages.IsExecutorAlive(executorId) =>
+            context.reply(executorSet.contains(executorId))
+        }
+      }
+    )
+
+    def createAndRegisterBlockManager(timeout: Boolean): BlockManagerId = {
+      val id = if (timeout) "timeout" else "normal"
+      val bmRef = rpcEnv.setupEndpoint(s"bm-$id", new RpcEndpoint {
+        override val rpcEnv: RpcEnv = this.rpcEnv
+        private def reply[T](context: RpcCallContext, response: T): Unit = {
+          if (timeout) {
+            Thread.sleep(conf.getTimeAsMs(Network.RPC_ASK_TIMEOUT.key) + 1000)
+          }
+          context.reply(response)
+        }
+
+        override def receiveAndReply(context: RpcCallContext): PartialFunction[Any, Unit] = {
+          case RemoveRdd(_) => reply(context, 1)
+          case RemoveBroadcast(_, _) => reply(context, 1)
+          case RemoveShuffle(_) => reply(context, true)
+        }
+      })
+      val bmId = BlockManagerId(s"exec-$id", "localhost", 1234, None)
+      master.registerBlockManager(bmId, Array.empty, 2000, 0, bmRef)
+    }
+
+    // set up normal bm1
+    val bm1Id = createAndRegisterBlockManager(false)
+    // set up bm2, which intentionally takes more time than RPC_ASK_TIMEOUT to
+    // remove rdd/broadcast/shuffle in order to raise timeout error
+    val bm2Id = createAndRegisterBlockManager(true)
+
+    driverEndpoint.askSync[Boolean](CoarseGrainedClusterMessages.RegisterExecutor(
+      bm1Id.executorId, null, bm1Id.host, 1, Map.empty, Map.empty,
+      Map.empty, 0))
+
+    if (!withLost) {
+      driverEndpoint.askSync[Boolean](CoarseGrainedClusterMessages.RegisterExecutor(
+        bm2Id.executorId, null, bm1Id.host, 1, Map.empty, Map.empty, Map.empty, 0))
+    }
+
+    eventually(timeout(5.seconds)) {
+      // make sure both bm1 and bm2 are registered at driver side BlockManagerMaster
+      verify(master, times(2))
+        .registerBlockManager(mc.any(), mc.any(), mc.any(), mc.any(), mc.any())
+      assert(driverEndpoint.askSync[Boolean](
+        CoarseGrainedClusterMessages.IsExecutorAlive(bm1Id.executorId)))
+      assert(driverEndpoint.askSync[Boolean](
+        CoarseGrainedClusterMessages.IsExecutorAlive(bm2Id.executorId)) === !withLost)
+    }
   }
 
   test("StorageLevel object caching") {
@@ -1829,7 +1904,7 @@ class BlockManagerSuite extends SparkFunSuite with Matchers with BeforeAndAfterE
       when(env.conf).thenReturn(conf)
       SparkEnv.set(env)
 
-      decomManager.offloadShuffleBlocks()
+      decomManager.refreshOffloadingShuffleBlocks()
 
       eventually(timeout(1.second), interval(10.milliseconds)) {
         assert(mapOutputTracker.shuffleStatuses(0).mapStatuses(0).location === bm2.blockManagerId)
