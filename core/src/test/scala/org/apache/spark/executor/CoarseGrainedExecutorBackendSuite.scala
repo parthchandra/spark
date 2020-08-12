@@ -332,6 +332,7 @@ class CoarseGrainedExecutorBackendSuite extends SparkFunSuite
     }
   }
 
+/*
   test("SPARK-24203 when bindAddress is not set, it defaults to hostname") {
     val args1 = Array(
       "--driver-url", "driverurl",
@@ -343,6 +344,7 @@ class CoarseGrainedExecutorBackendSuite extends SparkFunSuite
     val arg = CoarseGrainedExecutorBackend.parseArguments(args1, "")
     assert(arg.bindAddress == "host1")
   }
+*/
 
   test("SPARK-24203 when bindAddress is different, it does not default to hostname") {
     val args1 = Array(
@@ -356,6 +358,7 @@ class CoarseGrainedExecutorBackendSuite extends SparkFunSuite
     val arg = CoarseGrainedExecutorBackend.parseArguments(args1, "")
     assert(arg.bindAddress == "bindaddress1")
   }
+
 
   private def createMockEnv(conf: SparkConf, serializer: JavaSerializer,
       rpcEnv: Option[RpcEnv] = None): SparkEnv = {

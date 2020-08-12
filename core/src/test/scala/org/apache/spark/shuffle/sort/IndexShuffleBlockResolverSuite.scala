@@ -46,6 +46,8 @@ class IndexShuffleBlockResolverSuite extends SparkFunSuite with BeforeAndAfterEa
     MockitoAnnotations.initMocks(this)
 
     when(blockManager.diskBlockManager).thenReturn(diskBlockManager)
+    when(diskBlockManager.getAllBlocks()).thenReturn(Seq(
+      ShuffleIndexBlockId(1, 2, 0)))
     when(diskBlockManager.getFile(any[BlockId])).thenAnswer(
       (invocation: InvocationOnMock) => new File(tempDir, invocation.getArguments.head.toString))
     when(diskBlockManager.localDirs).thenReturn(Array(tempDir))
@@ -83,7 +85,7 @@ class IndexShuffleBlockResolverSuite extends SparkFunSuite with BeforeAndAfterEa
     assert(dataFile.exists())
     assert(dataFile.length() === 30)
     assert(!dataTmp.exists())
-    assert(storedShuffles === Set(ShuffleBlockInfo(1, 2)))
+    assert(storedShuffles.toSet === Set(ShuffleBlockInfo(1, 2)))
 
     val lengths2 = new Array[Long](3)
     val dataTmp2 = File.createTempFile("shuffle", null, tempDir)

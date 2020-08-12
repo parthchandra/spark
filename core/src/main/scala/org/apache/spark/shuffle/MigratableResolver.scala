@@ -19,7 +19,7 @@ package org.apache.spark.shuffle
 
 import java.io.File
 
-import org.apache.spark.annotation.Experimental
+import org.apache.spark.annotation.{Experimental, Since}
 import org.apache.spark.network.buffer.ManagedBuffer
 import org.apache.spark.network.client.StreamCallbackWithID
 import org.apache.spark.serializer.SerializerManager
@@ -30,11 +30,12 @@ import org.apache.spark.storage.BlockId
  * An experimental trait to allow Spark to migrate shuffle blocks.
  */
 @Experimental
+@Since("3.1.0")
 trait MigratableResolver {
   /**
    * Get the shuffle ids that are stored locally. Used for block migrations.
    */
-  def getStoredShuffles(): Set[ShuffleBlockInfo]
+  def getStoredShuffles(): Seq[ShuffleBlockInfo]
 
   /**
    * Write a provided shuffle block as a stream. Used for block migrations.
@@ -48,7 +49,7 @@ trait MigratableResolver {
   def getMigrationBlocks(shuffleBlockInfo: ShuffleBlockInfo): List[(BlockId, ManagedBuffer)]
 
   /**
-   * Get the files for migration for a particular shuffle and map.
+   * Apple specific extension to get files for transfer outside of storage code.
    */
   def getMigrationFiles(shuffleBlockInfo: ShuffleBlockInfo): (File, File)
 }

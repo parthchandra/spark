@@ -127,6 +127,8 @@ private[spark] class ExecutorAllocationManager(
   private val executorAllocationRatio =
     conf.get(DYN_ALLOCATION_EXECUTOR_ALLOCATION_RATIO)
 
+  private val decommissionEnabled = conf.get(WORKER_DECOMMISSION_ENABLED)
+
   validateSettings()
 
   // Number of executors to add in the next round
@@ -201,7 +203,8 @@ private[spark] class ExecutorAllocationManager(
       // storage shuffle decommissioning is enabled we have *experimental* support for
       // decommissioning without a shuffle service.
       if (conf.get(config.DYN_ALLOCATION_SHUFFLE_TRACKING_ENABLED) ||
-        (conf.get(WORKER_DECOMMISSION_ENABLED) && conf.get(STORAGE_SHUFFLE_DECOMMISSION_ENABLED))) {
+          (decommissionEnabled &&
+            conf.get(config.STORAGE_DECOMMISSION_SHUFFLE_BLOCKS_ENABLED))) {
         logWarning("Dynamic allocation without a shuffle service is an experimental feature.")
       } else if (!testing) {
         throw new SparkException("Dynamic allocation of executors requires the external " +
@@ -431,7 +434,7 @@ private[spark] class ExecutorAllocationManager(
 
     logDebug(s"Request to remove executorIds: ${executors.mkString(", ")}")
     val numExistingExecutors = (executorMonitor.executorCount
-      - executorMonitor.pendingRemovalCount - executorMonitor.pendingDecommissioningCount)
+      - executorMonitor.pendingRemovalCount - executorMonitor.decommissioningCount)
 
     var newExecutorTotal = numExistingExecutors
     executors.foreach { executorIdToBeRemoved =>
@@ -457,10 +460,12 @@ private[spark] class ExecutorAllocationManager(
     } else {
       // We don't want to change our target number of executors, because we already did that
       // when the task backlog decreased.
-      if (conf.get(WORKER_DECOMMISSION_ENABLED)) {
-        client.decommissionExecutors(executorIdsToBeRemoved, adjustTargetNumExecutors = false)
+      if (decommissionEnabled) {
+        val executorIdsWithoutHostLoss = executorIdsToBeRemoved.toSeq.map(
+          id => (id, ExecutorDecommissionInfo("spark scale down", false))).toArray
+        client.decommissionExecutors(executorIdsWithoutHostLoss, adjustTargetNumExecutors = false)
       } else {
-        client.killExecutors(executorIdsToBeRemoved, adjustTargetNumExecutors = false,
+        client.killExecutors(executorIdsToBeRemoved.toSeq, adjustTargetNumExecutors = false,
           countFailures = false, force = false)
       }
     }
@@ -472,7 +477,7 @@ private[spark] class ExecutorAllocationManager(
     newExecutorTotal = numExistingExecutors
     if (testing || executorsRemoved.nonEmpty) {
       newExecutorTotal -= executorsRemoved.size
-      if (conf.get(WORKER_DECOMMISSION_ENABLED)) {
+      if (decommissionEnabled) {
         executorMonitor.executorsDecommissioned(executorsRemoved)
       } else {
         executorMonitor.executorsKilled(executorsRemoved)
