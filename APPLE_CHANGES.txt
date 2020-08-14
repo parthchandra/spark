@@ -188,7 +188,7 @@ SPARK-28818       Respect source column nullability in the arrays created by `fr
 SPARK-32560       Improve exception message at InsertIntoHiveTable.processInsert
 
 # Internal Patches
-rdar://66576657   Add spark-parquet to the tgz build to simplify kernels
+rdar://66576657   Add spark-avro to the tgz build to simplify kernels
 rdar://64257783   Use parquet-1.10.1.1-apple to support ZSTD Parquet
 rdar://63889762   Support for AWS S3 cloud storage
 rdar://63686227   Support Aircompressor's LZO library which is Apache v2 licensed
