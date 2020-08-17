@@ -18,11 +18,11 @@ package org.apache.spark.scheduler.cluster.k8s
 
 import java.util.concurrent.atomic.{AtomicInteger, AtomicLong}
 
-import scala.collection.mutable
-import scala.util.control.NonFatal
-
 import io.fabric8.kubernetes.api.model.{HasMetadata, PersistentVolumeClaim, PodBuilder}
 import io.fabric8.kubernetes.client.KubernetesClient
+import scala.collection.JavaConverters._
+import scala.collection.mutable
+import scala.util.control.NonFatal
 
 import org.apache.spark.{SparkConf, SparkException}
 import org.apache.spark.deploy.k8s.Config._
@@ -137,7 +137,7 @@ private[spark] class ExecutorPodsAllocator(
           val executorPod = resolvedExecutorSpec.pod
           val podWithAttachedContainer = new PodBuilder(executorPod.pod)
             .editOrNewSpec()
-            .addToContainers(executorPod.container)
+            .addToContainers(executorPod.containers: _*)
             .endSpec()
             .build()
           val createdExecutorPod = kubernetesClient.pods().create(podWithAttachedContainer)

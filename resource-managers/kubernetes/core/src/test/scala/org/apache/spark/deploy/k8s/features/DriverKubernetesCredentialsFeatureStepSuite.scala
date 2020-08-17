@@ -169,7 +169,7 @@ class DriverKubernetesCredentialsFeatureStepSuite extends SparkFunSuite with Bef
     assert(driverPodVolumes.head.getName === DRIVER_CREDENTIALS_SECRET_VOLUME_NAME)
     assert(driverPodVolumes.head.getSecret != null)
     assert(driverPodVolumes.head.getSecret.getSecretName === credentialsSecret.getMetadata.getName)
-    val driverContainerVolumeMount = driverPod.container.getVolumeMounts.asScala
+    val driverContainerVolumeMount = driverPod.containers.head.getVolumeMounts.asScala
     assert(driverContainerVolumeMount.size === 1)
     assert(driverContainerVolumeMount.head.getName === DRIVER_CREDENTIALS_SECRET_VOLUME_NAME)
     assert(driverContainerVolumeMount.head.getMountPath === DRIVER_CREDENTIALS_SECRETS_BASE_DIR)

@@ -40,11 +40,13 @@ private[spark] class MountVolumesFeatureStep(
       .endSpec()
       .build()
 
-    val containerWithVolumeMounts = new ContainerBuilder(pod.container)
-      .addToVolumeMounts(volumeMounts.toSeq: _*)
-      .build()
+    val containersWithVolumeMounts = pod.containers.map{ container =>
+      new ContainerBuilder(container)
+        .addToVolumeMounts(volumeMounts.toSeq: _*)
+        .build()
+    }
 
-    SparkPod(podWithVolumes, containerWithVolumeMounts)
+    SparkPod(podWithVolumes, containersWithVolumeMounts)
   }
 
   override def getAdditionalPodSystemProperties(): Map[String, String] = Map.empty

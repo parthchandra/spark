@@ -57,7 +57,7 @@ class PythonDriverFeatureStepSuite extends SparkFunSuite {
 
     val step = new PythonDriverFeatureStep(kubernetesConf)
     val driverPod = step.configurePod(baseDriverPod).pod
-    val driverContainerwithPySpark = step.configurePod(baseDriverPod).container
+    val driverContainerwithPySpark = step.configurePod(baseDriverPod).containers.head
     assert(driverContainerwithPySpark.getEnv.size === 4)
     val envs = driverContainerwithPySpark
       .getEnv
@@ -92,7 +92,7 @@ class PythonDriverFeatureStepSuite extends SparkFunSuite {
       roleVolumes = Nil,
       sparkFiles = Seq.empty[String])
     val step = new PythonDriverFeatureStep(kubernetesConf)
-    val driverContainerwithPySpark = step.configurePod(baseDriverPod).container
+    val driverContainerwithPySpark = step.configurePod(baseDriverPod).containers.head
     val args = driverContainerwithPySpark
       .getArgs.asScala
     assert(driverContainerwithPySpark.getArgs.size === 5)

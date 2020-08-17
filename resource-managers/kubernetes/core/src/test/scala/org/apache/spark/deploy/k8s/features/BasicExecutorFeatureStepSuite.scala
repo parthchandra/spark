@@ -101,10 +101,12 @@ class BasicExecutorFeatureStepSuite
 
     // There is exactly 1 container with no volume mounts and default memory limits.
     // Default memory limit is 1024M + 384M (minimum overhead constant).
-    assert(executor.container.getImage === EXECUTOR_IMAGE)
-    assert(executor.container.getVolumeMounts.isEmpty)
-    assert(executor.container.getResources.getLimits.size() === 1)
-    assert(executor.container.getResources
+    executor.containers.map{ container =>
+      assert(container.getImage === EXECUTOR_IMAGE)
+      assert(container.getVolumeMounts.isEmpty)
+    }
+    assert(executor.containers.head.getResources.getLimits.size() === 1)
+    assert(executor.containers.head.getResources
       .getLimits.get("memory").getAmount === "1408Mi")
 
     // The pod has no node selector, volumes.
@@ -182,7 +184,8 @@ class BasicExecutorFeatureStepSuite
         Seq.empty[String]))
     val executor = step.configurePod(SparkPod.initialPod())
     // This is checking that basic executor + executorMemory = 1408 + 42 = 1450
-    assert(executor.container.getResources.getRequests.get("memory").getAmount === "1450Mi")
+    assert(executor.containers.head.getResources
+      .getRequests.get("memory").getAmount === "1450Mi")
   }
 
   // There is always exactly one controller reference, and it points to the driver pod.
@@ -203,10 +206,13 @@ class BasicExecutorFeatureStepSuite
       ENV_SPARK_CONF_DIR -> SPARK_CONF_DIR_INTERNAL,
       ENV_EXECUTOR_POD_IP -> null) ++ additionalEnvVars
 
-    assert(executorPod.container.getEnv.size() === defaultEnvs.size)
-    val mapEnvs = executorPod.container.getEnv.asScala.map {
-      x => (x.getName, x.getValue)
-    }.toMap
-    assert(defaultEnvs === mapEnvs)
+    executorPod.containers.map { container =>
+      val containerEnvs = container.getEnv.asScala.map {
+        x => (x.getName, x.getValue)
+      }.toMap
+
+      val expectedEnvs = defaultEnvs ++ additionalEnvVars
+      assert(containerEnvs === expectedEnvs)
+    }
   }
 }

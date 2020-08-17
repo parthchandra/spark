@@ -133,6 +133,16 @@ case "$SPARK_K8S_CMD" in
       --hostname $SPARK_EXECUTOR_POD_IP
     )
     ;;
+  shuffleService)
+    shift 1
+    CMD=(
+      ${JAVA_HOME}/bin/java
+      "${SPARK_EXECUTOR_JAVA_OPTS[@]}"
+      -cp "$SPARK_CLASSPATH:$SPARK_DIST_CLASSPATH"
+      org.apache.spark.deploy.ExternalShuffleService
+    )
+    ;;
+
 
   *)
     echo "Unknown command: $SPARK_K8S_CMD" 1>&2

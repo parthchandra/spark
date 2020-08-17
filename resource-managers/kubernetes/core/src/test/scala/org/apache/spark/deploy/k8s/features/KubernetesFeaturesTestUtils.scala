@@ -37,15 +37,15 @@ object KubernetesFeaturesTestUtils {
     when(mockStep.getAdditionalPodSystemProperties())
       .thenReturn(Map(stepType -> stepType))
     when(mockStep.configurePod(Matchers.any(classOf[SparkPod])))
-      .thenAnswer(new Answer[SparkPod]() {
+      .thenAnswer(new Answer[SparkPod] () {
         override def answer(invocation: InvocationOnMock): SparkPod = {
-          val originalPod = invocation.getArgumentAt(0, classOf[SparkPod])
+          val originalPod: SparkPod = invocation.getArgumentAt(0, classOf[SparkPod])
           val configuredPod = new PodBuilder(originalPod.pod)
             .editOrNewMetadata()
             .addToLabels(stepType, stepType)
             .endMetadata()
             .build()
-          SparkPod(configuredPod, originalPod.container)
+          SparkPod(configuredPod, originalPod.containers)
         }
       })
     mockStep

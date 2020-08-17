@@ -45,10 +45,12 @@ private[spark] class EnvSecretsFeatureStep(
           .build()
       }
 
-    val containerWithEnvVars = new ContainerBuilder(pod.container)
-      .addAllToEnv(addedEnvSecrets.toSeq.asJava)
+    val containersWithEnvVars = pod.containers.map{ container =>
+      new ContainerBuilder(container)
+        .addAllToEnv(addedEnvSecrets.toSeq.asJava)
       .build()
-    SparkPod(pod.pod, containerWithEnvVars)
+    }
+    SparkPod(pod.pod, containersWithEnvVars)
   }
 
   override def getAdditionalPodSystemProperties(): Map[String, String] = Map.empty

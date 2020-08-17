@@ -60,14 +60,15 @@ private[spark] class PythonDriverFeatureStep(
       maybePythonArgs.toSeq ++
       maybePythonFiles.toSeq
 
-    val withPythonPrimaryContainer = new ContainerBuilder(pod.container)
+    // No sidecar
+    val withPythonPrimaryContainer = new ContainerBuilder(pod.containers.head)
         .addAllToEnv(pythonEnvs.asJava)
         .addToArgs("driver-py")
         .addToArgs("--properties-file", SPARK_CONF_PATH)
         .addToArgs("--class", roleConf.mainClass)
       .build()
 
-    SparkPod(pod.pod, withPythonPrimaryContainer)
+    SparkPod(pod.pod, List(withPythonPrimaryContainer))
   }
   override def getAdditionalPodSystemProperties(): Map[String, String] =
     Map(APP_RESOURCE_TYPE.key -> "python")

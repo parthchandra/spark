@@ -50,7 +50,7 @@ class RDriverFeatureStepSuite extends SparkFunSuite {
       sparkFiles = Seq.empty[String])
 
     val step = new RDriverFeatureStep(kubernetesConf)
-    val driverContainerwithR = step.configurePod(baseDriverPod).container
+    val driverContainerwithR = step.configurePod(baseDriverPod).containers.head
     assert(driverContainerwithR.getEnv.size === 2)
     val envs = driverContainerwithR
       .getEnv

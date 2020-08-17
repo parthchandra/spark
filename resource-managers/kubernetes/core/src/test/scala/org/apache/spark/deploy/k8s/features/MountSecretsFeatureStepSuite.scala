@@ -48,7 +48,7 @@ class MountSecretsFeatureStepSuite extends SparkFunSuite {
 
     val step = new MountSecretsFeatureStep(kubernetesConf)
     val driverPodWithSecretsMounted = step.configurePod(baseDriverPod).pod
-    val driverContainerWithSecretsMounted = step.configurePod(baseDriverPod).container
+    val driverContainerWithSecretsMounted = step.configurePod(baseDriverPod).containers.head
 
     Seq(s"$SECRET_FOO-volume", s"$SECRET_BAR-volume").foreach { volumeName =>
       assert(SecretVolumeUtils.podHasVolume(driverPodWithSecretsMounted, volumeName))

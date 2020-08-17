@@ -53,10 +53,12 @@ class MountVolumesFeatureStepSuite extends SparkFunSuite {
 
     assert(configuredPod.pod.getSpec.getVolumes.size() === 1)
     assert(configuredPod.pod.getSpec.getVolumes.get(0).getHostPath.getPath === "/hostPath/tmp")
-    assert(configuredPod.container.getVolumeMounts.size() === 1)
-    assert(configuredPod.container.getVolumeMounts.get(0).getMountPath === "/tmp")
-    assert(configuredPod.container.getVolumeMounts.get(0).getName === "testVolume")
-    assert(configuredPod.container.getVolumeMounts.get(0).getReadOnly === false)
+    configuredPod.containers.map{ container =>
+      assert(container.getVolumeMounts.size() === 1)
+      assert(container.getVolumeMounts.get(0).getMountPath === "/tmp")
+      assert(container.getVolumeMounts.get(0).getName === "testVolume")
+      assert(container.getVolumeMounts.get(0).getReadOnly === false)
+    }
   }
 
   test("Mounts pesistentVolumeClaims") {
@@ -73,11 +75,12 @@ class MountVolumesFeatureStepSuite extends SparkFunSuite {
     assert(configuredPod.pod.getSpec.getVolumes.size() === 1)
     val pvcClaim = configuredPod.pod.getSpec.getVolumes.get(0).getPersistentVolumeClaim
     assert(pvcClaim.getClaimName === "pvcClaim")
-    assert(configuredPod.container.getVolumeMounts.size() === 1)
-    assert(configuredPod.container.getVolumeMounts.get(0).getMountPath === "/tmp")
-    assert(configuredPod.container.getVolumeMounts.get(0).getName === "testVolume")
-    assert(configuredPod.container.getVolumeMounts.get(0).getReadOnly === true)
-
+    configuredPod.containers.map{ container =>
+      assert(container.getVolumeMounts.size() === 1)
+      assert(container.getVolumeMounts.get(0).getMountPath === "/tmp")
+      assert(container.getVolumeMounts.get(0).getName === "testVolume")
+      assert(container.getVolumeMounts.get(0).getReadOnly)
+    }
   }
 
   test("Create and mount persistentVolumeClaims in executors") {
@@ -112,11 +115,13 @@ class MountVolumesFeatureStepSuite extends SparkFunSuite {
     assert(configuredPod.pod.getSpec.getVolumes.size() === 1)
     val emptyDir = configuredPod.pod.getSpec.getVolumes.get(0).getEmptyDir
     assert(emptyDir.getMedium === "Memory")
-    assert(emptyDir.getSizeLimit.getAmount === "6G")
-    assert(configuredPod.container.getVolumeMounts.size() === 1)
-    assert(configuredPod.container.getVolumeMounts.get(0).getMountPath === "/tmp")
-    assert(configuredPod.container.getVolumeMounts.get(0).getName === "testVolume")
-    assert(configuredPod.container.getVolumeMounts.get(0).getReadOnly === false)
+    assert(emptyDir.getSizeLimit.getAmount ===  "6G")
+    configuredPod.containers.map{ container =>
+      assert(container.getVolumeMounts.size() === 1)
+      assert(container.getVolumeMounts.get(0).getMountPath === "/tmp")
+      assert(container.getVolumeMounts.get(0).getName === "testVolume")
+      assert(container.getVolumeMounts.get(0).getReadOnly === false)
+    }
   }
 
   test("Mounts emptyDir with no options") {
@@ -134,10 +139,12 @@ class MountVolumesFeatureStepSuite extends SparkFunSuite {
     val emptyDir = configuredPod.pod.getSpec.getVolumes.get(0).getEmptyDir
     assert(emptyDir.getMedium === "")
     assert(emptyDir.getSizeLimit.getAmount === null)
-    assert(configuredPod.container.getVolumeMounts.size() === 1)
-    assert(configuredPod.container.getVolumeMounts.get(0).getMountPath === "/tmp")
-    assert(configuredPod.container.getVolumeMounts.get(0).getName === "testVolume")
-    assert(configuredPod.container.getVolumeMounts.get(0).getReadOnly === false)
+    configuredPod.containers.map{ container =>
+      assert(container.getVolumeMounts.size() === 1)
+      assert(container.getVolumeMounts.get(0).getMountPath === "/tmp")
+      assert(container.getVolumeMounts.get(0).getName === "testVolume")
+      assert(container.getVolumeMounts.get(0).getReadOnly === false)
+    }
   }
 
   test("Mounts multiple volumes") {
@@ -159,6 +166,8 @@ class MountVolumesFeatureStepSuite extends SparkFunSuite {
     val configuredPod = step.configurePod(SparkPod.initialPod())
 
     assert(configuredPod.pod.getSpec.getVolumes.size() === 2)
-    assert(configuredPod.container.getVolumeMounts.size() === 2)
+    configuredPod.containers.map{ container =>
+      assert(container.getVolumeMounts.size() === 2)
+    }
   }
 }

@@ -48,10 +48,12 @@ private[spark] class MountSecretsFeatureStep(
             .withMountPath(mountPath)
             .build()
       }
-    val containerWithMounts = new ContainerBuilder(pod.container)
-      .addToVolumeMounts(addedVolumeMounts.toSeq: _*)
-      .build()
-    SparkPod(podWithVolumes, containerWithMounts)
+    val containersWithMounts = pod.containers.map { container =>
+      new ContainerBuilder(container)
+        .addToVolumeMounts(addedVolumeMounts.toSeq: _*)
+        .build()
+    }
+    SparkPod(podWithVolumes, containersWithMounts)
   }
 
   override def getAdditionalPodSystemProperties(): Map[String, String] = Map.empty

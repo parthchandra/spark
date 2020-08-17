@@ -47,7 +47,7 @@ class JavaDriverFeatureStepSuite extends SparkFunSuite {
 
     val step = new JavaDriverFeatureStep(kubernetesConf)
     val driverPod = step.configurePod(baseDriverPod).pod
-    val driverContainerwithJavaStep = step.configurePod(baseDriverPod).container
+    val driverContainerwithJavaStep = step.configurePod(baseDriverPod).containers.head
     assert(driverContainerwithJavaStep.getArgs.size === 7)
     val args = driverContainerwithJavaStep
       .getArgs.asScala

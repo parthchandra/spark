@@ -29,29 +29,38 @@ import org.apache.spark.deploy.k8s.Constants._
 private[spark] class PodTemplateConfigMapStep(
    conf: KubernetesConf[_ <: KubernetesRoleSpecificConf])
   extends KubernetesFeatureConfigStep {
-  def configurePod(pod: SparkPod): SparkPod = {
-    val podWithVolume = new PodBuilder(pod.pod)
-        .editSpec()
-          .addNewVolume()
-            .withName(POD_TEMPLATE_VOLUME)
-            .withNewConfigMap()
-              .withName(POD_TEMPLATE_CONFIGMAP)
-              .addNewItem()
-                .withKey(POD_TEMPLATE_KEY)
-                .withPath(EXECUTOR_POD_SPEC_TEMPLATE_FILE_NAME)
-              .endItem()
-            .endConfigMap()
-          .endVolume()
-        .endSpec()
-      .build()
 
-    val containerWithVolume = new ContainerBuilder(pod.container)
-        .addNewVolumeMount()
+  private val hasTemplate = !conf.get(KUBERNETES_EXECUTOR_PODTEMPLATE_FILE).isEmpty
+
+  def configurePod(pod: SparkPod): SparkPod = {
+    if (hasTemplate) {
+      val podWithVolume = new PodBuilder(pod.pod)
+          .editSpec()
+            .addNewVolume()
+              .withName(POD_TEMPLATE_VOLUME)
+              .withNewConfigMap()
+                .withName(POD_TEMPLATE_CONFIGMAP)
+                .addNewItem()
+                  .withKey(POD_TEMPLATE_KEY)
+                  .withPath(EXECUTOR_POD_SPEC_TEMPLATE_FILE_NAME)
+                .endItem()
+              .endConfigMap()
+            .endVolume()
+          .endSpec()
+        .build()
+
+      val containersWithVolume = pod.containers.map { container =>
+        new ContainerBuilder(container)
+          .addNewVolumeMount()
           .withName(POD_TEMPLATE_VOLUME)
-          .withMountPath(EXECUTOR_POD_SPEC_TEMPLATE_MOUNTPATH)
-        .endVolumeMount()
-      .build()
-    SparkPod(podWithVolume, containerWithVolume)
+            .withMountPath(EXECUTOR_POD_SPEC_TEMPLATE_MOUNTPATH)
+          .endVolumeMount()
+          .build()
+      }
+      SparkPod(podWithVolume, containersWithVolume)
+    } else {
+      pod
+    }
   }
 
   def getAdditionalPodSystemProperties(): Map[String, String] = Map[String, String](

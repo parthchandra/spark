@@ -46,14 +46,15 @@ private[spark] class RDriverFeatureStep(
     val rEnvs = envSeq ++
       maybeRArgs.toSeq
 
-    val withRPrimaryContainer = new ContainerBuilder(pod.container)
+    // No sidecar
+    val withRPrimaryContainer = new ContainerBuilder(pod.containers.head)
         .addAllToEnv(rEnvs.asJava)
         .addToArgs("driver-r")
         .addToArgs("--properties-file", SPARK_CONF_PATH)
         .addToArgs("--class", roleConf.mainClass)
       .build()
 
-    SparkPod(pod.pod, withRPrimaryContainer)
+    SparkPod(pod.pod, List(withRPrimaryContainer))
   }
   override def getAdditionalPodSystemProperties(): Map[String, String] =
     Map(APP_RESOURCE_TYPE.key -> "r")

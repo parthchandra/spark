@@ -28,7 +28,8 @@ private[spark] class JavaDriverFeatureStep(
   kubernetesConf: KubernetesConf[KubernetesDriverSpecificConf])
   extends KubernetesFeatureConfigStep {
   override def configurePod(pod: SparkPod): SparkPod = {
-    val withDriverArgs = new ContainerBuilder(pod.container)
+    // No driver sidecar
+    val withDriverArgs = new ContainerBuilder(pod.containers.head)
       .addToArgs("driver")
       .addToArgs("--properties-file", SPARK_CONF_PATH)
       .addToArgs("--class", kubernetesConf.roleSpecificConf.mainClass)
@@ -37,7 +38,7 @@ private[spark] class JavaDriverFeatureStep(
       .addToArgs(SparkLauncher.NO_RESOURCE)
       .addToArgs(kubernetesConf.roleSpecificConf.appArgs: _*)
       .build()
-    SparkPod(pod.pod, withDriverArgs)
+    SparkPod(pod.pod, List(withDriverArgs))
   }
   override def getAdditionalPodSystemProperties(): Map[String, String] =
     Map(APP_RESOURCE_TYPE.key -> "java")
