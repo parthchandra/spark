@@ -663,10 +663,26 @@ class CoarseGrainedSchedulerBackend(scheduler: TaskSchedulerImpl, val rpcEnv: Rp
 
   }
 
+  /**
+   * Get the max number of tasks that can be concurrent launched based on the resources
+   * could be used, even if some of them are being used at the moment.
+   * Note that please don't cache the value returned by this method, because the number can change
+   * due to add/remove executors.
+   *
+   * @return The max number of tasks that can be concurrent launched currently.
+   */
   override def maxNumConcurrentTasks(): Int = synchronized {
-    executorDataMap.values.map { executor =>
-      executor.totalCores / scheduler.CPUS_PER_TASK
-    }.sum
+    val (cpus, resources) = {
+      executorDataMap
+        .filter { case (id, _) => isExecutorActive(id) }
+        .values.toArray.map { executor =>
+        (
+          executor.totalCores,
+          executor.resourcesInfo.map { case (name, rInfo) => (name, rInfo.totalAddressAmount) }
+        )
+      }.unzip
+    }
+    TaskSchedulerImpl.calculateAvailableSlots(scheduler, cpus, resources)
   }
 
   // this function is for testing only
