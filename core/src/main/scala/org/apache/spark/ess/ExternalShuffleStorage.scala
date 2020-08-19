@@ -28,7 +28,6 @@ import org.apache.spark.{SparkConf, SparkEnv, SparkException}
 import org.apache.spark.deploy.SparkHadoopUtil
 import org.apache.spark.internal.Logging
 import org.apache.spark.internal.config._
-import org.apache.spark.internal.config.Worker.WORKER_DECOMMISSION_ENABLED
 import org.apache.spark.network.buffer.{ManagedBuffer, NioManagedBuffer}
 import org.apache.spark.shuffle.{IndexShuffleBlockResolver, ShuffleBlockInfo, ShuffleBlockResolver}
 import org.apache.spark.shuffle.IndexShuffleBlockResolver.NOOP_REDUCE_ID
@@ -54,7 +53,7 @@ object ExternalShuffleStorage extends Logging {
 
   def isEnabled(conf: SparkConf): Boolean = {
     conf.get(DYN_ALLOCATION_ENABLED) &&
-      conf.get(WORKER_DECOMMISSION_ENABLED) &&
+      conf.get(DECOMMISSION_ENABLED) &&
       conf.get(STORAGE_DECOMMISSION_ENABLED) &&
       conf.get(STORAGE_DECOMMISSION_SHUFFLE_BLOCKS_ENABLED) &&
       conf.get(SPARK_SHUFFLE_EXTERNAL_STORAGE_ENABLED)
@@ -154,7 +153,7 @@ object ExternalShuffleStorage extends Logging {
     if (isDisabled(conf)) {
       throw new SparkException(s"${getClass.getName} should be used only when " +
         s"${DYN_ALLOCATION_ENABLED.key} and " +
-        s"${WORKER_DECOMMISSION_ENABLED.key} and " +
+        s"${DECOMMISSION_ENABLED.key} and " +
         s"${STORAGE_DECOMMISSION_ENABLED.key} and " +
         s"${STORAGE_DECOMMISSION_SHUFFLE_BLOCKS_ENABLED.key} and " +
         s"${SPARK_SHUFFLE_EXTERNAL_STORAGE_ENABLED.key} are true.")
@@ -173,7 +172,7 @@ object ExternalShuffleStorage extends Logging {
   private[spark] def enableExternalShuffleStorage(conf: SparkConf): SparkConf = {
     conf
       .set(DYN_ALLOCATION_ENABLED, true)
-      .set(WORKER_DECOMMISSION_ENABLED, true)
+      .set(DECOMMISSION_ENABLED, true)
       .set(STORAGE_DECOMMISSION_ENABLED, true)
       .set(STORAGE_DECOMMISSION_SHUFFLE_BLOCKS_ENABLED, true)
       .set(SPARK_SHUFFLE_EXTERNAL_STORAGE_ENABLED, true)

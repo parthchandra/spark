@@ -54,7 +54,7 @@ class ExternalShuffleStorageSuite
 
   test("External shuffle storage should show warnings for invalid confs") {
     val errorMsg = s"should be used only when ${DYN_ALLOCATION_ENABLED.key} and " +
-      s"${Worker.WORKER_DECOMMISSION_ENABLED.key} and " +
+      s"${DECOMMISSION_ENABLED.key} and " +
       s"${STORAGE_DECOMMISSION_ENABLED.key} and " +
       s"${STORAGE_DECOMMISSION_SHUFFLE_BLOCKS_ENABLED.key} and " +
       s"${SPARK_SHUFFLE_EXTERNAL_STORAGE_ENABLED.key} are true"
