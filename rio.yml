@@ -496,7 +496,7 @@ builds:
       steps:
         - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --hadoop "$HADOOP_VERSION" --snapshot --maven-opts "-Xmx6g" --maven-params "-P hive,hadoop-${HADOOP_BINARY_VERSION},hive-thriftserver,kinesis-asl,mesos,yarn,kubernetes"
         - ./dev/make-distribution.sh --use-existing-build --with-hadoop --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION" -Phadoop-${HADOOP_BINARY_VERSION} -Dhadoop.version="$HADOOP_VERSION"
-        - ci stage-lib --many-many-artifacts ".dist/local-repo/**/*" --exclude "**/*.xml" --exclude "**/*.md5" --exclude "**/*.sha1"
+        - ci stage-lib --many-many-artifacts ".dist/local-repo/**/*"  --exclude "**/*.md5" --exclude "**/*.sha1"
     package:
       freeform:
       - publish:
@@ -519,7 +519,7 @@ builds:
         - sed -i 's/<scala\.version>[0-9.]*/<scala\.version>2.12.10/' pom.xml
         - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --hadoop "$HADOOP_VERSION" --snapshot --maven-opts "-Xmx6g" --maven-params "-Dscala.version=$SCALA_VERSION -P scala-${SCALA_BINARY_VERSION},hive,hadoop-${HADOOP_BINARY_VERSION},hive-thriftserver,kinesis-asl,mesos,yarn,kubernetes"
         - ./dev/make-distribution.sh --use-existing-build --with-hadoop --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION" -Pscala-$SCALA_BINARY_VERSION -Phadoop-${HADOOP_BINARY_VERSION} -Dhadoop.version="$HADOOP_VERSION"
-        - ci stage-lib --many-many-artifacts ".dist/local-repo/**/*" --exclude "**/*.xml" --exclude "**/*.md5" --exclude "**/*.sha1"
+        - ci stage-lib --many-many-artifacts ".dist/local-repo/**/*"  --exclude "**/*.md5" --exclude "**/*.sha1"
     package:
       freeform:
       - publish:
@@ -586,7 +586,7 @@ builds:
       steps:
         - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --hadoop "$HADOOP_VERSION" --release --maven-opts "-Xmx6g" --maven-params "-P hive,hadoop-${HADOOP_BINARY_VERSION},hive-thriftserver,kinesis-asl,mesos,yarn,kubernetes"
         - ./dev/make-distribution.sh --use-existing-build --with-hadoop --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION" -Phadoop-${HADOOP_BINARY_VERSION} -Dhadoop.version="$HADOOP_VERSION"
-        - ci stage-lib --many-many-artifacts ".dist/local-repo/**/*" --exclude "**/*.xml" --exclude "**/*.md5" --exclude "**/*.sha1"
+        - ci stage-lib --many-many-artifacts ".dist/local-repo/**/*"  --exclude "**/*.md5" --exclude "**/*.sha1"
     package:
       release: true
       freeform:
@@ -614,7 +614,7 @@ builds:
         - sed -i 's/<scala\.version>[0-9.]*/<scala\.version>2.12.10/' pom.xml
         - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --hadoop "$HADOOP_VERSION" --release --maven-opts "-Xmx6g" --maven-params "-Dscala.version=$SCALA_VERSION -P scala-${SCALA_BINARY_VERSION},hive,hadoop-${HADOOP_BINARY_VERSION},hive-thriftserver,kinesis-asl,mesos,yarn,kubernetes"
         - ./dev/make-distribution.sh --use-existing-build --with-hadoop --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION" -Pscala-$SCALA_BINARY_VERSION -Phadoop-${HADOOP_BINARY_VERSION} -Dhadoop.version="$HADOOP_VERSION"
-        - ci stage-lib --many-many-artifacts ".dist/local-repo/**/*" --exclude "**/*.xml" --exclude "**/*.md5" --exclude "**/*.sha1"
+        - ci stage-lib --many-many-artifacts ".dist/local-repo/**/*"  --exclude "**/*.md5" --exclude "**/*.sha1"
     package:
       release: true
       freeform:
@@ -759,4 +759,3 @@ builds:
       freeform:
       - publish:
         - repo: oss-patched-binaries-local
-
