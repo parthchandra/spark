@@ -186,6 +186,16 @@ SPARK-32428       Make BinaryClassificationMetricsExample cons…
 MINOR             Fix spacing in error message
 SPARK-28818       Respect source column nullability in the arrays created by `freqItems()`
 SPARK-32560       Improve exception message at InsertIntoHiveTable.processInsert
+SPARK-32003       When external shuffle service is used, unreister outputs for executor on fetch failure after executor is lost
+SPARK-32560       Improve exception message at InsertIntoHiveTable.processInsert
+SPARK-32556       Fix release script to URL encode the user povided passwords
+MINOR             Fix typos at ExecutorAllocationManager.scala
+MINOR             Update URL of the parquet project in code comment
+SPARK-31703       Parquet RLE float/double are read incorrectly on big endian platforms
+SPARK-32625       Log error message when falling back to interpreter mode
+Revert 32018      UnsafeRow.setDecimal should set null with overflowed value
+SPARK-32609       Incorrect exchange reuse with DataSourceV2
+SPARK-32647       Report SparkR test results with JUnit reporter
 
 # Internal Patches
 rdar://66576657   Add spark-avro to the tgz build to simplify kernels
