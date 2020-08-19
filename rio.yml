@@ -286,7 +286,7 @@ builds:
       template: freestyle:v4:publish
       steps:
         - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --hadoop "$HADOOP_VERSION" --snapshot --maven-opts "-Xmx6g" --maven-params "-P hive,hadoop-${HADOOP_BINARY_VERSION},hadoop-cloud,hive-thriftserver,kinesis-asl,mesos,yarn,kubernetes"
-        - ci stage-lib --many-many-artifacts ".dist/local-repo/**/*" --exclude "**/*.xml" --exclude "**/*.md5" --exclude "**/*.sha1"
+        - ci stage-lib --many-many-artifacts ".dist/local-repo/**/*" --exclude "**/*.md5" --exclude "**/*.sha1"
     package:
       freeform:
       - publish:
@@ -331,7 +331,7 @@ builds:
       template: freestyle:v4:publish
       steps:
         - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --hadoop "$HADOOP_VERSION" --release --maven-opts "-Xmx6g" --maven-params "-P hive,hadoop-cloud,hadoop-${HADOOP_BINARY_VERSION},hive-thriftserver,kinesis-asl,mesos,yarn,kubernetes"
-        - ci stage-lib --many-many-artifacts ".dist/local-repo/**/*" --exclude "**/*.xml" --exclude "**/*.md5" --exclude "**/*.sha1"
+        - ci stage-lib --many-many-artifacts ".dist/local-repo/**/*" --exclude "**/*.md5" --exclude "**/*.sha1"
     package:
       release: true
       freeform:
