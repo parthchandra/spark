@@ -129,6 +129,12 @@ private[spark] class BasicExecutorFeatureStep(
           .build())
         .build()
     ) ++ executorExtraJavaOptionsEnv ++ executorExtraClasspathEnv.toSeq
+    executorEnv.find(_.getName == ENV_EXECUTOR_DIRS).foreach { e =>
+      e.setValue(e.getValue
+        .replaceAll(ENV_APPLICATION_ID, kubernetesConf.appId)
+        .replaceAll(ENV_EXECUTOR_ID, kubernetesConf.roleSpecificConf.executorId))
+    }
+
     val requiredPorts = Seq(
       (BLOCK_MANAGER_PORT_NAME, blockManagerPort))
       .map { case (name, port) =>
