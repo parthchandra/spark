@@ -152,11 +152,11 @@ t=$(date '+%H%M%S')
 set -x
 if [ $IS_RELEASE -eq 0 ] ; then
   find "./.dist/local-repo/org/apache/spark/" -name "*.jar" -print0 | while read -d $'\0' file; do
-    new_name=$(echo "$file" | sed -E  "s/-([[:digit:]]+)\.[[:digit:]]+-([[:digit:]]+)/-SNAPSHOT-\1.${t}-\2/")
+    new_name=$(echo "$file" | sed -E  "s/-([[:digit:]]+)\.[[:digit:]]+-([[:digit:]]+)/-SNAPSHOT/")
     mv "$file" "$new_name"
   done
   find "./.dist/local-repo/org/apache/spark/" -name "*.pom" -print0 | while read -d $'\0' file; do
-    new_name=$(echo "$file" | sed -E  "s/-([[:digit:]]+)\.[[:digit:]]+-([[:digit:]]+)/-SNAPSHOT-\1.${t}-\2/")
+    new_name=$(echo "$file" | sed -E  "s/-([[:digit:]]+)\.[[:digit:]]+-([[:digit:]]+)/-SNAPSHOT/")
     mv "$file" "$new_name"
   done
 fi
