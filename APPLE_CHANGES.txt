@@ -41,10 +41,11 @@ SPARK-32490      Upgrade netty-all to 4.1.51.Final
 SPARK-32437      Improve MapStatus deserialization speed with RoaringBitmap 0.9.0
 SPARK-32437      Update dependency manifest for RoaringBitmap 0.9.0
 SPARK-32485      Fix endianness issues in tests in RecordBinaryComparatorSuite
+SPARK-32517      Add StorageLevel.DISK_ONLY_3
+SPARK-32655      Support appId/execId placeholder in K8s SPARK_EXECUTOR_DIRS
 
 
 # From Spark 3.0.1
-SPARK-32018      UnsafeRow.setDecimal should set null with overflowed value
 SPARK-32234      Spark sql commands are failing on selecting the orc tables
 SPARK-32318      Add a test case to EliminateSortsSuite for ORDER BY in DISTRIBUTE BY
 SPARK-32301      Add a test case for toPandas to work with empty partitioned Spark DataFrame
@@ -191,6 +192,39 @@ SPARK-32559      Fix the trim logic in UTF8String.toInt/toLong did't handle non-
 SPARK-32564      Re-enable TPCDSQuerySuite with empty tables
 SPARK-32564      Inject data statistics to simulate plan generation on actual TPCDS data
 SPARK-32560      Improve exception message at InsertIntoHiveTable.processInsert
+SPARK-32456      Check the Distinct by assuming it as Aggregate for Structured Streaming
+MINOR            add test_createDataFrame_empty_partition in pyspark arrow tests
+SPARK-32576      Add tests for all the character array types in PostgresIntegrationSuite
+SPARK-32409      Document dependency between spark.metrics.staticSources.enabled and JVMSource registration
+SPARK-32528      The analyze method should make sure the plan is analyzed
+SPARK-32543      Remove arrow::as_tibble usage in SparkR
+SPARK-32586      Fix NumberFormatException error message when ansi is enabled
+SPARK-32594      Fix serialization of dates inserted to Hive tables
+SPARK-31703      Parquet RLE float/double are read incorrectly on big endian platforms
+SPARK-32599      Check the TEXTFILE file format in `HiveSerDeReadWriteSuite`
+SPARK-32250      Fix flaky MasterSuite.test(...) in Github Actions
+SPARK-27510      Fix flaky MasterSuite.test(...) in Github Actions
+MINOR            Update URL of the parquet project in code comment
+MINOR            Fixed approx_count_distinct rsd param description
+SPARK-32625      Log error message when falling back to interpreter mode
+SPARK-32610      Fix the link to metrics.dropwizard.io in monitoring.md to refer the proper version
+SPARK-32622      Add case-sensitivity test for ORC predicate pushdown
+SPARK-32518      CoarseGrainedSchedulerBackend.maxNumConcurrentTasks should consider all kinds of resources
+SPARK-32652      ObjectSerializerPruning fails for RowEncoder
+SPARK-32647      Report SparkR test results with JUnit reporter
+SPARK-32624      Use getCanonicalName to fix byte[] compile issue
+SPARK-32451      Support Apache Arrow 1.0.0
+SPARK-28863      Introduce AlreadyPlanned to prevent reanalysis of V1FallbackWriters
+SPARK-32658      Fix `PartitionWriterStream` partition length overflow
+SPARK-32608      Script Transform ROW FORMAT DELIMIT value should format value
+SPARK-28863      Do not reuse the physical plan
+SPARK-32621      path' option can cause issues while inferring schema in CSV/JSON datasources
+SPARK-32660      Show Avro related API in documentation
+SPARK-32663      Avoid individual closing of pooled TransportClients (which must be closed through the pool)
+SPARK-32674      Add suggestion for parallel directory listing in tuning doc
+MINOR            backport PR#29443 to fix typo in doc,log messages and comments
+SPARK-32672      Fix data corruption in boolean bit set compression
+SPARK-31792      Rephrase the description for some operations
 
 # Internal Patches
 rdar://66526854  Update rio build script to handle new maven plugin ignoring mojo timestamps (improve dev from snapshot experience).
@@ -219,3 +253,5 @@ rdar://64257964  add back http support so it works without hadoop configuration
 MINOR            Switch to zstd
 MINOR            Bump to 3.0.0.11-apple-SNAPSHOT after releasing 3.0.0.10-apple
 MINOR            Support HDFS as external shuffle storage backend
+MINOR            Update to 3.0.0.13
+MINOR            Update our decommissioning logic to the current upstream. (#673)
