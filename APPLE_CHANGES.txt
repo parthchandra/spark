@@ -6,6 +6,8 @@ SPARK-32058       Use Apache Hadoop 3.2.0 dependency by default
 SPARK-31876       Upgrade to Zstd 1.4.5
 SPARK-32150       Upgrade to ZStd 1.4.5-4
 SPARK-32437       Improve MapStatus deserialization speed with RoaringBitmap 0.9.0
+SPARK-32517       Add StorageLevel.DISK_ONLY_3
+SPARK-32655       Support appId/execId placeholder in K8s SPARK_EXECUTOR_DIRS
 
 # From Spark 3.0.0
 SPARK-24540       Support for multiple character delimiter in Spark CSV read
@@ -196,6 +198,9 @@ SPARK-32625       Log error message when falling back to interpreter mode
 Revert 32018      UnsafeRow.setDecimal should set null with overflowed value
 SPARK-32609       Incorrect exchange reuse with DataSourceV2
 SPARK-32647       Report SparkR test results with JUnit reporter
+SPARK-31966       Increase the timeout for StreamingLogisticRegressionWithSGDTests.test_training_and_prediction
+SPARK-32674       Add suggestion for parallel directory listing in tuning doc
+SPARK-32672       Fix data corruption in boolean bit set compression
 
 # Internal Patches
 rdar://66576657   Add spark-avro to the tgz build to simplify kernels
@@ -236,3 +241,4 @@ MINOR             Use zstd as default shuffle compression
 MINOR             Bump to 2.4.6.7-apple-SNAPSHOT
 MINOR             Bump to 2.4.6.10-apple-SNAPSHOT
 MINOR             Set timestamp for publishing snapshot jar
+MINOR             Bump hive version (#676)
