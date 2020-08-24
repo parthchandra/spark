@@ -228,7 +228,7 @@ SPARK-31792      Rephrase the description for some operations
 
 # Internal Patches
 rdar://66526854  Update rio build script to handle new maven plugin ignoring mojo timestamps (improve dev from snapshot experience).
-rdar://66576657  Add spark-avro to the tgz build to simplify kernels
+rdar://66576657  Add spark-parquet to the tgz build to simplify kernels
 rdar://64257783  Use parquet-1.10.1.1-apple to support ZSTD Parquet
 COMBO            A preview of SPARK-20629, SPARK-31197 & SPARK-31198 to add shuffle block migration to dynamic scaling.
 MINOR            Script for helping us handle patches
