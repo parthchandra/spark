@@ -287,7 +287,7 @@ builds:
       steps:
         - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --hadoop "$HADOOP_VERSION" --snapshot --maven-opts "-Xmx6g" --maven-params "-P hive,hadoop-${HADOOP_BINARY_VERSION},hadoop-cloud,hive-thriftserver,kinesis-asl,mesos,yarn,kubernetes"
         - ci stage-lib --many-many-artifacts ".dist/local-repo/**/*.jar"
-        - ci stage-lib --many-many-artifacts ".dist/local-repo/**/*.pom"
+        - ci stage-lib --many-many-artifacts ".dist/local-repo/**/pom.xml"
     package:
       freeform:
       - publish:
@@ -333,7 +333,7 @@ builds:
       steps:
         - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --hadoop "$HADOOP_VERSION" --release --maven-opts "-Xmx6g" --maven-params "-P hive,hadoop-cloud,hadoop-${HADOOP_BINARY_VERSION},hive-thriftserver,kinesis-asl,mesos,yarn,kubernetes"
         - ci stage-lib --many-many-artifacts ".dist/local-repo/**/*.jar"
-        - ci stage-lib --many-many-artifacts ".dist/local-repo/**/*.pom"
+        - ci stage-lib --many-many-artifacts ".dist/local-repo/**/pom.xml"
     package:
       release: true
       freeform:
