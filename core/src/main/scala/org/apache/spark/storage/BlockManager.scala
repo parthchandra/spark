@@ -629,7 +629,7 @@ private[spark] class BlockManager(
    */
   override def getLocalBlockData(blockId: BlockId): ManagedBuffer = {
     if (blockId.isShuffle) {
-      logInfo(s"Getting local shuffle block ${blockId}")
+      logDebug(s"Getting local shuffle block ${blockId}")
       ess.ExternalShuffleStorage.read(shuffleManager.shuffleBlockResolver, blockId)
     } else {
       getLocalBytes(blockId) match {
