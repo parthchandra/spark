@@ -43,6 +43,19 @@ SPARK-32437      Update dependency manifest for RoaringBitmap 0.9.0
 SPARK-32485      Fix endianness issues in tests in RecordBinaryComparatorSuite
 SPARK-32517      Add StorageLevel.DISK_ONLY_3
 SPARK-32655      Support appId/execId placeholder in K8s SPARK_EXECUTOR_DIRS
+SPARK-32549      Add column name in _infer_schema error message
+SPARK-32555      Add unique ID on query execution
+SPARK-32557      Logging and swallowing the exception per entry in History server
+SPARK-32554      Remove the words "experimental" in the k8s document
+SPARK-32470      Remove task result size check for shuffle map stage
+SPARK-32596      Clear Ivy resolution files as part of finally block
+SPARK-20680      Add HiveVoidType in HiveClientImpl
+SPARK-32616      Window operators should be added determinedly
+SPARK-32119      ExecutorPlugin doesn't work with Standalone Cluster and Kubernetes with --jars
+SPARK-32550      Make SpecificInternalRow constructors faster by using while loops instead of maps
+SPARK-32653      Decommissioned host/executor should be considered as inactive in TaskSchedulerImpl
+SPARK-32664      Switch the log level from info to debug at BlockManager.getLocalBlockData
+SPARK-32713      Support execId placeholder in executor PVC conf
 
 
 # From Spark 3.0.1
