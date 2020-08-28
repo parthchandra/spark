@@ -225,6 +225,20 @@ SPARK-32674      Add suggestion for parallel directory listing in tuning doc
 MINOR            backport PR#29443 to fix typo in doc,log messages and comments
 SPARK-32672      Fix data corruption in boolean bit set compression
 SPARK-31792      Rephrase the description for some operations
+SPARK-32701      mapreduce.fileoutputcommitter.algorithm.version default value
+SPARK-32659      Fix the data issue when pruning DPP on non-atomic type
+SPARK-32620      Reset the numPartitions metric when DPP is enabled
+SPARK-32614      Don't apply comment processing if 'comment' unset for CSV
+SPARK-32683      Fix doc error and add migration guide for datetime pattern F
+SPARK-32646      ORC predicate pushdown should work with case-insensitive analysis
+SPARK-32676      Fix double caching in KMeans/BiKMeans
+SPARK-32588      Fix SizeEstimator initialization in tests
+SPARK-32092      Removed foldCol related code
+SPARK-32552      Complete the documentation for Table-valued Function
+SPARK-32609      Add Tests for Incorrect exchange reuse with DataSourceV2
+SPARK-32092      Fix parameters not being copied in CrossValidatorModel.copy(), read() and write()
+SPARK-32556      Fix release script to have urlencoded passwords where required
+SPARK-31992      Benchmark the EXCEPTION rebase mode
 
 # Internal Patches
 rdar://66526854  Update rio build script to handle new maven plugin ignoring mojo timestamps (improve dev from snapshot experience).
