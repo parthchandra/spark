@@ -59,6 +59,7 @@ SPARK-32713      Support execId placeholder in executor PVC conf
 SPARK-32575      Bump up timeouts in BlockManagerDecommissionIntegrationSuite to reduce flakyness
 SPARK-32651      Decommission switch configuration should have the highest hierarchy
 SPARK-32657      Update the log strings we check for & imports in decommission K8s
+SPARK-32100      Reduce the required test resources
 
 
 # From Spark 3.0.1
