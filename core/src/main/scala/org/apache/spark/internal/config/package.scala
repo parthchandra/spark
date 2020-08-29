@@ -1919,6 +1919,7 @@ package object config {
         s"With decommission enabled, Spark will also decommission an executor instead of " +
         s"killing when ${DYN_ALLOCATION_ENABLED.key} enabled.")
       .version("3.1.0")
+      .withAlternative("spark.worker.decommission.enabled")
       .booleanConf
       .createWithDefault(false)
 
