@@ -56,6 +56,9 @@ SPARK-32550      Make SpecificInternalRow constructors faster by using while loo
 SPARK-32653      Decommissioned host/executor should be considered as inactive in TaskSchedulerImpl
 SPARK-32664      Switch the log level from info to debug at BlockManager.getLocalBlockData
 SPARK-32713      Support execId placeholder in executor PVC conf
+SPARK-32575      Bump up timeouts in BlockManagerDecommissionIntegrationSuite to reduce flakyness
+SPARK-32651      Decommission switch configuration should have the highest hierarchy
+SPARK-32657      Update the log strings we check for & imports in decommission K8s
 
 
 # From Spark 3.0.1
@@ -254,6 +257,7 @@ SPARK-32556      Fix release script to have urlencoded passwords where required
 SPARK-31992      Benchmark the EXCEPTION rebase mode
 
 # Internal Patches
+MINOR            Enabled both worker and top level config names for decommissioning.
 rdar://66526854  Update rio build script to handle new maven plugin ignoring mojo timestamps (improve dev from snapshot experience).
 rdar://66576657  Add spark-parquet to the tgz build to simplify kernels
 rdar://64257783  Use parquet-1.10.1.1-apple to support ZSTD Parquet
