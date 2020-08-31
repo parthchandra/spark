@@ -201,6 +201,8 @@ SPARK-32647       Report SparkR test results with JUnit reporter
 SPARK-31966       Increase the timeout for StreamingLogisticRegressionWithSGDTests.test_training_and_prediction
 SPARK-32674       Add suggestion for parallel directory listing in tuning doc
 SPARK-32672       Fix data corruption in boolean bit set compression
+MINOR             Add missing documentation for LongType mapping
+SPARK-32693       Compare two dataframes with same schema except nullable property
 
 # Internal Patches
 rdar://66576657   Add spark-avro to the tgz build to simplify kernels
