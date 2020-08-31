@@ -249,6 +249,10 @@ SPARK-32609      Add Tests for Incorrect exchange reuse with DataSourceV2
 SPARK-32092      Fix parameters not being copied in CrossValidatorModel.copy(), read() and write()
 SPARK-32556      Fix release script to have urlencoded passwords where required
 SPARK-31992      Benchmark the EXCEPTION rebase mode
+SPARK-28612      Correct method doc of DataFrameWriterV2.replace()
+SPARK-32693      Compare two dataframes with same schema except nullable property
+SPARK-31511      Make BytesToBytesMap iterators thread-safe
+SPARK-32747      Deduplicate configuration set/unset in test_sparkSQL_arrow.R
 
 # Internal Patches
 MINOR            Enabled both worker and top level config names for decommissioning.
