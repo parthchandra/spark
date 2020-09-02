@@ -1,0 +1,103 @@
+This contains the changes after creating `v3.0.1-rc3`
+
+# From Spark 3.1.0
+SPARK-25355      Add proxy user to driver if present on spark-submit
+SPARK-29089      Parallelize blocking FileSystem calls in DataSource#checkAndGlobPathIfNecessary
+SPARK-29905      Improve pod lifecycle manager behavior with dynamic allocation
+SPARK-30385      WebUI occasionally throw IOException on stop()
+SPARK-30772      avoid tuple assignment because it will circumvent the transient tag
+SPARK-30786      Fix Block replication failure propogation issue in BlockManager
+SPARK-30856      Fix SQLContext.getOrCreate() when SparkContext is restarted
+SPARK-31041      Show Maven errors from within make-distribution.sh
+SPARK-31071      Allow annotating non-null fields when encoding Java Beans
+SPARK-31120      Support enabling maven profiles for importing vi…
+SPARK-31125      Terminating pods have a deletion timestamp but they are not yet dead
+SPARK-31208      Add an expiremental cleanShuffleDependencies
+SPARK-31394      Adds support for Kubernetes NFS volume mounts
+SPARK-31394      Add nfs volume type description
+SPARK-31464      Upgrade Kafka to 2.5.0
+SPARK-31073      Add "shuffle write time" to task metrics summary in StagePage
+SPARK-20628      Start to improve Spark decommissioning & preemption support
+SPARK-20732      Decommission cache blocks to other executors when an executor is decommissioned
+SPARK-31011      Log better message if SIGPWR is not supported while setting up decommission
+SPARK-31239      Increase await duration in `WorkerDecommissionSuite`.`verify a task with all workers decommissioned succeeds`
+SPARK-31360      Fix hung-up issue in StagePage
+SPARK-31791      Improve cache block migration test reliability
+SPARK-31062      Improve spark decommissioning k8s test reliability
+SPARK-31047      Improve file listing for ViewFileSystem
+SPARK-31960      Only populate Hadoop classpath for no-hadoop build
+SPARK-32100      Add WorkerDecommissionExtendedSuite
+SPARK-32058      Use Apache Hadoop 3.2.0 dependency by default
+SPARK-31876      Upgrade to Zstd 1.4.5
+SPARK-32150      Upgrade to ZStd 1.4.5-4
+SPARK-31993      Build arrays for passing variables generated from children for 'concat_ws' with columns having at least one of array type
+SPARK-32033      Use new poll API in Kafka connector executor side to avoid infinite wait
+SPARK-32031      Fix the wrong references of the PartialMerge/Final AggregateExpression
+SPARK-32149      Improve file path name normalisation at block resolution within the external shuffle service
+SPARK-32270      Use TextFileFormat in CSV's schema inference with a different encoding
+SPARK-21040      Speculate tasks which are running on decommission executors
+SPARK-32490      Upgrade netty-all to 4.1.51.Final
+SPARK-32437      Improve MapStatus deserialization speed with RoaringBitmap 0.9.0
+SPARK-32437      Update dependency manifest for RoaringBitmap 0.9.0
+SPARK-32517      Add StorageLevel.DISK_ONLY_3
+SPARK-32655      Support appId/execId placeholder in K8s SPARK_EXECUTOR_DIRS
+SPARK-32713      Support execId placeholder in executor PVC conf
+SPARK-32554      Remove the words "experimental" in the k8s document
+SPARK-32470      Remove task result size check for shuffle map stage
+SPARK-32119      ExecutorPlugin doesn't work with Standalone Cluster and Kubernetes with --jars
+SPARK-32653      Decommissioned host/executor should be considered as inactive in TaskSchedulerImpl
+SPARK-32485      Fix endianness issues in tests in RecordBinaryComparatorSuite
+SPARK-32664      Switch the log level from info to debug at BlockManager.getLocalBlockData
+SPARK-32575      Bump up timeouts in BlockManagerDecommissionIntegrationSuite to reduce flakyness
+SPARK-32651      Decommission switch configuration should have the highest hierarchy
+SPARK-32657      Update the log strings we check for & imports in decommission K8s
+SPARK-32100      Reduce the required test resources
+
+# From Spark 3.0.1
+SPARK-28612      Correct method doc of DataFrameWriterV2.replace()
+SPARK-32693      Compare two dataframes with same schema except nullable property
+SPARK-31511      Make BytesToBytesMap iterators thread-safe
+SPARK-32747      Deduplicate configuration set/unset in test_sparkSQL_arrow.R
+MINOR            Fix a R style in try and finally at DataFrame.R
+SPARK-32659      Improve test for pruning DPP on non-atomic type
+SPARK-32624      Fix regression in CodegenContext.addReferenceObj on nested Scala types
+SPARK-32774      Don't track docs/.jekyll-cache
+SPARK-32771      The example of expressions.Aggregator in Javadoc / Scaladoc is wrong
+SPARK-32776      Limit in streaming should not be optimized away by PropagateEmptyRelation
+SPARK-32788      non-partitioned table scan should not have partition filter
+SPARK-32767      Bucket join should work if spark.sql.shuffle.partitions larger than bucket number
+SPARK-32786      Improve performance for some slow DPP tests
+SPARK-32791      Non-partitioned table metric should not have dynamic partition pruning time
+SPARK-32779      Avoid using synchronized API of SessionCatalog in withClient flow, this leads to DeadLock
+SPARK-32810      CSV/JSON data sources should avoid globbing paths when inferring schema
+SPARK-32812      Avoid initiating a process during the main process for run-tests.py
+SPARK-32764      -0.0 should be equal to 0.0
+
+# Internal Patche
+SPARK-17767      Support user-provided ExternalCatalog and SessionBuilder
+rdar://64257964  Add back http support so it works without hadoop configuration
+rdar://66576657  Add spark-avro to the tgz build to simplify kernels
+MINOR            Add an empty APPLE_CHANGES.txt
+MINOR            Squashed commits to add decommissioning to Spark's dynamic scaledown
+MINOR            Fix our exiting and cleanup thread for better debugging next time. Cleanup the locks we use in decommissioning and clarify some more bits.
+MINOR            Add storage-shim module
+MINOR            Add external shuffle storage
+MINOR            Support HDFS as external shuffle storage backend
+MINOR            Backport 21040 since we don't have RPIs here
+MINOR            Update our decommissioning logic to the current upstream. (#673)
+MINOR            Allow multiple containers to our setup
+MINOR            Enabled the old name as a fall back for existing code
+MINOR            Add JDK11 options
+MINOR            Adjust test cases for RIO
+MINOR            Support JarvisSparkHadoopUtil
+MINOR            Added bindAddress in Mesos Executor Backend for now set to local host name
+MINOR            SparkUI patch
+MINOR            Use abstract storage as a replacement for window.localStorage
+MINOR            Use Utils.localHostName() for bindAddress
+MINOR            Integrate ACI spark call home service listener
+MINOR            Switch to zstd
+MINOR            Use parquet-1.10.1.1-apple to support zstd parquet
+MINOR            Add rio.yml and dev scripts
+MINOR            Use Apple Hadoop 3.2.0.2-apple
+MINOR            Add https://artifacts.apple.com/libs-release to spark.sql.maven.additionalRemoteRepositories
+MINOR            Bump to 3.0.1.1-apple-SNAPSHOT
