@@ -1,4 +1,4 @@
-This contains the changes after creating `v3.0.1-rc3`
+This contains the changes after creating `v3.0.1`
 
 # From Spark 3.1.0
 SPARK-25355      Add proxy user to driver if present on spark-submit
@@ -53,7 +53,7 @@ SPARK-32651      Decommission switch configuration should have the highest hiera
 SPARK-32657      Update the log strings we check for & imports in decommission K8s
 SPARK-32100      Reduce the required test resources
 
-# From Spark 3.0.1
+# From Spark 3.0.2
 SPARK-28612      Correct method doc of DataFrameWriterV2.replace()
 SPARK-32693      Compare two dataframes with same schema except nullable property
 SPARK-31511      Make BytesToBytesMap iterators thread-safe
