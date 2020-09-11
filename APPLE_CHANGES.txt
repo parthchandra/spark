@@ -1,0 +1,185 @@
+This contains the changes after v2.4.7-rc3
+
+# From Spark 3.1.0
+SPARK-31047       Improve file listing for ViewFileSystem
+SPARK-32058       Use Apache Hadoop 3.2.0 dependency by default
+SPARK-31876       Upgrade to Zstd 1.4.5
+SPARK-32150       Upgrade to ZStd 1.4.5-4
+SPARK-31960       Only populate Hadoop classpath for no-hadoop build
+SPARK-32437       Improve MapStatus deserialization speed with RoaringBitmap 0.9.0
+SPARK-32517       Add StorageLevel.DISK_ONLY_3
+SPARK-32655       Support appId/execId placeholder in K8s SPARK_EXECUTOR_DIRS
+
+# From Spark 3.0.0
+SPARK-17636       Parquet predicate pushdown in nested fields
+SPARK-24540       Support for multiple character delimiter in Spark CSV read
+SPARK-25558       Pushdown predicates for nested fields in DataSource Strategy
+SPARK-26839       Work around classloader changes in Java 9 for Hive isolation
+SPARK-28708       IsolatedClientLoader will not load hive classes from application jars on JDK9+
+SPARK-20636       Add new optimization rule to transpose adjacent Window expressions.
+SPARK-25691       Use semantic equality in AliasViewChild in order to compare attributes
+SPARK-20636       Add the rule TransposeWindow to the optimization batch
+SPARK-26390       ColumnPruning rule should only do column pruning
+SPARK-27123       Improve CollapseProject to handle projects cross limit/repartition/sample
+SPARK-27123       Use isRenaming check for limit too.
+SPARK-26975       Support nested-column pruning over limit/sample/repartition
+SPARK-25407       Allow nested access for non-existent field for Parquet file when nested pruning is enabled
+SPARK-27644       Enable spark.sql.optimizer.nestedSchemaPruning.enabled by default
+SPARK-25559       Remove the unsupported predicates in Parquet when possible
+SPARK-25860       Replace Literal(null, _) with FalseLiteral whenever possible
+SPARK-27514       Skip collapsing windows with empty window expressions
+SPARK-25338       Ensure to call super.beforeAll() and super.afterAll() in test cases
+SPARK-25631       Improve the test runtime of KafkaRDDSuite
+SPARK-25632       Improve the test runtime of KafkaRDDSuite
+SPARK-25954       Upgrade to Kafka 2.1.0
+SPARK-25954       Add Zookeeper 3.4.7 test dependency to Kafka modules
+SPARK-25615       Improve the test runtime of KafkaSinkSuite: streaming write to non-existing topic
+SPARK-25618       Reduce time taken to execute KafkaContinuousSourceStressForDontFailOnDataLossSuite
+SPARK-26916       Upgrade to Kafka 2.1.1
+SPARK-27138       Remove AdminUtils calls (fixes deprecation)
+SPARK-27260       Upgrade to Kafka 2.2.0
+SPARK-28013       Upgrade to Kafka 2.2.1
+SPARK-28174       Upgrade to Kafka 2.3.0
+SPARK-29613       Upgrade to Kafka 2.3.1
+SPARK-30228       Update zstd-jni to 1.4.4-3
+SPARK-27801       Improve performance of InMemoryFileIndex.listLeafFiles for HDFS directories with many files
+SPARK-27762       Support user provided avro schema for writing fields with different ordering
+SPARK-27838       Support user provided non-nullable avro schema for nullable catalyst schema without any null record
+SPARK-27830       Show Spark version at app lists of Spark History UI
+SPARK-27684       Avoid conversion overhead for primitive types
+SPARK-27981       Remove `Illegal reflective access` warning for `java.nio.Bits.unaligned()` in JDK9+
+SPARK-27839       Change UTF8String.replace() to operate on UTF8 bytes
+SPARK-28102       Avoid performance problems when lz4-java JNI libraries fail to initialize
+SPARK-28118       Add `spark.eventLog.compression.codec` configuration
+SPARK-24355       Spark external shuffle server improvement to better handle block fetch requests.
+SPARK-25641       Change the spark.shuffle.server.chunkFetchHandlerThreadsPercent default to 100
+SPARK-18364       Expose metrics for YarnShuffleService
+SPARK-25642       Adding two new metrics to record the number of registered connections as well as the number of active connections to YARN Shuffle Service
+SPARK-25692       Remove static initialization of worker eventLoop handling chunk fetch requests within TransportContext. This fixes ChunkFetchIntegrationSuite as well
+SPARK-27021       Cleanup of Netty event loop group for shuffle chunk fetch requests
+SPARK-28294       Support `spark.history.fs.cleaner.maxNum` configuration
+SPARK-28847       Annotate HiveExternalCatalogVersionsSuite with ExtendedHiveTest
+SPARK-29003       Add `start` method to ApplicationHistoryProvider to avoid deadlock on startup
+SPARK-29080       Support R file extension case-insensitively
+SPARK-29162       Simplify NOT(IsNull(x)) and NOT(IsNotNull(x))
+SPARK-29191       Add tag ExtendedSQLTest for SQLQueryTestSuite
+SPARK-29032       Add PrometheusServlet to monitor Master/Worker/Driver
+SPARK-29351       Avoid Full Synchronization in ShuffleMapStage
+SPARK-29434       Improve the MapStatuses Serialization Performance
+SPARK-29466       Show `Duration` for running drivers in Standalone master web UI
+SPARK-24421       Accessing sun.misc.Cleaner in JDK11
+SPARK-24421       Use normal direct ByteBuffer allocation if Cleaner can't be set
+SPARK-26306       More memory to de-flake SorterSuite
+SPARK-26507       Fix core tests for Java 11
+SPARK-27175       Upgrade hadoop-3 to 3.2.0
+SPARK-27467       Upgrade Maven to 3.6.1
+SPARK-28961       Upgrade Maven from 3.6.1 to 3.6.2
+SPARK-30142       Upgrade Maven to 3.6.3
+SPARK-25946       Upgrade ASM to 7.x to support JDK11
+SPARK-28111       Upgrade `xbean-asm7-shaded` to 4.14
+SPARK-27493       Upgrade ASM to 7.1 in Maven plugins
+SPARK-27493       Upgrade ASM to 7.1 in plugins.sbt
+SPARK-27620       Upgrade jetty to 9.4.18.v20190429
+SPARK-26124       Update plugins to latest versions
+SPARK-27608       Upgrade Surefire plugin to 3.0.0-M3
+SPARK-29470       Update plugins to latest versions
+SPARK-28759       Upgrade scala-maven-plugin to 4.2.0 and fix build profile on AppVeyor
+SPARK-26963       SizeEstimator can't make some JDK fields accessible in Java 9+
+SPARK-26966       Update to JPMML 1.4.8
+SPARK-26986       Add JAXB reference impl to build for Java 9+
+SPARK-27121       Resolve Scala compiler failure for Java 9+ in REPL
+SPARK-25891       Upgrade to Py4J 0.10.8.1
+SPARK-27180       Fix testing issues with yarn module in Hadoop-3
+SPARK-28735       Fix PySpark ML tests to pass in JDK 11
+SPARK-28736       Fix PySpark ML tests to pass in JDK 11
+SPARK-28755       Increase tolerance in 'spark.mlp' SparkR test for JDK 11
+SPARK-28756       Fix checkJavaVersion to accept JDK8+
+SPARK-28756       Specify minimum and maximum Java versions
+SPARK-28877       Make jaxb-runtime compile-time dependency
+SPARK-28932       Add scala-library test dependency to network-common module for JDK11
+SPARK-28932       Switch to scala-library compile dependency for JDK11
+SPARK-27849       Fix the testing regex in DataSourceScanRedactionTest
+SPARK-29739       Use `java` instead of `cc` in test_pipe_functions
+SPARK-29528       Upgrade scala-maven-plugin to 4.3.0 for Scala 2.13.1
+SPARK-24203       Make executor's bindAddress configurable
+SPARK-29795       Explicitly clear registered metrics on MetricSystem shutdown
+SPARK-29674       Update dropwizard metrics to 4.1.x for JDK 9+
+SPARK-26134       Upgrading Hadoop to 2.7.4 to fix java.version problem
+SPARK-30035       Upgrade to Apache Commons Lang 3.9
+SPARK-30157       Upgrade Apache HttpCore from 4.4.10 to 4.4.12
+SPARK-28737       Update Jersey to 2.29
+SPARK-30639       Upgrade Jersey to 2.30
+SPARK-30718       Exclude jdk.tools dependency from hadoop-yarn-api
+SPARK-24434       Kubernetes pod template files
+SPARK-30743       Use JRE instead of JDK in K8S test docker image
+SPARK-30733       Fix SparkR tests per testthat and R version upgrade, and disable CRAN
+SPARK-27262       Reenable CRAN check with UTF-8 encoding to DESCRIPTION
+SPARK-30737       Reenable CRAN check with UTF-8 encoding to DESCRIPTION
+SPARK-30870       Column pruning shouldn't alias a nested column if it means the whole structure
+SPARK-25893       Show a directional error message for unsupported Hive Metastore versions
+SPARK-26091       Upgrade to 2.3.4 for Hive Metastore Client 2.3
+SPARK-24360       Support Hive 3.1 metastore
+SPARK-24360       Add missing options for sql-migration-guide-hive-compatibility.md
+SPARK-27054       Remove the Calcite dependency
+SPARK-28066       Optimize UTF8String.trim() for common case of no whitespace
+SPARK-27737       Upgrade to Hive 2.3.5 for Hive Metastore Client and Hadoop-3.2 profile
+SPARK-27690       Remove materialized views first in `HiveClientImpl.reset`
+SPARK-27074       Hive 3.1 metastore support HiveClientImpl.runHive
+SPARK-27970       Support Hive 3.0 metastore
+SPARK-28723       Upgrade to Hive 2.3.6 for HiveMetastore Client and Hadoop-3.2 profile
+SPARK-28890       Upgrade Hive Metastore Client to the 3.1.2 for Hive 3.1
+SPARK-27155       Parameterize Oracle docker image name
+SPARK-28248       Upgrade docker image and library for PostgreSQL integration test
+SPARK-29567       Update JDBC Integration Test Docker Images
+SPARK-31135       Upgrdade docker-client version to 8.14.1
+SPARK-31116       Fix nested schema case-sensitivity in ParquetRowConverter
+SPARK-25062       Clean up BlockLocations in InMemoryFileIndex
+SPARK-27676       InMemoryFileIndex should respect spark.sql.files.ignoreMissingFiles
+SPARK-29189       Add an option to ignore block locations when listing file
+MINOR             Correct date_trunc docs
+SPARK-29245       Upgrade built-in Hive 2.3.6 to 2.3.7
+SPARK-31381       Upgrade built-in Hive 2.3.6 to 2.3.7
+SPARK-28772       Upgrade breeze to 1.0
+SPARK-23977       Support High Performance S3A committers [test-hadoop3.2]
+SPARK-32779       Avoid using synchronized API of SessionCatalog in withClient flow, this leads to DeadLock
+
+# From Spark 2.4.8
+SPARK-32815       Fix LibSVM data source loading error on file paths with glob metacharacters
+SPARK-32836       Fix DataStreamReaderWriterSuite to check writer options correctly
+SPARK-32832       Use CaseInsensitiveMap for DataStreamReader/Writer options
+SPARK-32794       Fixed rare corner case error in micro-batch engine with some stateful queries + no-data-batches + V1 sources
+
+# Internal Patches
+MINOR             Add an empty APPLE_CHANGES.txt
+SPARK-17767       Support user-provided ExternalCatalog and SessionBuilder
+rdar://63686227   Support Aircompressor's LZO library which is Apache v2 licensed
+rdar://63889762   Support for AWS S3 cloud storage
+rdar://64257783   Use parquet-1.10.1.1-apple to support ZSTD Parquet
+rdar://64647311   Integrate spark call home listener
+rdar://66576657   Add spark-avro to the tgz build to simplify kernels
+MINOR             Use zstd as default shuffle compression
+MINOR             Use the same dependency in SBT test
+MINOR             Added bindAddress in Mesos Executor Backend for now set to local host name
+MINOR             Use Utils.localHostName() for bindAddress
+MINOR             Use abstract storage as a replacement for window.localStorage
+MINOR             SparkUI patch
+MINOR             Updated state save parameter to rely on ajax enabled property
+MINOR             Add JDK11 options
+MINOR             Use reflection to reduce hive dependency
+MINOR             Remove hive test dependency
+MINOR             Support JarvisSparkHadoopUtil
+MINOR             Ignore root permission issue
+MINOR             Use lazy val in FilterPushdownBenchmark
+MINOR             Annotate HiveClientSuites/HiveSparkSubmitSuite/HiveQuerySuite with ExtendedHiveTest
+MINOR             Add rio.yml/rio-maven-custom-build.sh/.gitignore
+MINOR             Add apple repository
+MINOR             Use Apple Hive 1.2.1.spark2.5-apple
+MINOR             Use Apple Hadoop 3.2.0.2-apple
+MINOR             [ADT] Add ADT as a dependency
+MINOR             [ADT] Add UPDATE/DELETE/MERGE INTO grammar and plans (#628)
+MINOR             [ADT] Add OPTIMIZE grammar and logical plan (#633)
+MINOR             [ADT] Implement OrderAwareCoalesce
+MINOR             [ADT] Converge 2.4.0-pdt and 2.4.5
+MINOR             Bump ADT version to 0.6.1
+MINOR             Fix SPARK-31935 test case for Hadoop-3.2
+MINOR             Build docker image with openjdk:11-jre-slim instead of openjdk:8-jre-slim
