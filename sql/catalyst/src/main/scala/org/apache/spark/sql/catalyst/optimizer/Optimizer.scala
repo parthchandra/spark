@@ -93,6 +93,7 @@ abstract class Optimizer(sessionCatalog: SessionCatalog)
         RewriteCorrelatedScalarSubquery,
         EliminateSerialization,
         RemoveRedundantAliases,
+        UnwrapCastInBinaryComparison,
         RemoveNoopOperators,
         SimplifyExtractValueOps,
         CombineConcats) ++
