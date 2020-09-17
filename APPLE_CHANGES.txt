@@ -52,6 +52,11 @@ SPARK-32575      Bump up timeouts in BlockManagerDecommissionIntegrationSuite to
 SPARK-32651      Decommission switch configuration should have the highest hierarchy
 SPARK-32657      Update the log strings we check for & imports in decommission K8s
 SPARK-32100      Reduce the required test resources
+SPARK-32721      Simplify if clauses with null and boolean
+SPARK-24994      Add UnwrapCastInBinaryComparison optimizer to simplify literal types
+SPARK-32802      Avoid using SpecificInternalRow in RunLengthEncoding#Encoder
+SPARK-29157      Add DataFrameWriterV2 to Python API
+SPARK-32903      GeneratePredicate should be able to eliminate common sub-expressions
 
 # From Spark 3.0.2
 SPARK-28612      Correct method doc of DataFrameWriterV2.replace()
@@ -72,6 +77,33 @@ SPARK-32779      Avoid using synchronized API of SessionCatalog in withClient fl
 SPARK-32810      CSV/JSON data sources should avoid globbing paths when inferring schema
 SPARK-32812      Avoid initiating a process during the main process for run-tests.py
 SPARK-32764      -0.0 should be equal to 0.0
+SPARK-32785      Interval with dangling parts should not result null
+SPARK-31511      Make BytesToBytesMap iterators thread-safe
+SPARK-32753      Only copy tags to node with no tags
+SPARK-32815      Fix LibSVM data source loading error on file paths with glob metacharacters
+SPARK-32638      Corrects references when adding aliases in WidenSetOperationTypes
+SPARK-32824      Improve the error message when the user forgets the .amount in a resource config
+SPARK-32823      Fix the master ui resources reporting
+SPARK-32813      Get default config of ParquetSource vectorized reader if no active SparkSession
+SPARK-32810      Check path globbing in JSON/CSV datasources v1 and v2
+SPARK-32794      Fixed rare corner case error in micro-batch engine with some stateful queries + no-data-batches + V1 sources
+SPARK-32836      Fix DataStreamReaderWriterSuite to check writer options correctly
+SPARK-32832      Use CaseInsensitiveMap for DataStreamReader/Writer options
+SPARK-32819      ignoreNullability parameter should be effective recursively
+SPARK-32840      Invalid interval value can happen to be just adhesive with the unit
+SPARK-32677      Improve code comment in CreateFunctionCommand
+SPARK-32845      Add sinkParameter to check sink options robustly in DataStreamReaderWriterSuite
+SPARK-32779      Delete Unused code
+SPARK-32865      python section in quickstart page doesn't display SPARK_VERSION correctly
+SPARK-32876      Change default fallback versions to 3.0.1 and 2.4.7 in HiveExternalCatalogVersionsSuite
+SPARK-32872      Prevent BytesToBytesMap at MAX_CAPACITY from exceeding growth threshold
+SPARK-32715      Fix memory leak when failed to store pieces of broadcast
+SPARK-32688      Add special values to LiteralGenerator for float and double
+SPARK-32888      Add user document about header flag and RDD as path for reading CSV
+SPARK-32897      Don't show a deprecation warning at SparkSession.builder.getOrCreate
+SPARK-32900      Allow UnsafeExternalSorter to spill when there are nulls
+SPARK-32887      Correct the typo for SHOW TABLE
+SPARK-32738      Should reduce the number of active threads if fatal error happens in `Inbox.process`
 
 # Internal Patche
 SPARK-17767      Support user-provided ExternalCatalog and SessionBuilder
@@ -101,3 +133,5 @@ MINOR            Add rio.yml and dev scripts
 MINOR            Use Apple Hadoop 3.2.0.2-apple
 MINOR            Add https://artifacts.apple.com/libs-release to spark.sql.maven.additionalRemoteRepositories
 MINOR            Bump to 3.0.1.1-apple-SNAPSHOT
+MINOR            Bump to 3.0.1.2-apple-SNAPSHOT after 3.0.1.1-apple release
+rdar://68926116  Add alternative conf name `spark.FsUrlStreamHandlerFactory.enabled`
