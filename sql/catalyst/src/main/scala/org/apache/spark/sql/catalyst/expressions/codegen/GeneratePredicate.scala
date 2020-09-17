@@ -44,9 +44,23 @@ object GeneratePredicate extends CodeGenerator[Expression, Predicate] {
   protected def bind(in: Expression, inputSchema: Seq[Attribute]): Expression =
     BindReferences.bindReference(in, inputSchema)
 
-  protected def create(predicate: Expression): Predicate = {
+  def generate(
+      expressions: Expression,
+      inputSchema: Seq[Attribute],
+      useSubexprElimination: Boolean): Predicate =
+    generate(bind(expressions, inputSchema), useSubexprElimination)
+
+  def generate(expressions: Expression, useSubexprElimination: Boolean): Predicate =
+    create(canonicalize(expressions), useSubexprElimination)
+
+  protected def create(predicate: Expression): Predicate = create(predicate, false)
+
+  protected def create(predicate: Expression, useSubexprElimination: Boolean): Predicate = {
     val ctx = newCodeGenContext()
-    val eval = predicate.genCode(ctx)
+
+    // Do sub-expression elimination for predicates.
+    val eval = ctx.generateExpressions(Seq(predicate), useSubexprElimination).head
+    val evalSubexpr = ctx.subexprFunctions.mkString("\n")
 
     val codeBody = s"""
       public SpecificPredicate generate(Object[] references) {
@@ -67,6 +81,7 @@ object GeneratePredicate extends CodeGenerator[Expression, Predicate] {
         }
 
         public boolean eval(InternalRow ${ctx.INPUT_ROW}) {
+          $evalSubexpr
           ${eval.code}
           return !${eval.isNull} && ${eval.value};
         }

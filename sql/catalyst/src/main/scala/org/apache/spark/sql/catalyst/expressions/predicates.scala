@@ -55,7 +55,6 @@ trait Predicate extends Expression {
   override def dataType: DataType = BooleanType
 }
 
-
 trait PredicateHelper {
   protected def splitConjunctivePredicates(condition: Expression): Seq[Expression] = {
     condition match {

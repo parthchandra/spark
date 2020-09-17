@@ -36,6 +36,7 @@ import org.apache.spark.sql.catalyst.expressions.codegen.{Predicate => GenPredic
 import org.apache.spark.sql.catalyst.plans.QueryPlan
 import org.apache.spark.sql.catalyst.plans.physical._
 import org.apache.spark.sql.execution.metric.SQLMetric
+import org.apache.spark.sql.internal.SQLConf
 import org.apache.spark.sql.types.DataType
 import org.apache.spark.util.ThreadUtils
 
@@ -400,7 +401,8 @@ abstract class SparkPlan extends QueryPlan[SparkPlan] with Logging with Serializ
   protected def newPredicate(
       expression: Expression, inputSchema: Seq[Attribute]): GenPredicate = {
     try {
-      GeneratePredicate.generate(expression, inputSchema)
+      GeneratePredicate.generate(expression, inputSchema,
+        SQLConf.get.subexpressionEliminationEnabled)
     } catch {
       case _ @ (_: InternalCompilerException | _: CompileException) if codeGenFallBack =>
         genInterpretedPredicate(expression, inputSchema)
