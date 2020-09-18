@@ -1193,7 +1193,7 @@ class HiveDDLSuite
       expectedDBUri,
       Map.empty))
     // the database directory was created
-    assert(fs.exists(dbPath) && fs.isDirectory(dbPath))
+    assert(fs.exists(dbPath) && fs.getFileStatus(dbPath).isDirectory)
     sql(s"USE $dbName")
 
     val tabName = "tab1"
