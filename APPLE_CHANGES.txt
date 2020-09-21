@@ -104,6 +104,13 @@ SPARK-32897      Don't show a deprecation warning at SparkSession.builder.getOrC
 SPARK-32900      Allow UnsafeExternalSorter to spill when there are nulls
 SPARK-32887      Correct the typo for SHOW TABLE
 SPARK-32738      Should reduce the number of active threads if fatal error happens in `Inbox.process`
+SPARK-32635      Fix foldable propagation
+SPARK-32908      Fix target error calculation in `percentile_approx()`
+SPARK-32906      Struct field names should not change after normalizing floats
+SPARK-32905      ApplicationMaster fails to receive UpdateDelegationTokens message
+SPARK-32930      Replace deprecated isFile/isDirectory methods
+SPARK-32635      Add a new test case in catalyst module
+SPARK-32898      Fix wrong executorRunTime when task killed before real start
 
 # Internal Patche
 SPARK-17767      Support user-provided ExternalCatalog and SessionBuilder
