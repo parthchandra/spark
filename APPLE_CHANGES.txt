@@ -210,6 +210,7 @@ SPARK-32812       Avoid initiating a process during the main process for run-tes
 SPARK-31511       Make BytesToBytesMap iterators thread-safe
 
 # Internal Patches
+N/A               Upgrade ADT to 0.6.2
 rdar://66576657   Add spark-avro to the tgz build to simplify kernels
 rdar://64257783   Use parquet-1.10.1.1-apple to support ZSTD Parquet
 rdar://63889762   Support for AWS S3 cloud storage
