@@ -9,6 +9,10 @@ SPARK-31960       Only populate Hadoop classpath for no-hadoop build
 SPARK-32437       Improve MapStatus deserialization speed with RoaringBitmap 0.9.0
 SPARK-32517       Add StorageLevel.DISK_ONLY_3
 SPARK-32655       Support appId/execId placeholder in K8s SPARK_EXECUTOR_DIRS
+SPARK-32721       Simplify if clauses with null and boolean
+SPARK-32721       Simplify if clauses with null and boolean
+SPARK-24994       Add UnwrapCastInBinaryComparison optimizer to simplify literal types
+SPARK-32802       Avoid using SpecificInternalRow in RunLengthEncoding#Encoder
 
 # From Spark 3.0.0
 SPARK-17636       Parquet predicate pushdown in nested fields
@@ -142,12 +146,24 @@ SPARK-31381       Upgrade built-in Hive 2.3.6 to 2.3.7
 SPARK-28772       Upgrade breeze to 1.0
 SPARK-23977       Support High Performance S3A committers [test-hadoop3.2]
 SPARK-32779       Avoid using synchronized API of SessionCatalog in withClient flow, this leads to DeadLock
+SPARK-30371       Add spark.kubernetes.driver.master conf
 
 # From Spark 2.4.8
 SPARK-32815       Fix LibSVM data source loading error on file paths with glob metacharacters
 SPARK-32836       Fix DataStreamReaderWriterSuite to check writer options correctly
 SPARK-32832       Use CaseInsensitiveMap for DataStreamReader/Writer options
 SPARK-32794       Fixed rare corner case error in micro-batch engine with some stateful queries + no-data-batches + V1 sources
+SPARK-32845       Add sinkParameter to check sink options robustly in DataStreamReaderWriterSuite
+SPARK-32865       python section in quickstart page doesn't display SPARK_VERSION correctly
+SPARK-32708       Query optimization fails to reuse exchange with DataSourceV2
+SPARK-32872       Prevent BytesToBytesMap at MAX_CAPACITY from exceeding growth threshold
+SPARK-32715       Fix memory leak when failed to store pieces of broadcast
+SPARK-32888       Add user document about header flag and RDD as path for reading CSV
+SPARK-32900       Allow UnsafeExternalSorter to spill when there are nulls
+SPARK-32903       GeneratePredicate should be able to eliminate common sub-expressions (#690)
+SPARK-32908       Fix target error calculation in `percentile_approx()`
+SPARK-32635       Fix foldable propagation
+SPARK-32738       Should reduce the number of active threads if fatal error happens in `Inbox.process`
 
 # Internal Patches
 MINOR             Add an empty APPLE_CHANGES.txt
@@ -183,3 +199,6 @@ MINOR             [ADT] Converge 2.4.0-pdt and 2.4.5
 MINOR             Bump ADT version to 0.6.1
 MINOR             Fix SPARK-31935 test case for Hadoop-3.2
 MINOR             Build docker image with openjdk:11-jre-slim instead of openjdk:8-jre-slim
+MINOR             Bump to 2.4.7.2-apple-SNAPSHOT
+rdar://68926116   Add alternative conf name `spark.FsUrlStreamHandlerFactory.enabled`
+MINOR             Bump ADT version to 0.6.2
