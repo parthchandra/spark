@@ -1098,6 +1098,14 @@ object SparkSession extends Logging {
     "org.apache.spark.sql.hive.HiveSessionStateBuilder"
 
   private def sessionStateClassName(conf: SparkConf): String = {
+    val builderNotSet = conf.get(SESSION_STATE_BUILDER_CLASS_NAME).isEmpty
+    val catalogProvided = conf.get(CATALOG_IMPLEMENTATION) == "provided"
+    assert(builderNotSet || catalogProvided,
+      s"""${SESSION_STATE_BUILDER_CLASS_NAME.key} set but ${CATALOG_IMPLEMENTATION.key} is set to
+         |${conf.get(CATALOG_IMPLEMENTATION)} and not 'provided'. If you did not intend to set
+         |${CATALOG_IMPLEMENTATION.key}, make sure your conf is correct and you have not called
+         |enableHiveSupport() which will revert the value to "hive" or modified the configuration
+         |in some other programmatic way.""".stripMargin)
     conf.get(CATALOG_IMPLEMENTATION) match {
       case "hive" => HIVE_SESSION_STATE_BUILDER_CLASS_NAME
       case "in-memory" => classOf[SessionStateBuilder].getCanonicalName
