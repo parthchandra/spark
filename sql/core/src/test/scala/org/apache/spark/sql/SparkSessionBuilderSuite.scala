@@ -258,13 +258,21 @@ class SparkSessionBuilderSuite extends SparkFunSuite with BeforeAndAfterEach {
     assert(session.sessionState.conf.getConfString("MySessionStateBuilder") == "true")
   }
 
-  test("SPARK-17767 - Fail on missing configs") {
+  test("SPARK-17767 - Fail on missing SessionStateBuilder") {
     val session = SparkSession.builder()
       .master("local")
       .enableProvidedCatalog()
       .getOrCreate()
     assertThrows[SparkException](session.sharedState.externalCatalog)
     assertThrows[SparkException](session.sessionState)
+  }
+
+  test("SPARK-17767-followup - Fail on unused SessionStateBuilder config") {
+    val session = SparkSession.builder()
+      .master("local")
+      .config("spark.sql.sessionStateBuilder", "org.apache.spark.sql.MySessionStateBuilder")
+      .getOrCreate()
+    assertThrows[AssertionError](session.sessionState)
   }
 
   test("SPARK-32160: Disallow to create SparkSession in executors if the config is set") {
