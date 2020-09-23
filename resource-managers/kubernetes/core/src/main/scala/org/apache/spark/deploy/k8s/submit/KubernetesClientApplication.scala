@@ -20,17 +20,21 @@ import java.io.StringWriter
 import java.util.{Collections, UUID}
 import java.util.Properties
 
-import io.fabric8.kubernetes.api.model._
-import io.fabric8.kubernetes.client.KubernetesClient
 import scala.collection.JavaConverters._
 import scala.collection.mutable
+import scala.util.control.Breaks._
 import scala.util.control.NonFatal
+
+import io.fabric8.kubernetes.api.model._
+import io.fabric8.kubernetes.client.{KubernetesClient, Watch}
+import io.fabric8.kubernetes.client.Watcher.Action
 
 import org.apache.spark.SparkConf
 import org.apache.spark.deploy.SparkApplication
 import org.apache.spark.deploy.k8s._
 import org.apache.spark.deploy.k8s.Config._
 import org.apache.spark.deploy.k8s.Constants._
+import org.apache.spark.deploy.k8s.KubernetesUtils.addOwnerReference
 import org.apache.spark.internal.Logging
 import org.apache.spark.util.Utils
 
@@ -139,7 +143,7 @@ private[spark] class Client(
       try {
         val otherKubernetesResources =
           resolvedDriverSpec.driverKubernetesResources ++ Seq(configMap)
-        addDriverOwnerReference(createdDriverPod, otherKubernetesResources)
+        addOwnerReference(createdDriverPod, otherKubernetesResources)
         kubernetesClient.resourceList(otherKubernetesResources: _*).createOrReplace()
       } catch {
         case NonFatal(e) =>
@@ -149,22 +153,6 @@ private[spark] class Client(
 
       val sId = Seq(conf.namespace, driverPodName).mkString(":")
       watcher.watchOrStop(sId)
-    }
-  }
-
-  // Add a OwnerReference to the given resources making the driver pod an owner of them so when
-  // the driver pod is deleted, the resources are garbage collected.
-  private def addDriverOwnerReference(driverPod: Pod, resources: Seq[HasMetadata]): Unit = {
-    val driverPodOwnerReference = new OwnerReferenceBuilder()
-      .withName(driverPod.getMetadata.getName)
-      .withApiVersion(driverPod.getApiVersion)
-      .withUid(driverPod.getMetadata.getUid)
-      .withKind(driverPod.getKind)
-      .withController(true)
-      .build()
-    resources.foreach { resource =>
-      val originalMetadata = resource.getMetadata
-      originalMetadata.setOwnerReferences(Collections.singletonList(driverPodOwnerReference))
     }
   }
 
