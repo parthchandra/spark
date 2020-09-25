@@ -16,6 +16,9 @@
  */
 package org.apache.spark.deploy.k8s.features
 
+import scala.collection.JavaConverters._
+import scala.collection.mutable.ArrayBuffer
+
 import io.fabric8.kubernetes.api.model._
 
 import org.apache.spark.deploy.k8s._
@@ -24,6 +27,9 @@ import org.apache.spark.deploy.k8s.Constants.ENV_EXECUTOR_ID
 private[spark] class MountVolumesFeatureStep(
     kubernetesConf: KubernetesConf[_ <: KubernetesRoleSpecificConf])
   extends KubernetesFeatureConfigStep {
+  import MountVolumesFeatureStep._
+
+  val additionalResources = ArrayBuffer.empty[HasMetadata]
 
   override def configurePod(pod: SparkPod): SparkPod = {
     val (volumeMounts, volumes) = constructVolumes(kubernetesConf.roleVolumes).unzip
@@ -43,12 +49,12 @@ private[spark] class MountVolumesFeatureStep(
 
   override def getAdditionalPodSystemProperties(): Map[String, String] = Map.empty
 
-  override def getAdditionalKubernetesResources(): Seq[HasMetadata] = Seq.empty
+  override def getAdditionalKubernetesResources(): Seq[HasMetadata] = additionalResources
 
   private def constructVolumes(
     volumeSpecs: Iterable[KubernetesVolumeSpec[_ <: KubernetesVolumeSpecificConf]]
   ): Iterable[(VolumeMount, Volume)] = {
-    volumeSpecs.map { spec =>
+    volumeSpecs.zipWithIndex.map { case (spec, i) =>
       val volumeMount = new VolumeMountBuilder()
         .withMountPath(spec.mountPath)
         .withReadOnly(spec.mountReadOnly)
@@ -62,10 +68,31 @@ private[spark] class MountVolumesFeatureStep(
               .withPath(hostPath)
               .build())
 
-        case KubernetesPVCVolumeConf(claimNameTemplate) =>
+        case KubernetesPVCVolumeConf(claimNameTemplate, storageClass, size) =>
           val claimName = kubernetesConf.roleSpecificConf match {
             case c: KubernetesExecutorSpecificConf =>
-              claimNameTemplate.replaceAll(ENV_EXECUTOR_ID, c.executorId)
+              val claimName = claimNameTemplate
+                .replaceAll(PVC_ON_DEMAND,
+                  s"${kubernetesConf.appResourceNamePrefix}-exec-${c.executorId}$PVC_POSTFIX-$i")
+                .replaceAll(ENV_EXECUTOR_ID, c.executorId)
+
+              if (storageClass.isDefined && size.isDefined) {
+                additionalResources.append(new PersistentVolumeClaimBuilder()
+                  .withKind(PVC)
+                  .withApiVersion("v1")
+                  .withNewMetadata()
+                  .withName(claimName)
+                  .endMetadata()
+                  .withNewSpec()
+                  .withStorageClassName(storageClass.get)
+                  .withAccessModes(PVC_ACCESS_MODE)
+                  .withResources(new ResourceRequirementsBuilder()
+                    .withRequests(Map("storage" -> new Quantity(size.get)).asJava).build())
+                  .endSpec()
+                  .build())
+              }
+
+              claimName
             case _ =>
               claimNameTemplate
           }
@@ -85,4 +112,11 @@ private[spark] class MountVolumesFeatureStep(
       (volumeMount, volume)
     }
   }
+}
+
+private[spark] object MountVolumesFeatureStep {
+  val PVC_ON_DEMAND = "OnDemand"
+  val PVC = "PersistentVolumeClaim"
+  val PVC_POSTFIX = "-pvc"
+  val PVC_ACCESS_MODE = "ReadWriteOnce"
 }

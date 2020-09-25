@@ -45,7 +45,7 @@ private[spark] class KubernetesExecutorBuilder(
     provideInitialPod: () => SparkPod = SparkPod.initialPod) {
 
   def buildFromFeatures(
-    kubernetesConf: KubernetesConf[KubernetesExecutorSpecificConf]): SparkPod = {
+    kubernetesConf: KubernetesConf[KubernetesExecutorSpecificConf]): KubernetesExecutorSpec = {
 
     val baseFeatures = Seq(provideBasicStep(kubernetesConf), provideLocalDirsStep(kubernetesConf))
     val secretFeature = if (kubernetesConf.roleSecretNamesToMountPaths.nonEmpty) {
@@ -60,11 +60,17 @@ private[spark] class KubernetesExecutorBuilder(
 
     val allFeatures = baseFeatures ++ secretFeature ++ secretEnvFeature ++ volumesFeature
 
-    var executorPod = provideInitialPod()
-    for (feature <- allFeatures) {
-      executorPod = feature.configurePod(executorPod)
+    var spec = KubernetesExecutorSpec(
+      provideInitialPod(),
+      executorKubernetesResources = Seq.empty)
+
+    allFeatures.foldLeft(spec) { case (spec, feature) =>
+      val configuredPod = feature.configurePod(spec.pod)
+      val addedResources = feature.getAdditionalKubernetesResources()
+      KubernetesExecutorSpec(
+        configuredPod,
+        spec.executorKubernetesResources ++ addedResources)
     }
-    executorPod
   }
 }
 

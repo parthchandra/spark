@@ -17,10 +17,11 @@
 package org.apache.spark.deploy.k8s
 
 import java.io.File
+import java.util.Collections
 
 import scala.collection.JavaConverters._
 
-import io.fabric8.kubernetes.api.model.{Container, ContainerBuilder, ContainerStateRunning, ContainerStateTerminated, ContainerStateWaiting, ContainerStatus, Pod, PodBuilder}
+import io.fabric8.kubernetes.api.model.{Container, ContainerBuilder, ContainerStateRunning, ContainerStateTerminated, ContainerStateWaiting, ContainerStatus, HasMetadata, OwnerReferenceBuilder, Pod, PodBuilder}
 import io.fabric8.kubernetes.client.KubernetesClient
 
 import org.apache.spark.{SparkConf, SparkException}
@@ -109,4 +110,22 @@ private[spark] object KubernetesUtils extends Logging {
   }
 
   def parseMasterUrl(url: String): String = url.substring("k8s://".length)
+
+  // Add a OwnerReference to the given resources making the pod an owner of them so when
+  // the pod is deleted, the resources are garbage collected.
+  def addOwnerReference(pod: Pod, resources: Seq[HasMetadata]): Unit = {
+    if (pod != null) {
+      val reference = new OwnerReferenceBuilder()
+        .withName(pod.getMetadata.getName)
+        .withApiVersion(pod.getApiVersion)
+        .withUid(pod.getMetadata.getUid)
+        .withKind(pod.getKind)
+        .withController(true)
+        .build()
+      resources.foreach { resource =>
+        val originalMetadata = resource.getMetadata
+        originalMetadata.setOwnerReferences(Collections.singletonList(reference))
+      }
+    }
+  }
 }

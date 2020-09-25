@@ -27,7 +27,7 @@ import org.mockito.stubbing.Answer
 import org.scalatest.BeforeAndAfter
 
 import org.apache.spark.{SparkConf, SparkFunSuite}
-import org.apache.spark.deploy.k8s.{KubernetesConf, KubernetesExecutorSpecificConf, SparkPod}
+import org.apache.spark.deploy.k8s.{KubernetesConf, KubernetesExecutorSpec, KubernetesExecutorSpecificConf, SparkPod}
 import org.apache.spark.deploy.k8s.Config._
 import org.apache.spark.deploy.k8s.Constants._
 import org.apache.spark.deploy.k8s.Fabric8Aliases._
@@ -152,12 +152,13 @@ class ExecutorPodsAllocatorSuite extends SparkFunSuite with BeforeAndAfter {
     verify(podOperations).create(podWithAttachedContainerForId(2))
   }
 
-  private def executorPodAnswer(): Answer[SparkPod] = {
-    new Answer[SparkPod] {
-      override def answer(invocation: InvocationOnMock): SparkPod = {
+  private def executorPodAnswer(): Answer[KubernetesExecutorSpec] = {
+    new Answer[KubernetesExecutorSpec] {
+      override def answer(invocation: InvocationOnMock): KubernetesExecutorSpec = {
         val k8sConf = invocation.getArgumentAt(
           0, classOf[KubernetesConf[KubernetesExecutorSpecificConf]])
-        executorPodWithId(k8sConf.roleSpecificConf.executorId.toInt)
+        KubernetesExecutorSpec(
+          executorPodWithId(k8sConf.roleSpecificConf.executorId.toInt), Seq.empty)
       }
     }
   }

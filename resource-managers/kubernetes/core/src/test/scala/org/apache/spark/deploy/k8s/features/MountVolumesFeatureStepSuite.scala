@@ -16,6 +16,8 @@
  */
 package org.apache.spark.deploy.k8s.features
 
+import io.fabric8.kubernetes.api.model.PodBuilder
+
 import org.apache.spark.{SparkConf, SparkFunSuite}
 import org.apache.spark.deploy.k8s._
 
@@ -76,6 +78,24 @@ class MountVolumesFeatureStepSuite extends SparkFunSuite {
     assert(configuredPod.container.getVolumeMounts.get(0).getName === "testVolume")
     assert(configuredPod.container.getVolumeMounts.get(0).getReadOnly === true)
 
+  }
+
+  test("Create and mount persistentVolumeClaims in executors") {
+    val volumeConf = KubernetesVolumeSpec(
+      "testVolume",
+      "/tmp",
+      true,
+      KubernetesPVCVolumeConf(MountVolumesFeatureStep.PVC_ON_DEMAND)
+    )
+    val executorConf = emptyKubernetesConf.copy(
+      roleVolumes = Seq(volumeConf),
+      roleSpecificConf = KubernetesExecutorSpecificConf("1", Some(new PodBuilder().build())))
+    val executorStep = new MountVolumesFeatureStep(executorConf)
+    val executorPod = executorStep.configurePod(SparkPod.initialPod())
+
+    assert(executorPod.pod.getSpec.getVolumes.size() === 1)
+    val executorPVC = executorPod.pod.getSpec.getVolumes.get(0).getPersistentVolumeClaim
+    assert(executorPVC.getClaimName.endsWith("-exec-1-pvc-0"))
   }
 
   test("Mounts emptyDir") {
