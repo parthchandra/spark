@@ -13,6 +13,7 @@ SPARK-32721       Simplify if clauses with null and boolean
 SPARK-32721       Simplify if clauses with null and boolean
 SPARK-24994       Add UnwrapCastInBinaryComparison optimizer to simplify literal types
 SPARK-32802       Avoid using SpecificInternalRow in RunLengthEncoding#Encoder
+SPARK-32971       Support dynamic PVC creation/deletion for K8s executors
 
 # From Spark 3.0.0
 SPARK-17636       Parquet predicate pushdown in nested fields
@@ -164,6 +165,11 @@ SPARK-32903       GeneratePredicate should be able to eliminate common sub-expre
 SPARK-32908       Fix target error calculation in `percentile_approx()`
 SPARK-32635       Fix foldable propagation
 SPARK-32738       Should reduce the number of active threads if fatal error happens in `Inbox.process`
+SPARK-32898       Fix wrong executorRunTime when task killed before real start
+SPARK-32886       fix 'undefined' link in event timeline view
+SPARK-32306       Clarify the result of `percentile_approx()`
+MINOR             Improve examples for `percentile_approx()`
+SPARK-32898       Fix wrong executorRunTime when task killed before real start
 
 # Internal Patches
 MINOR             Add an empty APPLE_CHANGES.txt
@@ -202,3 +208,4 @@ MINOR             Build docker image with openjdk:11-jre-slim instead of openjdk
 MINOR             Bump to 2.4.7.2-apple-SNAPSHOT
 rdar://68926116   Add alternative conf name `spark.FsUrlStreamHandlerFactory.enabled`
 MINOR             Bump ADT version to 0.6.2
+rdar://69319047   Spark should reject invalid CatalogImplementation Configuration
