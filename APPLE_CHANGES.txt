@@ -57,6 +57,7 @@ SPARK-24994      Add UnwrapCastInBinaryComparison optimizer to simplify literal 
 SPARK-32802      Avoid using SpecificInternalRow in RunLengthEncoding#Encoder
 SPARK-29157      Add DataFrameWriterV2 to Python API
 SPARK-32903      GeneratePredicate should be able to eliminate common sub-expressions
+SPARK-32971      Support dynamic PVC creation/deletion for K8s executors
 
 # From Spark 3.0.2
 SPARK-28612      Correct method doc of DataFrameWriterV2.replace()
@@ -111,6 +112,14 @@ SPARK-32905      ApplicationMaster fails to receive UpdateDelegationTokens messa
 SPARK-32930      Replace deprecated isFile/isDirectory methods
 SPARK-32635      Add a new test case in catalyst module
 SPARK-32898      Fix wrong executorRunTime when task killed before real start
+SPARK-32886      fix 'undefined' link in event timeline view
+SPARK-32718      Remove unnecessary keywords for interval units
+SPARK-32659      Broadcast Array instead of Set in InSubqueryExec
+SPARK-32977      Fix JavaDoc on Default Save Mode
+SPARK-32306      Clarify the result of `percentile_approx()`
+MINOR            Improve examples for `percentile_approx()`
+SPARK-32877      Add test for Hive UDF complex decimal type
+SPARK-32999      Use Utils.getSimpleName to avoid hitting Malformed class name in TreeNode
 
 # Internal Patche
 SPARK-17767      Support user-provided ExternalCatalog and SessionBuilder
@@ -142,3 +151,4 @@ MINOR            Add https://artifacts.apple.com/libs-release to spark.sql.maven
 MINOR            Bump to 3.0.1.1-apple-SNAPSHOT
 MINOR            Bump to 3.0.1.2-apple-SNAPSHOT after 3.0.1.1-apple release
 rdar://68926116  Add alternative conf name `spark.FsUrlStreamHandlerFactory.enabled`
+rdar://69319047  Spark should reject invalid CatalogImplementation Configuration
