@@ -108,6 +108,7 @@ abstract class Optimizer(catalogManager: CatalogManager)
         UnwrapCastInBinaryComparison,
         RemoveNoopOperators,
         SimplifyExtractValueOps,
+        OptimizeJsonExprs,
         CombineConcats) ++
         extendedOperatorOptimizationRules
 
