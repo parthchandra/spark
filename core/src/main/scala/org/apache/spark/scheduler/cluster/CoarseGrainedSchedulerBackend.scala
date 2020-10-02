@@ -199,7 +199,7 @@ class CoarseGrainedSchedulerBackend(scheduler: TaskSchedulerImpl, val rpcEnv: Rp
         removeExecutor(executorId, reason)
 
       case DecommissionExecutor(executorId, decommissionInfo) =>
-        logError(s"Received decommission executor message ${executorId}: $decommissionInfo")
+        logInfo(s"Received decommission executor message ${executorId}: $decommissionInfo")
         decommissionExecutor(executorId, decommissionInfo, adjustTargetNumExecutors = false)
 
       case RemoveWorker(workerId, host, message) =>
@@ -283,7 +283,7 @@ class CoarseGrainedSchedulerBackend(scheduler: TaskSchedulerImpl, val rpcEnv: Rp
         context.reply(true)
 
       case DecommissionExecutor(executorId, decommissionInfo) =>
-        logError(s"Received decommission executor message ${executorId}: ${decommissionInfo}.")
+        logInfo(s"Received decommission executor message ${executorId}: ${decommissionInfo}.")
         context.reply(decommissionExecutor(executorId, decommissionInfo,
           adjustTargetNumExecutors = false))
 
