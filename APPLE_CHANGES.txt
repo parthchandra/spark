@@ -58,6 +58,7 @@ SPARK-32802      Avoid using SpecificInternalRow in RunLengthEncoding#Encoder
 SPARK-29157      Add DataFrameWriterV2 to Python API
 SPARK-32903      GeneratePredicate should be able to eliminate common sub-expressions
 SPARK-32971      Support dynamic PVC creation/deletion for K8s executors
+SPARK-32997      Support dynamic PVC creation and deletion in K8s driver
 
 # From Spark 3.0.2
 SPARK-28612      Correct method doc of DataFrameWriterV2.replace()
@@ -120,6 +121,18 @@ SPARK-32306      Clarify the result of `percentile_approx()`
 MINOR            Improve examples for `percentile_approx()`
 SPARK-32877      Add test for Hive UDF complex decimal type
 SPARK-32999      Use Utils.getSimpleName to avoid hitting Malformed class name in TreeNode
+SPARK-33019      Use spark.hadoop.mapreduce.fileoutputcommitter.algorithm.version=1 by default
+SPARK-33015      Compute the current date only once
+MINOR            Document when `current_date` and `current_timestamp` are evaluated
+SPARK-33021      Move functions related test cases into test_functions.py
+SPARK-33015      Use millisToDays() in the ComputeCurrentTime rule
+SPARK-32901      Do not allocate memory while spilling UnsafeExternalSorter
+MINOR            Fixing log message for better clarity
+SPARK-33018      Fix estimate statistics issue if child has 0 bytes
+SPARK-31753      Add missing keywords in the SQL docs
+MINOR            Corrects input table names in the examples of CREATE FUNCTION doc
+SPARK-32996      Handle empty ExecutorMetrics in ExecutorMetricsJsonSerializer
+SPARK-33051      Uses setup-r to install R in GitHub Actions build
 
 # Internal Patche
 SPARK-17767      Support user-provided ExternalCatalog and SessionBuilder
@@ -152,3 +165,5 @@ MINOR            Bump to 3.0.1.1-apple-SNAPSHOT
 MINOR            Bump to 3.0.1.2-apple-SNAPSHOT after 3.0.1.1-apple release
 rdar://68926116  Add alternative conf name `spark.FsUrlStreamHandlerFactory.enabled`
 rdar://69319047  Spark should reject invalid CatalogImplementation Configuration
+MINOR            Reduce log level from Error to Info for decom messages
+rdar://69905256  Change restart policy back to never
