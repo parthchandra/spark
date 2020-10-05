@@ -14,6 +14,7 @@ SPARK-32721       Simplify if clauses with null and boolean
 SPARK-24994       Add UnwrapCastInBinaryComparison optimizer to simplify literal types
 SPARK-32802       Avoid using SpecificInternalRow in RunLengthEncoding#Encoder
 SPARK-32971       Support dynamic PVC creation/deletion for K8s executors
+SPARK-33019       Use spark.hadoop.mapreduce.fileoutputcommitter.algorithm.version=1 by default
 
 # From Spark 3.0.0
 SPARK-17636       Parquet predicate pushdown in nested fields
@@ -170,6 +171,7 @@ SPARK-32886       fix 'undefined' link in event timeline view
 SPARK-32306       Clarify the result of `percentile_approx()`
 MINOR             Improve examples for `percentile_approx()`
 SPARK-32898       Fix wrong executorRunTime when task killed before real start
+SPARK-32999       Use Utils.getSimpleName to avoid hitting Malformed class name in TreeNode
 
 # Internal Patches
 MINOR             Add an empty APPLE_CHANGES.txt
