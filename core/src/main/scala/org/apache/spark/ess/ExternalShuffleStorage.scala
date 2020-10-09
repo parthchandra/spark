@@ -212,7 +212,7 @@ object ExternalShuffleStorage extends Logging {
     val ret = master.updateBlockInfo(
       EXTERNAL_BLOCK_MANAGER_ID, blockId, StorageLevel.DISK_ONLY, memSize = 0, dataLength)
     if (ret && master.getLocations(blockId).isEmpty) {
-      logError(s"Cannot find updated blocks: ${master.getLocations(blockId)}")
+      logInfo(s"Cannot find updated blocks: ${master.getLocations(blockId)}")
     }
     ret
   }

@@ -92,8 +92,8 @@ private[storage] class BlockManagerDecommissioner(
                   if (ess.ExternalShuffleStorage.upload(conf, bm, shuffleBlockInfo)) {
                     logInfo(s"Migrated $shuffleBlockInfo to external shuffle storage")
                   } else {
-                    logError(s"Fail to migrate $shuffleBlockInfo to external shuffle storage")
-                    throw new SparkException("Fail to use external shuffle storage")
+                    logWarning(s"Adding back $shuffleBlockInfo to migration queue")
+                    shufflesToMigrate.add((shuffleBlockInfo, retryCount + 1))
                   }
                 } else {
                   blocks.foreach { case (blockId, buffer) =>
