@@ -241,17 +241,20 @@ object ExternalShuffleStorage extends Logging {
     val (indexFile, dataFile) = bm.migratableResolver.getMigrationFiles(shuffleBlockInfo)
 
     val parent = getAppIdPrefix(conf)
+    var isDataFileVisible = true
     logInfo(s"Uploading ${indexFile.getAbsolutePath}")
     putObject(conf, parent + indexFile.getName, indexFile)
-    logInfo(s"Uploading ${dataFile.getAbsolutePath}")
-    putObject(conf, parent + dataFile.getName, dataFile)
+    if (dataFile.exists) {
+      logInfo(s"Uploading ${dataFile.getAbsolutePath}")
+      putObject(conf, parent + dataFile.getName, dataFile)
+      isDataFileVisible = doesObjectExist(conf, parent + dataFile.getName)
+    }
 
-    if (doesObjectExist(conf, parent + indexFile.getName) &&
-        doesObjectExist(conf, parent + dataFile.getName)) {
+    if (doesObjectExist(conf, parent + indexFile.getName) && isDataFileVisible) {
       logInfo(s"Uploading ${dataFile.getAbsolutePath}")
       reportBlockStatus(bm, shuffleId, mapId, dataFile.length)
     } else {
-      logInfo(s"Still invisible ${parent + dataFile.getName}")
+      logInfo(s"Still invisible ${parent + indexFile.getName} or data file")
       false
     }
   }
