@@ -172,6 +172,11 @@ SPARK-32306       Clarify the result of `percentile_approx()`
 MINOR             Improve examples for `percentile_approx()`
 SPARK-32898       Fix wrong executorRunTime when task killed before real start
 SPARK-32999       Use Utils.getSimpleName to avoid hitting Malformed class name in TreeNode
+SPARK-33051       Uses setup-r to install R in GitHub Actions build
+SPARK-33069       Skip test result report if no JUnit XML files are found
+SPARK-30201       HiveOutputWriter standardOI should use ObjectInspectorCopyOption.DEFAULT
+SPARK-32901       Do not allocate memory while spilling UnsafeExternalSorter
+SPARK-33096       Use LinkedHashMap instead of Map for newlyCreatedExecutors
 
 # Internal Patches
 MINOR             Add an empty APPLE_CHANGES.txt
@@ -211,3 +216,4 @@ MINOR             Bump to 2.4.7.2-apple-SNAPSHOT
 rdar://68926116   Add alternative conf name `spark.FsUrlStreamHandlerFactory.enabled`
 MINOR             Bump ADT version to 0.6.2
 rdar://69319047   Spark should reject invalid CatalogImplementation Configuration
+rdar://66018002   TLF: Native libs by using Apple Hadoop 3.2.0.3
