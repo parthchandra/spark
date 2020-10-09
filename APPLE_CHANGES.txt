@@ -59,6 +59,7 @@ SPARK-29157      Add DataFrameWriterV2 to Python API
 SPARK-32903      GeneratePredicate should be able to eliminate common sub-expressions
 SPARK-32971      Support dynamic PVC creation/deletion for K8s executors
 SPARK-32997      Support dynamic PVC creation and deletion in K8s driver
+SPARK-33099      Respect executor idle timeout conf in ExecutorPodsAllocator
 
 # From Spark 3.0.2
 SPARK-28612      Correct method doc of DataFrameWriterV2.replace()
@@ -133,6 +134,16 @@ SPARK-31753      Add missing keywords in the SQL docs
 MINOR            Corrects input table names in the examples of CREATE FUNCTION doc
 SPARK-32996      Handle empty ExecutorMetrics in ExecutorMetricsJsonSerializer
 SPARK-33051      Uses setup-r to install R in GitHub Actions build
+SPARK-33043      Handle spark.driver.maxResultSize=0 in RowMatrix heuristic computation
+SPARK-33065      Expand the stack size of a thread in a test in LocalityPlacementStrategySuite for Java 11 with sbt
+SPARK-33069      Skip test result report if no JUnit XML files are found
+SPARK-27428      Increase receive buffer size used in StatsdSinkSuite
+SPARK-33035      Updates the obsoleted entries of attribute mapping in QueryPlan#transformUpWithNewOutput
+SPARK-33073      Improve error handling on Pandas to Arrow conversion failures
+SPARK-32067      Use unique ConfigMap name for executor pod template
+SPARK-33089      make avro format propagate Hadoop config from DS options to underlying HDFS file system
+SPARK-33091      Avoid using map instead of foreach to avoid potential side effect at callers of OrcUtils.readCatalystSchema
+SPARK-33096      Use LinkedHashMap instead of Map for newlyCreatedExecutors
 
 # Internal Patche
 SPARK-17767      Support user-provided ExternalCatalog and SessionBuilder
@@ -167,3 +178,4 @@ rdar://68926116  Add alternative conf name `spark.FsUrlStreamHandlerFactory.enab
 rdar://69319047  Spark should reject invalid CatalogImplementation Configuration
 MINOR            Reduce log level from Error to Info for decom messages
 rdar://69905256  Change restart policy back to never
+rdar://66018002   TLF: Native libs by using Apple Hadoop 3.2.0.3
