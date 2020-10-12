@@ -60,6 +60,7 @@ SPARK-32903      GeneratePredicate should be able to eliminate common sub-expres
 SPARK-32971      Support dynamic PVC creation/deletion for K8s executors
 SPARK-32997      Support dynamic PVC creation and deletion in K8s driver
 SPARK-33099      Respect executor idle timeout conf in ExecutorPodsAllocator
+SPARK-32881      Catch some race condition errors and log them more clearly
 
 # From Spark 3.0.2
 SPARK-28612      Correct method doc of DataFrameWriterV2.replace()
