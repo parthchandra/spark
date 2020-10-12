@@ -27,6 +27,7 @@ import org.apache.spark.deploy.k8s.submit.PodBuilderSuiteUtils
 
 class KubernetesExecutorBuilderSuite extends SparkFunSuite {
   private val BASIC_STEP_TYPE = "basic"
+  private val CREDENTIALS_STEP_TYPE = "creds"
   private val SECRETS_STEP_TYPE = "mount-secrets"
   private val ENV_SECRETS_STEP_TYPE = "env-secrets"
   private val LOCAL_DIRS_STEP_TYPE = "local-dirs"
@@ -34,6 +35,8 @@ class KubernetesExecutorBuilderSuite extends SparkFunSuite {
 
   private val basicFeatureStep = KubernetesFeaturesTestUtils.getMockConfigStepForStepType(
     BASIC_STEP_TYPE, classOf[BasicExecutorFeatureStep])
+  private val credentialsStep = KubernetesFeaturesTestUtils.getMockConfigStepForStepType(
+    CREDENTIALS_STEP_TYPE, classOf[ExecutorKubernetesCredentialsFeatureStep])
   private val mountSecretsStep = KubernetesFeaturesTestUtils.getMockConfigStepForStepType(
     SECRETS_STEP_TYPE, classOf[MountSecretsFeatureStep])
   private val envSecretsStep = KubernetesFeaturesTestUtils.getMockConfigStepForStepType(
@@ -45,6 +48,7 @@ class KubernetesExecutorBuilderSuite extends SparkFunSuite {
 
   private val builderUnderTest = new KubernetesExecutorBuilder(
     _ => basicFeatureStep,
+    _ => credentialsStep,
     _ => mountSecretsStep,
     _ => envSecretsStep,
     _ => localDirsStep,
@@ -65,7 +69,8 @@ class KubernetesExecutorBuilderSuite extends SparkFunSuite {
       Nil,
       Seq.empty[String])
     validateStepTypesApplied(
-      builderUnderTest.buildFromFeatures(conf).pod, BASIC_STEP_TYPE, LOCAL_DIRS_STEP_TYPE)
+      builderUnderTest.buildFromFeatures(conf).pod, BASIC_STEP_TYPE,
+      CREDENTIALS_STEP_TYPE, LOCAL_DIRS_STEP_TYPE)
   }
 
   test("Apply secrets step if secrets are present.") {
@@ -85,6 +90,7 @@ class KubernetesExecutorBuilderSuite extends SparkFunSuite {
     validateStepTypesApplied(
       builderUnderTest.buildFromFeatures(conf).pod,
       BASIC_STEP_TYPE,
+      CREDENTIALS_STEP_TYPE,
       LOCAL_DIRS_STEP_TYPE,
       SECRETS_STEP_TYPE,
       ENV_SECRETS_STEP_TYPE)
@@ -112,6 +118,7 @@ class KubernetesExecutorBuilderSuite extends SparkFunSuite {
     validateStepTypesApplied(
       builderUnderTest.buildFromFeatures(conf).pod,
       BASIC_STEP_TYPE,
+      CREDENTIALS_STEP_TYPE,
       LOCAL_DIRS_STEP_TYPE,
       MOUNT_VOLUMES_STEP_TYPE)
   }

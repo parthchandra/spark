@@ -128,4 +128,15 @@ private[spark] object KubernetesUtils extends Logging {
       }
     }
   }
+
+  def buildPodWithServiceAccount(serviceAccount: Option[String], pod: SparkPod): Option[Pod] = {
+    serviceAccount.map { account =>
+      new PodBuilder(pod.pod)
+        .editOrNewSpec()
+          .withServiceAccount(account)
+          .withServiceAccountName(account)
+        .endSpec()
+        .build()
+    }
+  }
 }
