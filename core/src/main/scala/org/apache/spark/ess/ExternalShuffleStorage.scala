@@ -75,58 +75,64 @@ object ExternalShuffleStorage extends Logging {
     }
   }
 
+  def getCredentials(conf: SparkConf): (String, String, String) = {
+    val accessKey = conf.get(SPARK_SHUFFLE_EXTERNAL_STORAGE_ACCESS_KEY)
+      .getOrElse(System.getenv("AWS_ACCESS_KEY_ID"))
+    val secretKey = conf.get(SPARK_SHUFFLE_EXTERNAL_STORAGE_SECRET_KEY)
+      .getOrElse(System.getenv("AWS_SECRET_ACCESS_KEY"))
+    val sessionToken = conf.get(SPARK_SHUFFLE_EXTERNAL_STORAGE_SESSION_TOKEN)
+      .getOrElse(System.getenv("AWS_SESSION_TOKEN"))
+    (accessKey, secretKey, sessionToken)
+  }
+
   // --------------------------------------------------------------------------
   // Wrapper functions for StorageShim API
   // --------------------------------------------------------------------------
   def putObject(conf: SparkConf, key: String, file: File): Unit = withCheck(conf) {
     val backend = conf.get(SPARK_SHUFFLE_EXTERNAL_STORAGE_BACKEND)
-    val accessKey = conf.get(SPARK_SHUFFLE_EXTERNAL_STORAGE_ACCESS_KEY)
-    val secretKey = conf.get(SPARK_SHUFFLE_EXTERNAL_STORAGE_SECRET_KEY)
+    val (accessKey, secretKey, sessionToken) = getCredentials(conf)
     val endpoint = conf.get(SPARK_SHUFFLE_EXTERNAL_STORAGE_ENDPOINT)
     val bucket = conf.get(SPARK_SHUFFLE_EXTERNAL_STORAGE_BUCKET)
     setFileSystemIfNeeded(conf)
-    StorageShim.putObject(backend, accessKey, secretKey, endpoint, bucket, key, file)
+    StorageShim.putObject(backend, accessKey, secretKey, sessionToken, endpoint, bucket, key, file)
   }
 
   def deleteObject(conf: SparkConf, key: String): Unit = withCheck(conf) {
     val backend = conf.get(SPARK_SHUFFLE_EXTERNAL_STORAGE_BACKEND)
-    val accessKey = conf.get(SPARK_SHUFFLE_EXTERNAL_STORAGE_ACCESS_KEY)
-    val secretKey = conf.get(SPARK_SHUFFLE_EXTERNAL_STORAGE_SECRET_KEY)
+    val (accessKey, secretKey, sessionToken) = getCredentials(conf)
     val endpoint = conf.get(SPARK_SHUFFLE_EXTERNAL_STORAGE_ENDPOINT)
     val bucket = conf.get(SPARK_SHUFFLE_EXTERNAL_STORAGE_BUCKET)
     setFileSystemIfNeeded(conf)
-    StorageShim.deleteObject(backend, accessKey, secretKey, endpoint, bucket, key)
+    StorageShim.deleteObject(backend, accessKey, secretKey, sessionToken, endpoint, bucket, key)
   }
 
   def doesObjectExist(conf: SparkConf, key: String): Boolean = withCheckOrFalse(conf) {
     val backend = conf.get(SPARK_SHUFFLE_EXTERNAL_STORAGE_BACKEND)
-    val accessKey = conf.get(SPARK_SHUFFLE_EXTERNAL_STORAGE_ACCESS_KEY)
-    val secretKey = conf.get(SPARK_SHUFFLE_EXTERNAL_STORAGE_SECRET_KEY)
+    val (accessKey, secretKey, sessionToken) = getCredentials(conf)
     val endpoint = conf.get(SPARK_SHUFFLE_EXTERNAL_STORAGE_ENDPOINT)
     val bucket = conf.get(SPARK_SHUFFLE_EXTERNAL_STORAGE_BUCKET)
     setFileSystemIfNeeded(conf)
-    StorageShim.doesObjectExist(backend, accessKey, secretKey, endpoint, bucket, key)
+    StorageShim.doesObjectExist(backend, accessKey, secretKey, sessionToken, endpoint, bucket, key)
   }
 
   def getObject(conf: SparkConf, key: String, start: Long, end: Long)
     : InputStream = withCheckOrException(conf) {
     val backend = conf.get(SPARK_SHUFFLE_EXTERNAL_STORAGE_BACKEND)
-    val accessKey = conf.get(SPARK_SHUFFLE_EXTERNAL_STORAGE_ACCESS_KEY)
-    val secretKey = conf.get(SPARK_SHUFFLE_EXTERNAL_STORAGE_SECRET_KEY)
+    val (accessKey, secretKey, sessionToken) = getCredentials(conf)
     val endpoint = conf.get(SPARK_SHUFFLE_EXTERNAL_STORAGE_ENDPOINT)
     val bucket = conf.get(SPARK_SHUFFLE_EXTERNAL_STORAGE_BUCKET)
     setFileSystemIfNeeded(conf)
-    StorageShim.getObject(backend, accessKey, secretKey, endpoint, bucket, key, start, end)
+    StorageShim.getObject(
+      backend, accessKey, secretKey, sessionToken, endpoint, bucket, key, start, end)
   }
 
   def cleanUp(conf: SparkConf, prefix: String): Unit = withCheck(conf) {
     val backend = conf.get(SPARK_SHUFFLE_EXTERNAL_STORAGE_BACKEND)
-    val accessKey = conf.get(SPARK_SHUFFLE_EXTERNAL_STORAGE_ACCESS_KEY)
-    val secretKey = conf.get(SPARK_SHUFFLE_EXTERNAL_STORAGE_SECRET_KEY)
+    val (accessKey, secretKey, sessionToken) = getCredentials(conf)
     val endpoint = conf.get(SPARK_SHUFFLE_EXTERNAL_STORAGE_ENDPOINT)
     val bucket = conf.get(SPARK_SHUFFLE_EXTERNAL_STORAGE_BUCKET)
     setFileSystemIfNeeded(conf)
-    StorageShim.cleanUp(backend, accessKey, secretKey, endpoint, bucket, prefix)
+    StorageShim.cleanUp(backend, accessKey, secretKey, sessionToken, endpoint, bucket, prefix)
   }
 
   // --------------------------------------------------------------------------

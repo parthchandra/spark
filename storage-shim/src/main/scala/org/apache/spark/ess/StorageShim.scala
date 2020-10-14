@@ -23,7 +23,7 @@ import java.nio.file.{Files, StandardCopyOption}
 import scala.collection.JavaConverters._
 import scala.util.control.NonFatal
 
-import com.amazonaws.auth.{AWSStaticCredentialsProvider, BasicAWSCredentials}
+import com.amazonaws.auth.{AWSStaticCredentialsProvider, BasicSessionCredentials}
 import com.amazonaws.services.s3.{AmazonS3, AmazonS3ClientBuilder}
 import com.amazonaws.services.s3.model.{DeleteObjectsRequest, GetObjectRequest}
 import io.minio.{MinioClient, PutObjectOptions}
@@ -48,12 +48,14 @@ object StorageShim {
   private var minioClient: Option[MinioClient] = None
   private var fs: Option[FileSystem] = None
 
-  private def getOrCreateS3Client(access_key: String, secret_key: String) = {
+  private def getOrCreateS3Client(access_key: String, secret_key: String, session_token: String) = {
+    // val session_token = System.getProperty("AWS_SESSION_TOKEN", "")
     s3Client.getOrElse {
       s3Client = Some(AmazonS3ClientBuilder
         .standard()
         .withCredentials(
-          new AWSStaticCredentialsProvider(new BasicAWSCredentials(access_key, secret_key)))
+          new AWSStaticCredentialsProvider(
+            new BasicSessionCredentials(access_key, secret_key, session_token)))
         .build())
       logger.debug("New S3 client is created")
       s3Client.get
@@ -79,13 +81,14 @@ object StorageShim {
       backend: String,
       access_key: String,
       secret_key: String,
+      session_token: String,
       endpoint: String,
       bucket: String,
       prefix: String): Unit = {
     backend match {
       case "s3" =>
         logger.debug(s"Clean up s3://$bucket/$prefix*")
-        val s3 = getOrCreateS3Client(access_key, secret_key)
+        val s3 = getOrCreateS3Client(access_key, secret_key, session_token)
         // Handle pagination
         var isTruncated = true
         while (isTruncated) {
@@ -138,6 +141,7 @@ object StorageShim {
       backend: String,
       access_key: String,
       secret_key: String,
+      session_token: String,
       endpoint: String,
       bucket: String,
       key: String,
@@ -151,7 +155,7 @@ object StorageShim {
     backend match {
       case "s3" =>
         logger.debug(s"Upload to s3://$bucket/$key")
-        val s3 = getOrCreateS3Client(access_key, secret_key)
+        val s3 = getOrCreateS3Client(access_key, secret_key, session_token)
         s3.putObject(bucket, key, file)
 
       case "minio" =>
@@ -191,13 +195,14 @@ object StorageShim {
       backend: String,
       access_key: String,
       secret_key: String,
+      session_token: String,
       endpoint: String,
       bucket: String,
       key: String): Unit = {
     backend match {
       case "s3" =>
         logger.debug(s"Delete s3://$bucket/$key")
-        val s3 = getOrCreateS3Client(access_key, secret_key)
+        val s3 = getOrCreateS3Client(access_key, secret_key, session_token)
         s3.deleteObject(bucket, key)
 
       case "minio" =>
@@ -220,12 +225,13 @@ object StorageShim {
       backend: String,
       access_key: String,
       secret_key: String,
+      session_token: String,
       endpoint: String,
       bucket: String,
       key: String): Boolean = {
     backend match {
       case "s3" =>
-        val s3 = getOrCreateS3Client(access_key, secret_key)
+        val s3 = getOrCreateS3Client(access_key, secret_key, session_token)
         logger.debug(s"Check s3://$bucket/$key")
         val result = s3.doesObjectExist(bucket, key)
         if (result) {
@@ -259,6 +265,7 @@ object StorageShim {
       backend: String,
       access_key: String,
       secret_key: String,
+      session_token: String,
       endpoint: String,
       bucket: String,
       key: String,
@@ -267,7 +274,7 @@ object StorageShim {
     : InputStream = {
     backend match {
       case "s3" =>
-        val s3 = getOrCreateS3Client(access_key, secret_key)
+        val s3 = getOrCreateS3Client(access_key, secret_key, session_token)
         logger.debug(s"Read [$start:$end] from s3://$bucket/$key")
         s3.getObject(new GetObjectRequest(bucket, key).withRange(start, end)).getObjectContent
 

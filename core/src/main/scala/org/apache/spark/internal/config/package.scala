@@ -484,7 +484,7 @@ package object config {
       .doc("The bucket name for external shuffle storage")
       .version("3.1.0")
       .stringConf
-      .createWithDefault("spark-ess")
+      .createWithDefault("ess")
 
   private[spark] val SPARK_SHUFFLE_EXTERNAL_STORAGE_ACCESS_KEY =
     ConfigBuilder("spark.shuffle.externalStorage.access.key")
@@ -492,7 +492,7 @@ package object config {
         "We use a separate credential for security enforcement.")
       .version("3.1.0")
       .stringConf
-      .createWithDefault("minioadmin")
+      .createOptional
 
   private[spark] val SPARK_SHUFFLE_EXTERNAL_STORAGE_SECRET_KEY =
     ConfigBuilder("spark.shuffle.externalStorage.secret.key")
@@ -500,7 +500,15 @@ package object config {
         "We use a separate credential for security enforcement.")
       .version("3.1.0")
       .stringConf
-      .createWithDefault("minioadmin")
+      .createOptional
+
+  private[spark] val SPARK_SHUFFLE_EXTERNAL_STORAGE_SESSION_TOKEN =
+    ConfigBuilder("spark.shuffle.externalStorage.session.token")
+      .doc("The session token for external shuffle storage. " +
+        "We use a separate credential for security enforcement.")
+      .version("3.1.0")
+      .stringConf
+      .createOptional
 
   private[spark] val SPARK_SHUFFLE_EXTERNAL_STORAGE_BACKEND =
     ConfigBuilder("spark.shuffle.externalStorage.backend")

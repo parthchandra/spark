@@ -31,6 +31,7 @@ class StorageShimSuite extends FunSuite { // scalastyle:ignore funsuite
     val backend = "efs"
     val accessKey = ""
     val secretKey = ""
+    val sessionToken = ""
     val endpoint = ""
     val bucket = Files.createTempDirectory("tmp").toFile.getAbsolutePath
     val file = File.createTempFile("tmp", ".tmp")
@@ -41,37 +42,38 @@ class StorageShimSuite extends FunSuite { // scalastyle:ignore funsuite
     val index3 = "appid/shuffle_1_2_0.index"
     val data3 = "appid/shuffle_1_2_0.data"
 
-    putObject(backend, accessKey, secretKey, endpoint, bucket, index1, file)
-    putObject(backend, accessKey, secretKey, endpoint, bucket, data1, file)
-    assert(doesObjectExist(backend, accessKey, secretKey, endpoint, bucket, index1))
-    assert(doesObjectExist(backend, accessKey, secretKey, endpoint, bucket, data1))
+    putObject(backend, accessKey, secretKey, sessionToken, endpoint, bucket, index1, file)
+    putObject(backend, accessKey, secretKey, sessionToken, endpoint, bucket, data1, file)
+    assert(doesObjectExist(backend, accessKey, sessionToken, secretKey, endpoint, bucket, index1))
+    assert(doesObjectExist(backend, accessKey, secretKey, sessionToken, endpoint, bucket, data1))
 
-    deleteObject(backend, accessKey, secretKey, endpoint, bucket, data1)
-    assert(doesObjectExist(backend, accessKey, secretKey, endpoint, bucket, index1))
-    assert(!doesObjectExist(backend, accessKey, secretKey, endpoint, bucket, data1))
+    deleteObject(backend, accessKey, secretKey, sessionToken, endpoint, bucket, data1)
+    assert(doesObjectExist(backend, accessKey, secretKey, sessionToken, endpoint, bucket, index1))
+    assert(!doesObjectExist(backend, accessKey, secretKey, sessionToken, endpoint, bucket, data1))
 
     // Clean up an app
-    cleanUp(backend, accessKey, secretKey, endpoint, bucket, "appid")
-    assert(!doesObjectExist(backend, accessKey, secretKey, endpoint, bucket, data1))
+    cleanUp(backend, accessKey, secretKey, sessionToken, endpoint, bucket, "appid")
+    assert(!doesObjectExist(backend, accessKey, secretKey, sessionToken, endpoint, bucket, data1))
 
     // Clean up a shuffle
-    putObject(backend, accessKey, secretKey, endpoint, bucket, index1, file)
-    putObject(backend, accessKey, secretKey, endpoint, bucket, index2, file)
-    putObject(backend, accessKey, secretKey, endpoint, bucket, index3, file)
-    cleanUp(backend, accessKey, secretKey, endpoint, bucket, "appid/shuffle_0_")
-    assert(!doesObjectExist(backend, accessKey, secretKey, endpoint, bucket, index1))
-    assert(!doesObjectExist(backend, accessKey, secretKey, endpoint, bucket, index2))
-    assert(doesObjectExist(backend, accessKey, secretKey, endpoint, bucket, index3))
+    putObject(backend, accessKey, secretKey, sessionToken, endpoint, bucket, index1, file)
+    putObject(backend, accessKey, secretKey, sessionToken, endpoint, bucket, index2, file)
+    putObject(backend, accessKey, secretKey, sessionToken, endpoint, bucket, index3, file)
+    cleanUp(backend, accessKey, secretKey, sessionToken, endpoint, bucket, "appid/shuffle_0_")
+    assert(!doesObjectExist(backend, accessKey, secretKey, sessionToken, endpoint, bucket, index1))
+    assert(!doesObjectExist(backend, accessKey, secretKey, sessionToken, endpoint, bucket, index2))
+    assert(doesObjectExist(backend, accessKey, secretKey, sessionToken, endpoint, bucket, index3))
 
     // Clean up a file
-    cleanUp(backend, accessKey, secretKey, endpoint, bucket, data3)
-    assert(!doesObjectExist(backend, accessKey, secretKey, endpoint, bucket, data3))
+    cleanUp(backend, accessKey, secretKey, sessionToken, endpoint, bucket, data3)
+    assert(!doesObjectExist(backend, accessKey, secretKey, sessionToken, endpoint, bucket, data3))
   }
 
   test("Shim API test with dfs") {
     val backend = "hdfs"
     val accessKey = ""
     val secretKey = ""
+    val sessionToken = ""
     val endpoint = "file://"
     val bucket = Files.createTempDirectory("tmp").toFile.getAbsolutePath
     val file = File.createTempFile("tmp", ".tmp")
@@ -84,31 +86,78 @@ class StorageShimSuite extends FunSuite { // scalastyle:ignore funsuite
     val index3 = "appid/shuffle_1_2_0.index"
     val data3 = "appid/shuffle_1_2_0.data"
 
-    putObject(backend, accessKey, secretKey, endpoint, bucket, index1, file)
-    putObject(backend, accessKey, secretKey, endpoint, bucket, data1, file)
-    assert(doesObjectExist(backend, accessKey, secretKey, endpoint, bucket, index1))
-    assert(doesObjectExist(backend, accessKey, secretKey, endpoint, bucket, data1))
+    putObject(backend, accessKey, secretKey, sessionToken, endpoint, bucket, index1, file)
+    putObject(backend, accessKey, secretKey, sessionToken, endpoint, bucket, data1, file)
+    assert(doesObjectExist(backend, accessKey, secretKey, sessionToken, endpoint, bucket, index1))
+    assert(doesObjectExist(backend, accessKey, secretKey, sessionToken, endpoint, bucket, data1))
 
-    deleteObject(backend, accessKey, secretKey, endpoint, bucket, data1)
-    assert(doesObjectExist(backend, accessKey, secretKey, endpoint, bucket, index1))
-    assert(!doesObjectExist(backend, accessKey, secretKey, endpoint, bucket, data1))
+    deleteObject(backend, accessKey, secretKey, sessionToken, endpoint, bucket, data1)
+    assert(doesObjectExist(backend, accessKey, secretKey, sessionToken, endpoint, bucket, index1))
+    assert(!doesObjectExist(backend, accessKey, secretKey, sessionToken, endpoint, bucket, data1))
 
     // Clean up an app
-    cleanUp(backend, accessKey, secretKey, endpoint, bucket, "appid")
-    assert(!doesObjectExist(backend, accessKey, secretKey, endpoint, bucket, data1))
+    cleanUp(backend, accessKey, secretKey, sessionToken, endpoint, bucket, "appid")
+    assert(!doesObjectExist(backend, accessKey, secretKey, sessionToken, endpoint, bucket, data1))
 
     // Clean up a shuffle
-    putObject(backend, accessKey, secretKey, endpoint, bucket, index1, file)
-    putObject(backend, accessKey, secretKey, endpoint, bucket, index2, file)
-    putObject(backend, accessKey, secretKey, endpoint, bucket, index3, file)
-    cleanUp(backend, accessKey, secretKey, endpoint, bucket, "appid/shuffle_0_")
-    assert(!doesObjectExist(backend, accessKey, secretKey, endpoint, bucket, index1))
-    assert(!doesObjectExist(backend, accessKey, secretKey, endpoint, bucket, index2))
-    assert(doesObjectExist(backend, accessKey, secretKey, endpoint, bucket, index3))
+    putObject(backend, accessKey, secretKey, sessionToken, endpoint, bucket, index1, file)
+    putObject(backend, accessKey, secretKey, sessionToken, endpoint, bucket, index2, file)
+    putObject(backend, accessKey, secretKey, sessionToken, endpoint, bucket, index3, file)
+    cleanUp(backend, accessKey, secretKey, sessionToken, endpoint, bucket, "appid/shuffle_0_")
+    assert(!doesObjectExist(backend, accessKey, secretKey, sessionToken, endpoint, bucket, index1))
+    assert(!doesObjectExist(backend, accessKey, secretKey, sessionToken, endpoint, bucket, index2))
+    assert(doesObjectExist(backend, accessKey, secretKey, sessionToken, endpoint, bucket, index3))
 
     // Clean up a file
-    cleanUp(backend, accessKey, secretKey, endpoint, bucket, data3)
-    assert(!doesObjectExist(backend, accessKey, secretKey, endpoint, bucket, data3))
+    cleanUp(backend, accessKey, secretKey, sessionToken, endpoint, bucket, data3)
+    assert(!doesObjectExist(backend, accessKey, sessionToken, secretKey, endpoint, bucket, data3))
+  }
+
+  ignore("Shim API test with S3") {
+    val backend = "s3"
+    val accessKey = System.getProperty("AWS_ACCESS_KEY_ID")
+    val secretKey = System.getProperty("AWS_SECRET_ACCESS_KEY")
+    val sessionToken = System.getProperty("AWS_SESSION_TOKEN")
+    val endpoint = ""
+    val bucket = "test-bucket-813987666268"
+    val file = File.createTempFile("tmp", ".tmp")
+
+    setFileSystem(FileSystem.get(new Configuration()))
+
+    val index1 = "appid/shuffle_0_0_0.index"
+    val data1 = "appid/shuffle_0_0_0.data"
+    val index2 = "appid/shuffle_0_1_0.index"
+    val index3 = "appid/shuffle_1_2_0.index"
+    val data3 = "appid/shuffle_1_2_0.data"
+
+    putObject(backend, accessKey, secretKey, sessionToken, endpoint, bucket, index1, file)
+    putObject(backend, accessKey, secretKey, sessionToken, endpoint, bucket, data1, file)
+    assert(doesObjectExist(backend, accessKey, secretKey, sessionToken, endpoint, bucket, index1))
+    assert(doesObjectExist(backend, accessKey, secretKey, sessionToken, endpoint, bucket, data1))
+
+    deleteObject(backend, accessKey, secretKey, sessionToken, endpoint, bucket, data1)
+    assert(doesObjectExist(backend, accessKey, secretKey, sessionToken, endpoint, bucket, index1))
+    assert(!doesObjectExist(backend, accessKey, secretKey, sessionToken, endpoint, bucket, data1))
+
+    // Clean up an app
+    cleanUp(backend, accessKey, secretKey, sessionToken, endpoint, bucket, "appid")
+    assert(!doesObjectExist(backend, accessKey, secretKey, sessionToken, endpoint, bucket, data1))
+
+    // Clean up a shuffle
+    putObject(backend, accessKey, secretKey, sessionToken, endpoint, bucket, index1, file)
+    putObject(backend, accessKey, secretKey, sessionToken, endpoint, bucket, index2, file)
+    putObject(backend, accessKey, secretKey, sessionToken, endpoint, bucket, index3, file)
+    cleanUp(backend, accessKey, secretKey, sessionToken, endpoint, bucket, "appid/shuffle_0_")
+    assert(!doesObjectExist(backend, accessKey, secretKey, sessionToken, endpoint, bucket, index1))
+    assert(!doesObjectExist(backend, accessKey, secretKey, sessionToken, endpoint, bucket, index2))
+    assert(doesObjectExist(backend, accessKey, secretKey, sessionToken, endpoint, bucket, index3))
+
+    // Clean up a file
+    cleanUp(backend, accessKey, secretKey, sessionToken, endpoint, bucket, data3)
+    assert(!doesObjectExist(backend, accessKey, secretKey, sessionToken, endpoint, bucket, data3))
+
+    // This is already tested at the previous test. This is for clean up this test.
+    cleanUp(backend, accessKey, secretKey, sessionToken, endpoint, bucket, "appid")
   }
 }
 
