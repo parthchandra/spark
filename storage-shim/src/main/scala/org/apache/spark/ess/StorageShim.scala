@@ -23,7 +23,7 @@ import java.nio.file.{Files, StandardCopyOption}
 import scala.collection.JavaConverters._
 import scala.util.control.NonFatal
 
-import com.amazonaws.auth.{AWSStaticCredentialsProvider, BasicSessionCredentials}
+import com.amazonaws.auth.{AWSCredentialsProviderChain, AWSStaticCredentialsProvider, BasicSessionCredentials, InstanceProfileCredentialsProvider}
 import com.amazonaws.services.s3.{AmazonS3, AmazonS3ClientBuilder}
 import com.amazonaws.services.s3.model.{DeleteObjectsRequest, GetObjectRequest}
 import io.minio.{MinioClient, PutObjectOptions}
@@ -49,13 +49,15 @@ object StorageShim {
   private var fs: Option[FileSystem] = None
 
   private def getOrCreateS3Client(access_key: String, secret_key: String, session_token: String) = {
-    // val session_token = System.getProperty("AWS_SESSION_TOKEN", "")
     s3Client.getOrElse {
       s3Client = Some(AmazonS3ClientBuilder
         .standard()
         .withCredentials(
-          new AWSStaticCredentialsProvider(
-            new BasicSessionCredentials(access_key, secret_key, session_token)))
+          new AWSCredentialsProviderChain(
+            new AWSStaticCredentialsProvider(
+              new BasicSessionCredentials(access_key, access_key, session_token)),
+            new InstanceProfileCredentialsProvider()
+          ))
         .build())
       logger.debug("New S3 client is created")
       s3Client.get
