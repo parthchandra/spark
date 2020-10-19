@@ -149,6 +149,7 @@ SPARK-28772       Upgrade breeze to 1.0
 SPARK-23977       Support High Performance S3A committers [test-hadoop3.2]
 SPARK-32779       Avoid using synchronized API of SessionCatalog in withClient flow, this leads to DeadLock
 SPARK-30371       Add spark.kubernetes.driver.master conf
+SPARK-33176       Use 11-jre-slim as default in K8s Dockerfile
 
 # From Spark 2.4.8
 SPARK-32815       Fix LibSVM data source loading error on file paths with glob metacharacters
@@ -177,6 +178,15 @@ SPARK-33069       Skip test result report if no JUnit XML files are found
 SPARK-30201       HiveOutputWriter standardOI should use ObjectInspectorCopyOption.DEFAULT
 SPARK-32901       Do not allocate memory while spilling UnsafeExternalSorter
 SPARK-33096       Use LinkedHashMap instead of Map for newlyCreatedExecutors
+SPARK-33101       Make LibSVM format propagate Hadoop config from DS options to underlying HDFS file system
+SPARK-33094       Make ORC format propagate Hadoop config from DS options to underlying HDFS file system
+SPARK-27872       Fix executor service account inconsistency
+SPARK-25271       Hive ctas commands should use data source if it is convertible
+SPARK-33136       Fix mistakenly swapped parameter in V2WriteCommand.outputResolved
+SPARK-30894       Make Size's nullable independent from SQL config changes
+SPARK-26646       Fix flaky test: pyspark.mllib.tests.StreamingLogisticRegressionWithSGDTests.test_training_and_prediction
+SPARK-33131       Fix grouping sets with having clause can not resolve qualified col name
+MINOR             Fix the Python manual_load_options_csv example
 
 # Internal Patches
 MINOR             Add an empty APPLE_CHANGES.txt
@@ -211,7 +221,6 @@ MINOR             [ADT] Implement OrderAwareCoalesce
 MINOR             [ADT] Converge 2.4.0-pdt and 2.4.5
 MINOR             Bump ADT version to 0.6.1
 MINOR             Fix SPARK-31935 test case for Hadoop-3.2
-MINOR             Build docker image with openjdk:11-jre-slim instead of openjdk:8-jre-slim
 MINOR             Bump to 2.4.7.2-apple-SNAPSHOT
 rdar://68926116   Add alternative conf name `spark.FsUrlStreamHandlerFactory.enabled`
 MINOR             Bump ADT version to 0.6.2
