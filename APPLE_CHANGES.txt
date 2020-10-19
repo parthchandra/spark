@@ -61,6 +61,12 @@ SPARK-32971      Support dynamic PVC creation/deletion for K8s executors
 SPARK-32997      Support dynamic PVC creation and deletion in K8s driver
 SPARK-33099      Respect executor idle timeout conf in ExecutorPodsAllocator
 SPARK-32881      Catch some race condition errors and log them more clearly
+SPARK-33092      Support subexpression elimination in ProjectExec
+SPARK-32948      Optimize to_json and from_json expression chain
+SPARK-32958      Prune unnecessary columns from JsonToStructs
+SPARK-33007      Simplify named_struct + get struct field + from_json expression chain
+SPARK-33154      Handle cleaned shuffles during migration
+SPARK-33175      Detect duplicated mountPaths and fail at Spark side
 
 # From Spark 3.0.2
 SPARK-28612      Correct method doc of DataFrameWriterV2.replace()
@@ -145,6 +151,24 @@ SPARK-32067      Use unique ConfigMap name for executor pod template
 SPARK-33089      make avro format propagate Hadoop config from DS options to underlying HDFS file system
 SPARK-33091      Avoid using map instead of foreach to avoid potential side effect at callers of OrcUtils.readCatalystSchema
 SPARK-33096      Use LinkedHashMap instead of Map for newlyCreatedExecutors
+SPARK-33101      Make LibSVM format propagate Hadoop config from DS options to underlying HDFS file system
+SPARK-33094      Make ORC format propagate Hadoop config from DS options to underlying HDFS file system
+SPARK-33118      CREATE TEMPORARY TABLE fails with location
+SPARK-33115      Fix javadoc errors in `kvstore` and `unsafe` modules
+SPARK-33134      Return partial results only for root JSON objects
+SPARK-33136      Fix mistakenly swapped parameter in V2WriteCommand.outputResolved
+SPARK-33153      Ignore Spark 2.4 in HiveExternalCatalogVersionsSuite on Python 3.8/3.9
+SPARK-33078      Add config for json expression optimization
+SPARK-33163      Check the metadata key 'org.apache.spark.legacyDateTime' in Avro/Parquet files
+SPARK-33165      Remove dependencies(scalatest,scalactic) from Benchmark
+SPARK-32761      Allow aggregating multiple foldable distinct expressions
+SPARK-33165      Use scala.Predef.assert instead
+SPARK-33171      Mark ParquetV*FilterSuite/ParquetV*SchemaPruningSuite as ExtendedSQLTest
+SPARK-32436      Initialize numNonEmptyBlocks in HighlyCompressedMapStatus.readExternal
+SPARK-33131      Fix grouping sets with having clause can not resolve qualified col name
+SPARK-33170      Add SQL config to control fast-fail behavior in FileFormatWriter
+MINOR            Fix the Python manual_load_options_csv example
+SPARK-33176      Use 11-jre-slim as default in K8s Dockerfile
 
 # Internal Patche
 SPARK-17767      Support user-provided ExternalCatalog and SessionBuilder
@@ -180,3 +204,6 @@ rdar://69319047  Spark should reject invalid CatalogImplementation Configuration
 MINOR            Reduce log level from Error to Info for decom messages
 rdar://69905256  Change restart policy back to never
 rdar://66018002   TLF: Native libs by using Apple Hadoop 3.2.0.3
+MINOR            Support S3 env variables
+rdar://70330474  Support InstanceProfileCredentialsProvider
+MINOR            Adjust log messages
