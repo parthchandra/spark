@@ -257,7 +257,7 @@ object ExternalShuffleStorage extends Logging {
     }
 
     if (doesObjectExist(conf, parent + indexFile.getName) && isDataFileVisible) {
-      logInfo(s"Uploading ${dataFile.getAbsolutePath}")
+      logInfo(s"Uploaded ${indexFile.getAbsolutePath} and data file (if exists)")
       reportBlockStatus(bm, shuffleId, mapId, dataFile.length)
     } else {
       logInfo(s"Still invisible ${parent + indexFile.getName} or data file")

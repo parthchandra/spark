@@ -83,9 +83,9 @@ private[storage] class BlockManagerDecommissioner(
               Thread.sleep(SLEEP_TIME_SECS * 1000L)
             case Some((shuffleBlockInfo, retryCount)) =>
               if (retryCount < maxReplicationFailuresForDecommission) {
-                logDebug(s"Trying to migrate shuffle ${shuffleBlockInfo} to ${peer}")
+                logInfo(s"Trying to migrate shuffle ${shuffleBlockInfo} to ${peer}")
                 val blocks = bm.migratableResolver.getMigrationBlocks(shuffleBlockInfo)
-                logDebug(s"Got migration sub-blocks ${blocks}")
+                logInfo(s"Got migration sub-blocks ${blocks}")
 
                 // Migrate the blocks, handle missing blocks
                 try {
@@ -100,7 +100,7 @@ private[storage] class BlockManagerDecommissioner(
                     }
                   } else {
                     blocks.foreach { case (blockId, buffer) =>
-                      logDebug(s"Migrating sub-block ${blockId}")
+                      logInfo(s"Migrating sub-block ${blockId}")
                       bm.blockTransferService.uploadBlockSync(
                         peer.host,
                         peer.port,
@@ -109,10 +109,10 @@ private[storage] class BlockManagerDecommissioner(
                         buffer,
                         StorageLevel.DISK_ONLY,
                         null)// class tag, we don't need for shuffle
-                      logDebug(s"Migrated sub block ${blockId}")
+                      logInfo(s"Migrated sub block ${blockId}")
                     }
                   }
-                  logDebug(s"Migrated ${shuffleBlockInfo} to ${peer}")
+                  logInfo(s"Migrated ${shuffleBlockInfo} to ${peer}")
                 } catch {
                   case e: IOException =>
                     // If a block got deleted before netty opened the file handle, then trying to
