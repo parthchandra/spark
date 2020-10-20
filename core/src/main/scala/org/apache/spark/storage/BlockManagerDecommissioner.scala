@@ -83,7 +83,8 @@ private[storage] class BlockManagerDecommissioner(
               Thread.sleep(SLEEP_TIME_SECS * 1000L)
             case Some((shuffleBlockInfo, retryCount)) =>
               if (retryCount < maxReplicationFailuresForDecommission) {
-                logInfo(s"Trying to migrate shuffle ${shuffleBlockInfo} to ${peer}")
+                logInfo(s"Trying to migrate shuffle ${shuffleBlockInfo} to ${peer} " +
+                  "($retryCount / $maxReplicationFailuresForDecommission)")
                 val blocks = bm.migratableResolver.getMigrationBlocks(shuffleBlockInfo)
                 logInfo(s"Got migration sub-blocks ${blocks}")
 
@@ -255,6 +256,8 @@ private[storage] class BlockManagerDecommissioner(
     val newShufflesToMigrate = (localShuffles.diff(migratingShuffles)).toSeq
     shufflesToMigrate.addAll(newShufflesToMigrate.map(x => (x, 0)).asJava)
     migratingShuffles ++= newShufflesToMigrate
+    logInfo(s"${newShufflesToMigrate.size} of ${localShuffles.size} local shuffles " +
+      "are added. In total, ${migratingShuffles.size} shuffles are remained.")
 
     // Update the threads doing migrations
     val livePeerSet = bm.getPeers(false).toSet
