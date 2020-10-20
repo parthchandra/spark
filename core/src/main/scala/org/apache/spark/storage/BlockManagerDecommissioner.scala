@@ -181,9 +181,13 @@ private[storage] class BlockManagerDecommissioner(
       while (!stopped && !stoppedRDD && !Thread.interrupted()) {
         logInfo("Iterating on migrating from the block manager.")
         // Validate we have peers to migrate to.
-        val peers = bm.getPeers(false)
+        var peers = bm.getPeers(false)
+        if (peers.isEmpty) {
+          peers = bm.getPeers(true)
+        }
         // If we have no peers give up.
         if (peers.isEmpty) {
+          logError("Stopping migrations: no live peers")
           stopped = true
           stoppedRDD = true
         }
@@ -279,7 +283,16 @@ private[storage] class BlockManagerDecommissioner(
       stoppedShuffle = true
     }
     // If we found any new shuffles to migrate or otherwise have not migrated everything.
-    newShufflesToMigrate.nonEmpty || migratingShuffles.size < numMigratedShuffles.get()
+    if (newShufflesToMigrate.nonEmpty) {
+      logInfo(s"Found new shuffle blocks ${newShufflesToMigrate.size} to migrate.")
+      true
+    } else if (migratingShuffles.size < numMigratedShuffles.get()) {
+      logInfo(s"We have migrated ${numMigratedShuffles.get()} of ${migratingShuffles.size}")
+      true
+    } else {
+      logInfo(s"No new shuffle files found, migrated ${numMigratedShuffles}")
+      false
+    }
   }
 
   /**
@@ -408,14 +421,17 @@ private[storage] class BlockManagerDecommissioner(
     if (stopped || (stoppedRDD && stoppedShuffle)) {
       // Since we don't have anything left to migrate ever (since we don't restart once
       // stopped), return that we're done with a validity timestamp that doesn't expire.
+      logError("All block migrations stopped, reporting migrations as finished.")
       (Long.MaxValue, true)
     } else {
       // Chose the min of the active times. See the function description for more information.
       val lastMigrationTime = if (!stoppedRDD && !stoppedShuffle) {
         Math.min(lastRDDMigrationTime, lastShuffleMigrationTime)
       } else if (!stoppedShuffle) {
+        logInfo("RDD migrations stopped, using last shuffle migration time.")
         lastShuffleMigrationTime
       } else {
+        logInfo("Shuffle migrations stopped, using last RDD migration time")
         lastRDDMigrationTime
       }
 

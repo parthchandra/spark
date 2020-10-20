@@ -315,7 +315,7 @@ private[spark] class CoarseGrainedExecutorBackend(
                 exitExecutor(0, "Finished decommissioning", notifyDriver = true)
               }
             } else {
-              logInfo("Blocked from shutdown by running ${executor.numRunningtasks} tasks")
+              logInfo(s"Blocked from shutdown by running ${executor.numRunningTasks} tasks")
               // If there is a running task it could store blocks, so make sure we wait for a
               // migration loop to complete after the last task is done.
               // Note: this is only advanced if there is a running task, if there
