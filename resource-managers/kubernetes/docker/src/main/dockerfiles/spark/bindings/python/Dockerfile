@@ -25,7 +25,7 @@ USER 0
 
 RUN mkdir ${SPARK_HOME}/python
 # TODO: Investigate running both pip and pip3 via virtualenvs
-RUN apt-get update && \
+RUN apt-get update -o Acquire::https::artifacts.apple.com::Verify-Peer=false && \
     apt install -y python python-pip && \
     apt install -y python3 python3-pip && \
     # We remove ensurepip since it adds no functionality since pip is
