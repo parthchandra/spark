@@ -93,13 +93,13 @@ To launch Spark Pi in cluster mode,
 
 ```bash
 $ bin/spark-submit \
-    --master k8s://https://<k8s-apiserver-host>:<k8s-apiserver-port> \
-    --deploy-mode cluster \
-    --name spark-pi \
-    --class org.apache.spark.examples.SparkPi \
-    --conf spark.executor.instances=5 \
-    --conf spark.kubernetes.container.image=<spark-image> \
-    local:///path/to/examples.jar
+	--master k8s://https://<k8s-apiserver-host>:<k8s-apiserver-port> \
+	--deploy-mode cluster \
+	--name spark-pi \
+	--class org.apache.spark.examples.SparkPi \
+	--conf spark.executor.instances=5 \
+	--conf spark.kubernetes.container.image=<spark-image> \
+	local:///path/to/examples.jar
 ```
 
 The Spark master, specified either via passing the `--master` command line argument to `spark-submit` or by setting
@@ -232,7 +232,7 @@ To mount a volume of any of the types above into the driver pod, use the followi
 ```
 --conf spark.kubernetes.driver.volumes.[VolumeType].[VolumeName].mount.path=<mount path>
 --conf spark.kubernetes.driver.volumes.[VolumeType].[VolumeName].mount.readOnly=<true|false>
-``` 
+```
 
 Specifically, `VolumeType` can be one of the following values: `hostPath`, `emptyDir`, and `persistentVolumeClaim`. `VolumeName` is the name you want to use for the volume under the `volumes` field in the pod specification.
 
@@ -240,7 +240,7 @@ Each supported type of volumes may have some specific configuration options, whi
 
 ```
 spark.kubernetes.driver.volumes.[VolumeType].[VolumeName].options.[OptionName]=<value>
-``` 
+```
 
 For example, the claim name of a `persistentVolumeClaim` with volume name `checkpointpvc` can be specified using the following property:
 
@@ -248,7 +248,7 @@ For example, the claim name of a `persistentVolumeClaim` with volume name `check
 spark.kubernetes.driver.volumes.persistentVolumeClaim.checkpointpvc.options.claimName=check-point-pvc-claim
 ```
 
-The configuration properties for mounting volumes into the executor pods use prefix `spark.kubernetes.executor.` instead of `spark.kubernetes.driver.`. For a complete list of available options for each supported type of volumes, please refer to the [Spark Properties](#spark-properties) section below. 
+The configuration properties for mounting volumes into the executor pods use prefix `spark.kubernetes.executor.` instead of `spark.kubernetes.driver.`. For a complete list of available options for each supported type of volumes, please refer to the [Spark Properties](#spark-properties) section below.
 
 ## Introspection and Debugging
 
@@ -386,365 +386,365 @@ specific to Spark on Kubernetes.
   <td><code>spark.kubernetes.driver.master</code></td>
   <td><code>https://kubernetes.default.svc</code></td>
   <td>
-    The internal Kubernetes master (API server) address to be used for driver to request executors.
+	The internal Kubernetes master (API server) address to be used for driver to request executors.
   </td>
 </tr>
 <tr>
   <td><code>spark.kubernetes.namespace</code></td>
   <td><code>default</code></td>
   <td>
-    The namespace that will be used for running the driver and executor pods.
+	The namespace that will be used for running the driver and executor pods.
   </td>
 </tr>
 <tr>
   <td><code>spark.kubernetes.container.image</code></td>
   <td><code>(none)</code></td>
   <td>
-    Container image to use for the Spark application.
-    This is usually of the form <code>example.com/repo/spark:v1.0.0</code>.
-    This configuration is required and must be provided by the user, unless explicit
-    images are provided for each different container type.
+	Container image to use for the Spark application.
+	This is usually of the form <code>example.com/repo/spark:v1.0.0</code>.
+	This configuration is required and must be provided by the user, unless explicit
+	images are provided for each different container type.
   </td>
 </tr>
 <tr>
   <td><code>spark.kubernetes.driver.container.image</code></td>
   <td><code>(value of spark.kubernetes.container.image)</code></td>
   <td>
-    Custom container image to use for the driver.
+	Custom container image to use for the driver.
   </td>
 </tr>
 <tr>
   <td><code>spark.kubernetes.executor.container.image</code></td>
   <td><code>(value of spark.kubernetes.container.image)</code></td>
   <td>
-    Custom container image to use for executors.
+	Custom container image to use for executors.
   </td>
 </tr>
 <tr>
   <td><code>spark.kubernetes.container.image.pullPolicy</code></td>
   <td><code>IfNotPresent</code></td>
   <td>
-    Container image pull policy used when pulling images within Kubernetes.
+	Container image pull policy used when pulling images within Kubernetes.
   </td>
 </tr>
 <tr>
   <td><code>spark.kubernetes.container.image.pullSecrets</code></td>
   <td><code></code></td>
   <td>
-    Comma separated list of Kubernetes secrets used to pull images from private image registries.
+	Comma separated list of Kubernetes secrets used to pull images from private image registries.
   </td>
 </tr>
 <tr>
   <td><code>spark.kubernetes.allocation.batch.size</code></td>
   <td><code>5</code></td>
   <td>
-    Number of pods to launch at once in each round of executor pod allocation.
+	Number of pods to launch at once in each round of executor pod allocation.
   </td>
 </tr>
 <tr>
   <td><code>spark.kubernetes.allocation.batch.delay</code></td>
   <td><code>1s</code></td>
   <td>
-    Time to wait between each round of executor pod allocation. Specifying values less than 1 second may lead to
-    excessive CPU usage on the spark driver.
+	Time to wait between each round of executor pod allocation. Specifying values less than 1 second may lead to
+	excessive CPU usage on the spark driver.
   </td>
 </tr>
 <tr>
   <td><code>spark.kubernetes.authenticate.submission.caCertFile</code></td>
   <td>(none)</td>
   <td>
-    Path to the CA cert file for connecting to the Kubernetes API server over TLS when starting the driver. This file
-    must be located on the submitting machine's disk. Specify this as a path as opposed to a URI (i.e. do not provide
-    a scheme). In client mode, use <code>spark.kubernetes.authenticate.caCertFile</code> instead.
+	Path to the CA cert file for connecting to the Kubernetes API server over TLS when starting the driver. This file
+	must be located on the submitting machine's disk. Specify this as a path as opposed to a URI (i.e. do not provide
+	a scheme). In client mode, use <code>spark.kubernetes.authenticate.caCertFile</code> instead.
   </td>
 </tr>
 <tr>
   <td><code>spark.kubernetes.authenticate.submission.clientKeyFile</code></td>
   <td>(none)</td>
   <td>
-    Path to the client key file for authenticating against the Kubernetes API server when starting the driver. This file
-    must be located on the submitting machine's disk. Specify this as a path as opposed to a URI (i.e. do not provide
-    a scheme). In client mode, use <code>spark.kubernetes.authenticate.clientKeyFile</code> instead.
+	Path to the client key file for authenticating against the Kubernetes API server when starting the driver. This file
+	must be located on the submitting machine's disk. Specify this as a path as opposed to a URI (i.e. do not provide
+	a scheme). In client mode, use <code>spark.kubernetes.authenticate.clientKeyFile</code> instead.
   </td>
 </tr>
 <tr>
   <td><code>spark.kubernetes.authenticate.submission.clientCertFile</code></td>
   <td>(none)</td>
   <td>
-    Path to the client cert file for authenticating against the Kubernetes API server when starting the driver. This
-    file must be located on the submitting machine's disk. Specify this as a path as opposed to a URI (i.e. do not
-    provide a scheme). In client mode, use <code>spark.kubernetes.authenticate.clientCertFile</code> instead.
+	Path to the client cert file for authenticating against the Kubernetes API server when starting the driver. This
+	file must be located on the submitting machine's disk. Specify this as a path as opposed to a URI (i.e. do not
+	provide a scheme). In client mode, use <code>spark.kubernetes.authenticate.clientCertFile</code> instead.
   </td>
 </tr>
 <tr>
   <td><code>spark.kubernetes.authenticate.submission.oauthToken</code></td>
   <td>(none)</td>
   <td>
-    OAuth token to use when authenticating against the Kubernetes API server when starting the driver. Note
-    that unlike the other authentication options, this is expected to be the exact string value of the token to use for
-    the authentication. In client mode, use <code>spark.kubernetes.authenticate.oauthToken</code> instead.
+	OAuth token to use when authenticating against the Kubernetes API server when starting the driver. Note
+	that unlike the other authentication options, this is expected to be the exact string value of the token to use for
+	the authentication. In client mode, use <code>spark.kubernetes.authenticate.oauthToken</code> instead.
   </td>
 </tr>
 <tr>
   <td><code>spark.kubernetes.authenticate.submission.oauthTokenFile</code></td>
   <td>(none)</td>
   <td>
-    Path to the OAuth token file containing the token to use when authenticating against the Kubernetes API server when starting the driver.
-    This file must be located on the submitting machine's disk. Specify this as a path as opposed to a URI (i.e. do not
-    provide a scheme). In client mode, use <code>spark.kubernetes.authenticate.oauthTokenFile</code> instead.
+	Path to the OAuth token file containing the token to use when authenticating against the Kubernetes API server when starting the driver.
+	This file must be located on the submitting machine's disk. Specify this as a path as opposed to a URI (i.e. do not
+	provide a scheme). In client mode, use <code>spark.kubernetes.authenticate.oauthTokenFile</code> instead.
   </td>
 </tr>
 <tr>
   <td><code>spark.kubernetes.authenticate.driver.caCertFile</code></td>
   <td>(none)</td>
   <td>
-    Path to the CA cert file for connecting to the Kubernetes API server over TLS from the driver pod when requesting
-    executors. This file must be located on the submitting machine's disk, and will be uploaded to the driver pod.
-    Specify this as a path as opposed to a URI (i.e. do not provide a scheme). In client mode, use
-    <code>spark.kubernetes.authenticate.caCertFile</code> instead.
+	Path to the CA cert file for connecting to the Kubernetes API server over TLS from the driver pod when requesting
+	executors. This file must be located on the submitting machine's disk, and will be uploaded to the driver pod.
+	Specify this as a path as opposed to a URI (i.e. do not provide a scheme). In client mode, use
+	<code>spark.kubernetes.authenticate.caCertFile</code> instead.
   </td>
 </tr>
 <tr>
   <td><code>spark.kubernetes.authenticate.driver.clientKeyFile</code></td>
   <td>(none)</td>
   <td>
-    Path to the client key file for authenticating against the Kubernetes API server from the driver pod when requesting
-    executors. This file must be located on the submitting machine's disk, and will be uploaded to the driver pod as
-    a Kubernetes secret. Specify this as a path as opposed to a URI (i.e. do not provide a scheme).
-    In client mode, use <code>spark.kubernetes.authenticate.clientKeyFile</code> instead.
+	Path to the client key file for authenticating against the Kubernetes API server from the driver pod when requesting
+	executors. This file must be located on the submitting machine's disk, and will be uploaded to the driver pod as
+	a Kubernetes secret. Specify this as a path as opposed to a URI (i.e. do not provide a scheme).
+	In client mode, use <code>spark.kubernetes.authenticate.clientKeyFile</code> instead.
   </td>
 </tr>
 <tr>
   <td><code>spark.kubernetes.authenticate.driver.clientCertFile</code></td>
   <td>(none)</td>
   <td>
-    Path to the client cert file for authenticating against the Kubernetes API server from the driver pod when
-    requesting executors. This file must be located on the submitting machine's disk, and will be uploaded to the
-    driver pod as a Kubernetes secret. Specify this as a path as opposed to a URI (i.e. do not provide a scheme).
-    In client mode, use <code>spark.kubernetes.authenticate.clientCertFile</code> instead.
+	Path to the client cert file for authenticating against the Kubernetes API server from the driver pod when
+	requesting executors. This file must be located on the submitting machine's disk, and will be uploaded to the
+	driver pod as a Kubernetes secret. Specify this as a path as opposed to a URI (i.e. do not provide a scheme).
+	In client mode, use <code>spark.kubernetes.authenticate.clientCertFile</code> instead.
   </td>
 </tr>
 <tr>
   <td><code>spark.kubernetes.authenticate.driver.oauthToken</code></td>
   <td>(none)</td>
   <td>
-    OAuth token to use when authenticating against the Kubernetes API server from the driver pod when
-    requesting executors. Note that unlike the other authentication options, this must be the exact string value of
-    the token to use for the authentication. This token value is uploaded to the driver pod as a Kubernetes secret.
-    In client mode, use <code>spark.kubernetes.authenticate.oauthToken</code> instead.
+	OAuth token to use when authenticating against the Kubernetes API server from the driver pod when
+	requesting executors. Note that unlike the other authentication options, this must be the exact string value of
+	the token to use for the authentication. This token value is uploaded to the driver pod as a Kubernetes secret.
+	In client mode, use <code>spark.kubernetes.authenticate.oauthToken</code> instead.
   </td>
 </tr>
 <tr>
   <td><code>spark.kubernetes.authenticate.driver.oauthTokenFile</code></td>
   <td>(none)</td>
   <td>
-    Path to the OAuth token file containing the token to use when authenticating against the Kubernetes API server from the driver pod when
-    requesting executors. Note that unlike the other authentication options, this file must contain the exact string value of
-    the token to use for the authentication. This token value is uploaded to the driver pod as a secret. In client mode, use
-    <code>spark.kubernetes.authenticate.oauthTokenFile</code> instead.
+	Path to the OAuth token file containing the token to use when authenticating against the Kubernetes API server from the driver pod when
+	requesting executors. Note that unlike the other authentication options, this file must contain the exact string value of
+	the token to use for the authentication. This token value is uploaded to the driver pod as a secret. In client mode, use
+	<code>spark.kubernetes.authenticate.oauthTokenFile</code> instead.
   </td>
 </tr>
 <tr>
   <td><code>spark.kubernetes.authenticate.driver.mounted.caCertFile</code></td>
   <td>(none)</td>
   <td>
-    Path to the CA cert file for connecting to the Kubernetes API server over TLS from the driver pod when requesting
-    executors. This path must be accessible from the driver pod.
-    Specify this as a path as opposed to a URI (i.e. do not provide a scheme). In client mode, use
-    <code>spark.kubernetes.authenticate.caCertFile</code> instead.
+	Path to the CA cert file for connecting to the Kubernetes API server over TLS from the driver pod when requesting
+	executors. This path must be accessible from the driver pod.
+	Specify this as a path as opposed to a URI (i.e. do not provide a scheme). In client mode, use
+	<code>spark.kubernetes.authenticate.caCertFile</code> instead.
   </td>
 </tr>
 <tr>
   <td><code>spark.kubernetes.authenticate.driver.mounted.clientKeyFile</code></td>
   <td>(none)</td>
   <td>
-    Path to the client key file for authenticating against the Kubernetes API server from the driver pod when requesting
-    executors. This path must be accessible from the driver pod.
-    Specify this as a path as opposed to a URI (i.e. do not provide a scheme). In client mode, use
-    <code>spark.kubernetes.authenticate.clientKeyFile</code> instead.
+	Path to the client key file for authenticating against the Kubernetes API server from the driver pod when requesting
+	executors. This path must be accessible from the driver pod.
+	Specify this as a path as opposed to a URI (i.e. do not provide a scheme). In client mode, use
+	<code>spark.kubernetes.authenticate.clientKeyFile</code> instead.
   </td>
 </tr>
 <tr>
   <td><code>spark.kubernetes.authenticate.driver.mounted.clientCertFile</code></td>
   <td>(none)</td>
   <td>
-    Path to the client cert file for authenticating against the Kubernetes API server from the driver pod when
-    requesting executors. This path must be accessible from the driver pod.
-    Specify this as a path as opposed to a URI (i.e. do not provide a scheme). In client mode, use
-    <code>spark.kubernetes.authenticate.clientCertFile</code> instead.
+	Path to the client cert file for authenticating against the Kubernetes API server from the driver pod when
+	requesting executors. This path must be accessible from the driver pod.
+	Specify this as a path as opposed to a URI (i.e. do not provide a scheme). In client mode, use
+	<code>spark.kubernetes.authenticate.clientCertFile</code> instead.
   </td>
 </tr>
 <tr>
   <td><code>spark.kubernetes.authenticate.driver.mounted.oauthTokenFile</code></td>
   <td>(none)</td>
   <td>
-    Path to the file containing the OAuth token to use when authenticating against the Kubernetes API server from the driver pod when
-    requesting executors. This path must be accessible from the driver pod.
-    Note that unlike the other authentication options, this file must contain the exact string value of the token to use
-    for the authentication. In client mode, use <code>spark.kubernetes.authenticate.oauthTokenFile</code> instead.
+	Path to the file containing the OAuth token to use when authenticating against the Kubernetes API server from the driver pod when
+	requesting executors. This path must be accessible from the driver pod.
+	Note that unlike the other authentication options, this file must contain the exact string value of the token to use
+	for the authentication. In client mode, use <code>spark.kubernetes.authenticate.oauthTokenFile</code> instead.
   </td>
 </tr>
 <tr>
   <td><code>spark.kubernetes.authenticate.driver.serviceAccountName</code></td>
   <td><code>default</code></td>
   <td>
-    Service account that is used when running the driver pod. The driver pod uses this service account when requesting
-    executor pods from the API server. Note that this cannot be specified alongside a CA cert file, client key file,
-    client cert file, and/or OAuth token. In client mode, use <code>spark.kubernetes.authenticate.serviceAccountName</code> instead.
+	Service account that is used when running the driver pod. The driver pod uses this service account when requesting
+	executor pods from the API server. Note that this cannot be specified alongside a CA cert file, client key file,
+	client cert file, and/or OAuth token. In client mode, use <code>spark.kubernetes.authenticate.serviceAccountName</code> instead.
   </td>
 </tr>
 <tr>
   <td><code>spark.kubernetes.authenticate.caCertFile</code></td>
   <td>(none)</td>
   <td>
-    In client mode, path to the CA cert file for connecting to the Kubernetes API server over TLS when
-    requesting executors. Specify this as a path as opposed to a URI (i.e. do not provide a scheme).
+	In client mode, path to the CA cert file for connecting to the Kubernetes API server over TLS when
+	requesting executors. Specify this as a path as opposed to a URI (i.e. do not provide a scheme).
   </td>
 </tr>
 <tr>
   <td><code>spark.kubernetes.authenticate.clientKeyFile</code></td>
   <td>(none)</td>
   <td>
-    In client mode, path to the client key file for authenticating against the Kubernetes API server
-    when requesting executors. Specify this as a path as opposed to a URI (i.e. do not provide a scheme).
+	In client mode, path to the client key file for authenticating against the Kubernetes API server
+	when requesting executors. Specify this as a path as opposed to a URI (i.e. do not provide a scheme).
   </td>
 </tr>
 <tr>
   <td><code>spark.kubernetes.authenticate.clientCertFile</code></td>
   <td>(none)</td>
   <td>
-    In client mode, path to the client cert file for authenticating against the Kubernetes API server
-    when requesting executors. Specify this as a path as opposed to a URI (i.e. do not provide a scheme).
+	In client mode, path to the client cert file for authenticating against the Kubernetes API server
+	when requesting executors. Specify this as a path as opposed to a URI (i.e. do not provide a scheme).
   </td>
 </tr>
 <tr>
   <td><code>spark.kubernetes.authenticate.oauthToken</code></td>
   <td>(none)</td>
   <td>
-    In client mode, the OAuth token to use when authenticating against the Kubernetes API server when
-    requesting executors. Note that unlike the other authentication options, this must be the exact string value of
-    the token to use for the authentication.
+	In client mode, the OAuth token to use when authenticating against the Kubernetes API server when
+	requesting executors. Note that unlike the other authentication options, this must be the exact string value of
+	the token to use for the authentication.
   </td>
 </tr>
 <tr>
   <td><code>spark.kubernetes.authenticate.oauthTokenFile</code></td>
   <td>(none)</td>
   <td>
-    In client mode, path to the file containing the OAuth token to use when authenticating against the Kubernetes API
-    server when requesting executors.
+	In client mode, path to the file containing the OAuth token to use when authenticating against the Kubernetes API
+	server when requesting executors.
   </td>
 </tr>
 <tr>
   <td><code>spark.kubernetes.driver.label.[LabelName]</code></td>
   <td>(none)</td>
   <td>
-    Add the label specified by <code>LabelName</code> to the driver pod.
-    For example, <code>spark.kubernetes.driver.label.something=true</code>.
-    Note that Spark also adds its own labels to the driver pod
-    for bookkeeping purposes.
+	Add the label specified by <code>LabelName</code> to the driver pod.
+	For example, <code>spark.kubernetes.driver.label.something=true</code>.
+	Note that Spark also adds its own labels to the driver pod
+	for bookkeeping purposes.
   </td>
 </tr>
 <tr>
   <td><code>spark.kubernetes.driver.annotation.[AnnotationName]</code></td>
   <td>(none)</td>
   <td>
-    Add the annotation specified by <code>AnnotationName</code> to the driver pod.
-    For example, <code>spark.kubernetes.driver.annotation.something=true</code>.
+	Add the annotation specified by <code>AnnotationName</code> to the driver pod.
+	For example, <code>spark.kubernetes.driver.annotation.something=true</code>.
   </td>
 </tr>
 <tr>
   <td><code>spark.kubernetes.executor.label.[LabelName]</code></td>
   <td>(none)</td>
   <td>
-    Add the label specified by <code>LabelName</code> to the executor pods.
-    For example, <code>spark.kubernetes.executor.label.something=true</code>.
-    Note that Spark also adds its own labels to the driver pod
-    for bookkeeping purposes.
+	Add the label specified by <code>LabelName</code> to the executor pods.
+	For example, <code>spark.kubernetes.executor.label.something=true</code>.
+	Note that Spark also adds its own labels to the driver pod
+	for bookkeeping purposes.
   </td>
 </tr>
 <tr>
   <td><code>spark.kubernetes.executor.annotation.[AnnotationName]</code></td>
   <td>(none)</td>
   <td>
-    Add the annotation specified by <code>AnnotationName</code> to the executor pods.
-    For example, <code>spark.kubernetes.executor.annotation.something=true</code>.
+	Add the annotation specified by <code>AnnotationName</code> to the executor pods.
+	For example, <code>spark.kubernetes.executor.annotation.something=true</code>.
   </td>
 </tr>
 <tr>
   <td><code>spark.kubernetes.driver.pod.name</code></td>
   <td>(none)</td>
   <td>
-    Name of the driver pod. In cluster mode, if this is not set, the driver pod name is set to "spark.app.name"
-    suffixed by the current timestamp to avoid name conflicts. In client mode, if your application is running
-    inside a pod, it is highly recommended to set this to the name of the pod your driver is running in. Setting this
-    value in client mode allows the driver to become the owner of its executor pods, which in turn allows the executor
-    pods to be garbage collected by the cluster.
+	Name of the driver pod. In cluster mode, if this is not set, the driver pod name is set to "spark.app.name"
+	suffixed by the current timestamp to avoid name conflicts. In client mode, if your application is running
+	inside a pod, it is highly recommended to set this to the name of the pod your driver is running in. Setting this
+	value in client mode allows the driver to become the owner of its executor pods, which in turn allows the executor
+	pods to be garbage collected by the cluster.
   </td>
 </tr>
 <tr>
   <td><code>spark.kubernetes.executor.lostCheck.maxAttempts</code></td>
   <td><code>10</code></td>
   <td>
-    Number of times that the driver will try to ascertain the loss reason for a specific executor.
-    The loss reason is used to ascertain whether the executor failure is due to a framework or an application error
-    which in turn decides whether the executor is removed and replaced, or placed into a failed state for debugging.
+	Number of times that the driver will try to ascertain the loss reason for a specific executor.
+	The loss reason is used to ascertain whether the executor failure is due to a framework or an application error
+	which in turn decides whether the executor is removed and replaced, or placed into a failed state for debugging.
   </td>
 </tr>
 <tr>
   <td><code>spark.kubernetes.submission.waitAppCompletion</code></td>
   <td><code>true</code></td>
   <td>
-    In cluster mode, whether to wait for the application to finish before exiting the launcher process.  When changed to
-    false, the launcher has a "fire-and-forget" behavior when launching the Spark job.
+	In cluster mode, whether to wait for the application to finish before exiting the launcher process.  When changed to
+	false, the launcher has a "fire-and-forget" behavior when launching the Spark job.
   </td>
 </tr>
 <tr>
   <td><code>spark.kubernetes.report.interval</code></td>
   <td><code>1s</code></td>
   <td>
-    Interval between reports of the current Spark job status in cluster mode.
+	Interval between reports of the current Spark job status in cluster mode.
   </td>
 </tr>
 <tr>
   <td><code>spark.kubernetes.driver.limit.cores</code></td>
   <td>(none)</td>
   <td>
-    Specify a hard cpu <a href="https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container">limit</a> for the driver pod.
+	Specify a hard cpu <a href="https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container">limit</a> for the driver pod.
   </td>
 </tr>
 <tr>
   <td><code>spark.kubernetes.executor.request.cores</code></td>
   <td>(none)</td>
   <td>
-    Specify the cpu request for each executor pod. Values conform to the Kubernetes <a href="https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#meaning-of-cpu">convention</a>.
-    Example values include 0.1, 500m, 1.5, 5, etc., with the definition of cpu units documented in <a href="https://kubernetes.io/docs/tasks/configure-pod-container/assign-cpu-resource/#cpu-units">CPU units</a>.
-    This is distinct from <code>spark.executor.cores</code>: it is only used and takes precedence over <code>spark.executor.cores</code> for specifying the executor pod cpu request if set. Task 
-    parallelism, e.g., number of tasks an executor can run concurrently is not affected by this.
+	Specify the cpu request for each executor pod. Values conform to the Kubernetes <a href="https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#meaning-of-cpu">convention</a>.
+	Example values include 0.1, 500m, 1.5, 5, etc., with the definition of cpu units documented in <a href="https://kubernetes.io/docs/tasks/configure-pod-container/assign-cpu-resource/#cpu-units">CPU units</a>.
+	This is distinct from <code>spark.executor.cores</code>: it is only used and takes precedence over <code>spark.executor.cores</code> for specifying the executor pod cpu request if set. Task
+	parallelism, e.g., number of tasks an executor can run concurrently is not affected by this.
   </td>
 </tr>
 <tr>
   <td><code>spark.kubernetes.executor.limit.cores</code></td>
   <td>(none)</td>
   <td>
-    Specify a hard cpu <a href="https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container">limit</a> for each executor pod launched for the Spark Application.
+	Specify a hard cpu <a href="https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container">limit</a> for each executor pod launched for the Spark Application.
   </td>
 </tr>
 <tr>
   <td><code>spark.kubernetes.node.selector.[labelKey]</code></td>
   <td>(none)</td>
   <td>
-    Adds to the node selector of the driver pod and executor pods, with key <code>labelKey</code> and the value as the
-    configuration's value. For example, setting <code>spark.kubernetes.node.selector.identifier</code> to <code>myIdentifier</code>
-    will result in the driver pod and executors having a node selector with key <code>identifier</code> and value
-     <code>myIdentifier</code>. Multiple node selector keys can be added by setting multiple configurations with this prefix.
+	Adds to the node selector of the driver pod and executor pods, with key <code>labelKey</code> and the value as the
+	configuration's value. For example, setting <code>spark.kubernetes.node.selector.identifier</code> to <code>myIdentifier</code>
+	will result in the driver pod and executors having a node selector with key <code>identifier</code> and value
+	 <code>myIdentifier</code>. Multiple node selector keys can be added by setting multiple configurations with this prefix.
   </td>
 </tr>
 <tr>
   <td><code>spark.kubernetes.driverEnv.[EnvironmentVariableName]</code></td>
   <td>(none)</td>
   <td>
-    Add the environment variable specified by <code>EnvironmentVariableName</code> to
-    the Driver process. The user can specify multiple of these to set multiple environment variables.
+	Add the environment variable specified by <code>EnvironmentVariableName</code> to
+	the Driver process. The user can specify multiple of these to set multiple environment variables.
   </td>
 </tr>
 <tr>
@@ -778,7 +778,7 @@ specific to Spark on Kubernetes.
    Add as an environment variable to the executor container with name EnvName (case sensitive), the value referenced by key <code> key </code> in the data of the referenced <a href="https://kubernetes.io/docs/concepts/configuration/secret/#using-secrets-as-environment-variables">Kubernetes Secret</a>. For example,
    <code>spark.kubernetes.executor.secrets.ENV_VAR=spark-secret:key</code>.
   </td>
-</tr>   
+</tr>
 <tr>
   <td><code>spark.kubernetes.driver.volumes.[VolumeType].[VolumeName].mount.path</code></td>
   <td>(none)</td>
@@ -831,15 +831,15 @@ specific to Spark on Kubernetes.
   <td><code>spark.kubernetes.memoryOverheadFactor</code></td>
   <td><code>0.1</code></td>
   <td>
-    This sets the Memory Overhead Factor that will allocate memory to non-JVM memory, which includes off-heap memory allocations, non-JVM tasks, and various systems processes. For JVM-based jobs this value will default to 0.10 and 0.40 for non-JVM jobs.
-    This is done as non-JVM tasks need more non-JVM heap space and such tasks commonly fail with "Memory Overhead Exceeded" errors. This prempts this error with a higher default. 
+	This sets the Memory Overhead Factor that will allocate memory to non-JVM memory, which includes off-heap memory allocations, non-JVM tasks, and various systems processes. For JVM-based jobs this value will default to 0.10 and 0.40 for non-JVM jobs.
+	This is done as non-JVM tasks need more non-JVM heap space and such tasks commonly fail with "Memory Overhead Exceeded" errors. This prempts this error with a higher default.
   </td>
 </tr>
 <tr>
   <td><code>spark.kubernetes.pyspark.pythonVersion</code></td>
   <td><code>"2"</code></td>
   <td>
-   This sets the major Python version of the docker image used to run the driver and executor containers. Can either be 2 or 3. 
+   This sets the major Python version of the docker image used to run the driver and executor containers. Can either be 2 or 3.
   </td>
 </tr>
 <tr>
@@ -856,7 +856,19 @@ specific to Spark on Kubernetes.
   <td>
    Specify the local file that contains the executor [pod template](#pod-template). For example
    <code>spark.kubernetes.executor.podTemplateFile=/path/to/executor-pod-template.yaml`</code>
+   Specify the local file that contains the executor <a href="#pod-template">pod template</a>. For example
+   <code>spark.kubernetes.executor.podTemplateFile=/path/to/executor-pod-template.yaml</code>
   </td>
+  <td>3.0.0</td>
+</tr>
+<tr>
+  <td><code>spark.kubernetes.executor.podTemplateContainerName</code></td>
+  <td>(none)</td>
+  <td>
+   Specify the container name to be used as a basis for the executor in the given <a href="#pod-template">pod template</a>.
+   For example <code>spark.kubernetes.executor.podTemplateContainerName=spark-executor</code>
+  </td>
+  <td>3.0.0</td>
 </tr>
 </table>
 
@@ -872,30 +884,30 @@ See the below table for the full list of pod specifications that will be overwri
   <td>name</td>
   <td>Value of <code>spark.kubernetes.driver.pod.name</code></td>
   <td>
-    The driver pod name will be overwritten with either the configured or default value of
-    <code>spark.kubernetes.driver.pod.name</code>. The executor pod names will be unaffected.
+	The driver pod name will be overwritten with either the configured or default value of
+	<code>spark.kubernetes.driver.pod.name</code>. The executor pod names will be unaffected.
   </td>
 </tr>
 <tr>
   <td>namespace</td>
   <td>Value of <code>spark.kubernetes.namespace</code></td>
   <td>
-    Spark makes strong assumptions about the driver and executor namespaces. Both driver and executor namespaces will
-    be replaced by either the configured or default spark conf value.
+	Spark makes strong assumptions about the driver and executor namespaces. Both driver and executor namespaces will
+	be replaced by either the configured or default spark conf value.
   </td>
 </tr>
 <tr>
   <td>labels</td>
   <td>Adds the labels from <code>spark.kubernetes.{driver,executor}.label.*</code></td>
   <td>
-    Spark will add additional labels specified by the spark configuration.
+	Spark will add additional labels specified by the spark configuration.
   </td>
 </tr>
 <tr>
   <td>annotations</td>
   <td>Adds the annotations from <code>spark.kubernetes.{driver,executor}.annotation.*</code></td>
   <td>
-    Spark will add additional labels specified by the spark configuration.
+	Spark will add additional labels specified by the spark configuration.
   </td>
 </tr>
 </table>
@@ -908,45 +920,45 @@ See the below table for the full list of pod specifications that will be overwri
   <td>imagePullSecrets</td>
   <td>Adds image pull secrets from <code>spark.kubernetes.container.image.pullSecrets</code></td>
   <td>
-    Additional pull secrets will be added from the spark configuration to both executor pods.
+	Additional pull secrets will be added from the spark configuration to both executor pods.
   </td>
 </tr>
 <tr>
   <td>nodeSelector</td>
   <td>Adds node selectors from <code>spark.kubernetes.node.selector.*</code></td>
   <td>
-    Additional node selectors will be added from the spark configuration to both executor pods.
+	Additional node selectors will be added from the spark configuration to both executor pods.
   </td>
 </tr>
 <tr>
   <td>restartPolicy</td>
   <td><code>"never"</code></td>
   <td>
-    Spark assumes that both drivers and executors never restart.
+	Spark assumes that both drivers and executors never restart.
   </td>
 </tr>
 <tr>
   <td>serviceAccount</td>
   <td>Value of <code>spark.kubernetes.authenticate.driver.serviceAccountName</code></td>
   <td>
-    Spark will override <code>serviceAccount</code> with the value of the spark configuration for only
-    driver pods, and only if the spark configuration is specified. Executor pods will remain unaffected.
+	Spark will override <code>serviceAccount</code> with the value of the spark configuration for only
+	driver pods, and only if the spark configuration is specified. Executor pods will remain unaffected.
   </td>
 </tr>
 <tr>
   <td>serviceAccountName</td>
   <td>Value of <code>spark.kubernetes.authenticate.driver.serviceAccountName</code></td>
   <td>
-    Spark will override <code>serviceAccountName</code> with the value of the spark configuration for only
-    driver pods, and only if the spark configuration is specified. Executor pods will remain unaffected.
+	Spark will override <code>serviceAccountName</code> with the value of the spark configuration for only
+	driver pods, and only if the spark configuration is specified. Executor pods will remain unaffected.
   </td>
 </tr>
 <tr>
   <td>volumes</td>
   <td>Adds volumes from <code>spark.kubernetes.{driver,executor}.volumes.[VolumeType].[VolumeName].mount.path</code></td>
   <td>
-    Spark will add volumes as specified by the spark conf, as well as additional volumes necessary for passing
-    spark conf and pod template files.
+	Spark will add volumes as specified by the spark conf, as well as additional volumes necessary for passing
+	spark conf and pod template files.
   </td>
 </tr>
 </table>
@@ -961,40 +973,40 @@ The following affect the driver and executor containers. All other containers in
   <td>env</td>
   <td>Adds env variables from <code>spark.kubernetes.driverEnv.[EnvironmentVariableName]</code></td>
   <td>
-    Spark will add driver env variables from <code>spark.kubernetes.driverEnv.[EnvironmentVariableName]</code>, and
-    executor env variables from <code>spark.executorEnv.[EnvironmentVariableName]</code>.
+	Spark will add driver env variables from <code>spark.kubernetes.driverEnv.[EnvironmentVariableName]</code>, and
+	executor env variables from <code>spark.executorEnv.[EnvironmentVariableName]</code>.
   </td>
 </tr>
 <tr>
   <td>image</td>
   <td>Value of <code>spark.kubernetes.{driver,executor}.container.image</code></td>
   <td>
-    The image will be defined by the spark configurations.
+	The image will be defined by the spark configurations.
   </td>
 </tr>
 <tr>
   <td>imagePullPolicy</td>
   <td>Value of <code>spark.kubernetes.container.image.pullPolicy</code></td>
   <td>
-    Spark will override the pull policy for both driver and executors.
+	Spark will override the pull policy for both driver and executors.
   </td>
 </tr>
 <tr>
   <td>name</td>
   <td>See description.</code></td>
   <td>
-    The container name will be assigned by spark ("spark-kubernetes-driver" for the driver container, and
-    "executor" for each executor container) if not defined by the pod template. If the container is defined by the
-    template, the template's name will be used.
+	The container name will be assigned by spark ("spark-kubernetes-driver" for the driver container, and
+	"executor" for each executor container) if not defined by the pod template. If the container is defined by the
+	template, the template's name will be used.
   </td>
 </tr>
 <tr>
   <td>resources</td>
   <td>See description</td>
   <td>
-    The cpu limits are set by <code>spark.kubernetes.{driver,executor}.limit.cores</code>. The cpu is set by
-    <code>spark.{driver,executor}.cores</code>. The memory request and limit are set by summing the values of
-    <code>spark.{driver,executor}.memory</code> and <code>spark.{driver,executor}.memoryOverhead</code>.
+	The cpu limits are set by <code>spark.kubernetes.{driver,executor}.limit.cores</code>. The cpu is set by
+	<code>spark.{driver,executor}.cores</code>. The memory request and limit are set by summing the values of
+	<code>spark.{driver,executor}.memory</code> and <code>spark.{driver,executor}.memoryOverhead</code>.
 
   </td>
 </tr>
@@ -1002,8 +1014,8 @@ The following affect the driver and executor containers. All other containers in
   <td>volumeMounts</td>
   <td>Add volumes from <code>spark.kubernetes.driver.volumes.[VolumeType].[VolumeName].mount.{path,readOnly}</code></td>
   <td>
-    Spark will add volumes as specified by the spark conf, as well as additional volumes necessary for passing
-    spark conf and pod template files.
+	Spark will add volumes as specified by the spark conf, as well as additional volumes necessary for passing
+	spark conf and pod template files.
   </td>
 </tr>
 </table>
