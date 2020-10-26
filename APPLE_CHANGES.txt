@@ -67,6 +67,12 @@ SPARK-32958      Prune unnecessary columns from JsonToStructs
 SPARK-33007      Simplify named_struct + get struct field + from_json expression chain
 SPARK-33154      Handle cleaned shuffles during migration
 SPARK-33175      Detect duplicated mountPaths and fail at Spark side
+SPARK-33218      Update misleading log messages for removed shuffle blocks
+SPARK-33202      Fix BlockManagerDecommissioner to return the correct migration status
+SPARK-33198      getMigrationBlocks should not fail at missing files
+MINOR            Improve log message during storage decommission
+SPARK-32858      UnwrapCastInBinaryComparison: support other numeric types
+SPARK-24994      Handle foldable, timezone and cleanup
 
 # From Spark 3.0.2
 SPARK-28612      Correct method doc of DataFrameWriterV2.replace()
@@ -169,6 +175,17 @@ SPARK-33131      Fix grouping sets with having clause can not resolve qualified 
 SPARK-33170      Add SQL config to control fast-fail behavior in FileFormatWriter
 MINOR            Fix the Python manual_load_options_csv example
 SPARK-33176      Use 11-jre-slim as default in K8s Dockerfile
+SPARK-33228      Don't uncache data when replacing a view having the same logical plan
+SPARK-30821      Handle executor failure with multiple containers
+SPARK-32247      Install and test scipy with PyPy in GitHub Actions
+SPARK-33189      Fix syntax error in python/run-tests.py
+SPARK-32785      Update migration guide for incomplete interval literals
+SPARK-33189      Add env var to tests for legacy nested timestamps in pyarrow
+MINOR            Fix the description about to_avro and from_avro functions
+SPARK-33190      Set upper bound of PyArrow version in GitHub Actions
+SPARK-33181      Document Load Table Directly from File in SQL Select Reference
+SPARK-32557      Logging and swallowing the exception per entry in History server
+SPARK-33123      Ignore GitHub only changes in Amplab Jenkins build
 
 # Internal Patche
 SPARK-17767      Support user-provided ExternalCatalog and SessionBuilder
@@ -207,3 +224,5 @@ rdar://66018002   TLF: Native libs by using Apple Hadoop 3.2.0.3
 MINOR            Support S3 env variables
 rdar://70330474  Support InstanceProfileCredentialsProvider
 MINOR            Adjust log messages
+rdar://70562690  Update kubernetes Dockerfile in Apple Spark to AppleJDK
+MINOR            Improve logging and extend GroupByTest for debugging purposes
