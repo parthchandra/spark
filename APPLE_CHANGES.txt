@@ -187,6 +187,9 @@ SPARK-30894       Make Size's nullable independent from SQL config changes
 SPARK-26646       Fix flaky test: pyspark.mllib.tests.StreamingLogisticRegressionWithSGDTests.test_training_and_prediction
 SPARK-33131       Fix grouping sets with having clause can not resolve qualified col name
 MINOR             Fix the Python manual_load_options_csv example
+SPARK-33217       Set upper bound of Pandas and PyArrow version in GitHub Actions in branch-2.4
+SPARK-32247       Install and test scipy with PyPy in GitHub Actions
+SPARK-33123       Ignore GitHub only changes in Amplab Jenkins build
 
 # Internal Patches
 MINOR             Add an empty APPLE_CHANGES.txt
@@ -226,3 +229,4 @@ rdar://68926116   Add alternative conf name `spark.FsUrlStreamHandlerFactory.ena
 MINOR             Bump ADT version to 0.6.2
 rdar://69319047   Spark should reject invalid CatalogImplementation Configuration
 rdar://66018002   TLF: Native libs by using Apple Hadoop 3.2.0.3
+N/A               Bump ADT version to 0.7.0
