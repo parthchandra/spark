@@ -43,6 +43,9 @@ class StateStoreConf(@transient private val sqlConf: SQLConf)
    */
   val providerClass: String = sqlConf.stateStoreProviderClass
 
+  /** The compression codec used to compress delta and snapshot files. */
+  val compressionCodec: String = sqlConf.stateStoreCompressionCodec
+
   /**
    * Additional configurations related to state store. This will capture all configs in
    * SQLConf that start with `spark.sql.streaming.stateStore.` */
