@@ -190,6 +190,13 @@ MINOR             Fix the Python manual_load_options_csv example
 SPARK-33217       Set upper bound of Pandas and PyArrow version in GitHub Actions in branch-2.4
 SPARK-32247       Install and test scipy with PyPy in GitHub Actions
 SPARK-33123       Ignore GitHub only changes in Amplab Jenkins build
+SPARK-32090       Improve UserDefinedType.equal() to make it be symmetrical
+SPARK-33228       Don't uncache data when replacing a view having the same logical plan
+SPARK-33268       Fix bugs for casting data from/to PythonUserDefinedType
+SPARK-33292       Make Literal ArrayBasedMapData string representation disambiguous
+SPARK-33183       Fix Optimizer rule EliminateSorts and add a physical rule to remove redundant sorts
+SPARK-29574       Add SPARK_DIST_CLASSPATH to the executor class path
+SPARK-33290       REFRESH TABLE should invalidate cache even though the table itself may not be cached
 
 # Internal Patches
 MINOR             Add an empty APPLE_CHANGES.txt
