@@ -73,6 +73,7 @@ SPARK-33198      getMigrationBlocks should not fail at missing files
 MINOR            Improve log message during storage decommission
 SPARK-32858      UnwrapCastInBinaryComparison: support other numeric types
 SPARK-24994      Handle foldable, timezone and cleanup
+SPARK-33263      Configurable StateStore compression codec
 
 # From Spark 3.0.2
 SPARK-28612      Correct method doc of DataFrameWriterV2.replace()
@@ -186,6 +187,19 @@ SPARK-33190      Set upper bound of PyArrow version in GitHub Actions
 SPARK-33181      Document Load Table Directly from File in SQL Select Reference
 SPARK-32557      Logging and swallowing the exception per entry in History server
 SPARK-33123      Ignore GitHub only changes in Amplab Jenkins build
+SPARK-33197      Make changes to spark.sql.analyzer.maxIterations take effect at runtime
+SPARK-33230      Hadoop committers to get unique job ID in "spark.sql.sources.writeJobUUID"
+SPARK-33260      Fix incorrect results from SortExec when sortOrder is Stream
+SPARK-33246      Correct documentation for null semantics of "NULL AND False"
+SPARK-32090      Improve UserDefinedType.equal() to make it be symmetrical
+SPARK-33264      Add a dedicated page for SQL-on-file in SQL documents
+SPARK-33208      Update the document of SparkSession#sql
+SPARK-33267      Fix NPE issue on 'In' filter when one of values contains null
+MINOR            Update from_unixtime doc
+SPARK-33292      Make Literal ArrayBasedMapData string representation disambiguous
+SPARK-33268      Fix bugs for casting data from/to PythonUserDefinedType
+SPARK-33183      Fix Optimizer rule EliminateSorts and add a physical rule to remove redundant sorts
+SPARK-33290      REFRESH TABLE should invalidate cache even though the table itself may not be cached
 
 # Internal Patche
 SPARK-17767      Support user-provided ExternalCatalog and SessionBuilder
