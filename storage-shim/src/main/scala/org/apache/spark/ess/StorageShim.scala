@@ -55,7 +55,7 @@ object StorageShim {
         .withCredentials(
           new AWSCredentialsProviderChain(
             new AWSStaticCredentialsProvider(
-              new BasicSessionCredentials(access_key, access_key, session_token)),
+              new BasicSessionCredentials(access_key, secret_key, session_token)),
             new InstanceProfileCredentialsProvider()
           ))
         .build())
