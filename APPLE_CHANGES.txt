@@ -200,6 +200,27 @@ SPARK-33292      Make Literal ArrayBasedMapData string representation disambiguo
 SPARK-33268      Fix bugs for casting data from/to PythonUserDefinedType
 SPARK-33183      Fix Optimizer rule EliminateSorts and add a physical rule to remove redundant sorts
 SPARK-33290      REFRESH TABLE should invalidate cache even though the table itself may not be cached
+SPARK-33306      Timezone is needed when cast date to string
+SPARK-33277      Use ContextAwareIterator to stop consuming after the task ends
+SPARK-33313      Add testthat 3.x support
+SPARK-33156      Upgrade GithubAction image from 18.04 to 20.04
+SPARK-33284      In the Storage UI page, clicking any field to sort the table will cause the header content to be lost
+SPARK-33333      Upgrade Jetty to 9.4.28.v20200408
+SPARK-33338      GROUP BY using literal map should not fail
+SPARK-33162      Use pre-built image at GitHub Action PySpark jobs
+SPARK-33239      Use pre-built image at GitHub Action SparkR job
+Revert           SPARK-33277 Use ContextAwareIterator to stop consuming after the task ends
+MINOR            SS DOCS: Update join type in stream static joins code examples
+SPARK-33362      skipSchemaResolution should still require query to be resolved
+SPARK-32860      Updating documentation about map support in Encoders
+SPARK-33371      Update setup.py and tests for Python 3.9
+SPARK-33372      Fix InSet bucket pruning
+SPARK-33397      Fix generating md to html for available-patterns-for-shs-custom-executor-log-url
+SPARK-33405      Upgrade commons-compress to 1.20
+SPARK-33391      element_at with CreateArray not respect one based index
+SPARK-33339      Pyspark application will hang due to non Exception error
+SPARK-33417      Correct the behaviour of query filters in TPCDSQueryBenchmark
+SPARK-33412      OverwriteByExpression should resolve its delete condition based on the table relation not the input query
 
 # Internal Patche
 SPARK-17767      Support user-provided ExternalCatalog and SessionBuilder
