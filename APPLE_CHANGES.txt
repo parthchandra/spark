@@ -197,12 +197,16 @@ SPARK-33292       Make Literal ArrayBasedMapData string representation disambigu
 SPARK-33183       Fix Optimizer rule EliminateSorts and add a physical rule to remove redundant sorts
 SPARK-29574       Add SPARK_DIST_CLASSPATH to the executor class path
 SPARK-33290       REFRESH TABLE should invalidate cache even though the table itself may not be cached
-[SPARK-33277][PYSPARK][SQL][2.4] Use ContextAwareIterator to stop consuming
-[SPARK-33313][TESTS][R][3.0][2.4] Add testthat 3.x support
-[SPARK-33156][INFRA][2.4] Upgrade GithubAction image from 18.04 to 20.04
-[SPARK-33338][SQL] GROUP BY using literal map should not fail
-Revert "[SPARK-33277][PYSPARK][SQL][2.4] Use ContextAwareIterator to stop consuming"
-[MINOR][SS][DOCS] Update join type in stream static joins code examples
+SPARK-33277       Use ContextAwareIterator to stop consuming
+SPARK-33313       Add testthat 3.x support
+SPARK-33156       Upgrade GithubAction image from 18.04 to 20.04
+SPARK-33338       GROUP BY using literal map should not fail
+Revert            "SPARK-33277 PYSPARK SQL 2.4] Use ContextAwareIterator to stop consuming"
+MINOR             SS DOCS: Update join type in stream static joins code examples
+SPARK-33333       Upgrade Jetty to 9.4.28.v20200408
+SPARK-33405       Upgrade commons-compress to 1.20
+SPARK-33372       Fix InSet bucket pruning
+SPARK-33417       Correct the behaviour of query filters in TPCDSQueryBenchmark
 
 # Internal Patches
 MINOR             Add an empty APPLE_CHANGES.txt
