@@ -205,7 +205,6 @@ SPARK-33277      Use ContextAwareIterator to stop consuming after the task ends
 SPARK-33313      Add testthat 3.x support
 SPARK-33156      Upgrade GithubAction image from 18.04 to 20.04
 SPARK-33284      In the Storage UI page, clicking any field to sort the table will cause the header content to be lost
-SPARK-33333      Upgrade Jetty to 9.4.28.v20200408
 SPARK-33338      GROUP BY using literal map should not fail
 SPARK-33162      Use pre-built image at GitHub Action PySpark jobs
 SPARK-33239      Use pre-built image at GitHub Action SparkR job
