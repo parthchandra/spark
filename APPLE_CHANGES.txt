@@ -74,6 +74,9 @@ MINOR            Improve log message during storage decommission
 SPARK-32858      UnwrapCastInBinaryComparison: support other numeric types
 SPARK-24994      Handle foldable, timezone and cleanup
 SPARK-33263      Configurable StateStore compression codec
+SPARK-33387      Support ordered shuffle block migration
+SPARK-31765      Upgrade HtmlUnit >= 2.37.0
+SPARK-33384      Delete temporary file when cancelling writing to final path even underlying stream throwing error
 
 # From Spark 3.0.2
 SPARK-28612      Correct method doc of DataFrameWriterV2.replace()
@@ -220,6 +223,16 @@ SPARK-33391      element_at with CreateArray not respect one based index
 SPARK-33339      Pyspark application will hang due to non Exception error
 SPARK-33417      Correct the behaviour of query filters in TPCDSQueryBenchmark
 SPARK-33412      OverwriteByExpression should resolve its delete condition based on the table relation not the input query
+SPARK-33402      Jobs launched in same second have duplicate MapReduce JobIDs
+SPARK-33404      Fix incorrect results in `date_trunc` expression
+SPARK-33408      Use R 3.6.3 in K8s R image
+MINOR            spark.executor.memoryOverhead is not cluster-mode only
+SPARK-33435      DSv2: REFRESH TABLE should invalidate caches referencing the table
+SPARK-33439      Use SERIAL_SBT_TESTS=1 for SQL modules
+SPARK-33333      Upgrade Jetty to 9.4.28.v20200408
+SPARK-24266      Restart the watcher when we receive a version changed from k8s
+SPARK-33358      Return code when command process failed
+SPARK-33451      Change to 'spark.sql.adaptive.skewJoin.skewedPartitionThresholdInBytes' in documentation
 
 # Internal Patche
 SPARK-17767      Support user-provided ExternalCatalog and SessionBuilder
