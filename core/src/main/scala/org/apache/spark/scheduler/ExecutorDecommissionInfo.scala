@@ -14,26 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.spark.scheduler.cluster.k8s
 
-import io.fabric8.kubernetes.api.model.Pod
+package org.apache.spark.scheduler
 
-sealed trait ExecutorPodState {
-  def pod: Pod
-}
-
-case class PodRunning(pod: Pod) extends ExecutorPodState
-
-case class PodPending(pod: Pod) extends ExecutorPodState
-
-sealed trait FinalPodState extends ExecutorPodState
-
-case class PodSucceeded(pod: Pod) extends FinalPodState
-
-case class PodFailed(pod: Pod) extends FinalPodState
-
-case class PodDeleted(pod: Pod) extends FinalPodState
-
-case class PodTerminating(pod: Pod) extends FinalPodState
-
-case class PodUnknown(pod: Pod) extends ExecutorPodState
+/**
+ * Provides more detail when an executor is being decommissioned.
+ * @param message Human readable reason for why the decommissioning is happening.
+ * @param isHostDecommissioned Whether the host (aka the `node` or `worker` in other places) is
+ *                             being decommissioned too. Used to infer if the shuffle data might
+ *                             be lost even if the external shuffle service is enabled.
+ */
+private[spark]
+case class ExecutorDecommissionInfo(message: String, isHostDecommissioned: Boolean)

@@ -58,31 +58,29 @@ while (( "$#" )); do
   shift
 done
 
-if [[ $SPARK_TGZ == "N/A" ]];
-then
-  echo "Must specify a Spark tarball to build Docker images against with --spark-tgz." && exit 1;
-fi
 
 rm -rf $UNPACKED_SPARK_TGZ
 mkdir -p $UNPACKED_SPARK_TGZ
 tar -xzvf $SPARK_TGZ --strip-components=1 -C $UNPACKED_SPARK_TGZ;
+SPARK_INPUT_DIR="$UNPACKED_SPARK_TGZ"
+DOCKER_FILE_BASE_PATH="$SPARK_INPUT_DIR/kubernetes/dockerfiles/spark"
 
 if [[ $IMAGE_TAG == "N/A" ]];
 then
   IMAGE_TAG=$(uuidgen);
-  cd $UNPACKED_SPARK_TGZ
+  cd $SPARK_INPUT_DIR
   if [[ $DEPLOY_MODE == cloud ]] ;
   then
-    $UNPACKED_SPARK_TGZ/bin/docker-image-tool.sh -r $IMAGE_REPO -t $IMAGE_TAG build
+    $SPARK_INPUT_DIR/bin/docker-image-tool.sh -r $IMAGE_REPO -t $IMAGE_TAG build
     if  [[ $IMAGE_REPO == gcr.io* ]] ;
     then
       gcloud docker -- push $IMAGE_REPO/spark:$IMAGE_TAG
     else
-      $UNPACKED_SPARK_TGZ/bin/docker-image-tool.sh -r $IMAGE_REPO -t $IMAGE_TAG push
+      $SPARK_INPUT_DIR/bin/docker-image-tool.sh -r $IMAGE_REPO -t $IMAGE_TAG push
     fi
   else
     # -m option for minikube.
-    $UNPACKED_SPARK_TGZ/bin/docker-image-tool.sh -m -r $IMAGE_REPO -t $IMAGE_TAG build
+    $SPARK_INPUT_DIR/bin/docker-image-tool.sh -m -r $IMAGE_REPO -t $IMAGE_TAG build
   fi
   cd -
 fi

@@ -99,7 +99,7 @@ trait BlockManagerReplicationBehavior extends SparkFunSuite
     sc = new SparkContext("local", "test", conf)
     master = new BlockManagerMaster(rpcEnv.setupEndpoint("blockmanager",
       new BlockManagerMasterEndpoint(rpcEnv, true, conf,
-        new LiveListenerBus(conf))), conf, true)
+        new LiveListenerBus(conf), null)), conf, true)
     allStores.clear()
   }
 
@@ -504,4 +504,3 @@ class BlockManagerBasicStrategyReplicationSuite extends BlockManagerReplicationB
     "spark.storage.replication.topologyMapper",
     classOf[DummyTopologyMapper].getName)
 }
-
