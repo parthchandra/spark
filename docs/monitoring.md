@@ -1129,6 +1129,8 @@ These metrics are exposed by Spark executors. Note, currently they are not avail
 when running in local mode.
  
 - namespace=executor (metrics are of type counter or gauge)
+  - **notes:**
+    - `spark.executor.metrics.fileSystemSchemes` (default: `file,hdfs`) determines the exposed file system metrics.
   - bytesRead.count
   - bytesWritten.count
   - cpuTime.count
