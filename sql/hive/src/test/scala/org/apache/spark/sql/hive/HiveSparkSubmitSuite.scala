@@ -137,7 +137,7 @@ class HiveSparkSubmitSuite
       "--master", "local-cluster[2,1,1024]",
       "--conf", "spark.ui.enabled=false",
       "--conf", "spark.master.rest.enabled=false",
-      "--conf", "spark.sql.hive.metastore.version=0.12",
+      "--conf", "spark.sql.hive.metastore.version=2.3.8",
       "--conf", "spark.sql.hive.metastore.jars=maven",
       "--driver-java-options", "-Dderby.system.durability=test",
       unusedJar.toString)
@@ -656,7 +656,7 @@ object SparkSQLConfTest extends Logging {
         val filteredSettings = super.getAll.filterNot(e => isMetastoreSetting(e._1))
 
         // Always add these two metastore settings at the beginning.
-        (HiveUtils.HIVE_METASTORE_VERSION.key -> "0.12") +:
+        (HiveUtils.HIVE_METASTORE_VERSION.key -> "2.3.8") +:
         (HiveUtils.HIVE_METASTORE_JARS.key -> "maven") +:
         filteredSettings
       }
