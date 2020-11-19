@@ -27,11 +27,11 @@ SELECT case when from_json(a, 'struct<a:int,b:string>').a > 5 then from_json(a, 
 SELECT case when from_json(a, 'struct<a:int,b:string>').a > 5 then from_json(b, 'array<struct<a:int,b:int>>')[0].b when from_json(a, 'struct<a:int,b:string>').a > 4 then from_json(b, 'array<struct<a:int,b:int>>')[0].b + 1 else from_json(b, 'array<struct<a:int,b:int>>')[0].b + 2 end FROM testData;
 
 -- With non-deterministic expressions.
-SELECT from_json(a, 'struct<a:int,b:string>').a + random() > 2, from_json(a, 'struct<a:int,b:string>').b, from_json(b, 'array<struct<a:int,b:int>>')[0].a, from_json(b, 'array<struct<a:int,b:int>>')[0].b + + random() > 2 FROM testData;
+SELECT from_json(a, 'struct<a:int,b:string>').a + random(1) > 2, from_json(a, 'struct<a:int,b:string>').b, from_json(b, 'array<struct<a:int,b:int>>')[0].a, from_json(b, 'array<struct<a:int,b:int>>')[0].b + + random(2) > 2 FROM testData;
 
-SELECT if(from_json(a, 'struct<a:int,b:string>').a + random() > 5, from_json(b, 'array<struct<a:int,b:int>>')[0].a, from_json(b, 'array<struct<a:int,b:int>>')[0].a + 1) FROM testData;
+SELECT if(from_json(a, 'struct<a:int,b:string>').a + random(2) > 5, from_json(b, 'array<struct<a:int,b:int>>')[0].a, from_json(b, 'array<struct<a:int,b:int>>')[0].a + 1) FROM testData;
 
-SELECT case when from_json(a, 'struct<a:int,b:string>').a > 5 then from_json(a, 'struct<a:int,b:string>').b + random() > 5 when from_json(a, 'struct<a:int,b:string>').a > 4 then from_json(a, 'struct<a:int,b:string>').b + 1 + random() > 2 else from_json(a, 'struct<a:int,b:string>').b + 2 + random() > 5 end FROM testData;
+SELECT case when from_json(a, 'struct<a:int,b:string>').a > 5 then from_json(a, 'struct<a:int,b:string>').b + random(3) > 5 when from_json(a, 'struct<a:int,b:string>').a > 4 then from_json(a, 'struct<a:int,b:string>').b + 1 + random(4) > 2 else from_json(a, 'struct<a:int,b:string>').b + 2 + random(5) > 5 end FROM testData;
 
 -- Clean up
 DROP VIEW IF EXISTS testData;
