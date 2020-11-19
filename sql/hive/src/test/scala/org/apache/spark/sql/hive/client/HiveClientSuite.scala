@@ -28,7 +28,7 @@ import org.apache.spark.sql.catalyst.TableIdentifier
 import org.apache.spark.sql.catalyst.catalog._
 import org.apache.spark.sql.catalyst.dsl.expressions._
 import org.apache.spark.sql.catalyst.expressions._
-import org.apache.spark.sql.types.{BooleanType, IntegerType, LongType, StructType}
+import org.apache.spark.sql.types.{BooleanType, IntegerType, LongType, StringType, StructType}
 import org.apache.spark.util.Utils
 
 // TODO: Refactor this to `HivePartitionFilteringSuite`
@@ -275,6 +275,13 @@ class HiveClientSuite(version: String)
 
   test("create client with sharesHadoopClasses = false") {
     buildClient(new Configuration(), sharesHadoopClasses = false)
+  }
+
+  test("getPartitionsByFilter: chunk in ('ab', 'ba') and ((cast(ds as string)>'20170102')") {
+    val day = (20170101 to 20170103, 0 to 23, Seq("ab", "ba"))
+    testMetastorePartitionFiltering(
+      attr("chunk").in("ab", "ba") && (attr("ds").cast(StringType) > "20170102"),
+      day :: Nil)
   }
 
   private def testMetastorePartitionFiltering(
