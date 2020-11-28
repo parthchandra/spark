@@ -1189,7 +1189,7 @@ private[spark] object SparkSubmitUtils {
         ""
       }
       cacheDirectory.getAbsolutePath + File.separator +
-        s"${artifact.getOrganisation}_${artifact.getName}-${artifact.getRevision}${classifier}.jar"
+        s"${artifact.getOrganisation}_${artifact.getName}-${artifact.getRevision}$classifier.jar"
     }.mkString(",")
   }
 
