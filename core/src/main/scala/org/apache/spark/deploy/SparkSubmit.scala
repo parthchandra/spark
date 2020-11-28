@@ -1182,8 +1182,14 @@ private[spark] object SparkSubmitUtils {
       cacheDirectory: File): String = {
     artifacts.map { artifactInfo =>
       val artifact = artifactInfo.asInstanceOf[Artifact].getModuleRevisionId
+      val extraAttrs = artifactInfo.asInstanceOf[Artifact].getExtraAttributes
+      val classifier = if (extraAttrs.containsKey("classifier")) {
+        "-" + extraAttrs.get("classifier")
+      } else {
+        ""
+      }
       cacheDirectory.getAbsolutePath + File.separator +
-        s"${artifact.getOrganisation}_${artifact.getName}-${artifact.getRevision}.jar"
+        s"${artifact.getOrganisation}_${artifact.getName}-${artifact.getRevision}${classifier}.jar"
     }.mkString(",")
   }
 
