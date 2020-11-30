@@ -24,7 +24,7 @@ import org.apache.spark.sql.catalyst.analysis.{ResolvedNamespace, ResolvedTable}
 import org.apache.spark.sql.catalyst.expressions.{And, Expression, NamedExpression, PredicateHelper, SubqueryExpression}
 import org.apache.spark.sql.catalyst.planning.PhysicalOperation
 import org.apache.spark.sql.catalyst.plans.logical._
-import org.apache.spark.sql.connector.catalog.{CatalogV2Util, StagingTableCatalog, SupportsNamespaces, TableCapability, TableCatalog, TableChange}
+import org.apache.spark.sql.connector.catalog.{CatalogV2Util, Identifier, StagingTableCatalog, SupportsNamespaces, TableCapability, TableCatalog, TableChange}
 import org.apache.spark.sql.connector.read.streaming.{ContinuousStream, MicroBatchStream}
 import org.apache.spark.sql.execution.{FilterExec, LeafExecNode, ProjectExec, RowDataSourceScanExec, SparkPlan}
 import org.apache.spark.sql.execution.datasources.DataSourceStrategy
@@ -49,6 +49,18 @@ class DataSourceV2Strategy(session: SparkSession) extends Strategy with Predicat
       ProjectExec(project, withFilter)
     } else {
       withFilter
+    }
+  }
+
+  private def refreshCache(r: DataSourceV2Relation)(): Unit = {
+    session.sharedState.cacheManager.recacheByPlan(session, r)
+  }
+
+  private def invalidateCache(catalog: TableCatalog, ident: Identifier)(): Unit = {
+    if (catalog.tableExists(ident)) {
+      val table = catalog.loadTable(ident)
+      val v2Relation = DataSourceV2Relation.create(table, Some(catalog), Some(ident))
+      session.sharedState.cacheManager.uncacheQuery(session, v2Relation, cascade = true)
     }
   }
 
@@ -130,7 +142,7 @@ class DataSourceV2Strategy(session: SparkSession) extends Strategy with Predicat
       }
 
     case RefreshTable(catalog, ident) =>
-      RefreshTableExec(session, catalog, ident) :: Nil
+      RefreshTableExec(catalog, ident, invalidateCache(catalog, ident)) :: Nil
 
     case ReplaceTable(catalog, ident, schema, parts, props, orCreate) =>
       val propsWithOwner = CatalogV2Util.withDefaultOwnership(props)
@@ -174,9 +186,9 @@ class DataSourceV2Strategy(session: SparkSession) extends Strategy with Predicat
     case AppendData(r: DataSourceV2Relation, query, writeOptions, _) =>
       r.table.asWritable match {
         case v1 if v1.supports(TableCapability.V1_BATCH_WRITE) =>
-          AppendDataExecV1(v1, writeOptions.asOptions, query, r) :: Nil
+          AppendDataExecV1(v1, writeOptions.asOptions, query, refreshCache(r)) :: Nil
         case v2 =>
-          AppendDataExec(session, v2, r, writeOptions.asOptions, planLater(query)) :: Nil
+          AppendDataExec(v2, writeOptions.asOptions, planLater(query), refreshCache(r)) :: Nil
       }
 
     case OverwriteByExpression(r: DataSourceV2Relation, deleteExpr, query, writeOptions, _) =>
@@ -188,15 +200,16 @@ class DataSourceV2Strategy(session: SparkSession) extends Strategy with Predicat
       }.toArray
       r.table.asWritable match {
         case v1 if v1.supports(TableCapability.V1_BATCH_WRITE) =>
-          OverwriteByExpressionExecV1(v1, filters, writeOptions.asOptions, query, r) :: Nil
+          OverwriteByExpressionExecV1(v1, filters, writeOptions.asOptions,
+            query, refreshCache(r)) :: Nil
         case v2 =>
-          OverwriteByExpressionExec(session, v2, r, filters,
-            writeOptions.asOptions, planLater(query)) :: Nil
+          OverwriteByExpressionExec(v2, filters,
+            writeOptions.asOptions, planLater(query), refreshCache(r)) :: Nil
       }
 
     case OverwritePartitionsDynamic(r: DataSourceV2Relation, query, writeOptions, _) =>
       OverwritePartitionsDynamicExec(
-        session, r.table.asWritable, r, writeOptions.asOptions, planLater(query)) :: Nil
+        r.table.asWritable, writeOptions.asOptions, planLater(query), refreshCache(r)) :: Nil
 
     case DeleteFromTable(relation, condition) =>
       relation match {
@@ -243,7 +256,7 @@ class DataSourceV2Strategy(session: SparkSession) extends Strategy with Predicat
       DescribeTableExec(desc.output, r.table, isExtended) :: Nil
 
     case DropTable(catalog, ident, ifExists) =>
-      DropTableExec(catalog, ident, ifExists) :: Nil
+      DropTableExec(catalog, ident, ifExists, invalidateCache(catalog, ident)) :: Nil
 
     case AlterTable(catalog, ident, _, changes) =>
       AlterTableExec(catalog, ident, changes) :: Nil
