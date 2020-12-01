@@ -77,6 +77,7 @@ SPARK-33263      Configurable StateStore compression codec
 SPARK-33387      Support ordered shuffle block migration
 SPARK-31765      Upgrade HtmlUnit >= 2.37.0
 SPARK-33384      Delete temporary file when cancelling writing to final path even underlying stream throwing error
+SPARK-33262      Make pod allocation executor timeouts configurable & allow scheduling with pending pods
 
 # From Spark 3.0.2
 SPARK-28612      Correct method doc of DataFrameWriterV2.replace()
