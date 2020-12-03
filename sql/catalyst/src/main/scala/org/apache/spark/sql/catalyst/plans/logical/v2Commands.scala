@@ -21,6 +21,7 @@ import org.apache.spark.sql.catalyst.analysis.{NamedRelation, UnresolvedExceptio
 import org.apache.spark.sql.catalyst.catalog.CatalogTypes.TablePartitionSpec
 import org.apache.spark.sql.catalyst.expressions.{Attribute, AttributeReference, AttributeSet, Expression, Unevaluable}
 import org.apache.spark.sql.catalyst.plans.DescribeTableSchema
+import org.apache.spark.sql.catalyst.util.truncatedString
 import org.apache.spark.sql.connector.catalog._
 import org.apache.spark.sql.connector.catalog.TableChange.{AddColumn, ColumnChange}
 import org.apache.spark.sql.connector.expressions.Transform
@@ -518,4 +519,12 @@ case class CommentOnNamespace(child: LogicalPlan, comment: String) extends Comma
  */
 case class CommentOnTable(child: LogicalPlan, comment: String) extends Command {
   override def children: Seq[LogicalPlan] = child :: Nil
+}
+
+case class Call(procedure: Procedure, args: Seq[Expression]) extends Command {
+  override lazy val output: Seq[Attribute] = procedure.outputType.toAttributes
+
+  override def simpleString(maxFields: Int): String = {
+    s"Call${truncatedString(output, "[", ", ", "]", maxFields)} ${procedure.description}"
+  }
 }

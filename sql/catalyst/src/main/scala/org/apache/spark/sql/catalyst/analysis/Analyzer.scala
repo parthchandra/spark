@@ -208,6 +208,7 @@ class Analyzer(
       ResolveTableValuedFunctions ::
       ResolveNamespace(catalogManager) ::
       new ResolveCatalogs(catalogManager) ::
+      ResolveProcedures(catalogManager) ::
       ResolveInsertInto ::
       ResolveRelations ::
       ResolveTables ::

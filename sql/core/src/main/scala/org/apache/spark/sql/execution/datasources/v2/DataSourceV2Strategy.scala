@@ -20,8 +20,9 @@ package org.apache.spark.sql.execution.datasources.v2
 import scala.collection.JavaConverters._
 
 import org.apache.spark.sql.{AnalysisException, SparkSession, Strategy}
+import org.apache.spark.sql.catalyst.InternalRow
 import org.apache.spark.sql.catalyst.analysis.{ResolvedNamespace, ResolvedTable}
-import org.apache.spark.sql.catalyst.expressions.{And, Expression, NamedExpression, PredicateHelper, SubqueryExpression}
+import org.apache.spark.sql.catalyst.expressions.{And, Expression, GenericInternalRow, NamedExpression, PredicateHelper, SubqueryExpression}
 import org.apache.spark.sql.catalyst.planning.PhysicalOperation
 import org.apache.spark.sql.catalyst.plans.logical._
 import org.apache.spark.sql.connector.catalog.{CatalogV2Util, Identifier, StagingTableCatalog, SupportsNamespaces, TableCapability, TableCatalog, TableChange}
@@ -304,6 +305,18 @@ class DataSourceV2Strategy(session: SparkSession) extends Strategy with Predicat
     case r @ ShowTableProperties(rt: ResolvedTable, propertyKey) =>
       ShowTablePropertiesExec(r.output, rt.table, propertyKey) :: Nil
 
+    case c @ Call(procedure, args) =>
+      val input = buildInternalRow(args)
+      CallExec(c.output, procedure, input) :: Nil
+
     case _ => Nil
+  }
+
+  private def buildInternalRow(exprs: Seq[Expression]): InternalRow = {
+    val values = new Array[Any](exprs.size)
+    for (index <- exprs.indices) {
+      values(index) = exprs(index).eval()
+    }
+    new GenericInternalRow(values)
   }
 }
