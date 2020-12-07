@@ -28,9 +28,6 @@ import scala.collection.mutable
 import scala.util.control.Breaks._
 import scala.util.control.NonFatal
 
-import io.fabric8.kubernetes.api.model._
-import io.fabric8.kubernetes.client.KubernetesClient
-
 import org.apache.spark.SparkConf
 import org.apache.spark.deploy.SparkApplication
 import org.apache.spark.deploy.k8s.{KubernetesConf, KubernetesDriverSpecificConf, KubernetesUtils, SparkKubernetesClientFactory}
@@ -146,7 +143,7 @@ private[spark] class Client(
     val createdDriverPod = kubernetesClient.pods().create(resolvedDriverPod)
     try {
       val otherKubernetesResources = resolvedDriverSpec.driverKubernetesResources ++ Seq(configMap)
-      addDriverOwnerReference(createdDriverPod, otherKubernetesResources)
+      addOwnerReference(createdDriverPod, otherKubernetesResources)
       kubernetesClient.resourceList(otherKubernetesResources: _*).createOrReplace()
     } catch {
       case NonFatal(e) =>
