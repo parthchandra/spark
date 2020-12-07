@@ -78,6 +78,22 @@ SPARK-33387      Support ordered shuffle block migration
 SPARK-31765      Upgrade HtmlUnit >= 2.37.0
 SPARK-33384      Delete temporary file when cancelling writing to final path even underlying stream throwing error
 SPARK-33262      Make pod allocation executor timeouts configurable & allow scheduling with pending pods
+SPARK-33580      resolveDependencyPaths should use classifier attribute of artifact
+SPARK-33540      Subexpression elimination for interpreted predicate
+SPARK-33523      Add predicate related benchmark to SubExprEliminationBenchmark
+SPARK-33427      Add subexpression elimination for interpreted expression evaluation
+SPARK-33337      Support subexpression elimination in branches of conditional expressions
+SPARK-33476      Generalize ExecutorSource to expose user-given file system schemes
+SPARK-30985      Support propagating SPARK_CONF_DIR files to driver and executor pods
+SPARK-33455      Add SubExprEliminationBenchmark for benchmarking subexpression elimination
+SPARK-33456      Add end-to-end test for subexpression elimination
+SPARK-33473      Extend interpreted subexpression elimination to other interpreted projections
+SPARK-33231      Make pod allocation executor timeouts configurable & allow scheduling with pending pods
+SPARK-33608      Handle DELETE/UPDATE/MERGE in PullupCorrelatedPredicates
+SPARK-33612      Add dataSourceRewriteRules batch to Optimizer
+SPARK-33492      DSv2: Append/Overwrite/ReplaceTable should invalidate cache
+SPARK-33567      DSv2: Use callback instead of passing Spark session and v2 relation for refreshing cache
+SPARK-33524      Change `InMemoryTable` not to use Tuple.hashCode for `BucketTransform`
 
 # From Spark 3.0.2
 SPARK-28612      Correct method doc of DataFrameWriterV2.replace()
@@ -234,9 +250,36 @@ SPARK-33333      Upgrade Jetty to 9.4.28.v20200408
 SPARK-24266      Restart the watcher when we receive a version changed from k8s
 SPARK-33358      Return code when command process failed
 SPARK-33451      Change to 'spark.sql.adaptive.skewJoin.skewedPartitionThresholdInBytes' in documentation
+MINOR            Correct typos in the sub-modules: graphx, external, and examples
+SPARK-33464      Add/remove (un)necessary cache and restructure GitHub Actions yaml
+SPARK-27421      Fix filter for int column and value class java.lang.String when pruning partition column
+SPARK-33483      Fix rat exclusion patterns and add a LICENSE
+SPARK-33422      Fix the correct display of left menu item
+SPARK-33472      Adjust RemoveRedundantSorts rule order
+MINOR            Suppress warning in check-license
+SPARK-33535      Export LANG to en_US.UTF-8 in run-tests-jenkins script
+SPARK-33565      Remove py38 spark3
+SPARK-33565      Keep the test coverage with Python 3.8 in GitHub Actions
+SPARK-33585      Fix the comment for `SQLContext.tables()` and mention the `database` column
+SPARK-33579      Fix executor blank page behind proxy
+SPARK-33588      Respect the `spark.sql.caseSensitive` config while resolving partition spec in v1 `SHOW TABLE EXTENDED`
+SPARK-33440      Use current timestamp with warning log in HadoopFSDelegationTokenProvider when the issue date for token is not set up properly
+SPARK-33611      Avoid encoding twice on the query parameter of rewritten proxy URL
+SPARK-33631      Clean up spark.core.connection.ack.wait.timeout from configuration.md
+SPARK-33636      Add labelsArray to PySpark StringIndexer
+SPARK-33629      Make spark.buffer.size configuration visible on driver side
+SPARK-33660      Fix Kafka Headers Documentation
+SPARK-33571      Add a ref to INT96 config from the doc for `spark.sql.legacy.parquet.datetimeRebaseModeInWrite/Read`
+MINOR            Fix string interpolation in CommandUtils.scala and KafkaDataConsumer.scala
+SPARK-33667      Respect the `spark.sql.caseSensitive` config while resolving partition spec in v1 `SHOW PARTITIONS`
+SPARK-33675      Add GitHub Action job to publish snapshot
+SPARK-33592      Backport Fix: Pyspark ML Validator params in estimatorParamMaps may be lost after saving and reloading
 
 # Internal Patche
 rdar://72034392  Wait for the executor JVM to finish before returning decom.sh (fixed upstream but differently).
+rdar://71329454  New Hive release for the Avro compatibility issue
+rdar://71819374  Bridge in LZO codec family
+PR-791           Add stored procedure API
 SPARK-17767      Support user-provided ExternalCatalog and SessionBuilder
 rdar://64257964  Add back http support so it works without hadoop configuration
 rdar://66576657  Add spark-avro to the tgz build to simplify kernels
