@@ -236,6 +236,7 @@ SPARK-33358      Return code when command process failed
 SPARK-33451      Change to 'spark.sql.adaptive.skewJoin.skewedPartitionThresholdInBytes' in documentation
 
 # Internal Patche
+rdar://72034392  Wait for the executor JVM to finish before returning decom.sh (fixed upstream but differently).
 SPARK-17767      Support user-provided ExternalCatalog and SessionBuilder
 rdar://64257964  Add back http support so it works without hadoop configuration
 rdar://66576657  Add spark-avro to the tgz build to simplify kernels
