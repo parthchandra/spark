@@ -16,6 +16,7 @@ SPARK-32802       Avoid using SpecificInternalRow in RunLengthEncoding#Encoder
 SPARK-32971       Support dynamic PVC creation/deletion for K8s executors
 SPARK-33019       Use spark.hadoop.mapreduce.fileoutputcommitter.algorithm.version=1 by default
 SPARK-33384       Delete temporary file when cancelling writing to final path even underlying stream throwing error
+SPARK-33337       Support subexpression elimination in branches of conditional expressions
 
 # From Spark 3.0.0
 SPARK-17636       Parquet predicate pushdown in nested fields
@@ -210,6 +211,20 @@ SPARK-33372       Fix InSet bucket pruning
 SPARK-33417       Correct the behaviour of query filters in TPCDSQueryBenchmark
 MINOR             Correct typos in the sub-modules: graphx, external, and examples
 SPARK-33339       Pyspark application will hang due to non Exception error
+SPARK-33464       Add/remove (un)necessary cache and restructure GitHub Actions yaml
+SPARK-33483       Fix rat exclusion patterns and add a LICENSE
+SPARK-27421       Fix filter for int column and value class java.lang.String when pruning partition column
+SPARK-33472       Adjust RemoveRedundantSorts rule order
+MINOR             Suppress warning in check-license
+SPARK-33535       Export LANG to en_US.UTF-8 in run-tests-jenkins script
+SPARK-24266       Restart the watcher when we receive a version changed from k8s
+SPARK-26645       Support decimals with negative scale when parsing datatype
+SPARK-33585       Fix the comment for `SQLContext.tables()` and mention the `database` column
+SPARK-33588       Respect the `spark.sql.caseSensitive` config while resolving partition spec in v1 `SHOW TABLE EXTENDED`
+SPARK-33631       Clean up spark.core.connection.ack.wait.timeout from configuration.md
+SPARK-33667       Respect the `spark.sql.caseSensitive` config while resolving partition spec in v1 `SHOW PARTITIONS`
+SPARK-33675       Add GitHub Action job to publish snapshot
+SPARK-33681       Increase K8s IT timeout to 3 minutes
 
 # Internal Patches
 MINOR             Add an empty APPLE_CHANGES.txt
@@ -250,3 +265,4 @@ MINOR             Bump ADT version to 0.6.2
 rdar://69319047   Spark should reject invalid CatalogImplementation Configuration
 rdar://66018002   TLF: Native libs by using Apple Hadoop 3.2.0.3
 N/A               Bump ADT version to 0.7.0
+N/A               Bump ADT version to 0.7.1
