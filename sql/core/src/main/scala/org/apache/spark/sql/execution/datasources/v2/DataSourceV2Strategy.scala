@@ -324,6 +324,17 @@ class DataSourceV2Strategy(session: SparkSession) extends Strategy with Predicat
       val input = buildInternalRow(args)
       CallExec(c.output, procedure, input) :: Nil
 
+    case DynamicFileFilter(scanRelation, fileFilterPlan) =>
+      // we don't use planLater here as we need set cachePartitions to false in BatchScanExec
+      val scanExec = BatchScanExec(scanRelation.output, scanRelation.scan, cachePartitions = false)
+      val dynamicFileFilter = DynamicFileFilterExec(scanExec, planLater(fileFilterPlan))
+      if (scanExec.supportsColumnar) {
+        dynamicFileFilter :: Nil
+      } else {
+        // add a projection to ensure we have UnsafeRows required by some operations
+        ProjectExec(scanRelation.output, dynamicFileFilter) :: Nil
+      }
+
     case _ => Nil
   }
 
