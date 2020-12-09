@@ -194,7 +194,7 @@ class InMemoryTable(
     }
   }
 
-  private abstract class TestBatchWrite extends BatchWrite {
+  protected abstract class TestBatchWrite extends BatchWrite {
     override def createBatchWriterFactory(info: PhysicalWriteInfo): DataWriterFactory = {
       BufferedRowsWriterFactory
     }
@@ -202,13 +202,13 @@ class InMemoryTable(
     override def abort(messages: Array[WriterCommitMessage]): Unit = {}
   }
 
-  private object Append extends TestBatchWrite {
+  protected object Append extends TestBatchWrite {
     override def commit(messages: Array[WriterCommitMessage]): Unit = dataMap.synchronized {
       withData(messages.map(_.asInstanceOf[BufferedRows]))
     }
   }
 
-  private object DynamicOverwrite extends TestBatchWrite {
+  protected object DynamicOverwrite extends TestBatchWrite {
     override def commit(messages: Array[WriterCommitMessage]): Unit = dataMap.synchronized {
       val newData = messages.map(_.asInstanceOf[BufferedRows])
       dataMap --= newData.flatMap(_.rows.map(getKey))
@@ -216,7 +216,7 @@ class InMemoryTable(
     }
   }
 
-  private class Overwrite(filters: Array[Filter]) extends TestBatchWrite {
+  protected class Overwrite(filters: Array[Filter]) extends TestBatchWrite {
     import org.apache.spark.sql.connector.catalog.CatalogV2Implicits.MultipartIdentifierHelper
     override def commit(messages: Array[WriterCommitMessage]): Unit = dataMap.synchronized {
       val deleteKeys = InMemoryTable.filtersToKeys(
@@ -226,7 +226,7 @@ class InMemoryTable(
     }
   }
 
-  private object TruncateAndAppend extends TestBatchWrite {
+  protected object TruncateAndAppend extends TestBatchWrite {
     override def commit(messages: Array[WriterCommitMessage]): Unit = dataMap.synchronized {
       dataMap.clear
       withData(messages.map(_.asInstanceOf[BufferedRows]))

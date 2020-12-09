@@ -27,6 +27,7 @@ import org.apache.spark.sql.catalyst.planning.PhysicalOperation
 import org.apache.spark.sql.catalyst.plans.logical._
 import org.apache.spark.sql.connector.catalog.{CatalogV2Util, Identifier, StagingTableCatalog, SupportsNamespaces, TableCapability, TableCatalog, TableChange}
 import org.apache.spark.sql.connector.read.streaming.{ContinuousStream, MicroBatchStream}
+import org.apache.spark.sql.connector.write.V1Write
 import org.apache.spark.sql.execution.{FilterExec, LeafExecNode, ProjectExec, RowDataSourceScanExec, SparkPlan}
 import org.apache.spark.sql.execution.datasources.DataSourceStrategy
 import org.apache.spark.sql.execution.streaming.continuous.{ContinuousCoalesceExec, WriteToContinuousDataSource, WriteToContinuousDataSourceExec}
@@ -184,15 +185,20 @@ class DataSourceV2Strategy(session: SparkSession) extends Strategy with Predicat
             orCreate = orCreate) :: Nil
       }
 
-    case AppendData(r: DataSourceV2Relation, query, writeOptions, _) =>
+    case AppendData(r: DataSourceV2Relation, query, writeOptions, _, write) =>
       r.table.asWritable match {
         case v1 if v1.supports(TableCapability.V1_BATCH_WRITE) =>
-          AppendDataExecV1(v1, writeOptions.asOptions, query, refreshCache(r)) :: Nil
+          AppendDataExecV1(
+            v1, writeOptions.asOptions, query,
+            refreshCache(r), write.map(_.asInstanceOf[V1Write])) :: Nil
         case v2 =>
-          AppendDataExec(v2, writeOptions.asOptions, planLater(query), refreshCache(r)) :: Nil
+          AppendDataExec(
+            v2, writeOptions.asOptions, planLater(query),
+            refreshCache(r), write.map(_.toBatch)) :: Nil
       }
 
-    case OverwriteByExpression(r: DataSourceV2Relation, deleteExpr, query, writeOptions, _) =>
+    case OverwriteByExpression(
+        r: DataSourceV2Relation, deleteExpr, query, writeOptions, _, write) =>
       // fail if any filter cannot be converted. correctness depends on removing all matching data.
       val filters = splitConjunctivePredicates(deleteExpr).map {
         filter => DataSourceStrategy.translateFilter(deleteExpr,
@@ -201,16 +207,19 @@ class DataSourceV2Strategy(session: SparkSession) extends Strategy with Predicat
       }.toArray
       r.table.asWritable match {
         case v1 if v1.supports(TableCapability.V1_BATCH_WRITE) =>
-          OverwriteByExpressionExecV1(v1, filters, writeOptions.asOptions,
-            query, refreshCache(r)) :: Nil
+          OverwriteByExpressionExecV1(
+            v1, filters, writeOptions.asOptions, query,
+            refreshCache(r), write.map(_.asInstanceOf[V1Write])) :: Nil
         case v2 =>
-          OverwriteByExpressionExec(v2, filters,
-            writeOptions.asOptions, planLater(query), refreshCache(r)) :: Nil
+          OverwriteByExpressionExec(
+            v2, filters, writeOptions.asOptions, planLater(query),
+            refreshCache(r), write.map(_.toBatch)) :: Nil
       }
 
-    case OverwritePartitionsDynamic(r: DataSourceV2Relation, query, writeOptions, _) =>
+    case OverwritePartitionsDynamic(r: DataSourceV2Relation, query, writeOptions, _, write) =>
       OverwritePartitionsDynamicExec(
-        r.table.asWritable, writeOptions.asOptions, planLater(query), refreshCache(r)) :: Nil
+        r.table.asWritable, writeOptions.asOptions, planLater(query),
+        refreshCache(r), write.map(_.toBatch)) :: Nil
 
     case DeleteFromTable(relation, condition) =>
       relation match {

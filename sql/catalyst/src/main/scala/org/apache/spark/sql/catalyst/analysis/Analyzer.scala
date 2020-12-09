@@ -2849,7 +2849,7 @@ class Analyzer(
    */
   object ResolveOutputRelation extends Rule[LogicalPlan] {
     override def apply(plan: LogicalPlan): LogicalPlan = plan.resolveOperators {
-      case append @ AppendData(table, query, _, isByName)
+      case append @ AppendData(table, query, _, isByName, _)
           if table.resolved && query.resolved && !append.outputResolved =>
         validateStoreAssignmentPolicy()
         val projection =
@@ -2861,7 +2861,7 @@ class Analyzer(
           append
         }
 
-      case overwrite @ OverwriteByExpression(table, _, query, _, isByName)
+      case overwrite @ OverwriteByExpression(table, _, query, _, isByName, _)
           if table.resolved && query.resolved && !overwrite.outputResolved =>
         validateStoreAssignmentPolicy()
         val projection =
@@ -2873,7 +2873,7 @@ class Analyzer(
           overwrite
         }
 
-      case overwrite @ OverwritePartitionsDynamic(table, query, _, isByName)
+      case overwrite @ OverwritePartitionsDynamic(table, query, _, isByName, _)
           if table.resolved && query.resolved && !overwrite.outputResolved =>
         validateStoreAssignmentPolicy()
         val projection =

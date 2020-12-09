@@ -25,6 +25,7 @@ import org.apache.spark.sql.catalyst.util.truncatedString
 import org.apache.spark.sql.connector.catalog._
 import org.apache.spark.sql.connector.catalog.TableChange.{AddColumn, ColumnChange}
 import org.apache.spark.sql.connector.expressions.Transform
+import org.apache.spark.sql.connector.write.Write
 import org.apache.spark.sql.types.{DataType, MetadataBuilder, StringType, StructType}
 
 /**
@@ -60,7 +61,8 @@ case class AppendData(
     table: NamedRelation,
     query: LogicalPlan,
     writeOptions: Map[String, String],
-    isByName: Boolean) extends V2WriteCommand
+    isByName: Boolean,
+    write: Option[Write] = None) extends V2WriteCommand
 
 object AppendData {
   def byName(
@@ -86,7 +88,8 @@ case class OverwriteByExpression(
     deleteExpr: Expression,
     query: LogicalPlan,
     writeOptions: Map[String, String],
-    isByName: Boolean) extends V2WriteCommand {
+    isByName: Boolean,
+    write: Option[Write] = None) extends V2WriteCommand {
   override lazy val resolved: Boolean = {
     table.resolved && query.resolved && outputResolved && deleteExpr.resolved
   }
@@ -118,7 +121,8 @@ case class OverwritePartitionsDynamic(
     table: NamedRelation,
     query: LogicalPlan,
     writeOptions: Map[String, String],
-    isByName: Boolean) extends V2WriteCommand
+    isByName: Boolean,
+    write: Option[Write] = None) extends V2WriteCommand
 
 object OverwritePartitionsDynamic {
   def byName(
