@@ -31,7 +31,7 @@ import org.apache.spark.sql.catalyst.InternalRow
 import org.apache.spark.sql.catalyst.analysis.{CannotReplaceMissingTableException, NoSuchTableException, TableAlreadyExistsException}
 import org.apache.spark.sql.catalyst.expressions.Attribute
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
-import org.apache.spark.sql.connector.catalog.{Identifier, StagedTable, StagingTableCatalog, SupportsWrite, Table, TableCatalog}
+import org.apache.spark.sql.connector.catalog.{Identifier, StagedTable, StagingTableCatalog, SupportsMerge, SupportsWrite, Table, TableCatalog}
 import org.apache.spark.sql.connector.expressions.Transform
 import org.apache.spark.sql.connector.write.{BatchWrite, DataWriterFactory, LogicalWriteInfoImpl, PhysicalWriteInfoImpl, SupportsDynamicOverwrite, SupportsOverwrite, SupportsTruncate, V1Write, V1WriteBuilder, WriteBuilder, WriterCommitMessage}
 import org.apache.spark.sql.execution.{SparkPlan, UnaryExecNode}
@@ -335,6 +335,29 @@ case class OverwritePartitionsDynamicExec(
       case _ =>
         throw new SparkException(s"Table does not support dynamic partition overwrite: $table")
     }
+  }
+}
+
+/**
+ * Physical plan node to replace data in existing tables.
+ */
+case class ReplaceDataExec(
+    table: SupportsMerge,
+    query: SparkPlan,
+    refreshCache: () => Unit,
+    batchWrite: BatchWrite) extends V2ExistingTableWriteExec {
+
+  override def write: Option[BatchWrite] = Some(batchWrite)
+
+  override protected def run(): Seq[InternalRow] = {
+    // calling prepare() ensures we execute DynamicFileFilter if present
+    prepare()
+    super.run();
+  }
+
+  // we don't have to implement buildAndRun as we always have BatchWrite
+  override protected def buildAndRun(): Seq[InternalRow] = {
+    throw new UnsupportedOperationException("Not implemented: buildAndRun")
   }
 }
 

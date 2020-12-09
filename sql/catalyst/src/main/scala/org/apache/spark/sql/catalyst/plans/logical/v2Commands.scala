@@ -140,6 +140,13 @@ object OverwritePartitionsDynamic {
   }
 }
 
+/**
+ * Replace data in an existing table.
+ */
+case class ReplaceData(
+    table: NamedRelation,
+    query: LogicalPlan,
+    write: Write) extends V2WriteCommand
 
 /** A trait used for logical plan nodes that create or replace V2 table definitions. */
 trait V2CreateTablePlan extends LogicalPlan {

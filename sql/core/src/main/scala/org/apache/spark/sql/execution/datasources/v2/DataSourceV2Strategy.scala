@@ -221,6 +221,9 @@ class DataSourceV2Strategy(session: SparkSession) extends Strategy with Predicat
         r.table.asWritable, writeOptions.asOptions, planLater(query),
         refreshCache(r), write.map(_.toBatch)) :: Nil
 
+    case ReplaceData(r: DataSourceV2Relation, query, write) =>
+      ReplaceDataExec(r.table.asMergeable, planLater(query), refreshCache(r), write.toBatch) :: Nil
+
     case DeleteFromTable(relation, condition) =>
       relation match {
         case DataSourceV2ScanRelation(table, _, output) =>
