@@ -1,5 +1,8 @@
 This contains the changes after creating `v3.0.1`
 
+# Form Spark 3.2.0
+[SPARK-33724     Add decom script as a configuration param
+
 # From Spark 3.1.0
 SPARK-25355      Add proxy user to driver if present on spark-submit
 SPARK-29089      Parallelize blocking FileSystem calls in DataSource#checkAndGlobPathIfNecessary
