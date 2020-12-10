@@ -24,12 +24,19 @@ import org.apache.spark.internal.config.ConfigBuilder
 
 private[spark] object Config extends Logging {
 
+
   val KUBERNETES_DRIVER_MASTER_URL =
     ConfigBuilder("spark.kubernetes.driver.master")
       .doc("The internal Kubernetes master (API server) address " +
         "to be used for driver to request executors.")
       .stringConf
       .createWithDefault(KUBERNETES_MASTER_INTERNAL_URL)
+
+  val DECOMMISSION_SCRIPT =
+    ConfigBuilder("spark.kubernetes.decommission.script")
+      .doc("The location of the script to use for graceful decommissioning")
+      .stringConf
+      .createWithDefault("/opt/decom.sh")
 
   val KUBERNETES_NAMESPACE =
     ConfigBuilder("spark.kubernetes.namespace")

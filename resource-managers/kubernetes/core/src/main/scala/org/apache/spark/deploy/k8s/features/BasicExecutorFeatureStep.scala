@@ -167,6 +167,22 @@ private[spark] class BasicExecutorFeatureStep(
           .endResources()
         .build()
     }.getOrElse(executorContainer)
+    val containerWithLifecycle =
+      if (!kubernetesConf.workerDecommissioning) {
+        logInfo("Decommissioning not enabled, skipping shutdown script")
+        containerWithLimitCores
+      } else {
+        logInfo("Adding decommission script to lifecycle")
+        new ContainerBuilder(containerWithLimitCores).withNewLifecycle()
+          .withNewPreStop()
+            .withNewExec()
+              .addToCommand(kubernetesConf.get(DECOMMISSION_SCRIPT))
+            .endExec()
+          .endPreStop()
+          .endLifecycle()
+          .build()
+      }
+
     val driverPod = kubernetesConf.roleSpecificConf.driverPod
     val ownerReference = driverPod.map(pod =>
       new OwnerReferenceBuilder()
@@ -191,7 +207,7 @@ private[spark] class BasicExecutorFeatureStep(
         .endSpec()
       .build()
 
-    SparkPod(executorPod, containerWithLimitCores)
+    SparkPod(executorPod, containerWithLifecycle)
   }
 
   override def getAdditionalPodSystemProperties(): Map[String, String] = Map.empty
