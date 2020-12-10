@@ -1863,7 +1863,7 @@ class DataSourceV2SQLSuite
       }
 
       assert(spark.table(t).count === 3)
-      assert(exc.getMessage.contains("Delete by condition with subquery is not supported"))
+      assert(exc.getMessage.contains("Table does not support updates and deletes"))
     }
   }
 
@@ -1877,7 +1877,7 @@ class DataSourceV2SQLSuite
       }
 
       assert(spark.table(t).count === 3)
-      assert(exc.getMessage.contains(s"Cannot delete from table $t"))
+      assert(exc.getMessage.contains("Table does not support updates and deletes"))
     }
   }
 
