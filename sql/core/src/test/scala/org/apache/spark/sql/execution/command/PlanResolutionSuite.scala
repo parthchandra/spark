@@ -34,6 +34,11 @@ import org.apache.spark.sql.catalyst.plans.logical.{AlterTable, Assignment, Crea
 import org.apache.spark.sql.connector.FakeV2Provider
 import org.apache.spark.sql.connector.catalog.{CatalogManager, CatalogNotFoundException, Identifier, Table, TableCapability, TableCatalog, TableChange, V1Table}
 import org.apache.spark.sql.connector.catalog.TableChange.{UpdateColumnComment, UpdateColumnType}
+import org.apache.spark.sql.connector.distributions.Distributions
+import org.apache.spark.sql.connector.expressions.{FieldReference, SortOrder}
+import org.apache.spark.sql.connector.expressions.LogicalExpressions._
+import org.apache.spark.sql.connector.expressions.NullOrdering._
+import org.apache.spark.sql.connector.expressions.SortDirection._
 import org.apache.spark.sql.execution.datasources.CreateTable
 import org.apache.spark.sql.execution.datasources.v2.DataSourceV2Relation
 import org.apache.spark.sql.internal.SQLConf
@@ -1552,6 +1557,35 @@ class PlanResolutionSuite extends AnalysisTest {
     checkFailure("v1Table", v1Format)
     checkFailure("v2Table", v2Format)
     checkFailure("testcat.tab", "foo")
+  }
+
+  test("alter table: set distribution and ordering for v2 tables") {
+    Seq("v2Table", "testcat.tab").foreach { t =>
+      val sql = s"ALTER TABLE $t WRITE ORDERED BY (i, bucket(8, s))"
+
+      val ordering = Array[SortOrder](
+        sort(FieldReference("i"), ASCENDING, NULLS_FIRST),
+        sort(bucket(8, Array(FieldReference("s"))), ASCENDING, NULLS_FIRST)
+      )
+      val distribution = Distributions.ordered(ordering)
+      val expectedChange = TableChange.setDistributionAndOrder(distribution, ordering)
+
+      parseAndResolve(sql) match {
+        case AlterTable(_, _, _: DataSourceV2Relation, changes) =>
+          assert(changes.size == 1, "expected only one change")
+          assert(changes.head == expectedChange, "change must match")
+        case _ =>
+          fail("expected AlterTable")
+      }
+    }
+  }
+
+  test("alter table: cannot set distribution and ordering for v1 tables") {
+    val sql = "ALTER TABLE v1Table WRITE ORDERED BY (i, bucket(8, s))"
+    val e = intercept[AnalysisException] {
+      parseAndResolve(sql)
+    }
+    assert(e.message.contains("Cannot set distribution and ordering in v1 tables"))
   }
 
   // TODO: add tests for more commands.

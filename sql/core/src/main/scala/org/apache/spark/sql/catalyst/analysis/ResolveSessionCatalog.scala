@@ -160,6 +160,16 @@ class ResolveSessionCatalog(
         createAlterTable(nameParts, catalog, tbl, changes)
       }
 
+    case AlterTableDistributionAndOrderingStatement(
+         nameParts @ SessionCatalogAndTable(catalog, tbl), distribution, order) =>
+      loadTable(catalog, tbl.asIdentifier).collect {
+        case _: V1Table =>
+          throw new AnalysisException("Cannot set distribution and ordering in v1 tables")
+      }.getOrElse {
+        val change = TableChange.setDistributionAndOrder(distribution, order.toArray)
+        createAlterTable(nameParts, catalog, tbl, Seq(change))
+      }
+
     case AlterTableSetPropertiesStatement(
          nameParts @ SessionCatalogAndTable(catalog, tbl), props) =>
       loadTable(catalog, tbl.asIdentifier).collect {

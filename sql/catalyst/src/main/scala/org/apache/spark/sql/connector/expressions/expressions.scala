@@ -17,7 +17,10 @@
 
 package org.apache.spark.sql.connector.expressions
 
-import org.apache.spark.sql.catalyst
+import org.apache.spark.sql.{catalyst, AnalysisException}
+import org.apache.spark.sql.catalyst.FunctionIdentifier
+import org.apache.spark.sql.catalyst.analysis.{UnresolvedAttribute, UnresolvedFunction}
+import org.apache.spark.sql.catalyst.expressions.{Ascending, Descending, NullsFirst, NullsLast}
 import org.apache.spark.sql.catalyst.parser.CatalystSqlParser
 import org.apache.spark.sql.internal.SQLConf
 import org.apache.spark.sql.types.{DataType, IntegerType, StringType}
@@ -65,6 +68,68 @@ private[sql] object LogicalExpressions {
       direction: SortDirection,
       nullOrdering: NullOrdering): SortOrder = {
     SortValue(reference, direction, nullOrdering)
+  }
+
+  def fromCatalyst(sortOrder: Seq[catalyst.expressions.SortOrder]): Array[SortOrder] = {
+    sortOrder.map {
+      case catalyst.expressions.SortOrder(expr, direction, nullOrder, _) =>
+        sort(fromCatalyst(expr), fromCatalyst(direction), fromCatalyst(nullOrder))
+      case invalid =>
+        throw new AnalysisException(s"Cannot convert $invalid to a sort order")
+    }.toArray
+  }
+
+  private def fromCatalyst(direction: catalyst.expressions.SortDirection): SortDirection = {
+    direction match {
+      case Ascending => SortDirection.ASCENDING
+      case Descending => SortDirection.DESCENDING
+    }
+  }
+
+  private def fromCatalyst(nullOrder: catalyst.expressions.NullOrdering): NullOrdering = {
+    nullOrder match {
+      case NullsFirst => NullOrdering.NULLS_FIRST
+      case NullsLast => NullOrdering.NULLS_LAST
+    }
+  }
+
+  def fromCatalyst(expr: catalyst.expressions.Expression): Expression = {
+    expr match {
+      case UnresolvedAttribute(nameParts) =>
+        reference(nameParts)
+
+      case catalyst.expressions.Literal(value, dataType) =>
+        literal(value, dataType)
+
+      case UnresolvedFunction(FunctionIdentifier(name, _), children, false, _) =>
+        val args = children.map(fromCatalyst)
+        (name, args) match {
+          case ("identity", Seq(ref: NamedReference)) =>
+            identity(ref)
+          case ("years", Seq(ref: NamedReference)) =>
+            years(ref)
+          case ("months", Seq(ref: NamedReference)) =>
+            months(ref)
+          case ("days", Seq(ref: NamedReference)) =>
+            days(ref)
+          case ("hours", Seq(ref: NamedReference)) =>
+            hours(ref)
+          case ("bucket", args) =>
+            (args.head, args.tail) match {
+              case (LiteralValue(numBuckets: Int, IntegerType), refs) =>
+                bucket(numBuckets, refs.map(_.asInstanceOf[NamedReference]).toArray)
+              case _ =>
+                // not valid arguments to bucket
+                throw new AnalysisException(
+                  s"Cannot convert bucket(${children.map(_.sql).mkString(", ")})")
+            }
+          case (other, _) =>
+            apply(other, args: _*)
+        }
+
+      case _ =>
+        throw new AnalysisException(s"Cannot convert ${expr.sql} to pass to data sources")
+    }
   }
 }
 

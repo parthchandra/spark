@@ -77,6 +77,11 @@ class ResolveCatalogs(val catalogManager: CatalogManager)
       val changes = cols.map(col => TableChange.deleteColumn(col.toArray))
       createAlterTable(nameParts, catalog, tbl, changes)
 
+    case AlterTableDistributionAndOrderingStatement(
+         nameParts @ NonSessionCatalogAndTable(catalog, tbl), distribution, order) =>
+      val change = TableChange.setDistributionAndOrder(distribution, order.toArray)
+      createAlterTable(nameParts, catalog, tbl, Seq(change))
+
     case AlterTableSetPropertiesStatement(
          nameParts @ NonSessionCatalogAndTable(catalog, tbl), props) =>
       val changes = props.map { case (key, value) =>

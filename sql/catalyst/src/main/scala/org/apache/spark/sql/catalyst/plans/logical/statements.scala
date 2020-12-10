@@ -22,7 +22,8 @@ import org.apache.spark.sql.catalyst.catalog.{BucketSpec, FunctionResource}
 import org.apache.spark.sql.catalyst.catalog.CatalogTypes.TablePartitionSpec
 import org.apache.spark.sql.catalyst.expressions.{Attribute, Expression}
 import org.apache.spark.sql.connector.catalog.TableChange.ColumnPosition
-import org.apache.spark.sql.connector.expressions.Transform
+import org.apache.spark.sql.connector.distributions.Distribution
+import org.apache.spark.sql.connector.expressions.{SortOrder, Transform}
 import org.apache.spark.sql.types.{DataType, StructType}
 
 /**
@@ -476,3 +477,11 @@ case class CreateFunctionStatement(
     isTemp: Boolean,
     ignoreIfExists: Boolean,
     replace: Boolean) extends ParsedStatement
+
+/**
+ * ALTER TABLE ... WRITE ... statement, as parsed from SQL.
+ */
+case class AlterTableDistributionAndOrderingStatement(
+    tableName: Seq[String],
+    distribution: Distribution,
+    order: Seq[SortOrder]) extends ParsedStatement

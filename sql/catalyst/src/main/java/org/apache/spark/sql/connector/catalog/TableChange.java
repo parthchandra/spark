@@ -22,6 +22,8 @@ import java.util.Objects;
 import javax.annotation.Nullable;
 
 import org.apache.spark.annotation.Evolving;
+import org.apache.spark.sql.connector.distributions.Distribution;
+import org.apache.spark.sql.connector.expressions.SortOrder;
 import org.apache.spark.sql.types.DataType;
 
 /**
@@ -228,6 +230,48 @@ public interface TableChange {
    */
   static TableChange deleteColumn(String[] fieldNames) {
     return new DeleteColumn(fieldNames);
+  }
+
+  /**
+   * Create a TableChange for setting the distribution and sort order in a table.
+   *
+   * @param distribution a distribution the table
+   * @param sortOrder a sort order for the table
+   * @return a TableChange for setting the distribution and sort order
+   */
+  static TableChange setDistributionAndOrder(Distribution distribution, SortOrder[] sortOrder) {
+    return new SetDistributionAndOrder(distribution, sortOrder);
+  }
+
+  final class SetDistributionAndOrder implements TableChange {
+    private final Distribution distribution;
+    private final SortOrder[] sortOrder;
+
+    private SetDistributionAndOrder(Distribution distribution, SortOrder[] sortOrder) {
+      this.distribution = distribution;
+      this.sortOrder = sortOrder;
+    }
+
+    public SortOrder[] sortOrder() {
+      return sortOrder;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) return true;
+      if (o == null || getClass() != o.getClass()) return false;
+
+      SetDistributionAndOrder that = (SetDistributionAndOrder) o;
+      return Objects.equals(distribution, that.distribution) &&
+          Arrays.equals(sortOrder, that.sortOrder);
+    }
+
+    @Override
+    public int hashCode() {
+      int result = Objects.hash(distribution);
+      result = 31 * result + Arrays.hashCode(sortOrder);
+      return result;
+    }
   }
 
   /**

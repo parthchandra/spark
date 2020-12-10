@@ -166,6 +166,8 @@ statement
     | ALTER TABLE multipartIdentifier
         (partitionSpec)? SET locationSpec                              #setTableLocation
     | ALTER TABLE multipartIdentifier RECOVER PARTITIONS               #recoverPartitions
+    | ALTER TABLE multipartIdentifier WRITE
+        ORDERED BY '(' order+=sortItem (',' order+=sortItem)* ')'      #setTableDistributionAndOrdering
     | DROP TABLE (IF EXISTS)? multipartIdentifier PURGE?               #dropTable
     | DROP VIEW (IF EXISTS)? multipartIdentifier                       #dropView
     | CREATE (OR REPLACE)? (GLOBAL? TEMPORARY)?
@@ -1087,6 +1089,7 @@ ansiNonReserved
     | OF
     | OPTION
     | OPTIONS
+    | ORDERED
     | OUT
     | OUTPUTFORMAT
     | OVER
@@ -1166,6 +1169,7 @@ ansiNonReserved
     | VIEW
     | VIEWS
     | WINDOW
+    | WRITE
 //--ANSI-NON-RESERVED-END
     ;
 
@@ -1337,6 +1341,7 @@ nonReserved
     | OPTIONS
     | OR
     | ORDER
+    | ORDERED
     | OUT
     | OUTER
     | OUTPUTFORMAT
@@ -1431,6 +1436,7 @@ nonReserved
     | WHERE
     | WINDOW
     | WITH
+    | WRITE
 //--DEFAULT-NON-RESERVED-END
     ;
 
@@ -1590,6 +1596,7 @@ OPTION: 'OPTION';
 OPTIONS: 'OPTIONS';
 OR: 'OR';
 ORDER: 'ORDER';
+ORDERED: 'ORDERED';
 OUT: 'OUT';
 OUTER: 'OUTER';
 OUTPUTFORMAT: 'OUTPUTFORMAT';
@@ -1689,6 +1696,7 @@ WHEN: 'WHEN';
 WHERE: 'WHERE';
 WINDOW: 'WINDOW';
 WITH: 'WITH';
+WRITE: 'WRITE';
 //--SPARK-KEYWORD-LIST-END
 //============================
 // End of the keywords list
