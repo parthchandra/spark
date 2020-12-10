@@ -297,7 +297,7 @@
       <url>https://artifacts.apple.com/libs-release</url>
     </repository>
     <repository>
-      <id>apple</id>
+      <id>apple-snapshot</id>
       <url>https://artifacts.apple.com/libs-snapshot</url>
     </repository>
   </repositories>
