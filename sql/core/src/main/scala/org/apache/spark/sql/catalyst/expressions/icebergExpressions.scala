@@ -91,7 +91,7 @@ case class IcebergBucketTransform(
   @transient lazy val bucketFunc: Any => Int = child.dataType match {
     case _: DecimalType =>
       val t = Transforms.bucket[Any](icebergInputType, numBuckets)
-      d: Any => t(d.asInstanceOf[Decimal].toBigDecimal).toInt
+      d: Any => t(d.asInstanceOf[Decimal].toJavaBigDecimal).toInt
     case _: StringType =>
       // the spec requires that the hash of a string is equal to the hash of its UTF-8 encoded bytes
       // TODO: pass bytes without the copy out of the InternalRow
