@@ -343,6 +343,21 @@ class ExplainSuite extends ExplainSuiteHelper with DisableAdaptiveExecutionSuite
       assert(getNormalizedExplain(df1, FormattedMode) === getNormalizedExplain(df2, FormattedMode))
     }
   }
+
+  test("Explain UnresolvedRelation with CaseInsensitiveStringMap options") {
+    val tableName = "test"
+    withTable(tableName) {
+      val df1 = Seq((1L, "a"), (2L, "b"), (3L, "c")).toDF("id", "data")
+      df1.write.saveAsTable(tableName)
+      val df2 = spark.read
+        .option("key1", "value1")
+        .option("KEY2", "VALUE2")
+        .table(tableName)
+      // == Parsed Logical Plan ==
+      // 'UnresolvedRelation [test], [key1=value1, KEY2=VALUE2]
+      checkKeywordsExistsInExplain(df2, keywords = "[key1=value1, KEY2=VALUE2]")
+    }
+  }
 }
 
 class ExplainSuiteAE extends ExplainSuiteHelper with EnableAdaptiveExecutionSuite {

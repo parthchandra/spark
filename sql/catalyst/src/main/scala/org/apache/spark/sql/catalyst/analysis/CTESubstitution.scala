@@ -164,7 +164,7 @@ object CTESubstitution extends Rule[LogicalPlan] {
       cteName: String,
       ctePlan: => LogicalPlan): LogicalPlan =
     plan resolveOperatorsUp {
-      case UnresolvedRelation(Seq(table)) if plan.conf.resolver(cteName, table) => ctePlan
+      case UnresolvedRelation(Seq(table), _) if plan.conf.resolver(cteName, table) => ctePlan
 
       case other =>
         // This cannot be done in ResolveSubquery because ResolveSubquery does not know the CTE.
