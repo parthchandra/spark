@@ -225,6 +225,12 @@ SPARK-33631       Clean up spark.core.connection.ack.wait.timeout from configura
 SPARK-33667       Respect the `spark.sql.caseSensitive` config while resolving partition spec in v1 `SHOW PARTITIONS`
 SPARK-33675       Add GitHub Action job to publish snapshot
 SPARK-33681       Increase K8s IT timeout to 3 minutes
+SPARK-33670       Verify the partition provider is Hive in v1 SHOW TABLE EXTENDED
+SPARK-33725       Upgrade snappy-java to 1.1.8.2
+SPARK-33732       Kubernetes integration tests doesn't work with Minikube 1.9+
+SPARK-33749       Exclude target directory in pycodestyle and flake8
+SPARK-33757       Fix the R dependencies build error on GitHub Actions and AppVeyor
+SPARK-33742       Throw PartitionsAlreadyExistException from HiveExternalCatalog.createPartitions()
 
 # Internal Patches
 MINOR             Add an empty APPLE_CHANGES.txt
@@ -266,3 +272,5 @@ rdar://69319047   Spark should reject invalid CatalogImplementation Configuratio
 rdar://66018002   TLF: Native libs by using Apple Hadoop 3.2.0.3
 N/A               Bump ADT version to 0.7.0
 N/A               Bump ADT version to 0.7.1
+MINOR             update dev dependencies
+N/A               Upgrade ADT to 0.7.2
