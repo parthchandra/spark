@@ -1,7 +1,12 @@
 This contains the changes after creating `v3.0.1`
 
 # Form Spark 3.2.0
-[SPARK-33724     Add decom script as a configuration param
+SPARK-33724     Add decom script as a configuration param
+SPARK-33621     Add a way to inject data source rewrite rules
+SPARK-33722     Handle DELETE in ReplaceNullWithFalseInPredicate
+SPARK-23889     DataSourceV2: required sorting and clustering for writes
+SPARK-33724     Add decom script as a configuration param
+SPARK-33261     Add a developer API for custom feature steps
 
 # From Spark 3.1.0
 SPARK-25355      Add proxy user to driver if present on spark-submit
@@ -97,6 +102,11 @@ SPARK-33612      Add dataSourceRewriteRules batch to Optimizer
 SPARK-33492      DSv2: Append/Overwrite/ReplaceTable should invalidate cache
 SPARK-33567      DSv2: Use callback instead of passing Spark session and v2 relation for refreshing cache
 SPARK-33524      Change `InMemoryTable` not to use Tuple.hashCode for `BucketTransform`
+SPARK-32276      Remove redundant sorts before repartition nodes
+SPARK-25154      Support NOT IN sub-queries inside nested OR conditions
+SPARK-33623      Add canDeleteWhere to SupportsDelete
+SPARK-32592      Make DataFrameReader.table take the specified options
+SPARK-33729      When refreshing cache, Spark should not use cached plan when recaching data
 
 # From Spark 3.0.2
 SPARK-28612      Correct method doc of DataFrameWriterV2.replace()
@@ -277,6 +287,17 @@ MINOR            Fix string interpolation in CommandUtils.scala and KafkaDataCon
 SPARK-33667      Respect the `spark.sql.caseSensitive` config while resolving partition spec in v1 `SHOW PARTITIONS`
 SPARK-33675      Add GitHub Action job to publish snapshot
 SPARK-33592      Backport Fix: Pyspark ML Validator params in estimatorParamMaps may be lost after saving and reloading
+SPARK-33670      Verify the partition provider is Hive in v1 SHOW TABLE EXTENDED
+SPARK-32680      Don't Preprocess V2 CTAS with Unresolved Query
+SPARK-33677      Skip LikeSimplification rule if pattern contains any escapeChar
+SPARK-32110      normalize special floating numbers in HyperLogLog++
+SPARK-33727      Fall back from gnupg.net to openpgp.org
+SPARK-33725      Upgrade snappy-java to 1.1.8.2
+SPARK-33732      Kubernetes integration tests doesn't work with Minikube 1.9+
+SPARK-33749      Exclude target directory in pycodestyle and flake8
+SPARK-33740      hadoop configs in hive-site.xml can overrides pre-existing hadoop ones
+SPARK-33757      Fix the R dependencies build error on GitHub Actions and AppVeyor
+SPARK-33742      Throw PartitionsAlreadyExistException from HiveExternalCatalog.createPartitions()
 
 # Internal Patche
 rdar://72034392  Wait for the executor JVM to finish before returning decom.sh (fixed upstream but differently).
@@ -321,3 +342,15 @@ rdar://70330474  Support InstanceProfileCredentialsProvider
 MINOR            Adjust log messages
 rdar://70562690  Update kubernetes Dockerfile in Apple Spark to AppleJDK
 MINOR            Improve logging and extend GroupByTest for debugging purposes
+PR-811           Add connector row-level APIs
+PR-812           Add dynamic file filtering nodes
+PR-814           Rewrite DELETE commands
+MINOR            Fix UT failures due to `Rewrite DELETE commands`
+PR-818           Add Iceberg runtime as a dep
+PR-819           ALTER TABLE ... WRITE command
+MINOR            Add snapshot repository
+MINOR            rename
+PR-822           Fix Iceberg bucketing for decimal columns
+PR-825           Implement Iceberg truncate transform
+PR-828           Upgrade Iceberg to non-Snapshot artifact 0.11.0-apple-preview
+
