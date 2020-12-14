@@ -111,7 +111,7 @@ class HadoopDelegationTokenManagerSuite extends SparkFunSuite with Matchers {
     creds.getAllTokens.size should be (0)
   }
 
-  test("SPARK-23209: obtain tokens when Hive classes are not available") {
+  ignore("SPARK-23209: obtain tokens when Hive classes are not available") {
     // This test needs a custom class loader to hide Hive classes which are in the classpath.
     // Because the manager code loads the Hive provider directly instead of using reflection, we
     // need to drive the test through the custom class loader so a new copy that cannot find
