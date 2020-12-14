@@ -19,10 +19,10 @@ package org.apache.spark.sql.execution.datasources.v2
 
 import org.apache.spark.sql.{catalyst, AnalysisException}
 import org.apache.spark.sql.catalyst.analysis.Resolver
-import org.apache.spark.sql.catalyst.expressions.{IcebergBucketTransform, IcebergDayTransform, IcebergHourTransform, IcebergMonthTransform, IcebergYearTransform, NamedExpression, SortOrder}
+import org.apache.spark.sql.catalyst.expressions.{IcebergBucketTransform, IcebergDayTransform, IcebergHourTransform, IcebergMonthTransform, IcebergTruncateTransform, IcebergYearTransform, NamedExpression, SortOrder}
 import org.apache.spark.sql.catalyst.plans.logical.{LogicalPlan, RepartitionByExpression, Sort}
 import org.apache.spark.sql.connector.distributions.{ClusteredDistribution, OrderedDistribution, UnspecifiedDistribution}
-import org.apache.spark.sql.connector.expressions.{BucketTransform, DaysTransform, Expression, FieldReference, HoursTransform, IdentityTransform, MonthsTransform, NullOrdering, SortDirection, SortValue, YearsTransform}
+import org.apache.spark.sql.connector.expressions.{BucketTransform, DaysTransform, Expression, FieldReference, HoursTransform, IdentityTransform, Lit, LiteralValue, MonthsTransform, NullOrdering, SortDirection, SortValue, TruncateTransform, YearsTransform}
 import org.apache.spark.sql.connector.write.{RequiresDistributionAndOrdering, Write}
 import org.apache.spark.sql.internal.SQLConf
 
@@ -88,6 +88,8 @@ object DistributionAndOrderingUtils {
         resolve(ref)
       case BucketTransform(numBuckets, ref) =>
         IcebergBucketTransform(numBuckets, resolve(ref))
+      case TruncateTransform(length, ref) =>
+        IcebergTruncateTransform(length, resolve(ref))
       case YearsTransform(ref) =>
         IcebergYearTransform(resolve(ref))
       case MonthsTransform(ref) =>

@@ -82,6 +82,38 @@ case class IcebergHourTransform(child: Expression)
   @transient lazy val transform: Transform[Any, Integer] = Transforms.hour[Any](icebergInputType)
 }
 
+case class IcebergTruncateTransform(
+    length: Int,
+    child: Expression) extends IcebergTransformExpression {
+
+  override def children: Seq[Expression] = child :: Nil
+
+  @transient lazy val truncateFunc: Any => Any = child.dataType match {
+    case _: DecimalType =>
+      val t = Transforms.truncate[java.math.BigDecimal](icebergInputType, length)
+      d: Any =>
+        val truncatedValue = t(d.asInstanceOf[Decimal].toJavaBigDecimal)
+        Decimal(truncatedValue)
+    case _: StringType =>
+      val t = Transforms.truncate[String](icebergInputType, length)
+      s: Any =>
+        val truncatedValue = t(s.asInstanceOf[UTF8String].toString)
+        UTF8String.fromString(truncatedValue)
+    case _ =>
+      val t = Transforms.truncate[Any](icebergInputType, length)
+      a: Any => t(a)
+  }
+
+  override def eval(input: InternalRow): Any = child.eval(input) match {
+    case null =>
+      null
+    case value =>
+      truncateFunc(value)
+  }
+
+  override def dataType: DataType = child.dataType
+}
+
 case class IcebergBucketTransform(
     numBuckets: Int,
     child: Expression) extends IcebergTransformExpression {
