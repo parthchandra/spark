@@ -41,8 +41,8 @@ private[spark] class HiveDelegationTokenProvider
 
   private val classNotFoundErrorStr = s"You are attempting to use the " +
     s"${getClass.getCanonicalName}, but your Spark distribution is not built with Hive libraries."
-  val hiveConfClass = Utils.classForName("org.apache.hadoop.hive.conf.HiveConf")
-  val hiveClass = Utils.classForName("org.apache.hadoop.hive.ql.metadata.Hive")
+  lazy val hiveConfClass = Utils.classForName("org.apache.hadoop.hive.conf.HiveConf")
+  lazy val hiveClass = Utils.classForName("org.apache.hadoop.hive.ql.metadata.Hive")
 
   private def hiveConf(hadoopConf: Configuration): Configuration = {
     try {
