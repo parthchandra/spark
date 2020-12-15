@@ -1,7 +1,6 @@
 This contains the changes after creating `v3.0.1`
 
 # Form Spark 3.2.0
-SPARK-33724     Add decom script as a configuration param
 SPARK-33621     Add a way to inject data source rewrite rules
 SPARK-33722     Handle DELETE in ReplaceNullWithFalseInPredicate
 SPARK-23889     DataSourceV2: required sorting and clustering for writes
