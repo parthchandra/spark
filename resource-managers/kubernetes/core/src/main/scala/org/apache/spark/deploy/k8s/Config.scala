@@ -24,7 +24,6 @@ import org.apache.spark.internal.config.ConfigBuilder
 
 private[spark] object Config extends Logging {
 
-
   val KUBERNETES_DRIVER_MASTER_URL =
     ConfigBuilder("spark.kubernetes.driver.master")
       .doc("The internal Kubernetes master (API server) address " +
