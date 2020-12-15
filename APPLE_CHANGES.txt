@@ -210,6 +210,7 @@ SPARK-32812       Avoid initiating a process during the main process for run-tes
 SPARK-31511       Make BytesToBytesMap iterators thread-safe
 
 # Internal Patches
+N/A               Upgrade ADT to 0.7.2
 N/A               Bump ADT version to 0.7.1
 N/A               Bump ADT version to 0.7.0
 N/A               Upgrade ADT to 0.6.2
