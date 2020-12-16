@@ -85,7 +85,7 @@ private class ShuffleStatus(numPartitions: Int) extends Logging {
       mapStatusOpt match {
         case None =>
           logWarning(s"Asked to update map output ${mapId} for untracked map status :(")
-          logWarning(s"Our statuses are ${mapStatuses.toList}")
+          logDebug(s"Our statuses are ${mapStatuses.toList}")
         case Some(mapStatus) =>
           logInfo(s"Updating map output for ${mapId} to ${bmAddress}")
           mapStatus.updateLocation(bmAddress)

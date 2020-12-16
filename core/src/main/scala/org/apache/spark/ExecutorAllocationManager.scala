@@ -219,7 +219,8 @@ private[spark] class ExecutorAllocationManager(
         logWarning("Dynamic allocation without a shuffle service is an experimental feature.")
       } else {
         throw new SparkException("Dynamic allocation of executors requires the external " +
-          "shuffle service. You may enable this through spark.shuffle.service.enabled.")
+          "shuffle service or graceful decommissioning with shuffle block migration. " +
+          "You may enable the shuffle service through spark.shuffle.service.enabled.")
       }
     }
     if (tasksPerExecutorForFullParallelism == 0) {
