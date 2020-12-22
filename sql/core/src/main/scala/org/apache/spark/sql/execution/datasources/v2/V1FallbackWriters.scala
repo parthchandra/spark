@@ -20,6 +20,7 @@ package org.apache.spark.sql.execution.datasources.v2
 import java.util.UUID
 
 import org.apache.spark.SparkException
+import org.apache.spark.sql.Dataset
 import org.apache.spark.sql.catalyst.InternalRow
 import org.apache.spark.sql.catalyst.expressions.Attribute
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
@@ -132,9 +133,7 @@ trait SupportsV1Write extends SparkPlan {
   def plan: LogicalPlan
 
   protected def writeWithV1(relation: InsertableRelation): Seq[InternalRow] = {
-    val session = sqlContext.sparkSession
-    // The `plan` is already optimized, we should not analyze and optimize it again.
-    relation.insert(AlreadyOptimized.dataFrame(session, plan), overwrite = false)
+    relation.insert(Dataset.ofRows(sqlContext.sparkSession, plan), overwrite = false)
     Nil
   }
 }
