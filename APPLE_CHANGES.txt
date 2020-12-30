@@ -152,6 +152,7 @@ SPARK-23977       Support High Performance S3A committers [test-hadoop3.2]
 SPARK-32779       Avoid using synchronized API of SessionCatalog in withClient flow, this leads to DeadLock
 SPARK-30371       Add spark.kubernetes.driver.master conf
 SPARK-33176       Use 11-jre-slim as default in K8s Dockerfile
+SPARK-25285       Add startedTasks and finishedTasks to the metrics system in the executor instance
 
 # From Spark 2.4.8
 SPARK-32815       Fix LibSVM data source loading error on file paths with glob metacharacters
@@ -274,3 +275,4 @@ N/A               Bump ADT version to 0.7.0
 N/A               Bump ADT version to 0.7.1
 MINOR             update dev dependencies
 N/A               Upgrade ADT to 0.7.2
+rdar://72314058   Skip YARN archive generation on Mac environment
