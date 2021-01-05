@@ -8,7 +8,6 @@ SPARK-33724     Add decom script as a configuration param
 SPARK-33261     Add a developer API for custom feature steps
 
 # From Spark 3.1.0
-SPARK-33874      Handle long lived sidecars
 SPARK-25355      Add proxy user to driver if present on spark-submit
 SPARK-29089      Parallelize blocking FileSystem calls in DataSource#checkAndGlobPathIfNecessary
 SPARK-29905      Improve pod lifecycle manager behavior with dynamic allocation
@@ -107,6 +106,8 @@ SPARK-25154      Support NOT IN sub-queries inside nested OR conditions
 SPARK-33623      Add canDeleteWhere to SupportsDelete
 SPARK-32592      Make DataFrameReader.table take the specified options
 SPARK-33729      When refreshing cache, Spark should not use cached plan when recaching data
+SPARK-33874      Handle long lived sidecars
+SPARK-33874      Handle long lived sidecars - clean up logging
 
 # From Spark 3.0.2
 SPARK-28612      Correct method doc of DataFrameWriterV2.replace()
@@ -298,6 +299,35 @@ SPARK-33749      Exclude target directory in pycodestyle and flake8
 SPARK-33740      hadoop configs in hive-site.xml can overrides pre-existing hadoop ones
 SPARK-33757      Fix the R dependencies build error on GitHub Actions and AppVeyor
 SPARK-33742      Throw PartitionsAlreadyExistException from HiveExternalCatalog.createPartitions()
+MINOR            Correct JobPage's skipped/pending tableHeaderId
+SPARK-33757      Provide more simple solution
+SPARK-33770      Fix the `ALTER TABLE .. DROP PARTITION` tests that delete files out of partition path
+SPARK-33786      The storage level for a cache should be respected when a table name is altered
+SPARK-33788      Throw NoSuchPartitionsException from HiveExternalCatalog.dropPartitions()
+SPARK-33793      Introduce withExecutor to ensure proper cleanup in tests
+SPARK-33733      PullOutNondeterministic should check and collect deterministic field
+SPARK-33819      SingleFileEventLogFileReader/RollingEventLogFilesFileReader should be `package private`
+SPARK-33774      Back to Master" returns 500 error in Standalone cluster
+SPARK-33831      Update to jetty 9.4.34
+SPARK-33593      Vector reader got incorrect data with binary partition value
+SPARK-33841      Fix issue with jobs disappearing intermittently from the SHS under high load
+SPARK-33756      Make BytesToBytesMap's MapIterator idempotent
+SPARK-33853      EXPLAIN CODEGEN and BenchmarkQueryTest don't show subquery code
+SPARK-33869      Have a separate metastore directory for each PySpark test job
+SPARK-28863      Make sure optimized plan will not be re-analyzed
+BUILD            Do not publish snapshots from forks
+SPARK-33891      Update dynamic allocation related documents
+SPARK-33277      Use ContextAwareIterator to stop consuming after the task ends
+SPARK-33900      Show shuffle read size / records correctly when only remotebytesread is available
+SPARK-33911      Update the SQL migration guide about changes in `HiveClientImpl`
+MINOR            Call fetchEarliestOffsets when it is necessary
+SPARK-33942      Remove `hiveClientCalls.count` in `CodeGenerator` metrics docs
+SPARK-33931      Recover GitHub Action `build_and_test` job
+SPARK-33963      Canonicalize `HiveTableRelation` w/o table stats
+SPARK-33398      Fix loading tree models prior to Spark 3.0
+SPARK-33950      Refresh cache in v1 `ALTER TABLE .. DROP PARTITION`
+SPARK-34000      Fix stageAttemptToNumSpeculativeTasks java.util.NoSuchElementException
+SPARK-34010      Use python3 instead of python in SQL documentation build
 
 # Internal Patche
 rdar://72034392  Wait for the executor JVM to finish before returning decom.sh (fixed upstream but differently).
@@ -353,3 +383,5 @@ MINOR            rename
 PR-822           Fix Iceberg bucketing for decimal columns
 PR-825           Implement Iceberg truncate transform
 PR-828           Upgrade Iceberg to non-Snapshot artifact 0.11.0-apple-preview
+rdar://72314058  Skip YARN archive generation on Mac environment
+MINOR            Support disable AJAX call on Stage Page (#745)
