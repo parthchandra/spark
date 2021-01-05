@@ -1,6 +1,7 @@
 This contains the changes after v2.4.7-rc3
 
 # From Spark 3.1.0
+MULTIPART         Add Spark K8s Decommissioning & Dynamic Allocation support
 SPARK-31047       Improve file listing for ViewFileSystem
 SPARK-32058       Use Apache Hadoop 3.2.0 dependency by default
 SPARK-31876       Upgrade to Zstd 1.4.5
