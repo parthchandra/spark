@@ -8,6 +8,7 @@ SPARK-33724     Add decom script as a configuration param
 SPARK-33261     Add a developer API for custom feature steps
 
 # From Spark 3.1.0
+SPARK-33874      Handle long lived sidecars
 SPARK-25355      Add proxy user to driver if present on spark-submit
 SPARK-29089      Parallelize blocking FileSystem calls in DataSource#checkAndGlobPathIfNecessary
 SPARK-29905      Improve pod lifecycle manager behavior with dynamic allocation
@@ -352,4 +353,3 @@ MINOR            rename
 PR-822           Fix Iceberg bucketing for decimal columns
 PR-825           Implement Iceberg truncate transform
 PR-828           Upgrade Iceberg to non-Snapshot artifact 0.11.0-apple-preview
-
