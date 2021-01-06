@@ -106,8 +106,6 @@ SPARK-25154      Support NOT IN sub-queries inside nested OR conditions
 SPARK-33623      Add canDeleteWhere to SupportsDelete
 SPARK-32592      Make DataFrameReader.table take the specified options
 SPARK-33729      When refreshing cache, Spark should not use cached plan when recaching data
-SPARK-33874      Handle long lived sidecars
-SPARK-33874      Handle long lived sidecars - clean up logging
 
 # From Spark 3.0.2
 SPARK-28612      Correct method doc of DataFrameWriterV2.replace()
