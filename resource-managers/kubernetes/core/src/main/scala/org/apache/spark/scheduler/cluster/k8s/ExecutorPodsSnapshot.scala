@@ -93,10 +93,9 @@ object ExecutorPodsSnapshot extends Logging {
                   case _ =>
                     PodRunning(pod)
                 }
-              // If we can't find the Spark container status, fall back to the pod status. This is
-              // expected to occur during pod startup and other situations.
+              // If we can't find the Spark container status, fall back to the pod status
               case _ =>
-                logDebug(s"Unable to find container ${sparkContainerName} in pod ${pod} " +
+                logWarning(s"Unable to find container ${sparkContainerName} in pod ${pod} " +
                   "defaulting to entire pod status (running).")
                 PodRunning(pod)
             }
