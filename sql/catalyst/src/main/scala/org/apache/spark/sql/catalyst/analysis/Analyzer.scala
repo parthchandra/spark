@@ -240,6 +240,7 @@ class Analyzer(override val catalogManager: CatalogManager)
       ResolveTableValuedFunctions ::
       ResolveNamespace(catalogManager) ::
       new ResolveCatalogs(catalogManager) ::
+      ResolveProcedures(catalogManager) ::
       ResolveUserSpecifiedColumns ::
       ResolveInsertInto ::
       ResolveRelations ::
