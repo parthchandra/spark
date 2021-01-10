@@ -545,7 +545,7 @@ class HiveThriftBinaryServerSuite extends HiveThriftJdbcTest {
       }
 
       if (HiveUtils.isHive23) {
-        assert(conf.get(HiveUtils.FAKE_HIVE_VERSION.key) === Some("2.3.8.0-apple"))
+        assert(conf.get(HiveUtils.FAKE_HIVE_VERSION.key) === Some("2.3.8.1-apple"))
       } else {
         assert(conf.get(HiveUtils.FAKE_HIVE_VERSION.key) === Some("1.2.1"))
       }
@@ -562,7 +562,7 @@ class HiveThriftBinaryServerSuite extends HiveThriftJdbcTest {
       }
 
       if (HiveUtils.isHive23) {
-        assert(conf.get(HiveUtils.FAKE_HIVE_VERSION.key) === Some("2.3.8.0-apple"))
+        assert(conf.get(HiveUtils.FAKE_HIVE_VERSION.key) === Some("2.3.8.1-apple"))
       } else {
         assert(conf.get(HiveUtils.FAKE_HIVE_VERSION.key) === Some("1.2.1"))
       }
