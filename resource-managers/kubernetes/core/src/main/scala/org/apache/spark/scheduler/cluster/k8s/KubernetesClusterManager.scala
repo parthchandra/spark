@@ -79,8 +79,6 @@ private[spark] class KubernetesClusterManager extends ExternalClusterManager wit
     val requestExecutorsService = ThreadUtils.newDaemonCachedThreadPool(
       "kubernetes-executor-requests")
 
-    ExecutorPodsSnapshot.setShouldCheckAllContainers(
-      sc.conf.get(KUBERNETES_EXECUTOR_CHECK_ALL_CONTAINERS))
     val sparkContainerName = sc.conf.get(KUBERNETES_EXECUTOR_PODTEMPLATE_CONTAINER_NAME)
       .getOrElse(DEFAULT_EXECUTOR_CONTAINER_NAME)
     ExecutorPodsSnapshot.setSparkContainerName(sparkContainerName)

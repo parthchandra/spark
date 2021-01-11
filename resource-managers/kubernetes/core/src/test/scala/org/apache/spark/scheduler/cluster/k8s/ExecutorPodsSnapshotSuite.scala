@@ -36,7 +36,6 @@ class ExecutorPodsSnapshotSuite extends SparkFunSuite {
   }
 
   test("States are interpreted correctly from pod metadata.") {
-    ExecutorPodsSnapshot.setShouldCheckAllContainers(false)
     val testCases = Seq(
       testCase(pendingExecutor(0), PodPending),
       testCase(runningExecutor(1), PodRunning),
@@ -50,23 +49,7 @@ class ExecutorPodsSnapshotSuite extends SparkFunSuite {
     doTest(testCases)
   }
 
-  test("SPARK-30821: States are interpreted correctly from pod metadata"
-    + " when configured to check all containers.") {
-    ExecutorPodsSnapshot.setShouldCheckAllContainers(true)
-    val testCases = Seq(
-      testCase(pendingExecutor(0), PodPending),
-      testCase(runningExecutor(1), PodRunning),
-      testCase(runningExecutorWithFailedContainer(2), PodFailed),
-      testCase(succeededExecutor(3), PodSucceeded),
-      testCase(failedExecutorWithoutDeletion(4), PodFailed),
-      testCase(deletedExecutor(5), PodDeleted),
-      testCase(unknownExecutor(6), PodUnknown)
-    )
-    doTest(testCases)
-  }
-
   test("Updates add new pods for non-matching ids and edit existing pods for matching ids") {
-    ExecutorPodsSnapshot.setShouldCheckAllContainers(false)
     val originalPods = Seq(
       pendingExecutor(0),
       runningExecutor(1))

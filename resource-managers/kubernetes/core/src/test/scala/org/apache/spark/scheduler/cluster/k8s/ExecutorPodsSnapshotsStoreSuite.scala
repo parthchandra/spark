@@ -35,7 +35,6 @@ class ExecutorPodsSnapshotsStoreSuite extends SparkFunSuite with BeforeAndAfter 
   before {
     eventBufferScheduler = new DeterministicScheduler()
     eventQueueUnderTest = new ExecutorPodsSnapshotsStoreImpl(eventBufferScheduler)
-    ExecutorPodsSnapshot.setShouldCheckAllContainers(false)
   }
 
   test("Subscribers get notified of events periodically.") {

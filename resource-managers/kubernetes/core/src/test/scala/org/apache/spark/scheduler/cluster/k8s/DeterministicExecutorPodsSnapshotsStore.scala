@@ -24,7 +24,6 @@ import org.apache.spark.deploy.k8s.Constants.DEFAULT_EXECUTOR_CONTAINER_NAME
 
 class DeterministicExecutorPodsSnapshotsStore extends ExecutorPodsSnapshotsStore {
 
-  ExecutorPodsSnapshot.setShouldCheckAllContainers(false)
   ExecutorPodsSnapshot.setSparkContainerName(DEFAULT_EXECUTOR_CONTAINER_NAME)
 
   private val snapshotsBuffer = mutable.Buffer.empty[ExecutorPodsSnapshot]

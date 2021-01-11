@@ -21,6 +21,7 @@ import java.util.Locale
 import scala.collection.JavaConverters._
 
 import io.fabric8.kubernetes.api.model.ContainerStateTerminated
+import io.fabric8.kubernetes.api.model.ContainerStatus
 import io.fabric8.kubernetes.api.model.Pod
 
 import org.apache.spark.deploy.k8s.Constants._
@@ -40,7 +41,6 @@ private[spark] case class ExecutorPodsSnapshot(executorPods: Map[Long, ExecutorP
 }
 
 object ExecutorPodsSnapshot extends Logging {
-  private var shouldCheckAllContainers: Boolean = _
   private var sparkContainerName: String = DEFAULT_EXECUTOR_CONTAINER_NAME
 
   def apply(executorPods: Seq[Pod]): ExecutorPodsSnapshot = {
@@ -48,10 +48,6 @@ object ExecutorPodsSnapshot extends Logging {
   }
 
   def apply(): ExecutorPodsSnapshot = ExecutorPodsSnapshot(Map.empty[Long, ExecutorPodState])
-
-  def setShouldCheckAllContainers(watchAllContainers: Boolean): Unit = {
-    shouldCheckAllContainers = watchAllContainers
-  }
 
   def setSparkContainerName(containerName: String): Unit = {
     sparkContainerName = containerName
@@ -78,31 +74,22 @@ object ExecutorPodsSnapshot extends Logging {
         case "pending" =>
           PodPending(pod)
         case "running" =>
-          // If we're checking all containers look for any non-zero exits
-          if (shouldCheckAllContainers &&
-            "Never" == pod.getSpec.getRestartPolicy &&
-            pod.getStatus.getContainerStatuses.stream
-              .map[ContainerStateTerminated](cs => cs.getState.getTerminated)
-              .anyMatch(t => t != null && t.getExitCode != 0)) {
-            PodFailed(pod)
-          } else {
-            // Otherwise look for the Spark container and get the exit code if present.
-            val sparkContainerExitCode = pod.getStatus.getContainerStatuses.asScala
-              .find(_.getName() == sparkContainerName).flatMap(x => Option(x.getState))
-              .flatMap(x => Option(x.getTerminated)).flatMap(x => Option(x.getExitCode))
-              .map(_.toInt)
-            sparkContainerExitCode match {
-              case Some(t) =>
-                t match {
-                  case 0 =>
-                    PodSucceeded(pod)
-                  case _ =>
-                    PodFailed(pod)
-                }
-              // No exit code means we are running.
-              case _ =>
-                PodRunning(pod)
-            }
+          // Look for the Spark container and get the exit code if present.
+          val sparkContainerExitCode = pod.getStatus.getContainerStatuses.asScala
+            .find(_.getName() == sparkContainerName).flatMap(x => Option(x.getState))
+            .flatMap(x => Option(x.getTerminated)).flatMap(x => Option(x.getExitCode))
+            .map(_.toInt)
+          sparkContainerExitCode match {
+            case Some(t) =>
+              t match {
+                case 0 =>
+                  PodSucceeded(pod)
+                case _ =>
+                  PodFailed(pod)
+              }
+            // No exit code means we are running.
+            case _ =>
+              PodRunning(pod)
           }
         case "failed" =>
           PodFailed(pod)
