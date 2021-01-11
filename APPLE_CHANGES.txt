@@ -1,4 +1,4 @@
-This contains the changes after branching `v3.1.0`
+This contains the changes after branching `v3.1.0-rc1`
 
 # From Spark 3.2.0
 SPARK-33295     Upgrade ORC to 1.6.6
@@ -36,7 +36,6 @@ SPARK-34012     Keep behavior consistent when conf `spark.sql.legacy.parser.havi
 SPARK-33874     Handle long lived sidecars - clean up logging
 SPARK-33844     InsertIntoHiveDir command should check col name too
 SPARK-34021     Fix hyper links in SparkR documentation for CRAN submission
-SPARK-33933     Materialize BroadcastQueryStage first to avoid broadcast timeout in AQE
 SPARK-33100     Find correct bound of bracketed comment in spark-sql
 
 # Internal Patches
