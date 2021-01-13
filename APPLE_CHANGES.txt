@@ -233,6 +233,21 @@ SPARK-33732       Kubernetes integration tests doesn't work with Minikube 1.9+
 SPARK-33749       Exclude target directory in pycodestyle and flake8
 SPARK-33757       Fix the R dependencies build error on GitHub Actions and AppVeyor
 SPARK-33742       Throw PartitionsAlreadyExistException from HiveExternalCatalog.createPartitions()
+MINOR             UI Correct JobPage's skipped/pending tableHeaderId
+SPARK-33757       Provide more simple solution
+SPARK-33770       Fix the `ALTER TABLE .. DROP PARTITION ` tests that delete files out of partition path
+SPARK-33788       Throw NoSuchPartitionsException from HiveExternalCatalog.dropPartitions()
+SPARK-33733       PullOutNondeterministic should check and collect deterministic field
+SPARK-33831       UI Update to jetty 9.4.34
+SPARK-33756       Make BytesToBytesMap's MapIterator idempotent
+SPARK-33593       Vector reader got incorrect data with binary partition value
+SPARK-33869       Have a separate metastore directory for each PySpark test job
+MINOR             BUILD Do not publish snapshots from forks
+SPARK-27575       Yarn file-related confs should merge new value with existing value
+SPARK-33277       Use ContextAwareIterator to stop consuming after the task ends
+SPARK-33935       Fix CBO cost function
+SPARK-34012       Keep behavior consistent when conf `spark.sqllegacy.parser.havingWithoutGroupByAsWhere` is true with migration guide
+SPARK-34059       Use for/foreach rather than map to make sure execute it eagerly
 
 # Internal Patches
 MINOR             Add an empty APPLE_CHANGES.txt
