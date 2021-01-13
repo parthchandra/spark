@@ -326,17 +326,17 @@ SPARK-33398      Fix loading tree models prior to Spark 3.0
 SPARK-33950      Refresh cache in v1 `ALTER TABLE .. DROP PARTITION`
 SPARK-34000      Fix stageAttemptToNumSpeculativeTasks java.util.NoSuchElementException
 SPARK-34010      Use python3 instead of python in SQL documentation build
-[SPARK-33935][SQL][3.0] Fix CBO cost function
-[SPARK-33844][SQL][3.0] InsertIntoHiveDir command should check col name too
-[SPARK-33635][SS] Adjust the order of check in KafkaTokenUtil.needTokenUpdate to remedy perf regression
-[SPARK-33029][CORE][WEBUI][3.0] Fix the UI executor page incorrectly marking the driver as blacklisted
-[SPARK-34012][SQL][3.0] Keep behavior consistent when conf `spark.sqllegacy.parser.havingWithoutGroupByAsWhere` is true with migration guide
-[SPARK-34011][SQL][3.1][3.0] Refresh cache in `ALTER TABLE .. RENAME TO PARTITION`
-[SPARK-33100][SQL][3.0] Ignore a semicolon inside a bracketed comment in spark-sql
-[SPARK-34055][SQL][3.0] Refresh cache in `ALTER TABLE .. ADD PARTITION`
-[SPARK-33591][SQL][3.0] Recognize `null` in partition spec values
-[MINOR][3.1][3.0] Improve flaky NaiveBayes test
-[SPARK-34060][SQL][3.0] Fix Hive table caching while updating stats by `ALTER TABLE .. DROP PARTITION`
+SPARK-33935      Fix CBO cost function
+SPARK-33844      InsertIntoHiveDir command should check col name too
+SPARK-33635      Adjust the order of check in KafkaTokenUtil.needTokenUpdate to remedy perf regression
+SPARK-33029      Fix the UI executor page incorrectly marking the driver as blacklisted
+SPARK-34012      Keep behavior consistent when conf `spark.sqllegacy.parser.havingWithoutGroupByAsWhere` is true with migration guide
+SPARK-34011      Refresh cache in `ALTER TABLE .. RENAME TO PARTITION`
+SPARK-33100      Ignore a semicolon inside a bracketed comment in spark-sql
+SPARK-34055      Refresh cache in `ALTER TABLE .. ADD PARTITION`
+SPARK-33591      Recognize `null` in partition spec values
+MINOR            Improve flaky NaiveBayes test
+SPARK-34060      Fix Hive table caching while updating stats by `ALTER TABLE .. DROP PARTITION`
 
 # Internal Patche
 rdar://72034392  Wait for the executor JVM to finish before returning decom.sh (fixed upstream but differently).
