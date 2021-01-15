@@ -37,7 +37,7 @@ import org.apache.spark.sql.catalyst.util.quietly
 import org.apache.spark.sql.hive.HiveUtils
 import org.apache.spark.sql.internal.NonClosableMutableURLClassLoader
 import org.apache.spark.sql.internal.SQLConf
-import org.apache.spark.util.{MutableURLClassLoader, Utils}
+import org.apache.spark.util.{MutableURLClassLoader, Utils, VersionUtils}
 
 /** Factory for `IsolatedClientLoader` with specific versions of hive. */
 private[hive] object IsolatedClientLoader extends Logging {
@@ -108,22 +108,33 @@ private[hive] object IsolatedClientLoader extends Logging {
         s"Please set ${HiveUtils.HIVE_METASTORE_VERSION.key} with a valid version.")
   }
 
+  def supportsHadoopShadedClient(hadoopVersion: String): Boolean = {
+    VersionUtils.majorMinorPatchVersion(hadoopVersion).exists {
+      case (3, 2, v) if v >= 2 => true
+      case _ => false
+    }
+  }
+
   private def downloadVersion(
       version: HiveVersion,
       hadoopVersion: String,
       ivyPath: Option[String],
       remoteRepos: String): Seq[URL] = {
+    val hadoopJarNames = if (supportsHadoopShadedClient(hadoopVersion)) {
+      Seq(s"org.apache.hadoop:hadoop-client-api:$hadoopVersion",
+        s"org.apache.hadoop:hadoop-client-runtime:$hadoopVersion")
+    } else {
+      Seq(s"org.apache.hadoop:hadoop-client:$hadoopVersion")
+    }
     val hiveArtifacts = if (version.fullVersion != "2.3.8.5-apple")  {
       version.extraDeps ++
         Seq("hive-metastore", "hive-exec", "hive-common", "hive-serde")
           .map(a => s"org.apache.hive:$a:${version.fullVersion}") ++
-        Seq("com.google.guava:guava:14.0.1",
-          s"org.apache.hadoop:hadoop-client:$hadoopVersion")
+        Seq("com.google.guava:guava:14.0.1") ++ hadoopJarNames
     } else {
       version.extraDeps ++
         Seq("hive-metastore", "hive-exec", "hive-common", "hive-serde")
-          .map(a => s"org.apache.hive:$a:${version.fullVersion}") ++
-        Seq(s"org.apache.hadoop:hadoop-client:$hadoopVersion")
+          .map(a => s"org.apache.hive:$a:${version.fullVersion}") ++ hadoopJarNames
     }
 
     val classpath = quietly {
