@@ -108,7 +108,10 @@ object MimaExcludes {
     ProblemFilters.exclude[DirectMissingMethodProblem]("org.apache.spark.sql.SparkSession.this"),
 
     // [SPARK-33808][SQL] DataSource V2: Build logical writes in the optimizer
-    ProblemFilters.exclude[MissingClassProblem]("org.apache.spark.sql.connector.write.V1WriteBuilder")
+    ProblemFilters.exclude[MissingClassProblem]("org.apache.spark.sql.connector.write.V1WriteBuilder"),
+
+    // [SPARK-33790][CORE] Reduce the rpc call of getFileStatus in SingleFileEventLogFileReader
+    ProblemFilters.exclude[DirectMissingMethodProblem]("org.apache.spark.deploy.history.SingleFileEventLogFileReader.this")
   )
 
   // Exclude rules for 3.0.x
