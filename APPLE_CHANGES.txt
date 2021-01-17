@@ -2,7 +2,6 @@ This contains the changes after branching `v3.1.0-rc1`
 
 # From Spark 3.2.0
 SPARK-33295     Upgrade ORC to 1.6.6
-SPARK-33679     Enable spark.sql.adaptive.enabled by default
 SPARK-33750     Use `hadoop-3.2` distribution in HiveExternalCatalogVersionsSuite
 SPARK-33724     Add decom script as a configuration param
 SPARK-33261     Add a developer API for custom feature steps
@@ -37,6 +36,7 @@ SPARK-33874     Handle long lived sidecars - clean up logging
 SPARK-33844     InsertIntoHiveDir command should check col name too
 SPARK-34021     Fix hyper links in SparkR documentation for CRAN submission
 SPARK-33100     Find correct bound of bracketed comment in spark-sql
+SPARK-34116     Separate state store numKeys metric test and validate metrics after committing
 
 # Internal Patches
 SPARK-17767     Support user-provided ExternalCatalog and SessionBuilder
@@ -64,4 +64,5 @@ MINOR           Switch compression codec and parquet-1.10.1.1-apple to support z
 MINOR           SparkUI patch
 MINOR           Add connector row-level APIs
 MINOR           Add stored procedure API
-
+MINOR           Remove no-hadoop distribution jobs
+rdar://73187768 Incorporate RocksDB StateStore into Apple Spark distribution.
