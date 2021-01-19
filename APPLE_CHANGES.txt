@@ -1,4 +1,4 @@
-This contains the changes after branching `v3.1.0-rc1`
+This contains the changes after branching `v3.1.1-rc1`
 
 # From Spark 3.2.0
 SPARK-33295     Upgrade ORC to 1.6.6
@@ -20,23 +20,8 @@ SPARK-33808     DataSource V2: Build logical writes in the optimizer
 SPARK-34049     DataSource V2: Use Write abstraction in StreamExecution
 
 # From Spark 3.1.1
-SPARK-33844     InsertIntoHiveDir command should check col name too
-SPARK-34022     Fix typo in SQL built-in function docs
-SPARK-34011     Refresh cache in `ALTER TABLE .. RENAME TO PARTITION`
-SPARK-33977     Add doc for "'like any' and 'like all' operators"
-SPARK-34022     Support latest mkdocs in SQL built-in function docs
-SPARK-30681     Keep the name similar with Scala side in higher order functions
-SPARK-32221     Avoid possible errors due to incorrect file size or type supplied in spark conf
-SPARK-33948     Fix CodeGen error of MapObjects.doGenCode method in Scala 2.13
-SPARK-33635     Adjust the order of check in KafkaTokenUtil.needTokenUpdate to remedy perf regression
-SPARK-33029     Fix the UI executor page incorrectly marking the driver as excluded
-SPARK-34015     Fixing input timing in gapply
-SPARK-34012     Keep behavior consistent when conf `spark.sql.legacy.parser.havingWithoutGroupByAsWhere` is true with migration guide
-SPARK-33874     Handle long lived sidecars - clean up logging
-SPARK-33844     InsertIntoHiveDir command should check col name too
-SPARK-34021     Fix hyper links in SparkR documentation for CRAN submission
-SPARK-33100     Find correct bound of bracketed comment in spark-sql
-SPARK-34116     Separate state store numKeys metric test and validate metrics after committing
+SPARK-34151     Replaces `java.io.File.toURL` with `java.io.File.toURI.toURL`
+SPARK-34111     Deconflict the jars jakarta.servlet-api-4.0.3.jar and javax.servlet-api-3.1.0.jar
 
 # Internal Patches
 SPARK-17767     Support user-provided ExternalCatalog and SessionBuilder
