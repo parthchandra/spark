@@ -18,10 +18,12 @@ SPARK-33978     Support ZSTD compression in ORC data source
 SPARK-34029     Add OrcEncryptionSuite and FakeKeyProvider
 SPARK-33808     DataSource V2: Build logical writes in the optimizer
 SPARK-34049     DataSource V2: Use Write abstraction in StreamExecution
+SPARK-34142     Support Fallback Storage Cleanup during stopping SparkContext
 
 # From Spark 3.1.1
 SPARK-34151     Replaces `java.io.File.toURL` with `java.io.File.toURI.toURL`
 SPARK-34111     Deconflict the jars jakarta.servlet-api-4.0.3.jar and javax.servlet-api-3.1.0.jar
+SPARK-34027     Refresh cache in `ALTER TABLE .. RECOVER PARTITIONS`
 
 # Internal Patches
 SPARK-17767     Support user-provided ExternalCatalog and SessionBuilder
