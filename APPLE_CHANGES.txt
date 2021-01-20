@@ -154,6 +154,20 @@ SPARK-32779       Avoid using synchronized API of SessionCatalog in withClient f
 SPARK-30371       Add spark.kubernetes.driver.master conf
 SPARK-33176       Use 11-jre-slim as default in K8s Dockerfile
 SPARK-25285       Add startedTasks and finishedTasks to the metrics system in the executor instance
+SPARK-23429       Add executor memory metrics to heartbeat and expose in executors REST API
+SPARK-23429       MetricGetter should rename to ExecutorMetricType in comments
+SPARK-24958       Add memory from procfs to executor metrics.
+SPARK-25865       Add GC information to ExecutorMetrics
+SPARK-27157       Add Executor level metrics to monitoring docs
+SPARK-26890       Add list of available Dropwizard metrics in Spark and add additional configuration details to the monitoring documentation
+SPARK-26928       Add driver CPU Time to the metrics system
+SPARK-25449       Heartbeat shouldn't include accumulators for zero metrics
+SPARK-29654       Add configuration to allow disabling registration of static sources to the metrics system
+SPARK-27189       Add Executor metrics and memory usage instrumentation to the metrics system
+SPARK-25394       Add an application status metrics source
+SPARK-25926       Move config entries in core module to internal.config.
+SPARK-30060       Rename metrics enable/disable configs
+SPARK-27324       Document configurations related to executor metrics and modify a configuration
 
 # From Spark 2.4.8
 SPARK-32815       Fix LibSVM data source loading error on file paths with glob metacharacters
@@ -292,4 +306,6 @@ N/A               Bump ADT version to 0.7.1
 MINOR             update dev dependencies
 N/A               Upgrade ADT to 0.7.2
 rdar://72314058   Skip YARN archive generation on Mac environment
+MINOR             Lazily instantiate Hive classes
+MINOR             Upgrade callhomelistner 0.2.4
 rdar://65691577   TLF: Support Parquet Encryption
