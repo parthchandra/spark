@@ -2419,7 +2419,7 @@ class SparkContext(config: SparkConf) extends Logging {
     } catch {
       case e: Exception =>
         // We don't fail the job and just log a warning.
-        log.warn("Exception when registering Spark Call Home Listener", e)
+        log.warn("Exception when registering Spark Call Home Listener", e.getMessage)
     }
   }
 
