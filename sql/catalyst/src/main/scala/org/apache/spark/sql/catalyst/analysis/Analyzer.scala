@@ -1175,7 +1175,10 @@ class Analyzer(override val catalogManager: CatalogManager)
           }
           val key = catalog.name +: ident.namespace :+ ident.name
           AnalysisContext.get.relationCache.get(key).map(_.transform {
-            case multi: MultiInstanceRelation => multi.newInstance()
+            case multi: MultiInstanceRelation =>
+              val newRelation = multi.newInstance()
+              newRelation.copyTagsFrom(multi)
+              newRelation
           }).orElse {
             loaded.foreach(AnalysisContext.get.relationCache.update(key, _))
             loaded
@@ -1325,6 +1328,7 @@ class Analyzer(override val catalogManager: CatalogManager)
         case oldVersion: MultiInstanceRelation
             if oldVersion.outputSet.intersect(conflictingAttributes).nonEmpty =>
           val newVersion = oldVersion.newInstance()
+          newVersion.copyTagsFrom(oldVersion)
           Seq((oldVersion, newVersion))
 
         case oldVersion: SerializeFromObject
