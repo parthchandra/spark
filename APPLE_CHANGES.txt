@@ -1,5 +1,8 @@
 This contains the changes after creating `v3.0.1`
 
+# Parquet modular encryption
+PARQUET-1178    Umbrella ticket for PME. Spark with parquet-mr-1.10.1.3-apple (PME backport to parquet-mr-1.10.1)
+
 # Form Spark 3.2.0
 SPARK-33621     Add a way to inject data source rewrite rules
 SPARK-33722     Handle DELETE in ReplaceNullWithFalseInPredicate
