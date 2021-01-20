@@ -791,8 +791,4 @@ package object config {
       .toSequence
       .createWithDefault(Nil)
 
-  private[spark] val SPARK_CALL_HOME_ENABLED =
-    ConfigBuilder("spark.aci.callhome.enabled")
-      .booleanConf
-      .createWithDefault(false)
 }

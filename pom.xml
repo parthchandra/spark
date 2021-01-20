@@ -180,7 +180,7 @@
     <antlr4.version>4.7</antlr4.version>
     <jpam.version>1.1</jpam.version>
     <selenium.version>2.52.0</selenium.version>
-    <acispark.callhome.version>0.2.0</acispark.callhome.version>
+    <acispark.callhome.version>0.2.4</acispark.callhome.version>
     <adt.version>0.7.2</adt.version>
     <!--
     Managed up from older version from Avro; sync with jackson-module-paranamer dependency version
