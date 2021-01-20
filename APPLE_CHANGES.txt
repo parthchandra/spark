@@ -292,3 +292,4 @@ N/A               Bump ADT version to 0.7.1
 MINOR             update dev dependencies
 N/A               Upgrade ADT to 0.7.2
 rdar://72314058   Skip YARN archive generation on Mac environment
+rdar://65691577   TLF: Support Parquet Encryption
