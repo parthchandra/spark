@@ -1961,11 +1961,6 @@ package object config {
     .bytesConf(ByteUnit.BYTE)
     .createOptional
 
-  private[spark] val SPARK_CALL_HOME_ENABLED =
-    ConfigBuilder("spark.aci.callhome.enabled")
-      .booleanConf
-      .createWithDefault(false)
-
   private[spark] val EXECUTOR_ALLOW_SPARK_CONTEXT =
     ConfigBuilder("spark.executor.allowSparkContext")
       .doc("If set to true, SparkContext can be created in executors.")

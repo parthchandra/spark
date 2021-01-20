@@ -198,9 +198,10 @@
     <jpam.version>1.1</jpam.version>
     <selenium.version>3.141.59</selenium.version>
     <htmlunit.version>2.40.0</htmlunit.version>
-    <acispark.callhome.version>0.2.0</acispark.callhome.version>
+    <acispark.callhome.version>0.2.4</acispark.callhome.version>
     <iceberg.version>0.11.0-apple-preview</iceberg.version>
     <!--
+
     Managed up from older version from Avro; sync with jackson-module-paranamer dependency version
     -->
     <paranamer.version>2.8</paranamer.version>

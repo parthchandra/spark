@@ -615,9 +615,8 @@ class SparkContext(config: SparkConf) extends Logging {
       }
     _executorAllocationManager.foreach(_.start())
 
-    if (conf.get(SPARK_CALL_HOME_ENABLED)) {
-      setupSparkCallHomeListener()
-    }
+
+    setupSparkCallHomeListener()
     setupAndStartListenerBus()
     postEnvironmentUpdate()
     postApplicationStart()
