@@ -34,8 +34,8 @@ import org.apache.spark.util.{ResetSystemProperties, SystemClock, ThreadUtils}
 class BlockManagerDecommissionIntegrationSuite extends SparkFunSuite with LocalSparkContext
     with ResetSystemProperties with Eventually {
 
-  val numExecs = 3
-  val numParts = 3
+  val numExecs = 2
+  val numParts = 2
   val TaskStarted = "TASK_STARTED"
   val TaskEnded = "TASK_ENDED"
   val JobEnded = "JOB_ENDED"
@@ -77,6 +77,8 @@ class BlockManagerDecommissionIntegrationSuite extends SparkFunSuite with LocalS
       .set(config.STORAGE_DECOMMISSION_ENABLED, true)
       .set(config.STORAGE_DECOMMISSION_RDD_BLOCKS_ENABLED, persist)
       .set(config.STORAGE_DECOMMISSION_SHUFFLE_BLOCKS_ENABLED, shuffle)
+      // Since we use the bus for testing we don't want to drop any messages
+      .set(config.LISTENER_BUS_EVENT_QUEUE_CAPACITY, 1000000)
       // Just replicate blocks quickly during testing, there isn't another
       // workload we need to worry about.
       .set(config.STORAGE_DECOMMISSION_REPLICATION_REATTEMPT_INTERVAL, 10L)
@@ -90,7 +92,7 @@ class BlockManagerDecommissionIntegrationSuite extends SparkFunSuite with LocalS
     // Wait for the executors to start
     TestUtils.waitUntilExecutorsUp(sc = sc,
       numExecutors = numExecs,
-      timeout = 60000) // 60s
+      timeout = 1200000) // 120s
 
     val input = sc.parallelize(1 to numParts, numParts)
     val accum = sc.longAccumulator("mapperRunAccumulator")
@@ -145,7 +147,7 @@ class BlockManagerDecommissionIntegrationSuite extends SparkFunSuite with LocalS
         taskEndEvents.add(taskEnd)
       }
 
-      override def onBlockUpdated(blockUpdated: SparkListenerBlockUpdated): Unit = {
+      override def onBlockUpdated(blockUpdated: SparkListenerBlockUpdated): Unit = synchronized {
         blocksUpdated.append(blockUpdated)
       }
 
@@ -188,7 +190,7 @@ class BlockManagerDecommissionIntegrationSuite extends SparkFunSuite with LocalS
         assert(getCandidateExecutorToDecom.isDefined)
       }
     } else {
-      ThreadUtils.awaitResult(asyncCount, 1.minute)
+      ThreadUtils.awaitResult(asyncCount, 2.minute)
     }
 
     // Decommission one of the executors.
@@ -203,7 +205,7 @@ class BlockManagerDecommissionIntegrationSuite extends SparkFunSuite with LocalS
     val decomTime = new SystemClock().getTimeMillis()
 
     // Wait for job to finish.
-    val asyncCountResult = ThreadUtils.awaitResult(asyncCount, 1.minute)
+    val asyncCountResult = ThreadUtils.awaitResult(asyncCount, 2.minute)
     assert(asyncCountResult === numParts)
     // All tasks finished, so accum should have been increased numParts times.
     assert(accum.value === numParts)
@@ -245,7 +247,7 @@ class BlockManagerDecommissionIntegrationSuite extends SparkFunSuite with LocalS
           (update.blockUpdatedInfo.blockId.name,
             update.blockUpdatedInfo.blockManagerId)}
         val blocksToManagers = blockLocs.groupBy(_._1).mapValues(_.size)
-        assert(!blocksToManagers.filter(_._2 > 1).isEmpty,
+        assert(blocksToManagers.exists(_._2 > 1),
           s"We should have a block that has been on multiple BMs in rdds:\n ${rddUpdates} from:\n" +
           s"${blocksUpdated}\n but instead we got:\n ${blocksToManagers}")
       }
@@ -260,8 +262,11 @@ class BlockManagerDecommissionIntegrationSuite extends SparkFunSuite with LocalS
           val blockId = update.blockUpdatedInfo.blockId
           blockId.isInstanceOf[ShuffleIndexBlockId]
         }.size
-        assert(numDataLocs === 1, s"Expect shuffle data block updates in ${blocksUpdated}")
-        assert(numIndexLocs === 1, s"Expect shuffle index block updates in ${blocksUpdated}")
+        // If two parts end up on the exec being decommed then this will be 2.
+        assert(numDataLocs >= 1,
+          s"Expect shuffle data block updates in ${blocksUpdated}")
+        assert(numIndexLocs === numDataLocs,
+          s"Expect shuffle index block updates in ${blocksUpdated}")
       }
     }
 
