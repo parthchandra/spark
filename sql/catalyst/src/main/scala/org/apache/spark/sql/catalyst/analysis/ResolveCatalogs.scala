@@ -20,7 +20,7 @@ package org.apache.spark.sql.catalyst.analysis
 import org.apache.spark.sql.AnalysisException
 import org.apache.spark.sql.catalyst.plans.logical._
 import org.apache.spark.sql.catalyst.rules.Rule
-import org.apache.spark.sql.connector.catalog.{CatalogManager, CatalogPlugin, LookupCatalog, SupportsNamespaces, TableCatalog, TableChange}
+import org.apache.spark.sql.connector.catalog.{CatalogManager, CatalogPlugin, LookupCatalog, SupportsMigrate, SupportsNamespaces, SupportsSnapshot, TableCatalog, TableChange}
 
 /**
  * Resolves catalogs from the multi-part identifiers in SQL statements, and convert the statements
@@ -149,6 +149,31 @@ class ResolveCatalogs(val catalogManager: CatalogManager)
         convertTableProperties(c.properties, c.options, c.location, c.comment, c.provider),
         writeOptions = c.writeOptions,
         ignoreIfExists = c.ifNotExists)
+
+    case MigrateTableStatement(NonSessionCatalogAndTable(catalog, tbl), provider, properties) =>
+      if (!catalog.isInstanceOf[SupportsMigrate]) {
+        throw new AnalysisException(
+          s"Catalog ${catalog.name} does not support the Migrate command.")
+      }
+      MigrateTable(
+        catalog.asInstanceOf[SupportsMigrate],
+        tbl.asIdentifier,
+        convertTableProperties(properties, Map.empty, None, None, provider))
+
+    case SnapshotTableStatement(
+      CatalogAndIdentifier(sourceCatalog, sourceIdent),
+      NonSessionCatalogAndTable(catalog, ident), location, provider, properties) =>
+        if (!catalog.isInstanceOf[SupportsSnapshot]) {
+          throw new AnalysisException(
+            s"Catalog ${catalog.name} does not support the Snapshot command.")
+        }
+        SnapshotTable(
+          sourceCatalog.asTableCatalog,
+          sourceIdent,
+          catalog.asInstanceOf[SupportsSnapshot],
+          ident.asIdentifier,
+          convertTableProperties(properties, Map.empty, location, None, provider)
+        )
 
     case RefreshTableStatement(NonSessionCatalogAndTable(catalog, tbl)) =>
       RefreshTable(catalog.asTableCatalog, tbl.asIdentifier)

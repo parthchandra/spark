@@ -485,3 +485,21 @@ case class AlterTableDistributionAndOrderingStatement(
     tableName: Seq[String],
     distribution: Distribution,
     order: Seq[SortOrder]) extends ParsedStatement
+
+/**
+ * MIGRATE TABLE ... USING ... TBLPROPERTIES statement, as parsed from SQL
+ */
+case class MigrateTableStatement(
+    table: Seq[String],
+    provider: Option[String],
+    properties: Map[String, String]) extends ParsedStatement
+
+/**
+ * SNAPSHOT TABLE ... AS ... USING ... TBLPROPERTIES statement, as parsed from SQL
+ */
+case class SnapshotTableStatement(
+    sourceTable: Seq[String],
+    table: Seq[String],
+    location: Option[String],
+    provider: Option[String],
+    properties: Map[String, String]) extends ParsedStatement

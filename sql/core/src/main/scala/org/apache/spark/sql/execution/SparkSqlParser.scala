@@ -31,6 +31,7 @@ import org.apache.spark.sql.catalyst.expressions.Expression
 import org.apache.spark.sql.catalyst.parser._
 import org.apache.spark.sql.catalyst.parser.SqlBaseParser._
 import org.apache.spark.sql.catalyst.plans.logical._
+import org.apache.spark.sql.connector.catalog.TableCatalog
 import org.apache.spark.sql.execution.command._
 import org.apache.spark.sql.execution.datasources._
 import org.apache.spark.sql.internal.{HiveSerDe, SQLConf, VariableSubstitution}
@@ -818,5 +819,23 @@ class SparkSqlAstBuilder(conf: SQLConf) extends AstBuilder(conf) {
       properties = rowStorage.properties ++ fileStorage.properties)
 
     (ctx.LOCAL != null, storage, Some(DDLUtils.HIVE_PROVIDER))
+  }
+
+  override def visitMigrateTable( ctx: MigrateTableContext): LogicalPlan = withOrigin(ctx) {
+    val multipartIdentifier = ctx.multipartIdentifier.parts.asScala.map(_.getText)
+    val provider = Option(ctx.tableProvider).map(_.multipartIdentifier.getText)
+    val tableProperties = Option(ctx.tableProps).map(visitPropertyKeyValues).getOrElse(Map.empty)
+
+    MigrateTableStatement(multipartIdentifier, provider, tableProperties)
+  }
+
+  override def visitSnapshotTable( ctx: SnapshotTableContext): LogicalPlan = withOrigin(ctx) {
+    val sourceIdentifier = ctx.source.parts.asScala.map(_.getText)
+    val identifier = ctx.target.parts.asScala.map(_.getText)
+    val provider = Option(ctx.tableProvider).map(_.multipartIdentifier.getText)
+    val location = Option(ctx.locationSpec).map(visitLocationSpec)
+    val tableProperties = Option(ctx.tableProps).map(visitPropertyKeyValues).getOrElse(Map.empty)
+
+    SnapshotTableStatement(sourceIdentifier, identifier, location, provider, tableProperties)
   }
 }
