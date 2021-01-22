@@ -24,6 +24,7 @@ import org.apache.spark.SparkConf
 import org.apache.spark.deploy.k8s.{Config, KubernetesConf, KubernetesDriverSpec, KubernetesDriverSpecificConf, KubernetesRoleSpecificConf, KubernetesUtils, SparkPod}
 import org.apache.spark.deploy.k8s.features._
 import org.apache.spark.deploy.k8s.features.bindings.{JavaDriverFeatureStep, PythonDriverFeatureStep, RDriverFeatureStep}
+import org.apache.spark.util.Utils
 
 private[spark] class KubernetesDriverBuilder(
     provideBasicStep: (KubernetesConf[KubernetesDriverSpecificConf]) => BasicDriverFeatureStep =
@@ -83,6 +84,10 @@ private[spark] class KubernetesDriverBuilder(
       kubernetesConf.get(Config.KUBERNETES_EXECUTOR_PODTEMPLATE_FILE).isDefined) {
       Seq(providePodTemplateConfigMapStep(kubernetesConf))
     } else Nil
+    val userFeatures = kubernetesConf.get(Config.KUBERNETES_DRIVER_POD_FEATURE_STEPS)
+      .map { className =>
+        Utils.classForName(className).newInstance().asInstanceOf[KubernetesFeatureConfigStep]
+      }
 
     val bindingsStep = kubernetesConf.roleSpecificConf.mainAppResource.map {
         case JavaMainAppResource(_) =>
@@ -96,7 +101,7 @@ private[spark] class KubernetesDriverBuilder(
     val allFeatures: Seq[KubernetesFeatureConfigStep] =
       (baseFeatures :+ bindingsStep) ++
         secretFeature ++ envSecretFeature ++ volumesFeature ++
-        podTemplateFeature
+        podTemplateFeature ++ userFeatures
 
     var spec = KubernetesDriverSpec(
       provideInitialPod(),

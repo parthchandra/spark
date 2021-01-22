@@ -24,7 +24,7 @@ import org.apache.spark.SparkConf
 import org.apache.spark.deploy.k8s._
 import org.apache.spark.deploy.k8s.Constants._
 import org.apache.spark.deploy.k8s.features._
-import org.apache.spark.deploy.k8s.features.{BasicExecutorFeatureStep, EnvSecretsFeatureStep, ExecutorKubernetesCredentialsFeatureStep, LocalDirsFeatureStep, MountSecretsFeatureStep}
+import org.apache.spark.util.Utils
 
 private[spark] class KubernetesExecutorBuilder(
     provideBasicStep: (KubernetesConf [KubernetesExecutorSpecificConf])
@@ -62,8 +62,14 @@ private[spark] class KubernetesExecutorBuilder(
     } else Nil
     val credentialsFeature = Seq(provideCredentialsStep(kubernetesConf))
 
+    val userFeatures = kubernetesConf.get(Config.KUBERNETES_EXECUTOR_POD_FEATURE_STEPS)
+      .map { className =>
+        Utils.classForName(className).newInstance().asInstanceOf[KubernetesFeatureConfigStep]
+      }
+
     val allFeatures =
-      baseFeatures ++ secretFeature ++ secretEnvFeature ++ volumesFeature ++ credentialsFeature
+      baseFeatures ++ secretFeature ++ secretEnvFeature ++ volumesFeature ++ credentialsFeature ++
+      userFeatures
 
     var spec = KubernetesExecutorSpec(
       provideInitialPod(),
