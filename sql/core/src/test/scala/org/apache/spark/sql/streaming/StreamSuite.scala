@@ -1262,6 +1262,20 @@ class StreamSuite extends StreamTest {
       }
     }
   }
+
+  test("SPARK-34205: Pipe Streaming Dataset") {
+    assume(TestUtils.testCommandAvailable("cat"))
+
+    val inputData = MemoryStream[Int]
+    val piped = inputData.toDS()
+      .pipe("cat", (n, printFunc) => printFunc(n.toString)).toDF
+
+    testStream(piped)(
+      AddData(inputData, 1, 2, 3),
+      CheckAnswer(Row("1"), Row("2"), Row("3")),
+      AddData(inputData, 4),
+      CheckNewAnswer(Row("4")))
+  }
 }
 
 abstract class FakeSource extends StreamSourceProvider {
