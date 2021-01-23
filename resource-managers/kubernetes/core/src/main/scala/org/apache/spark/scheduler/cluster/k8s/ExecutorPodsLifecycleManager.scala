@@ -16,8 +16,10 @@
  */
 package org.apache.spark.scheduler.cluster.k8s
 
-import com.google.common.cache.Cache
-import io.fabric8.kubernetes.api.model.Pod
+import java.util.concurrent.TimeUnit
+
+import com.google.common.cache.CacheBuilder
+import io.fabric8.kubernetes.api.model.{Pod, PodBuilder}
 import io.fabric8.kubernetes.client.KubernetesClient
 import scala.collection.JavaConverters._
 import scala.collection.mutable
@@ -31,16 +33,20 @@ import org.apache.spark.util.Utils
 private[spark] class ExecutorPodsLifecycleManager(
     conf: SparkConf,
     kubernetesClient: KubernetesClient,
-    snapshotsStore: ExecutorPodsSnapshotsStore,
-    // Use a best-effort to track which executors have been removed already. It's not generally
-    // job-breaking if we remove executors more than once but it's ideal if we make an attempt
-    // to avoid doing so. Expire cache entries so that this data structure doesn't grow beyond
-    // bounds.
-    removedExecutorsCache: Cache[java.lang.Long, java.lang.Long]) extends Logging {
+    snapshotsStore: ExecutorPodsSnapshotsStore) extends Logging {
 
   import ExecutorPodsLifecycleManager._
 
   private val eventProcessingInterval = conf.get(KUBERNETES_EXECUTOR_EVENT_PROCESSING_INTERVAL)
+
+  // Use a best-effort to track which executors have been removed already. It's not generally
+  // job-breaking if we remove executors more than once but it's ideal if we make an attempt
+  // to avoid doing so. Expire cache entries so that this data structure doesn't grow beyond
+  // bounds.
+  private lazy val removedExecutorsCache =
+    CacheBuilder.newBuilder()
+      .expireAfterWrite(3, TimeUnit.MINUTES)
+      .build[java.lang.Long, java.lang.Long]()
 
   def start(schedulerBackend: KubernetesClusterSchedulerBackend): Unit = {
     snapshotsStore.addSubscriber(eventProcessingInterval) {
