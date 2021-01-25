@@ -248,7 +248,7 @@ builds:
     build:
       template: freestyle:v4:build
       steps:
-        - curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py"
+        - curl "https://bootstrap.pypa.io/2.7/get-pip.py" -o "get-pip.py"
         - python get-pip.py
         - pip2.7 install numpy==1.16.4 scipy==1.2.2 pandas==0.23.2
         - yum install -y python3 # run-tests.py requires this
