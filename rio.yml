@@ -432,7 +432,7 @@ builds:
     build:
       template: freestyle:v4:build
       steps:
-        - curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py"
+        - curl "https://bootstrap.pypa.io/2.7/get-pip.py" -o "get-pip.py"
         - python get-pip.py
         - pip2.7 install numpy==1.16.4 scipy==1.2.2 pandas==0.19.2
         - build/sbt -Phadoop-3.2 -Pflume assembly/package streaming-flume-assembly/assembly test:package
@@ -447,7 +447,7 @@ builds:
       template: freestyle:v4:build
       steps:
         - dev/change-scala-version.sh 2.12
-        - curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py"
+        - curl "https://bootstrap.pypa.io/2.7/get-pip.py" -o "get-pip.py"
         - python get-pip.py
         - pip2.7 install numpy==1.16.4 scipy==1.2.2 pandas==0.19.2
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 -Pflume assembly/package streaming-flume-assembly/assembly test:package
