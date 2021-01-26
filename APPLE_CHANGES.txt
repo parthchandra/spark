@@ -18,6 +18,7 @@ SPARK-32971       Support dynamic PVC creation/deletion for K8s executors
 SPARK-33019       Use spark.hadoop.mapreduce.fileoutputcommitter.algorithm.version=1 by default
 SPARK-33384       Delete temporary file when cancelling writing to final path even underlying stream throwing error
 SPARK-33337       Support subexpression elimination in branches of conditional expressions
+SPARK-34206       Make Guava Cache as ExecutorPodsLifecycleManager private field
 
 # From Spark 3.0.0
 SPARK-17636       Parquet predicate pushdown in nested fields
@@ -262,6 +263,9 @@ SPARK-33277       Use ContextAwareIterator to stop consuming after the task ends
 SPARK-33935       Fix CBO cost function
 SPARK-34012       Keep behavior consistent when conf `spark.sqllegacy.parser.havingWithoutGroupByAsWhere` is true with migration guide
 SPARK-34059       Use for/foreach rather than map to make sure execute it eagerly
+SPARK-34115       Check SPARK_TESTING as lazy val to avoid slowdown
+SPARK-34118       Replaces filter and check for emptiness with exists or forall
+SPARK-34153       Remove unused `getRawTable()` from `HiveExternalCatalog.alterPartitions()`
 
 # Internal Patches
 MINOR             Add an empty APPLE_CHANGES.txt
