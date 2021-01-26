@@ -6,6 +6,11 @@ SPARK-33722     Handle DELETE in ReplaceNullWithFalseInPredicate
 SPARK-23889     DataSourceV2: required sorting and clustering for writes
 SPARK-33724     Add decom script as a configuration param
 SPARK-33261     Add a developer API for custom feature steps
+SPARK-34206     Make Guava Cache as ExecutorPodsLifecycleManager private field
+MINOR           Increase tolerance to 0.2 for NaiveBayesSuite
+SPARK-34181     Update Prerequisites for build doc of ruby 3.0 issue
+SPARK-33813     Fix the issue that JDBC source can't treat MS SQL Server's spatial types
+SPARK-34217     Fix Scala 2.12 release profile
 
 # From Spark 3.1.0
 SPARK-25355      Add proxy user to driver if present on spark-submit
@@ -106,6 +111,11 @@ SPARK-25154      Support NOT IN sub-queries inside nested OR conditions
 SPARK-33623      Add canDeleteWhere to SupportsDelete
 SPARK-32592      Make DataFrameReader.table take the specified options
 SPARK-33729      When refreshing cache, Spark should not use cached plan when recaching data
+SPARK-34200      Ambiguous column reference should consider attribute availability
+SPARK-34202      Add ability to fetch spark release package from internal environment in HiveExternalCatalogVersionsSuite
+SPARK-34213      Refresh cached data of v1 table in `LOAD DATA`
+SPARK-33726      Fix for Duplicate field names during Aggregation
+SPARK-34187      Use available offset range obtained during polling when checking offset validation
 
 # From Spark 3.0.2
 SPARK-28612      Correct method doc of DataFrameWriterV2.replace()
@@ -418,3 +428,5 @@ MINOR            Remove no-hadoop distribution jobs
 rdar://73187768  Incorporate RocksDB StateStore into Apple Spark distribution.
 MINOR            Upgrade callhomelistner (#873)
 rdar://72891915  Parquet encryption support via switch to parquet-1.10.1.3-apple
+PR-854           Adds Migrate and Snapshot Catalog Support
+MINOR            Generate comments.sql.out for MIGRATE/SNAPSHOT commands
