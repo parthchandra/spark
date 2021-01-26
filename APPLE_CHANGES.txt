@@ -19,11 +19,39 @@ SPARK-34029     Add OrcEncryptionSuite and FakeKeyProvider
 SPARK-33808     DataSource V2: Build logical writes in the optimizer
 SPARK-34049     DataSource V2: Use Write abstraction in StreamExecution
 SPARK-34142     Support Fallback Storage Cleanup during stopping SparkContext
+SPARK-34208     Upgrade ORC to 1.6.7
+SPARK-34206     Make Guava Cache as ExecutorPodsLifecycleManager private field
+SPARK-34153     Remove unused `getRawTable()` from `HiveExternalCatalog.alterPartitions()`
+MINOR           Increase the timeout for StreamingLinearRegressionSuite to 60s
+SPARK-34143     Fix adding partitions to fully partitioned v2 tables
+SPARK-34162     Add PyArrow compatibility note for Python 3.9
+SPARK-34005     Update peak memory metrics for each Executor on task end
+MINOR           Increase tolerance to 0.2 for NaiveBayesSuite
+SPARK-33813     Fix the issue that JDBC source can't treat MS SQL Server's spatial types
+SPARK-34052     store SQL text for a temp view created using "CACHE TABLE .. AS SELECT ..."
 
 # From Spark 3.1.1
 SPARK-34151     Replaces `java.io.File.toURL` with `java.io.File.toURI.toURL`
 SPARK-34111     Deconflict the jars jakarta.servlet-api-4.0.3.jar and javax.servlet-api-3.1.0.jar
 SPARK-34027     Refresh cache in `ALTER TABLE .. RECOVER PARTITIONS`
+SPARK-34130     Impove preformace for char varchar padding and length check with StaticInvoke
+SPARK-34115     Check SPARK_TESTING as lazy val to avoid slowdown
+SPARK-33940     Upgrade univocity to 2.9.1
+SPARK-34166     Fix flaky test in DecommissionWorkerSuite
+SPARK-34178     Copy tags for the new node created by MultiInstanceRelation.newInstance
+SPARK-34181     Update Prerequisites for build doc of ruby 3.0 issue
+SPARK-33901     Add drop table in charvarchar test
+SPARK-34190     Supplement the description for Python Package Management
+SPARK-34200     Ambiguous column reference should consider attribute availability
+SPARK-34191     Add typing for udf overload
+SPARK-34202     Add ability to fetch spark release package from internal environment in HiveExternalCatalogVersionsSuite
+SPARK-34213     Refresh cached data of v1 table in `LOAD DATA`
+SPARK-34187     Use available offset range obtained during polling when checking offset validation
+SPARK-34217     Fix Scala 2.12 release profile
+SPARK-34185     Review and fix issues in API docs
+SPARK-34133     Respect case sensitivity when performing Catalyst-to-Avro field matching
+SPARK-33726     Fix for Duplicate field names during Aggregation
+SPARK-34192     Move char padding to write side and remove length check on read side too
 
 # Internal Patches
 SPARK-17767     Support user-provided ExternalCatalog and SessionBuilder
@@ -53,3 +81,4 @@ MINOR           Add connector row-level APIs
 MINOR           Add stored procedure API
 MINOR           Remove no-hadoop distribution jobs
 rdar://73187768 Incorporate RocksDB StateStore into Apple Spark distribution.
+PR-870          Adds Migrate and Snapshot Catalog Support
