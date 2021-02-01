@@ -81,6 +81,7 @@ SPARK-34273     Do not reregister BlockManager when SparkContext is stopped
 SPARK-34144     Exception thrown when trying to write LocalDate and Instant values to a JDBC relation
 SPARK-33163     Fix the test for the parquet metadata key 'org.apache.spark.legacyDateTime'
 SPARK-34154     Fix flaky LocalityPlacementStrategySuite test
+SPARK-34270     Combine StateStoreMetrics should not override StateStoreCustomMetric
 
 # Internal Patches
 SPARK-17767     Support user-provided ExternalCatalog and SessionBuilder
