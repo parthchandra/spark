@@ -266,6 +266,17 @@ SPARK-34059       Use for/foreach rather than map to make sure execute it eagerl
 SPARK-34115       Check SPARK_TESTING as lazy val to avoid slowdown
 SPARK-34118       Replaces filter and check for emptiness with exists or forall
 SPARK-34153       Remove unused `getRawTable()` from `HiveExternalCatalog.alterPartitions()`
+SPARK-34187       Use available offset range obtained during polling when checking offset validation
+SPARK-33726       Fix for Duplicate field names during Aggregation
+SPARK-34229       Avro should read decimal values with the file schema
+SPARK-34212       Fix incorrect decimal reading from Parquet files
+SPARK-34231       Make proper use of resource file within AvroSuite test case
+SPARK-34212       Refine the behavior of reading parquet non-decimal fields as decimal
+SPARK-34268       Correct the documentation of the concat_ws function
+SPARK-34275       Replaces filter and size with count
+SPARK-34273       Do not reregister BlockManager when SparkContext is stopped
+SPARK-34260       Fix UnresolvedException when creating temp view twice
+SPARK-34270       Combine StateStoreMetrics should not override StateStoreCustomMetric
 
 # Internal Patches
 MINOR             Add an empty APPLE_CHANGES.txt
