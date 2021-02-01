@@ -52,6 +52,35 @@ SPARK-34185     Review and fix issues in API docs
 SPARK-34133     Respect case sensitivity when performing Catalyst-to-Avro field matching
 SPARK-33726     Fix for Duplicate field names during Aggregation
 SPARK-34192     Move char padding to write side and remove length check on read side too
+SPARK-34203     Convert `null` partition values to `__HIVE_DEFAULT_PARTITION__` in v1 `In-Memory` catalog
+SPARK-34203     Fix null partition values UT failure
+SPARK-31768     add getMetrics in Evaluators: cleanup
+SPARK-34223     FIX NPE for static partition with null in InsertIntoHadoopFsRelationCommand
+SPARK-32852     Add notice about keep hive version consistence when config hive jars location
+SPARK-34229     Avro should read decimal values with the file schema
+SPARK-34232     Redact SparkListenerEnvironmentUpdate event in log
+SPARK-34235     Make spark.sql.hive as a private package
+SPARK-34224     Ensure all resource opened by `Source.fromXXX` are closed
+SPARK-34244     Remove the Scala function version of regexp_extract_all
+SPARK-34052     Add document in SQL migration guide
+SPARK-34212     Fix incorrect decimal reading from Parquet files
+SPARK-34236     Fix v2 Overwrite w/ null static partition raise Cannot translate expression to source filter: null
+SPARK-34231     Make proper use of resource file within AvroSuite test case
+SPARK-34212     Refine the behavior of reading parquet non-decimal fields as decimal
+SPARK-34221     Ensure if a stage fails in the UI page, the corresponding error message can be displayed correctly
+SPARK-34193     TorrentBroadcast block manager decommissioning race fix
+SPARK-34154     Extend LocalityPlacementStrategySuite's test with a timeout
+SPARK-33867     Instant and LocalDate values aren't handled when generating SQL queries
+SPARK-34260     Fix UnresolvedException when creating temp view twice
+SPARK-34268     Correct the documentation of the concat_ws function
+SPARK-34275     Replaces filter and size with count
+SPARK-34262     Refresh cached data of v1 table in `ALTER TABLE .. SET LOCATION`
+SPARK-32866     Fix docker cross-build
+SPARK-34281     Promote spark.kubernetes.executor.podNamePrefix to the public conf
+SPARK-34273     Do not reregister BlockManager when SparkContext is stopped
+SPARK-34144     Exception thrown when trying to write LocalDate and Instant values to a JDBC relation
+SPARK-33163     Fix the test for the parquet metadata key 'org.apache.spark.legacyDateTime'
+SPARK-34154     Fix flaky LocalityPlacementStrategySuite test
 
 # Internal Patches
 SPARK-17767     Support user-provided ExternalCatalog and SessionBuilder
