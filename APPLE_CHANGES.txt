@@ -116,6 +116,7 @@ SPARK-34202      Add ability to fetch spark release package from internal enviro
 SPARK-34213      Refresh cached data of v1 table in `LOAD DATA`
 SPARK-33726      Fix for Duplicate field names during Aggregation
 SPARK-34187      Use available offset range obtained during polling when checking offset validation
+SPARK-33843      Upgrade to Zstd 1.4.8
 
 # From Spark 3.0.2
 SPARK-28612      Correct method doc of DataFrameWriterV2.replace()
@@ -366,6 +367,25 @@ SPARK-34027      Refresh cache in `ALTER TABLE .. RECOVER PARTITIONS`
 SPARK-34153      Remove unused `getRawTable()` from `HiveExternalCatalog.alterPartitions()`
 MINOR            Increase the timeout for StreamingLinearRegressionSuite to 60s
 SPARK-34115      Check SPARK_TESTING as lazy val to avoid slowdown
+SPARK-34203      Convert `null` partition values to `__HIVE_DEFAULT_PARTITION__` in v1 `In-Memory` catalog
+SPARK-34223      FIX NPE for static partition with null in InsertIntoHadoopFsRelationCommand
+SPARK-34229      Avro should read decimal values with the file schema
+SPARK-34224      Ensure all resource opened by `Source.fromXXX` are closed
+SPARK-34212      Fix incorrect decimal reading from Parquet files
+SPARK-34231      Make proper use of resource file within AvroSuite test case
+SPARK-34212      Refine the behavior of reading parquet non-decimal fields as decimal
+SPARK-34221      Ensure if a stage fails in the UI page, the corresponding error message can be displayed correctly
+SPARK-34154      Extend LocalityPlacementStrategySuite's test with a timeout
+SPARK-34268      Correct the documentation of the concat_ws function
+SPARK-34260      Fix UnresolvedException when creating temp view twice
+SPARK-34262      Refresh cached data of v1 table in `ALTER TABLE .. SET LOCATION`
+SPARK-34275      Replaces filter and size with count
+SPARK-34273      Do not reregister BlockManager when SparkContext is stopped
+SPARK-33867      Instant and LocalDate values aren't handled when generating SQL queries
+SPARK-34144      Exception thrown when trying to write LocalDate and Instant values to a table
+SPARK-33163      Fix the test for the parquet metadata key 'org.apache.spark.legacyDateTime'
+SPARK-34154      Fix flaky LocalityPlacementStrategySuite test
+SPARK-34270      Combine StateStoreMetrics should not override StateStoreCustomMetric
 
 # Internal Patche
 rdar://72034392  Wait for the executor JVM to finish before returning decom.sh (fixed upstream but differently).
