@@ -54,6 +54,7 @@ private[spark] class BasicExecutorFeatureStep(
   private val executorMemoryMiB = kubernetesConf.get(EXECUTOR_MEMORY)
   private val executorMemoryString = kubernetesConf.get(
     EXECUTOR_MEMORY.key, EXECUTOR_MEMORY.defaultValueString)
+  private val disableConfigMap = kubernetesConf.get(KUBERNETES_EXECUTOR_DISABLE_CONFIGMAP)
 
   private val memoryOverheadMiB = kubernetesConf
     .get(EXECUTOR_MEMORY_OVERHEAD)
@@ -199,11 +200,17 @@ private[spark] class BasicExecutorFeatureStep(
         .addToRequests("cpu", executorCpuQuantity)
         .addToLimits(executorResourceQuantities.asJava)
       .endResources()
-      .addNewVolumeMount()
-        .withName(SPARK_CONF_VOLUME_EXEC)
-        .withMountPath(SPARK_CONF_DIR_INTERNAL)
-        .endVolumeMount()
       .build()
+    val execContainerWithConfVolume = if (disableConfigMap) {
+      execContainer
+    } else {
+      new ContainerBuilder(execContainer)
+        .addNewVolumeMount()
+          .withName(SPARK_CONF_VOLUME_EXEC)
+          .withMountPath(SPARK_CONF_DIR_INTERNAL)
+          .endVolumeMount()
+        .build()
+    }
 
     // If the shuffle service is enabled
     val executorContainers = if (externalShuffleService) {
@@ -224,9 +231,9 @@ private[spark] class BasicExecutorFeatureStep(
         .endResources()
         .build()
 
-      List(execContainer, shuffleContainer)
+      List(execContainerWithConfVolume, shuffleContainer)
     } else {
-      List(execContainer)
+      List(execContainerWithConfVolume)
     }
 
     val containersWithLimitCores = executorLimitCores.map { limitCores =>
@@ -269,7 +276,7 @@ private[spark] class BasicExecutorFeatureStep(
         .build()
     }
 
-    val executorPod = new PodBuilder(pod.pod)
+    val executorPodBuilder = new PodBuilder(pod.pod)
       .editOrNewMetadata()
         .withName(name)
         .addToLabels(kubernetesConf.labels.asJava)
@@ -281,6 +288,10 @@ private[spark] class BasicExecutorFeatureStep(
         .withRestartPolicy("Never")
         .addToNodeSelector(kubernetesConf.nodeSelector.asJava)
         .addToImagePullSecrets(kubernetesConf.imagePullSecrets: _*)
+    val executorPod = if (disableConfigMap) {
+      executorPodBuilder.endSpec().build()
+    } else {
+      executorPodBuilder
         .addNewVolume()
           .withName(SPARK_CONF_VOLUME_EXEC)
           .withNewConfigMap()
@@ -289,7 +300,8 @@ private[spark] class BasicExecutorFeatureStep(
             .endConfigMap()
           .endVolume()
         .endSpec()
-      .build()
+       .build()
+    }
 
     kubernetesConf.get(KUBERNETES_EXECUTOR_SCHEDULER_NAME)
       .foreach(executorPod.getSpec.setSchedulerName)
