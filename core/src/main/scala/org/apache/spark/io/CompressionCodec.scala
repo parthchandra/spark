@@ -20,7 +20,7 @@ package org.apache.spark.io
 import java.io._
 import java.util.Locale
 
-import com.github.luben.zstd.{ZstdInputStream, ZstdOutputStream}
+import com.github.luben.zstd.{NoPool, RecyclingBufferPool, ZstdInputStream, ZstdOutputStream}
 import com.ning.compress.lzf.{LZFInputStream, LZFOutputStream}
 import net.jpountz.lz4.{LZ4BlockInputStream, LZ4BlockOutputStream, LZ4Factory}
 import net.jpountz.xxhash.XXHashFactory
@@ -28,6 +28,7 @@ import org.xerial.snappy.{Snappy, SnappyInputStream, SnappyOutputStream}
 
 import org.apache.spark.SparkConf
 import org.apache.spark.annotation.DeveloperApi
+import org.apache.spark.internal.config._
 import org.apache.spark.util.Utils
 
 /**
@@ -261,15 +262,22 @@ class ZStdCompressionCodec(conf: SparkConf) extends CompressionCodec {
   // fastest of all with reasonably high compression ratio.
   private val level = conf.getInt("spark.io.compression.zstd.level", 1)
 
+  private val bufferPool = if (conf.get(IO_COMPRESSION_ZSTD_BUFFERPOOL_ENABLED)) {
+    RecyclingBufferPool.INSTANCE
+  } else {
+    NoPool.INSTANCE
+  }
+
   override def compressedOutputStream(s: OutputStream): OutputStream = {
     // Wrap the zstd output stream in a buffered output stream, so that we can
     // avoid overhead excessive of JNI call while trying to compress small amount of data.
-    new BufferedOutputStream(new ZstdOutputStream(s, level), bufferSize)
+    val os = new ZstdOutputStream(s, bufferPool).setLevel(level)
+    new BufferedOutputStream(os, bufferSize)
   }
 
   override def compressedInputStream(s: InputStream): InputStream = {
     // Wrap the zstd input stream in a buffered input stream so that we can
     // avoid overhead excessive of JNI call while trying to uncompress small amount of data.
-    new BufferedInputStream(new ZstdInputStream(s), bufferSize)
+    new BufferedInputStream(new ZstdInputStream(s, bufferPool), bufferSize)
   }
 }
