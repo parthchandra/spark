@@ -3032,6 +3032,15 @@ object SQLConf {
     .stringConf
     .createOptional
 
+  val LEGACY_KEEP_COMMAND_OUTPUT_SCHEMA =
+    buildConf("spark.sql.legacy.keepCommandOutputSchema")
+      .internal()
+      .doc("When true, Spark will keep the output schema of commands such as SHOW DATABASES " +
+        "unchanged, for v1 catalog and/or table.")
+      .version("3.0.2")
+      .booleanConf
+      .createWithDefault(false)
+
   /**
    * Holds information about keys that have been deprecated.
    *
