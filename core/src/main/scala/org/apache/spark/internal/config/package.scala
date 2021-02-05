@@ -534,6 +534,17 @@ package object config {
       .checkValues(Set("/", "_"))
       .createWithDefault("/")
 
+  private[spark] val STORAGE_REMOTE_SHUFFLE_MAX_DISK =
+    ConfigBuilder("spark.storage.remote.shuffle.maxDisk")
+      .doc("Maximum disk space to use to store shuffle blocks before rejecting remote " +
+        "shuffle blocks. Rejecting remote shuffle blocks means that an exec will not receive any " +
+        " shuffle migrations, and if there are no execs avaialble for migration then " +
+        s"decommissioning will block unless ${SPARK_SHUFFLE_EXTERNAL_STORAGE_BACKEND.key} " +
+        "is configured")
+      .version("3.2.0")
+      .bytesConf(ByteUnit.BYTE)
+      .createOptional
+
   private[spark] val STORAGE_REPLICATION_TOPOLOGY_FILE =
     ConfigBuilder("spark.storage.replication.topologyFile")
       .version("2.1.0")
