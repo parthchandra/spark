@@ -797,6 +797,6 @@ package object config {
     ConfigBuilder("spark.io.compression.zstd.bufferPool.enabled")
       .doc("If true, enable buffer pool of ZSTD JNI library.")
       .booleanConf
-      .createWithDefault(false)
+      .createWithDefault(true)
 
 }
