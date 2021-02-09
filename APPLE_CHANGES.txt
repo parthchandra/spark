@@ -1,5 +1,9 @@
 This contains the changes after v2.4.7-rc3
 
+# From Spark 3.2.0
+SPARK-34391       Upgrade commons-io to 2.8.0
+SPARK-34340       Support ZSTD JNI BufferPool
+
 # From Spark 3.1.0
 MULTIPART         Add Spark K8s Decommissioning & Dynamic Allocation support
 SPARK-31047       Improve file listing for ViewFileSystem
@@ -19,6 +23,7 @@ SPARK-33019       Use spark.hadoop.mapreduce.fileoutputcommitter.algorithm.versi
 SPARK-33384       Delete temporary file when cancelling writing to final path even underlying stream throwing error
 SPARK-33337       Support subexpression elimination in branches of conditional expressions
 SPARK-34206       Make Guava Cache as ExecutorPodsLifecycleManager private field
+SPARK-33843       Upgrade to Zstd 1.4.8
 
 # From Spark 3.0.0
 SPARK-17636       Parquet predicate pushdown in nested fields
@@ -277,6 +282,10 @@ SPARK-34275       Replaces filter and size with count
 SPARK-34273       Do not reregister BlockManager when SparkContext is stopped
 SPARK-34260       Fix UnresolvedException when creating temp view twice
 SPARK-34270       Combine StateStoreMetrics should not override StateStoreCustomMetric
+SPARK-34310       Replaces map and flatten with flatMap
+SPARK-34212       Parquet vectorized reader can read decimal fields with a larger precision
+SPARK-34327       Strip passwords from inlining into build information while releasing
+SPARK-34318     ] Dataset.colRegex should work with column names and qualifiers which contain newlines
 
 # Internal Patches
 MINOR             Add an empty APPLE_CHANGES.txt
@@ -325,3 +334,4 @@ MINOR             Lazily instantiate Hive classes
 MINOR             Upgrade callhomelistner 0.2.4
 rdar://65691577   TLF: Support Parquet Encryption
 rdar://73436293   BlockManagerDecommissionIntegrationSuite flakiness fix
+rdar://74077552   Upgrade Parquet to 1.10.1.4 (PARQUET-1967/PARQUET-1973) 
