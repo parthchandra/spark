@@ -11,6 +11,9 @@ MINOR           Increase tolerance to 0.2 for NaiveBayesSuite
 SPARK-34181     Update Prerequisites for build doc of ruby 3.0 issue
 SPARK-33813     Fix the issue that JDBC source can't treat MS SQL Server's spatial types
 SPARK-34217     Fix Scala 2.12 release profile
+SPARK-34391     Upgrade commons-io to 2.8.0
+SPARK-34340     Support ZSTD JNI BufferPool
+SPARK-34316     Support spark.kubernetes.executor.disableConfigMap
 
 # From Spark 3.1.0
 SPARK-25355      Add proxy user to driver if present on spark-submit
@@ -386,6 +389,16 @@ SPARK-34144      Exception thrown when trying to write LocalDate and Instant val
 SPARK-33163      Fix the test for the parquet metadata key 'org.apache.spark.legacyDateTime'
 SPARK-34154      Fix flaky LocalityPlacementStrategySuite test
 SPARK-34270      Combine StateStoreMetrics should not override StateStoreCustomMetric
+SPARK-34310      Replaces map and flatten with flatMap
+SPARK-34319      Resolve duplicate attributes for FlatMapCoGroupsInPandas/MapInPandas
+SPARK-33591      Add legacy config for recognizing null partition spec values
+SPARK-34212      Parquet vectorized reader can read decimal fields with a larger precision
+SPARK-34327      Strip passwords from inlining into build information while releasing
+SPARK-34318      Dataset.colRegex should work with column names and qualifiers which contain newlines
+SPARK-34359      Add a legacy config to restore the output schema of SHOW DATABASES
+SPARK-34346      io.file.buffer.size set by spark.buffer.size will override by loading hive-site.xml accidentally may cause perf regression
+SPARK-34346      Fix UT by removing core-site.xml
+SPARK-33438      Eagerly init objects with defined SQL Confs for command `set -v`
 
 # Internal Patche
 rdar://72034392  Wait for the executor JVM to finish before returning decom.sh (fixed upstream but differently).
@@ -450,3 +463,7 @@ MINOR            Upgrade callhomelistner (#873)
 rdar://72891915  Parquet encryption support via switch to parquet-1.10.1.3-apple
 PR-854           Adds Migrate and Snapshot Catalog Support
 MINOR            Generate comments.sql.out for MIGRATE/SNAPSHOT commands
+rdar://74077552  Upgrade Parquet to 1.10.1.4 (PARQUET-1967/PARQUET-1973) 
+rdar://73724010  Exclude filesystems from token renewal
+rdar://74001493  Add Dataset pipe API
+N/A              Add an option for limiting storage for shuffle blocks
