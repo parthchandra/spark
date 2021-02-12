@@ -1,8 +1,12 @@
 schemaVersion: 2.0
+timeout: 90
 
 notify:
   email:
     enabled: false
+  pullRequestComment:
+    postOnSuccess: false
+    postOnFailure: false
 
 machine:
   java:
@@ -11,7 +15,6 @@ machine:
 builds:
   - name: apple-spark-2.11_2.4.7-snapshot-common
     branchName: branch-2.4.7-apple
-    timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -24,9 +27,22 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
+  - name: apple-spark-2.11_2.4.7-snapshot-common-pr
+    branchName: branch-2.4.7-apple
+    machine:
+      baseImage: docker.apple.com/cpbuild7/applejdk-8
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - build/sbt -Phadoop-3.2 "sketch/test" "kvstore/test" "network-common/test" "network-shuffle/test" "unsafe/test"
+    reports:
+      junit:
+        trim: true
+        paths:
+          - "**/target/test-reports/*.xml"
+
   - name: apple-spark-2.12_2.4.7-snapshot-common
     branchName: branch-2.4.7-apple
-    timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
@@ -40,9 +56,23 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
+  - name: apple-spark-2.12_2.4.7-snapshot-common-pr
+    branchName: branch-2.4.7-apple
+    machine:
+      baseImage: docker.apple.com/cpbuild7/applejdk-11
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - dev/change-scala-version.sh 2.12
+        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 "sketch/test" "kvstore/test" "network-common/test" "network-shuffle/test" "unsafe/test"
+    reports:
+      junit:
+        trim: true
+        paths:
+          - "**/target/test-reports/*.xml"
+
   - name: apple-spark-2.11_2.4.7-snapshot-core
     branchName: branch-2.4.7-apple
-    timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -50,9 +80,17 @@ builds:
       steps:
         - build/sbt -Phadoop-3.2 "core/test"
 
+  - name: apple-spark-2.11_2.4.7-snapshot-core-pr
+    branchName: branch-2.4.7-apple
+    machine:
+      baseImage: docker.apple.com/cpbuild7/applejdk-8
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - build/sbt -Phadoop-3.2 "core/test"
+
   - name: apple-spark-2.12_2.4.7-snapshot-core
     branchName: branch-2.4.7-apple
-    timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
@@ -61,9 +99,18 @@ builds:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 "core/test"
 
+  - name: apple-spark-2.12_2.4.7-snapshot-core-pr
+    branchName: branch-2.4.7-apple
+    machine:
+      baseImage: docker.apple.com/cpbuild7/applejdk-11
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - dev/change-scala-version.sh 2.12
+        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 "core/test"
+
   - name: apple-spark-2.11_2.4.7-snapshot-streaming
     branchName: branch-2.4.7-apple
-    timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -76,9 +123,22 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
+  - name: apple-spark-2.11_2.4.7-snapshot-streaming-pr
+    branchName: branch-2.4.7-apple
+    machine:
+      baseImage: docker.apple.com/cpbuild7/applejdk-8
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - build/sbt -Phadoop-3.2 "streaming/test"
+    reports:
+      junit:
+        trim: true
+        paths:
+          - "**/target/test-reports/*.xml"
+
   - name: apple-spark-2.12_2.4.7-snapshot-streaming
     branchName: branch-2.4.7-apple
-    timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
@@ -92,9 +152,23 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
+  - name: apple-spark-2.12_2.4.7-snapshot-streaming-pr
+    branchName: branch-2.4.7-apple
+    machine:
+      baseImage: docker.apple.com/cpbuild7/applejdk-11
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - dev/change-scala-version.sh 2.12
+        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 "streaming/test"
+    reports:
+      junit:
+        trim: true
+        paths:
+          - "**/target/test-reports/*.xml"
+
   - name: apple-spark-2.11_2.4.7-snapshot-mllib
     branchName: branch-2.4.7-apple
-    timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -107,9 +181,22 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
+  - name: apple-spark-2.11_2.4.7-snapshot-mllib-pr
+    branchName: branch-2.4.7-apple
+    machine:
+      baseImage: docker.apple.com/cpbuild7/applejdk-8
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - build/sbt -Phadoop-3.2 "mllib/test" "mllib-local/test" "graphx/test"
+    reports:
+      junit:
+        trim: true
+        paths:
+          - "**/target/test-reports/*.xml"
+
   - name: apple-spark-2.12_2.4.7-snapshot-mllib
     branchName: branch-2.4.7-apple
-    timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
@@ -123,9 +210,23 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
+  - name: apple-spark-2.12_2.4.7-snapshot-mllib-pr
+    branchName: branch-2.4.7-apple
+    machine:
+      baseImage: docker.apple.com/cpbuild7/applejdk-11
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - dev/change-scala-version.sh 2.12
+        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 "mllib/test" "mllib-local/test" "graphx/test"
+    reports:
+      junit:
+        trim: true
+        paths:
+          - "**/target/test-reports/*.xml"
+
   - name: apple-spark-2.11_2.4.7-snapshot-catalyst
     branchName: branch-2.4.7-apple
-    timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -138,9 +239,22 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
+  - name: apple-spark-2.11_2.4.7-snapshot-catalyst-pr
+    branchName: branch-2.4.7-apple
+    machine:
+      baseImage: docker.apple.com/cpbuild7/applejdk-8
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - build/sbt -Phadoop-3.2 "catalyst/test"
+    reports:
+      junit:
+        trim: true
+        paths:
+          - "**/target/test-reports/*.xml"
+
   - name: apple-spark-2.12_2.4.7-snapshot-catalyst
     branchName: branch-2.4.7-apple
-    timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
@@ -154,9 +268,23 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
+  - name: apple-spark-2.12_2.4.7-snapshot-catalyst-pr
+    branchName: branch-2.4.7-apple
+    machine:
+      baseImage: docker.apple.com/cpbuild7/applejdk-11
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - dev/change-scala-version.sh 2.12
+        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 "catalyst/test"
+    reports:
+      junit:
+        trim: true
+        paths:
+          - "**/target/test-reports/*.xml"
+
   - name: apple-spark-2.11_2.4.7-snapshot-sql-1
     branchName: branch-2.4.7-apple
-    timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -164,9 +292,17 @@ builds:
       steps:
         - build/sbt -Phadoop-3.2 "sql/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedSQLTest
 
+  - name: apple-spark-2.11_2.4.7-snapshot-sql-1-pr
+    branchName: branch-2.4.7-apple
+    machine:
+      baseImage: docker.apple.com/cpbuild7/applejdk-8
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - build/sbt -Phadoop-3.2 "sql/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedSQLTest
+
   - name: apple-spark-2.12_2.4.7-snapshot-sql-1
     branchName: branch-2.4.7-apple
-    timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
@@ -175,9 +311,18 @@ builds:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 "sql/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedSQLTest
 
+  - name: apple-spark-2.12_2.4.7-snapshot-sql-1-pr
+    branchName: branch-2.4.7-apple
+    machine:
+      baseImage: docker.apple.com/cpbuild7/applejdk-11
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - dev/change-scala-version.sh 2.12
+        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 "sql/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedSQLTest
+
   - name: apple-spark-2.11_2.4.7-snapshot-sql-2
     branchName: branch-2.4.7-apple
-    timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -190,9 +335,22 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
+  - name: apple-spark-2.11_2.4.7-snapshot-sql-2-pr
+    branchName: branch-2.4.7-apple
+    machine:
+      baseImage: docker.apple.com/cpbuild7/applejdk-8
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - build/sbt -Phadoop-3.2 "sql/test-only *.SQLQueryTestSuite"
+    reports:
+      junit:
+        trim: true
+        paths:
+          - "**/target/test-reports/*.xml"
+
   - name: apple-spark-2.12_2.4.7-snapshot-sql-2
     branchName: branch-2.4.7-apple
-    timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
@@ -206,9 +364,23 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
+  - name: apple-spark-2.12_2.4.7-snapshot-sql-2-pr
+    branchName: branch-2.4.7-apple
+    machine:
+      baseImage: docker.apple.com/cpbuild7/applejdk-11
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - dev/change-scala-version.sh 2.12
+        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 "sql/test-only *.SQLQueryTestSuite"
+    reports:
+      junit:
+        trim: true
+        paths:
+          - "**/target/test-reports/*.xml"
+
   - name: apple-spark-2.11_2.4.7-snapshot-hive-1
     branchName: branch-2.4.7-apple
-    timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -216,9 +388,17 @@ builds:
       steps:
         - build/sbt -Phadoop-3.2 -Phive "hive/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedHiveTest
 
+  - name: apple-spark-2.11_2.4.7-snapshot-hive-1-pr
+    branchName: branch-2.4.7-apple
+    machine:
+      baseImage: docker.apple.com/cpbuild7/applejdk-8
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - build/sbt -Phadoop-3.2 -Phive "hive/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedHiveTest
+
   - name: apple-spark-2.12_2.4.7-snapshot-hive-1
     branchName: branch-2.4.7-apple
-    timeout: 90
     machine:
         baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -227,9 +407,18 @@ builds:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 -Phive "hive/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedHiveTest
 
+  - name: apple-spark-2.12_2.4.7-snapshot-hive-1-pr
+    branchName: branch-2.4.7-apple
+    machine:
+        baseImage: docker.apple.com/cpbuild7/applejdk-8
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - dev/change-scala-version.sh 2.12
+        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 -Phive "hive/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedHiveTest
+
   - name: apple-spark-2.11_2.4.7-snapshot-hive-2
     branchName: branch-2.4.7-apple
-    timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -237,9 +426,17 @@ builds:
       steps:
         - build/sbt -Phadoop-3.2 -Phive "hive/test-only *.HiveSparkSubmitSuite" "hive/test-only *.VersionsSuite" "hive/test-only *.Hive_2_1_DDLSuite" "hive/test-only *.HiveQuerySuite"
 
+  - name: apple-spark-2.11_2.4.7-snapshot-hive-2-pr
+    branchName: branch-2.4.7-apple
+    machine:
+      baseImage: docker.apple.com/cpbuild7/applejdk-8
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - build/sbt -Phadoop-3.2 -Phive "hive/test-only *.HiveSparkSubmitSuite" "hive/test-only *.VersionsSuite" "hive/test-only *.Hive_2_1_DDLSuite" "hive/test-only *.HiveQuerySuite"
+
   - name: apple-spark-2.12_2.4.7-snapshot-hive-2
     branchName: branch-2.4.7-apple
-    timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -248,9 +445,18 @@ builds:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 -Phive "hive/test-only *.HiveSparkSubmitSuite" "hive/test-only *.VersionsSuite" "hive/test-only *.Hive_2_1_DDLSuite" "hive/test-only *.HiveQuerySuite"
 
+  - name: apple-spark-2.12_2.4.7-snapshot-hive-2-pr
+    branchName: branch-2.4.7-apple
+    machine:
+      baseImage: docker.apple.com/cpbuild7/applejdk-8
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - dev/change-scala-version.sh 2.12
+        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 -Phive "hive/test-only *.HiveSparkSubmitSuite" "hive/test-only *.VersionsSuite" "hive/test-only *.Hive_2_1_DDLSuite" "hive/test-only *.HiveQuerySuite"
+
   - name: apple-spark-2.11_2.4.7-snapshot-hive-3
     branchName: branch-2.4.7-apple
-    timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -258,9 +464,17 @@ builds:
       steps:
         - build/sbt -Phadoop-3.2 -Phive "hive/test-only *.HiveCompatibilitySuite" "hive/testOnly *.HiveClientSuites"
 
+  - name: apple-spark-2.11_2.4.7-snapshot-hive-3-pr
+    branchName: branch-2.4.7-apple
+    machine:
+      baseImage: docker.apple.com/cpbuild7/applejdk-8
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - build/sbt -Phadoop-3.2 -Phive "hive/test-only *.HiveCompatibilitySuite" "hive/testOnly *.HiveClientSuites"
+
   - name: apple-spark-2.12_2.4.7-snapshot-hive-3
     branchName: branch-2.4.7-apple
-    timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -269,9 +483,18 @@ builds:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 -Phive "hive/test-only *.HiveCompatibilitySuite"
 
+  - name: apple-spark-2.12_2.4.7-snapshot-hive-3-pr
+    branchName: branch-2.4.7-apple
+    machine:
+      baseImage: docker.apple.com/cpbuild7/applejdk-8
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - dev/change-scala-version.sh 2.12
+        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 -Phive "hive/test-only *.HiveCompatibilitySuite"
+
   - name: apple-spark-2.11_2.4.7-snapshot-launcher-repl-tools-hadoop-cloud
     branchName: branch-2.4.7-apple
-    timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -284,9 +507,22 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
+  - name: apple-spark-2.11_2.4.7-snapshot-launcher-repl-tools-hadoop-cloud-pr
+    branchName: branch-2.4.7-apple
+    machine:
+      baseImage: docker.apple.com/cpbuild7/applejdk-8
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - build/sbt -Phadoop-3.2 -Phadoop-cloud "launcher/test" "repl/test" "tools/test" "hadoop-cloud/test"
+    reports:
+      junit:
+        trim: true
+        paths:
+          - "**/target/test-reports/*.xml"
+
   - name: apple-spark-2.12_2.4.7-snapshot-launcher-repl-tools-hadoop-cloud
     branchName: branch-2.4.7-apple
-    timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
@@ -300,9 +536,23 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
+  - name: apple-spark-2.12_2.4.7-snapshot-launcher-repl-tools-hadoop-cloud-pr
+    branchName: branch-2.4.7-apple
+    machine:
+      baseImage: docker.apple.com/cpbuild7/applejdk-11
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - dev/change-scala-version.sh 2.12
+        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 -Phadoop-cloud "launcher/test" "repl/test" "tools/test" "hadoop-cloud/test"
+    reports:
+      junit:
+        trim: true
+        paths:
+          - "**/target/test-reports/*.xml"
+
   - name: apple-spark-2.11_2.4.7-snapshot-kafka
     branchName: branch-2.4.7-apple
-    timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -315,9 +565,22 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
+  - name: apple-spark-2.11_2.4.7-snapshot-kafka-pr
+    branchName: branch-2.4.7-apple
+    machine:
+      baseImage: docker.apple.com/cpbuild7/applejdk-8
+    build:
+      template: freestyle:v4:pr
+      steps:
+        - build/sbt -Phadoop-3.2 "streaming-kafka-0-10/test" "sql-kafka-0-10/test"
+    reports:
+      junit:
+        trim: true
+        paths:
+          - "**/target/test-reports/*.xml"
+
   - name: apple-spark-2.12_2.4.7-snapshot-kafka
     branchName: branch-2.4.7-apple
-    timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
@@ -331,9 +594,23 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
+  - name: apple-spark-2.12_2.4.7-snapshot-kafka-pr
+    branchName: branch-2.4.7-apple
+    machine:
+      baseImage: docker.apple.com/cpbuild7/applejdk-11
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - dev/change-scala-version.sh 2.12
+        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 "streaming-kafka-0-10/test" "sql-kafka-0-10/test"
+    reports:
+      junit:
+        trim: true
+        paths:
+          - "**/target/test-reports/*.xml"
+
   - name: apple-spark-2.11_2.4.7-snapshot-kinesis
     branchName: branch-2.4.7-apple
-    timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -346,9 +623,22 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
+  - name: apple-spark-2.11_2.4.7-snapshot-kinesis-pr
+    branchName: branch-2.4.7-apple
+    machine:
+      baseImage: docker.apple.com/cpbuild7/applejdk-8
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - build/sbt -Phadoop-3.2 -Pkinesis-asl "streaming-kinesis-asl/test"
+    reports:
+      junit:
+        trim: true
+        paths:
+          - "**/target/test-reports/*.xml"
+
   - name: apple-spark-2.12_2.4.7-snapshot-kinesis
     branchName: branch-2.4.7-apple
-    timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
@@ -362,9 +652,23 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
+  - name: apple-spark-2.12_2.4.7-snapshot-kinesis-pr
+    branchName: branch-2.4.7-apple
+    machine:
+      baseImage: docker.apple.com/cpbuild7/applejdk-11
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - dev/change-scala-version.sh 2.12
+        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 -Pkinesis-asl "streaming-kinesis-asl/test"
+    reports:
+      junit:
+        trim: true
+        paths:
+          - "**/target/test-reports/*.xml"
+
   - name: apple-spark-2.11_2.4.7-snapshot-avro
     branchName: branch-2.4.7-apple
-    timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -377,9 +681,22 @@ builds:
         paths:
           - "external/avro/target/test-reports/*.xml"
 
+  - name: apple-spark-2.11_2.4.7-snapshot-avro-pr
+    branchName: branch-2.4.7-apple
+    machine:
+      baseImage: docker.apple.com/cpbuild7/applejdk-8
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - build/sbt -Phadoop-3.2 "avro/test" -Pavro
+    reports:
+      junit:
+        trim: true
+        paths:
+          - "external/avro/target/test-reports/*.xml"
+
   - name: apple-spark-2.12_2.4.7-snapshot-avro
     branchName: branch-2.4.7-apple
-    timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
@@ -393,9 +710,23 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
+  - name: apple-spark-2.12_2.4.7-snapshot-avro-pr
+    branchName: branch-2.4.7-apple
+    machine:
+      baseImage: docker.apple.com/cpbuild7/applejdk-11
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - dev/change-scala-version.sh 2.12
+        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 "avro/test" -Pavro
+    reports:
+      junit:
+        trim: true
+        paths:
+          - "**/target/test-reports/*.xml"
+
   - name: apple-spark-2.11_2.4.7-snapshot-yarn-mesos-k8s
     branchName: branch-2.4.7-apple
-    timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -408,9 +739,22 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
+  - name: apple-spark-2.11_2.4.7-snapshot-yarn-mesos-k8s-pr
+    branchName: branch-2.4.7-apple
+    machine:
+      baseImage: docker.apple.com/cpbuild7/applejdk-8
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - build/sbt -Phadoop-3.2 -Pyarn -Pmesos -Pkubernetes "yarn/test" "mesos/test" "kubernetes/test"
+    reports:
+      junit:
+        trim: true
+        paths:
+          - "**/target/test-reports/*.xml"
+
   - name: apple-spark-2.12_2.4.7-snapshot-yarn-mesos-k8s
     branchName: branch-2.4.7-apple
-    timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
@@ -424,9 +768,23 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
+  - name: apple-spark-2.12_2.4.7-snapshot-yarn-mesos-k8s-pr
+    branchName: branch-2.4.7-apple
+    machine:
+      baseImage: docker.apple.com/cpbuild7/applejdk-11
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - dev/change-scala-version.sh 2.12
+        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 -Pyarn -Pmesos -Pkubernetes "yarn/test" "mesos/test" "kubernetes/test"
+    reports:
+      junit:
+        trim: true
+        paths:
+          - "**/target/test-reports/*.xml"
+
   - name: apple-spark-2.11_2.4.7-snapshot-python27
     branchName: branch-2.4.7-apple
-    timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -438,13 +796,39 @@ builds:
         - build/sbt -Phadoop-3.2 -Pflume assembly/package streaming-flume-assembly/assembly test:package
         - python/run-tests.py --python-executables python2.7
 
+  - name: apple-spark-2.11_2.4.7-snapshot-python27-pr
+    branchName: branch-2.4.7-apple
+    machine:
+      baseImage: docker.apple.com/cpbuild7/applejdk-8
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - curl "https://bootstrap.pypa.io/2.7/get-pip.py" -o "get-pip.py"
+        - python get-pip.py
+        - pip2.7 install numpy==1.16.4 scipy==1.2.2 pandas==0.19.2
+        - build/sbt -Phadoop-3.2 -Pflume assembly/package streaming-flume-assembly/assembly test:package
+        - python/run-tests.py --python-executables python2.7
+
   - name: apple-spark-2.12_2.4.7-snapshot-python27
     branchName: branch-2.4.7-apple
-    timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
       template: freestyle:v4:build
+      steps:
+        - dev/change-scala-version.sh 2.12
+        - curl "https://bootstrap.pypa.io/2.7/get-pip.py" -o "get-pip.py"
+        - python get-pip.py
+        - pip2.7 install numpy==1.16.4 scipy==1.2.2 pandas==0.19.2
+        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 -Pflume assembly/package streaming-flume-assembly/assembly test:package
+        - python/run-tests.py --python-executables python2.7
+
+  - name: apple-spark-2.12_2.4.7-snapshot-python27-pr
+    branchName: branch-2.4.7-apple
+    machine:
+      baseImage: docker.apple.com/cpbuild7/applejdk-11
+    build:
+      template: freestyle:v4:prb
       steps:
         - dev/change-scala-version.sh 2.12
         - curl "https://bootstrap.pypa.io/2.7/get-pip.py" -o "get-pip.py"
@@ -455,7 +839,6 @@ builds:
 
   - name: apple-spark-2.11_2.4.7-snapshot-python36
     branchName: branch-2.4.7-apple
-    timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -466,9 +849,20 @@ builds:
         - build/sbt -Phadoop-3.2 -Pflume assembly/package streaming-flume-assembly/assembly test:package
         - python/run-tests.py --python-executables python3.6
 
+  - name: apple-spark-2.11_2.4.7-snapshot-python36-pr
+    branchName: branch-2.4.7-apple
+    machine:
+      baseImage: docker.apple.com/cpbuild7/applejdk-8
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - yum install -y python3
+        - pip3.6 install numpy==1.16.4 scipy==1.2.2 pandas==0.23.2
+        - build/sbt -Phadoop-3.2 -Pflume assembly/package streaming-flume-assembly/assembly test:package
+        - python/run-tests.py --python-executables python3.6
+
   - name: apple-spark-2.12_2.4.7-snapshot-python36
     branchName: branch-2.4.7-apple
-    timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
@@ -480,9 +874,21 @@ builds:
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 -Pflume assembly/package streaming-flume-assembly/assembly test:package
         - python/run-tests.py --python-executables python3.6
 
+  - name: apple-spark-2.12_2.4.7-snapshot-python36-pr
+    branchName: branch-2.4.7-apple
+    machine:
+      baseImage: docker.apple.com/cpbuild7/applejdk-11
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - dev/change-scala-version.sh 2.12
+        - yum install -y python3
+        - pip3.6 install numpy==1.16.4 scipy==1.2.2 pandas==0.23.2
+        - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 -Pflume assembly/package streaming-flume-assembly/assembly test:package
+        - python/run-tests.py --python-executables python3.6
+
   - name: apple-spark-2.11_2.4.7-snapshot
     branchName: branch-2.4.7-apple
-    timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
       env:
@@ -504,7 +910,6 @@ builds:
 
   - name: apple-spark-2.12_2.4.7-snapshot
     branchName: branch-2.4.7-apple
-    timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
       env:
@@ -527,7 +932,6 @@ builds:
 
   - name: apple-spark-2.11_2.4.7-binaries-snapshot
     branchName: branch-2.4.7-apple
-    timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
       env:
@@ -549,7 +953,6 @@ builds:
 
   - name: apple-spark-2.12_2.4.7-binaries-snapshot
     branchName: branch-2.4.7-apple
-    timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
       env:
@@ -572,7 +975,6 @@ builds:
 
   - name: apple-spark-2.11_2.4.7-release
     branchName: branch-2.4.7-apple-release
-    timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
       env:
@@ -599,7 +1001,6 @@ builds:
 
   - name: apple-spark-2.12_2.4.7-release
     branchName: branch-2.4.7-apple-release
-    timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
       env:
@@ -627,7 +1028,6 @@ builds:
 
   - name: apple-spark-2.11_2.4.7-binaries-release
     branchName: branch-2.4.7-apple-release
-    timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
       env:
@@ -650,7 +1050,6 @@ builds:
 
   - name: apple-spark-2.12_2.4.7-binaries-release
     branchName: branch-2.4.7-apple-release
-    timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
       env:
@@ -674,7 +1073,6 @@ builds:
 
   - name: apple-spark-2.11_2.4.7-no-hadoop-binaries-snapshot
     branchName: branch-2.4.7-apple
-    timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
       env:
@@ -695,7 +1093,6 @@ builds:
 
   - name: apple-spark-2.12_2.4.7-no-hadoop-binaries-snapshot
     branchName: branch-2.4.7-apple
-    timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
       env:
@@ -717,7 +1114,6 @@ builds:
 
   - name: apple-spark-2.11_2.4.7-no-hadoop-binaries-release
     branchName: branch-2.4.7-apple-release
-    timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
       env:
@@ -739,7 +1135,6 @@ builds:
 
   - name: apple-spark-2.12_2.4.7-no-hadoop-binaries-release
     branchName: branch-2.4.7-apple-release
-    timeout: 90
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
       env:
