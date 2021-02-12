@@ -1,4 +1,4 @@
-This contains the changes after branching `v3.1.1-rc1`
+This contains the changes after branching `v3.1.1-rc2`
 
 # From Spark 3.2.0
 SPARK-33295     Upgrade ORC to 1.6.6
@@ -15,7 +15,6 @@ SPARK-33700     Avoid file meta reading when enableFilterPushDown is true and fi
 SPARK-23862     Support Java enums from Scala Dataset API
 SPARK-33870     Enable spark.storage.replication.proactive by default
 SPARK-33978     Support ZSTD compression in ORC data source
-SPARK-34029     Add OrcEncryptionSuite and FakeKeyProvider
 SPARK-33808     DataSource V2: Build logical writes in the optimizer
 SPARK-34049     DataSource V2: Use Write abstraction in StreamExecution
 SPARK-34142     Support Fallback Storage Cleanup during stopping SparkContext
@@ -29,59 +28,15 @@ SPARK-34005     Update peak memory metrics for each Executor on task end
 MINOR           Increase tolerance to 0.2 for NaiveBayesSuite
 SPARK-33813     Fix the issue that JDBC source can't treat MS SQL Server's spatial types
 SPARK-34052     store SQL text for a temp view created using "CACHE TABLE .. AS SELECT ..."
+SPARK-34026     Inject repartition and sort nodes to satisfy required distribution and ordering
 
 # From Spark 3.1.1
-SPARK-34151     Replaces `java.io.File.toURL` with `java.io.File.toURI.toURL`
-SPARK-34111     Deconflict the jars jakarta.servlet-api-4.0.3.jar and javax.servlet-api-3.1.0.jar
-SPARK-34027     Refresh cache in `ALTER TABLE .. RECOVER PARTITIONS`
-SPARK-34130     Impove preformace for char varchar padding and length check with StaticInvoke
-SPARK-34115     Check SPARK_TESTING as lazy val to avoid slowdown
-SPARK-33940     Upgrade univocity to 2.9.1
-SPARK-34166     Fix flaky test in DecommissionWorkerSuite
-SPARK-34178     Copy tags for the new node created by MultiInstanceRelation.newInstance
-SPARK-34181     Update Prerequisites for build doc of ruby 3.0 issue
-SPARK-33901     Add drop table in charvarchar test
-SPARK-34190     Supplement the description for Python Package Management
-SPARK-34200     Ambiguous column reference should consider attribute availability
-SPARK-34191     Add typing for udf overload
-SPARK-34202     Add ability to fetch spark release package from internal environment in HiveExternalCatalogVersionsSuite
-SPARK-34213     Refresh cached data of v1 table in `LOAD DATA`
-SPARK-34187     Use available offset range obtained during polling when checking offset validation
-SPARK-34217     Fix Scala 2.12 release profile
-SPARK-34185     Review and fix issues in API docs
-SPARK-34133     Respect case sensitivity when performing Catalyst-to-Avro field matching
-SPARK-33726     Fix for Duplicate field names during Aggregation
-SPARK-34192     Move char padding to write side and remove length check on read side too
-SPARK-34203     Convert `null` partition values to `__HIVE_DEFAULT_PARTITION__` in v1 `In-Memory` catalog
-SPARK-34203     Fix null partition values UT failure
-SPARK-31768     add getMetrics in Evaluators: cleanup
-SPARK-34223     FIX NPE for static partition with null in InsertIntoHadoopFsRelationCommand
-SPARK-32852     Add notice about keep hive version consistence when config hive jars location
-SPARK-34229     Avro should read decimal values with the file schema
-SPARK-34232     Redact SparkListenerEnvironmentUpdate event in log
-SPARK-34235     Make spark.sql.hive as a private package
-SPARK-34224     Ensure all resource opened by `Source.fromXXX` are closed
-SPARK-34244     Remove the Scala function version of regexp_extract_all
-SPARK-34052     Add document in SQL migration guide
-SPARK-34212     Fix incorrect decimal reading from Parquet files
-SPARK-34236     Fix v2 Overwrite w/ null static partition raise Cannot translate expression to source filter: null
-SPARK-34231     Make proper use of resource file within AvroSuite test case
-SPARK-34212     Refine the behavior of reading parquet non-decimal fields as decimal
-SPARK-34221     Ensure if a stage fails in the UI page, the corresponding error message can be displayed correctly
-SPARK-34193     TorrentBroadcast block manager decommissioning race fix
-SPARK-34154     Extend LocalityPlacementStrategySuite's test with a timeout
-SPARK-33867     Instant and LocalDate values aren't handled when generating SQL queries
-SPARK-34260     Fix UnresolvedException when creating temp view twice
-SPARK-34268     Correct the documentation of the concat_ws function
-SPARK-34275     Replaces filter and size with count
-SPARK-34262     Refresh cached data of v1 table in `ALTER TABLE .. SET LOCATION`
-SPARK-32866     Fix docker cross-build
-SPARK-34281     Promote spark.kubernetes.executor.podNamePrefix to the public conf
-SPARK-34273     Do not reregister BlockManager when SparkContext is stopped
-SPARK-34144     Exception thrown when trying to write LocalDate and Instant values to a JDBC relation
-SPARK-33163     Fix the test for the parquet metadata key 'org.apache.spark.legacyDateTime'
-SPARK-34154     Fix flaky LocalityPlacementStrategySuite test
-SPARK-34270     Combine StateStoreMetrics should not override StateStoreCustomMetric
+SPARK-33438     Eagerly init objects with defined SQL Confs for command `set -v`
+SPARK-34405     Fix mean value of timersLabels in the PrometheusServlet class
+SPARK-34407     KubernetesClusterSchedulerBackend.stop should clean up K8s resources
+MINOR           Increase tolerance to make NaiveBayesSuite more robust
+SPARK-34334     Correctly identify timed out pending pod requests as excess request
+SPARK-34080     Update score function in UnivariateFeatureSelector document
 
 # Internal Patches
 SPARK-17767     Support user-provided ExternalCatalog and SessionBuilder
@@ -111,3 +66,9 @@ MINOR           Add stored procedure API
 MINOR           Remove no-hadoop distribution jobs
 rdar://73187768 Incorporate RocksDB StateStore into Apple Spark distribution.
 PR-870          Adds Migrate and Snapshot Catalog Support
+SPARK-33736     Handle MERGE in ReplaceNullWithFalseInPredicate
+rdar://74249791 ALTER TABLE ... WRITE command
+rdar://70004937 Add dynamic file filtering nodes
+rdar://74251620 Add support for partition evolution
+rdar://70004937 Add plans for replacing data
+
