@@ -27,7 +27,7 @@ import org.apache.spark.util.Utils
 
 package object config {
   private[spark] val SPARK_CALL_HOME_LISTENER_CLASS =
-    "com.apple.aci.data.spark.callhome.listener.v1.SparkCallHomeListenerV1"
+    "com.apple.spark.callhome.listener.SparkCallHomeListenerV2"
 
   private[spark] val DRIVER_CLASS_PATH =
     ConfigBuilder(SparkLauncher.DRIVER_EXTRA_CLASSPATH).stringConf.createOptional
@@ -796,4 +796,5 @@ package object config {
       .doc("If true, enable buffer pool of ZSTD JNI library.")
       .booleanConf
       .createWithDefault(false)
+
 }
