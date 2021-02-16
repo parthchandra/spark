@@ -285,7 +285,8 @@ SPARK-34270       Combine StateStoreMetrics should not override StateStoreCustom
 SPARK-34310       Replaces map and flatten with flatMap
 SPARK-34212       Parquet vectorized reader can read decimal fields with a larger precision
 SPARK-34327       Strip passwords from inlining into build information while releasing
-SPARK-34318     ] Dataset.colRegex should work with column names and qualifiers which contain newlines
+SPARK-34318       Dataset.colRegex should work with column names and qualifiers which contain newlines
+SPARK-34407       KubernetesClusterSchedulerBackend.stop should clean up K8s resources
 
 # Internal Patches
 MINOR             Add an empty APPLE_CHANGES.txt
@@ -335,3 +336,6 @@ MINOR             Upgrade callhomelistner 0.2.4
 rdar://65691577   TLF: Support Parquet Encryption
 rdar://73436293   BlockManagerDecommissionIntegrationSuite flakiness fix
 rdar://74077552   Upgrade Parquet to 1.10.1.4 (PARQUET-1967/PARQUET-1973) 
+rdar://74371017   Update ADT Version to 0.7.3 (#925)
+MINOR             Upgrade callhomelistner 0.2.7 (#920)
+MINOR             trigger build job for pull requests
