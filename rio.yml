@@ -570,7 +570,7 @@ builds:
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
-      template: freestyle:v4:pr
+      template: freestyle:v4:prb
       steps:
         - build/sbt -Phadoop-3.2 "streaming-kafka-0-10/test" "sql-kafka-0-10/test"
     reports:
