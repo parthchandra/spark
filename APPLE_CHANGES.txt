@@ -399,6 +399,12 @@ SPARK-34359      Add a legacy config to restore the output schema of SHOW DATABA
 SPARK-34346      io.file.buffer.size set by spark.buffer.size will override by loading hive-site.xml accidentally may cause perf regression
 SPARK-34346      Fix UT by removing core-site.xml
 SPARK-33438      Eagerly init objects with defined SQL Confs for command `set -v`
+SPARK-34405      Fix mean value of timersLabels in the PrometheusServlet class
+SPARK-34407      KubernetesClusterSchedulerBackend.stop should clean up K8s resources
+MINOR            Increase tolerance to make NaiveBayesSuite more robust
+SPARK-34431      Only load `hive-site.xml` once
+SPARK-34201      Fix the test code build error for docker-integration-tests
+SPARK-34442      Pin Sphinx version to `sphinx<3.5.0`
 
 # Internal Patche
 rdar://72034392  Wait for the executor JVM to finish before returning decom.sh (fixed upstream but differently).
@@ -467,3 +473,5 @@ rdar://74077552  Upgrade Parquet to 1.10.1.4 (PARQUET-1967/PARQUET-1973)
 rdar://73724010  Exclude filesystems from token renewal
 rdar://74001493  Add Dataset pipe API
 N/A              Add an option for limiting storage for shuffle blocks
+MINOR            Upgrade callhomelistner 0.2.7 (#921)
+MINOR            trigger build job for pull requests
