@@ -22,7 +22,6 @@ import java.io.{ByteArrayInputStream, ByteArrayOutputStream}
 import com.google.common.io.ByteStreams
 
 import org.apache.spark.{SparkConf, SparkFunSuite}
-import org.apache.spark.internal.config.IO_COMPRESSION_ZSTD_BUFFERPOOL_ENABLED
 
 class CompressionCodecSuite extends SparkFunSuite {
   val conf = new SparkConf(false)
@@ -106,12 +105,9 @@ class CompressionCodecSuite extends SparkFunSuite {
   }
 
   test("zstd compression codec") {
-    Seq("true", "false").foreach { flag =>
-      val conf = new SparkConf(false).set(IO_COMPRESSION_ZSTD_BUFFERPOOL_ENABLED.key, flag)
-      val codec = CompressionCodec.createCodec(conf, classOf[ZStdCompressionCodec].getName)
-      assert(codec.getClass === classOf[ZStdCompressionCodec])
-      testCodec(codec)
-    }
+    val codec = CompressionCodec.createCodec(conf, classOf[ZStdCompressionCodec].getName)
+    assert(codec.getClass === classOf[ZStdCompressionCodec])
+    testCodec(codec)
   }
 
   test("zstd compression codec short form") {
