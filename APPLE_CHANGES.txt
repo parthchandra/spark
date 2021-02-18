@@ -1,4 +1,4 @@
-This contains the changes after creating `v3.0.1`
+This contains the changes after creating `v3.0.2-rc1`
 
 # Form Spark 3.2.0
 SPARK-33621     Add a way to inject data source rewrite rules
@@ -14,6 +14,7 @@ SPARK-34217     Fix Scala 2.12 release profile
 SPARK-34391     Upgrade commons-io to 2.8.0
 SPARK-34340     Support ZSTD JNI BufferPool
 SPARK-34316     Support spark.kubernetes.executor.disableConfigMap
+SPARK-34323     Upgrade zstd-jni to 1.4.8-3
 
 # From Spark 3.1.0
 SPARK-25355      Add proxy user to driver if present on spark-submit
@@ -122,291 +123,8 @@ SPARK-34187      Use available offset range obtained during polling when checkin
 SPARK-33843      Upgrade to Zstd 1.4.8
 
 # From Spark 3.0.2
-SPARK-28612      Correct method doc of DataFrameWriterV2.replace()
-SPARK-32693      Compare two dataframes with same schema except nullable property
-SPARK-31511      Make BytesToBytesMap iterators thread-safe
-SPARK-32747      Deduplicate configuration set/unset in test_sparkSQL_arrow.R
-MINOR            Fix a R style in try and finally at DataFrame.R
-SPARK-32659      Improve test for pruning DPP on non-atomic type
-SPARK-32624      Fix regression in CodegenContext.addReferenceObj on nested Scala types
-SPARK-32774      Don't track docs/.jekyll-cache
-SPARK-32771      The example of expressions.Aggregator in Javadoc / Scaladoc is wrong
-SPARK-32776      Limit in streaming should not be optimized away by PropagateEmptyRelation
-SPARK-32788      non-partitioned table scan should not have partition filter
-SPARK-32767      Bucket join should work if spark.sql.shuffle.partitions larger than bucket number
-SPARK-32786      Improve performance for some slow DPP tests
-SPARK-32791      Non-partitioned table metric should not have dynamic partition pruning time
-SPARK-32779      Avoid using synchronized API of SessionCatalog in withClient flow, this leads to DeadLock
-SPARK-32810      CSV/JSON data sources should avoid globbing paths when inferring schema
-SPARK-32812      Avoid initiating a process during the main process for run-tests.py
-SPARK-32764      -0.0 should be equal to 0.0
-SPARK-32785      Interval with dangling parts should not result null
-SPARK-31511      Make BytesToBytesMap iterators thread-safe
-SPARK-32753      Only copy tags to node with no tags
-SPARK-32815      Fix LibSVM data source loading error on file paths with glob metacharacters
-SPARK-32638      Corrects references when adding aliases in WidenSetOperationTypes
-SPARK-32824      Improve the error message when the user forgets the .amount in a resource config
-SPARK-32823      Fix the master ui resources reporting
-SPARK-32813      Get default config of ParquetSource vectorized reader if no active SparkSession
-SPARK-32810      Check path globbing in JSON/CSV datasources v1 and v2
-SPARK-32794      Fixed rare corner case error in micro-batch engine with some stateful queries + no-data-batches + V1 sources
-SPARK-32836      Fix DataStreamReaderWriterSuite to check writer options correctly
-SPARK-32832      Use CaseInsensitiveMap for DataStreamReader/Writer options
-SPARK-32819      ignoreNullability parameter should be effective recursively
-SPARK-32840      Invalid interval value can happen to be just adhesive with the unit
-SPARK-32677      Improve code comment in CreateFunctionCommand
-SPARK-32845      Add sinkParameter to check sink options robustly in DataStreamReaderWriterSuite
-SPARK-32779      Delete Unused code
-SPARK-32865      python section in quickstart page doesn't display SPARK_VERSION correctly
-SPARK-32876      Change default fallback versions to 3.0.1 and 2.4.7 in HiveExternalCatalogVersionsSuite
-SPARK-32872      Prevent BytesToBytesMap at MAX_CAPACITY from exceeding growth threshold
-SPARK-32715      Fix memory leak when failed to store pieces of broadcast
-SPARK-32688      Add special values to LiteralGenerator for float and double
-SPARK-32888      Add user document about header flag and RDD as path for reading CSV
-SPARK-32897      Don't show a deprecation warning at SparkSession.builder.getOrCreate
-SPARK-32900      Allow UnsafeExternalSorter to spill when there are nulls
-SPARK-32887      Correct the typo for SHOW TABLE
-SPARK-32738      Should reduce the number of active threads if fatal error happens in `Inbox.process`
-SPARK-32635      Fix foldable propagation
-SPARK-32908      Fix target error calculation in `percentile_approx()`
-SPARK-32906      Struct field names should not change after normalizing floats
-SPARK-32905      ApplicationMaster fails to receive UpdateDelegationTokens message
-SPARK-32930      Replace deprecated isFile/isDirectory methods
-SPARK-32635      Add a new test case in catalyst module
-SPARK-32898      Fix wrong executorRunTime when task killed before real start
-SPARK-32886      fix 'undefined' link in event timeline view
-SPARK-32718      Remove unnecessary keywords for interval units
-SPARK-32659      Broadcast Array instead of Set in InSubqueryExec
-SPARK-32977      Fix JavaDoc on Default Save Mode
-SPARK-32306      Clarify the result of `percentile_approx()`
-MINOR            Improve examples for `percentile_approx()`
-SPARK-32877      Add test for Hive UDF complex decimal type
-SPARK-32999      Use Utils.getSimpleName to avoid hitting Malformed class name in TreeNode
-SPARK-33019      Use spark.hadoop.mapreduce.fileoutputcommitter.algorithm.version=1 by default
-SPARK-33015      Compute the current date only once
-MINOR            Document when `current_date` and `current_timestamp` are evaluated
-SPARK-33021      Move functions related test cases into test_functions.py
-SPARK-33015      Use millisToDays() in the ComputeCurrentTime rule
-SPARK-32901      Do not allocate memory while spilling UnsafeExternalSorter
-MINOR            Fixing log message for better clarity
-SPARK-33018      Fix estimate statistics issue if child has 0 bytes
-SPARK-31753      Add missing keywords in the SQL docs
-MINOR            Corrects input table names in the examples of CREATE FUNCTION doc
-SPARK-32996      Handle empty ExecutorMetrics in ExecutorMetricsJsonSerializer
-SPARK-33051      Uses setup-r to install R in GitHub Actions build
-SPARK-33043      Handle spark.driver.maxResultSize=0 in RowMatrix heuristic computation
-SPARK-33065      Expand the stack size of a thread in a test in LocalityPlacementStrategySuite for Java 11 with sbt
-SPARK-33069      Skip test result report if no JUnit XML files are found
-SPARK-27428      Increase receive buffer size used in StatsdSinkSuite
-SPARK-33035      Updates the obsoleted entries of attribute mapping in QueryPlan#transformUpWithNewOutput
-SPARK-33073      Improve error handling on Pandas to Arrow conversion failures
-SPARK-32067      Use unique ConfigMap name for executor pod template
-SPARK-33089      make avro format propagate Hadoop config from DS options to underlying HDFS file system
-SPARK-33091      Avoid using map instead of foreach to avoid potential side effect at callers of OrcUtils.readCatalystSchema
-SPARK-33096      Use LinkedHashMap instead of Map for newlyCreatedExecutors
-SPARK-33101      Make LibSVM format propagate Hadoop config from DS options to underlying HDFS file system
-SPARK-33094      Make ORC format propagate Hadoop config from DS options to underlying HDFS file system
-SPARK-33118      CREATE TEMPORARY TABLE fails with location
-SPARK-33115      Fix javadoc errors in `kvstore` and `unsafe` modules
-SPARK-33134      Return partial results only for root JSON objects
-SPARK-33136      Fix mistakenly swapped parameter in V2WriteCommand.outputResolved
-SPARK-33153      Ignore Spark 2.4 in HiveExternalCatalogVersionsSuite on Python 3.8/3.9
-SPARK-33078      Add config for json expression optimization
-SPARK-33163      Check the metadata key 'org.apache.spark.legacyDateTime' in Avro/Parquet files
-SPARK-33165      Remove dependencies(scalatest,scalactic) from Benchmark
-SPARK-32761      Allow aggregating multiple foldable distinct expressions
-SPARK-33165      Use scala.Predef.assert instead
-SPARK-33171      Mark ParquetV*FilterSuite/ParquetV*SchemaPruningSuite as ExtendedSQLTest
-SPARK-32436      Initialize numNonEmptyBlocks in HighlyCompressedMapStatus.readExternal
-SPARK-33131      Fix grouping sets with having clause can not resolve qualified col name
-SPARK-33170      Add SQL config to control fast-fail behavior in FileFormatWriter
-MINOR            Fix the Python manual_load_options_csv example
-SPARK-33176      Use 11-jre-slim as default in K8s Dockerfile
-SPARK-33228      Don't uncache data when replacing a view having the same logical plan
-SPARK-30821      Handle executor failure with multiple containers
-SPARK-32247      Install and test scipy with PyPy in GitHub Actions
-SPARK-33189      Fix syntax error in python/run-tests.py
-SPARK-32785      Update migration guide for incomplete interval literals
-SPARK-33189      Add env var to tests for legacy nested timestamps in pyarrow
-MINOR            Fix the description about to_avro and from_avro functions
-SPARK-33190      Set upper bound of PyArrow version in GitHub Actions
-SPARK-33181      Document Load Table Directly from File in SQL Select Reference
-SPARK-32557      Logging and swallowing the exception per entry in History server
-SPARK-33123      Ignore GitHub only changes in Amplab Jenkins build
-SPARK-33197      Make changes to spark.sql.analyzer.maxIterations take effect at runtime
-SPARK-33230      Hadoop committers to get unique job ID in "spark.sql.sources.writeJobUUID"
-SPARK-33260      Fix incorrect results from SortExec when sortOrder is Stream
-SPARK-33246      Correct documentation for null semantics of "NULL AND False"
-SPARK-32090      Improve UserDefinedType.equal() to make it be symmetrical
-SPARK-33264      Add a dedicated page for SQL-on-file in SQL documents
-SPARK-33208      Update the document of SparkSession#sql
-SPARK-33267      Fix NPE issue on 'In' filter when one of values contains null
-MINOR            Update from_unixtime doc
-SPARK-33292      Make Literal ArrayBasedMapData string representation disambiguous
-SPARK-33268      Fix bugs for casting data from/to PythonUserDefinedType
-SPARK-33183      Fix Optimizer rule EliminateSorts and add a physical rule to remove redundant sorts
-SPARK-33290      REFRESH TABLE should invalidate cache even though the table itself may not be cached
-SPARK-33306      Timezone is needed when cast date to string
-SPARK-33277      Use ContextAwareIterator to stop consuming after the task ends
-SPARK-33313      Add testthat 3.x support
-SPARK-33156      Upgrade GithubAction image from 18.04 to 20.04
-SPARK-33284      In the Storage UI page, clicking any field to sort the table will cause the header content to be lost
-SPARK-33338      GROUP BY using literal map should not fail
-SPARK-33162      Use pre-built image at GitHub Action PySpark jobs
-SPARK-33239      Use pre-built image at GitHub Action SparkR job
-Revert           SPARK-33277 Use ContextAwareIterator to stop consuming after the task ends
-MINOR            SS DOCS: Update join type in stream static joins code examples
-SPARK-33362      skipSchemaResolution should still require query to be resolved
-SPARK-32860      Updating documentation about map support in Encoders
-SPARK-33371      Update setup.py and tests for Python 3.9
-SPARK-33372      Fix InSet bucket pruning
-SPARK-33397      Fix generating md to html for available-patterns-for-shs-custom-executor-log-url
-SPARK-33405      Upgrade commons-compress to 1.20
-SPARK-33391      element_at with CreateArray not respect one based index
-SPARK-33339      Pyspark application will hang due to non Exception error
-SPARK-33417      Correct the behaviour of query filters in TPCDSQueryBenchmark
-SPARK-33412      OverwriteByExpression should resolve its delete condition based on the table relation not the input query
-SPARK-33402      Jobs launched in same second have duplicate MapReduce JobIDs
-SPARK-33404      Fix incorrect results in `date_trunc` expression
-SPARK-33408      Use R 3.6.3 in K8s R image
-MINOR            spark.executor.memoryOverhead is not cluster-mode only
-SPARK-33435      DSv2: REFRESH TABLE should invalidate caches referencing the table
-SPARK-33439      Use SERIAL_SBT_TESTS=1 for SQL modules
-SPARK-33333      Upgrade Jetty to 9.4.28.v20200408
-SPARK-24266      Restart the watcher when we receive a version changed from k8s
-SPARK-33358      Return code when command process failed
-SPARK-33451      Change to 'spark.sql.adaptive.skewJoin.skewedPartitionThresholdInBytes' in documentation
-MINOR            Correct typos in the sub-modules: graphx, external, and examples
-SPARK-33464      Add/remove (un)necessary cache and restructure GitHub Actions yaml
-SPARK-27421      Fix filter for int column and value class java.lang.String when pruning partition column
-SPARK-33483      Fix rat exclusion patterns and add a LICENSE
-SPARK-33422      Fix the correct display of left menu item
-SPARK-33472      Adjust RemoveRedundantSorts rule order
-MINOR            Suppress warning in check-license
-SPARK-33535      Export LANG to en_US.UTF-8 in run-tests-jenkins script
-SPARK-33565      Remove py38 spark3
-SPARK-33565      Keep the test coverage with Python 3.8 in GitHub Actions
-SPARK-33585      Fix the comment for `SQLContext.tables()` and mention the `database` column
-SPARK-33579      Fix executor blank page behind proxy
-SPARK-33588      Respect the `spark.sql.caseSensitive` config while resolving partition spec in v1 `SHOW TABLE EXTENDED`
-SPARK-33440      Use current timestamp with warning log in HadoopFSDelegationTokenProvider when the issue date for token is not set up properly
-SPARK-33611      Avoid encoding twice on the query parameter of rewritten proxy URL
-SPARK-33631      Clean up spark.core.connection.ack.wait.timeout from configuration.md
-SPARK-33636      Add labelsArray to PySpark StringIndexer
-SPARK-33629      Make spark.buffer.size configuration visible on driver side
-SPARK-33660      Fix Kafka Headers Documentation
-SPARK-33571      Add a ref to INT96 config from the doc for `spark.sql.legacy.parquet.datetimeRebaseModeInWrite/Read`
-MINOR            Fix string interpolation in CommandUtils.scala and KafkaDataConsumer.scala
-SPARK-33667      Respect the `spark.sql.caseSensitive` config while resolving partition spec in v1 `SHOW PARTITIONS`
-SPARK-33675      Add GitHub Action job to publish snapshot
-SPARK-33592      Backport Fix: Pyspark ML Validator params in estimatorParamMaps may be lost after saving and reloading
-SPARK-33670      Verify the partition provider is Hive in v1 SHOW TABLE EXTENDED
-SPARK-32680      Don't Preprocess V2 CTAS with Unresolved Query
-SPARK-33677      Skip LikeSimplification rule if pattern contains any escapeChar
-SPARK-32110      normalize special floating numbers in HyperLogLog++
-SPARK-33727      Fall back from gnupg.net to openpgp.org
-SPARK-33725      Upgrade snappy-java to 1.1.8.2
-SPARK-33732      Kubernetes integration tests doesn't work with Minikube 1.9+
-SPARK-33749      Exclude target directory in pycodestyle and flake8
-SPARK-33740      hadoop configs in hive-site.xml can overrides pre-existing hadoop ones
-SPARK-33757      Fix the R dependencies build error on GitHub Actions and AppVeyor
-SPARK-33742      Throw PartitionsAlreadyExistException from HiveExternalCatalog.createPartitions()
-MINOR            Correct JobPage's skipped/pending tableHeaderId
-SPARK-33757      Provide more simple solution
-SPARK-33770      Fix the `ALTER TABLE .. DROP PARTITION` tests that delete files out of partition path
-SPARK-33786      The storage level for a cache should be respected when a table name is altered
-SPARK-33788      Throw NoSuchPartitionsException from HiveExternalCatalog.dropPartitions()
-SPARK-33793      Introduce withExecutor to ensure proper cleanup in tests
-SPARK-33733      PullOutNondeterministic should check and collect deterministic field
-SPARK-33819      SingleFileEventLogFileReader/RollingEventLogFilesFileReader should be `package private`
-SPARK-33774      Back to Master" returns 500 error in Standalone cluster
-SPARK-33831      Update to jetty 9.4.34
-SPARK-33593      Vector reader got incorrect data with binary partition value
-SPARK-33841      Fix issue with jobs disappearing intermittently from the SHS under high load
-SPARK-33756      Make BytesToBytesMap's MapIterator idempotent
-SPARK-33853      EXPLAIN CODEGEN and BenchmarkQueryTest don't show subquery code
-SPARK-33869      Have a separate metastore directory for each PySpark test job
-SPARK-28863      Make sure optimized plan will not be re-analyzed
-BUILD            Do not publish snapshots from forks
-SPARK-33891      Update dynamic allocation related documents
-SPARK-33277      Use ContextAwareIterator to stop consuming after the task ends
-SPARK-33900      Show shuffle read size / records correctly when only remotebytesread is available
-SPARK-33911      Update the SQL migration guide about changes in `HiveClientImpl`
-MINOR            Call fetchEarliestOffsets when it is necessary
-SPARK-33942      Remove `hiveClientCalls.count` in `CodeGenerator` metrics docs
-SPARK-33931      Recover GitHub Action `build_and_test` job
-SPARK-33963      Canonicalize `HiveTableRelation` w/o table stats
-SPARK-33398      Fix loading tree models prior to Spark 3.0
-SPARK-33950      Refresh cache in v1 `ALTER TABLE .. DROP PARTITION`
-SPARK-34000      Fix stageAttemptToNumSpeculativeTasks java.util.NoSuchElementException
-SPARK-34010      Use python3 instead of python in SQL documentation build
-SPARK-33935      Fix CBO cost function
-SPARK-33844      InsertIntoHiveDir command should check col name too
-SPARK-33635      Adjust the order of check in KafkaTokenUtil.needTokenUpdate to remedy perf regression
-SPARK-33029      Fix the UI executor page incorrectly marking the driver as blacklisted
-SPARK-34012      Keep behavior consistent when conf `spark.sqllegacy.parser.havingWithoutGroupByAsWhere` is true with migration guide
-SPARK-34011      Refresh cache in `ALTER TABLE .. RENAME TO PARTITION`
-SPARK-33100      Ignore a semicolon inside a bracketed comment in spark-sql
-SPARK-34055      Refresh cache in `ALTER TABLE .. ADD PARTITION`
-SPARK-33591      Recognize `null` in partition spec values
-MINOR            Improve flaky NaiveBayes test
-SPARK-34060      Fix Hive table caching while updating stats by `ALTER TABLE .. DROP PARTITION`
-SPARK-34059      Use for/foreach rather than map to make sure execute it eagerly
-SPARK-31952      Fix incorrect memory spill metric when doing Aggregate
-SPARK-32691      Bump commons-crypto to v1.1.0
-SPARK-34084      Fix auto updating of table stats in `ALTER TABLE .. ADD PARTITION`
-SPARK-34103      Fix MiMaExcludes by moving SPARK-23429 from 2.4 to 3.0
-SPARK-33557      Ensure the relationship between STORAGE_BLOCKMANAGER_HEARTBEAT_TIMEOUT and NETWORK_TIMEOUT
-SPARK-34116      Separate state store numKeys metric test and validate metrics after committing
-SPARK-34118      Replaces filter and check for emptiness with exists or forall
-SPARK-33790      Reduce the rpc call of getFileStatus in SingleFileEventLogFileReader
-SPARK-32598      Fix missing driver logs under UI App-Executors tab in standalone cluster mode
-SPARK-33711      Avoid race condition between POD lifecycle manager and scheduler backend
-SPARK-34060      Preserve serializability of canonicalized CatalogTable
-MINOR            Update Parquet website link
-MINOR            Fix typos in sql-ref-datatypes.md
-SPARK-33819      Restore the constructor of SingleFileEventLogFileReader to remove Mima exclusion
-SPARK-34027      Refresh cache in `ALTER TABLE .. RECOVER PARTITIONS`
-SPARK-34153      Remove unused `getRawTable()` from `HiveExternalCatalog.alterPartitions()`
-MINOR            Increase the timeout for StreamingLinearRegressionSuite to 60s
-SPARK-34115      Check SPARK_TESTING as lazy val to avoid slowdown
-SPARK-34203      Convert `null` partition values to `__HIVE_DEFAULT_PARTITION__` in v1 `In-Memory` catalog
-SPARK-34223      FIX NPE for static partition with null in InsertIntoHadoopFsRelationCommand
-SPARK-34229      Avro should read decimal values with the file schema
-SPARK-34224      Ensure all resource opened by `Source.fromXXX` are closed
-SPARK-34212      Fix incorrect decimal reading from Parquet files
-SPARK-34231      Make proper use of resource file within AvroSuite test case
-SPARK-34212      Refine the behavior of reading parquet non-decimal fields as decimal
-SPARK-34221      Ensure if a stage fails in the UI page, the corresponding error message can be displayed correctly
-SPARK-34154      Extend LocalityPlacementStrategySuite's test with a timeout
-SPARK-34268      Correct the documentation of the concat_ws function
-SPARK-34260      Fix UnresolvedException when creating temp view twice
-SPARK-34262      Refresh cached data of v1 table in `ALTER TABLE .. SET LOCATION`
-SPARK-34275      Replaces filter and size with count
-SPARK-34273      Do not reregister BlockManager when SparkContext is stopped
-SPARK-33867      Instant and LocalDate values aren't handled when generating SQL queries
-SPARK-34144      Exception thrown when trying to write LocalDate and Instant values to a table
-SPARK-33163      Fix the test for the parquet metadata key 'org.apache.spark.legacyDateTime'
-SPARK-34154      Fix flaky LocalityPlacementStrategySuite test
-SPARK-34270      Combine StateStoreMetrics should not override StateStoreCustomMetric
-SPARK-34310      Replaces map and flatten with flatMap
-SPARK-34319      Resolve duplicate attributes for FlatMapCoGroupsInPandas/MapInPandas
-SPARK-33591      Add legacy config for recognizing null partition spec values
-SPARK-34212      Parquet vectorized reader can read decimal fields with a larger precision
-SPARK-34327      Strip passwords from inlining into build information while releasing
-SPARK-34318      Dataset.colRegex should work with column names and qualifiers which contain newlines
-SPARK-34359      Add a legacy config to restore the output schema of SHOW DATABASES
-SPARK-34346      io.file.buffer.size set by spark.buffer.size will override by loading hive-site.xml accidentally may cause perf regression
-SPARK-34346      Fix UT by removing core-site.xml
-SPARK-33438      Eagerly init objects with defined SQL Confs for command `set -v`
-SPARK-34405      Fix mean value of timersLabels in the PrometheusServlet class
-SPARK-34407      KubernetesClusterSchedulerBackend.stop should clean up K8s resources
-MINOR            Increase tolerance to make NaiveBayesSuite more robust
-SPARK-34431      Only load `hive-site.xml` once
-SPARK-34201      Fix the test code build error for docker-integration-tests
-SPARK-34442      Pin Sphinx version to `sphinx<3.5.0`
 
-# Internal Patche
+# Internal Patch
 rdar://72034392  Wait for the executor JVM to finish before returning decom.sh (fixed upstream but differently).
 rdar://71329454  New Hive release for the Avro compatibility issue
 rdar://71819374  Bridge in LZO codec family
@@ -437,13 +155,11 @@ MINOR            Use parquet-1.10.1.1-apple to support zstd parquet
 MINOR            Add rio.yml and dev scripts
 MINOR            Use Apple Hadoop 3.2.0.2-apple
 MINOR            Add https://artifacts.apple.com/libs-release to spark.sql.maven.additionalRemoteRepositories
-MINOR            Bump to 3.0.1.1-apple-SNAPSHOT
-MINOR            Bump to 3.0.1.2-apple-SNAPSHOT after 3.0.1.1-apple release
 rdar://68926116  Add alternative conf name `spark.FsUrlStreamHandlerFactory.enabled`
 rdar://69319047  Spark should reject invalid CatalogImplementation Configuration
 MINOR            Reduce log level from Error to Info for decom messages
 rdar://69905256  Change restart policy back to never
-rdar://66018002   TLF: Native libs by using Apple Hadoop 3.2.0.3
+rdar://66018002  TLF: Native libs by using Apple Hadoop 3.2.0.3
 MINOR            Support S3 env variables
 rdar://70330474  Support InstanceProfileCredentialsProvider
 MINOR            Adjust log messages
@@ -465,7 +181,6 @@ MINOR            Support disable AJAX call on Stage Page (#745)
 rdar://72919239  HMS Client backward compatibility issue
 MINOR            Remove no-hadoop distribution jobs
 rdar://73187768  Incorporate RocksDB StateStore into Apple Spark distribution.
-MINOR            Upgrade callhomelistner (#873)
 rdar://72891915  Parquet encryption support via switch to parquet-1.10.1.3-apple
 PR-854           Adds Migrate and Snapshot Catalog Support
 MINOR            Generate comments.sql.out for MIGRATE/SNAPSHOT commands
