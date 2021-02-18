@@ -12,7 +12,6 @@ SPARK-34181     Update Prerequisites for build doc of ruby 3.0 issue
 SPARK-33813     Fix the issue that JDBC source can't treat MS SQL Server's spatial types
 SPARK-34217     Fix Scala 2.12 release profile
 SPARK-34391     Upgrade commons-io to 2.8.0
-SPARK-34340     Support ZSTD JNI BufferPool
 SPARK-34316     Support spark.kubernetes.executor.disableConfigMap
 
 # From Spark 3.1.0
