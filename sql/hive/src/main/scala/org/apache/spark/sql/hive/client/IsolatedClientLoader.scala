@@ -111,6 +111,7 @@ private[hive] object IsolatedClientLoader extends Logging {
   def supportsHadoopShadedClient(hadoopVersion: String): Boolean = {
     VersionUtils.majorMinorPatchVersion(hadoopVersion).exists {
       case (3, 2, v) if v >= 2 => true
+      case (3, 3, _) if hadoopVersion.contains("apple") => true
       case _ => false
     }
   }
