@@ -120,7 +120,7 @@
     <sbt.project.name>spark</sbt.project.name>
     <slf4j.version>1.7.30</slf4j.version>
     <log4j.version>1.2.17</log4j.version>
-    <hadoop.version>3.2.0.3-apple</hadoop.version>
+    <hadoop.version>3.3.0.2-apple</hadoop.version>
     <protobuf.version>2.5.0</protobuf.version>
     <yarn.version>${hadoop.version}</yarn.version>
     <zookeeper.version>3.4.14</zookeeper.version>
@@ -195,6 +195,7 @@
     <htmlunit.version>2.40.0</htmlunit.version>
     <acispark.callhome.version>0.2.0</acispark.callhome.version>
     <iceberg.version>0.12.0-apple-preview-5</iceberg.version>
+    <bouncycastle.version>1.52</bouncycastle.version>
     <!--
     Managed up from older version from Avro; sync with jackson-module-paranamer dependency version
     -->
@@ -1207,6 +1208,18 @@
             <artifactId>api-ldap-schema-data</artifactId>
           </exclusion>
         </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>org.bouncycastle</groupId>
+        <artifactId>bcprov-jdk15on</artifactId>
+        <version>${bouncycastle.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.bouncycastle</groupId>
+        <artifactId>bcpkix-jdk15on</artifactId>
+        <version>${bouncycastle.version}</version>
+        <scope>test</scope>
       </dependency>
       <!-- Managed up to match Hadoop in HADOOP-16530 -->
       <dependency>
