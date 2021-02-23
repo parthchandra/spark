@@ -238,6 +238,7 @@ class Analyzer(
       ResolveAggregateFunctions ::
       TimeWindowing ::
       ResolveInlineTables(conf) ::
+      ResolveSessionWindow ::
       ResolveHigherOrderFunctions(v1SessionCatalog) ::
       ResolveLambdaVariables(conf) ::
       ResolveTimeZone(conf) ::
@@ -3506,6 +3507,80 @@ object TimeWindowing extends Rule[LogicalPlan] {
       } else if (numWindowExpr > 1) {
         p.failAnalysis("Multiple time window expressions would result in a cartesian product " +
           "of rows, therefore they are currently not supported.")
+      } else {
+        p // Return unchanged. Analyzer will throw exception later
+      }
+  }
+}
+
+/**
+ * Replace the [[SessionWindowExpression]] in Aggregate node, this rule will add [[SessionWindow]]
+ * as the current Aggregate's new child. It will throw [[AnalysisException]] while
+ * [[SessionWindowExpression]] is the only column in group by.
+ */
+object ResolveSessionWindow extends Rule[LogicalPlan] {
+
+  private def hasWindowFunction(groupList: Seq[Expression]): Boolean =
+    groupList.exists(hasWindowFunction)
+
+  private def hasWindowFunction(expr: Expression): Boolean = {
+    expr.find {
+      case window: SessionWindowExpression => true
+      case _ => false
+    }.isDefined
+  }
+
+  private final val WINDOW_COL_NAME = "session_window"
+
+  def apply(plan: LogicalPlan): LogicalPlan = plan.resolveOperators {
+    case p @ Aggregate(groupingExpr, aggregateExpr, _) if hasWindowFunction(groupingExpr) =>
+      val child = p.child
+      val windowExpressions =
+        p.expressions.flatMap(_.collect { case t: SessionWindowExpression => t }).toSet
+
+      val numWindowExpr = windowExpressions.size
+      // Only support a single session window expression for now
+      if (numWindowExpr == 1 &&
+        windowExpressions.head.timeColumn.resolved &&
+        windowExpressions.head.checkInputDataTypes().isSuccess) {
+
+        val window = windowExpressions.head
+
+        val metadata = window.timeColumn match {
+          case a: Attribute => a.metadata
+          case _ => Metadata.empty
+        }
+
+        val windowAttr = AttributeReference(
+          WINDOW_COL_NAME, window.dataType, metadata = metadata)()
+
+        // check partitionExpression in groupingExpr
+        val partitionExpression = groupingExpr.filterNot(hasWindowFunction)
+        if (partitionExpression.isEmpty) {
+          p.failAnalysis("Cannot use session_window as the only group by column.")
+        }
+
+        val withWindow = SessionWindow(
+          windowAttr, window.timeColumn, partitionExpression, window.windowGap, child)
+
+        // replace session_window column into windowAttr
+        val newGroupingExpr = groupingExpr.map { _.transform {
+          case s: SessionWindowExpression =>
+            windowAttr
+        }}
+        val newAggExpr = aggregateExpr.map { _.transform {
+          case u: UnresolvedAttribute =>
+            windowAttr
+        }.asInstanceOf[NamedExpression]}
+
+        val plan = p.copy(groupingExpressions = newGroupingExpr, aggregateExpressions = newAggExpr)
+          .withNewChildren(Project(windowAttr +: child.output, withWindow) :: Nil)
+
+        plan transformExpressions {
+          case s: SessionWindowExpression => windowAttr
+        }
+      } else if (numWindowExpr > 1) {
+        p.failAnalysis("Multiple session windows are currently not supported.")
       } else {
         p // Return unchanged. Analyzer will throw exception later
       }

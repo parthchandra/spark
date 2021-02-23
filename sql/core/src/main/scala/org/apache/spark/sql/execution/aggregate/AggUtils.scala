@@ -19,8 +19,8 @@ package org.apache.spark.sql.execution.aggregate
 
 import org.apache.spark.sql.catalyst.expressions._
 import org.apache.spark.sql.catalyst.expressions.aggregate._
-import org.apache.spark.sql.execution.SparkPlan
-import org.apache.spark.sql.execution.streaming.{StateStoreRestoreExec, StateStoreSaveExec}
+import org.apache.spark.sql.execution.{SessionWindowMergeExec, SparkPlan}
+import org.apache.spark.sql.execution.streaming._
 
 /**
  * Utility functions used by the query planner to convert our plan to new aggregation code path.
@@ -262,6 +262,16 @@ object AggUtils {
    *  - PartialMerge (now there is at most 1 tuple per group)
    *  - StateStoreSave (saves the tuple for the next batch)
    *  - Complete (output the current result of the aggregation)
+   *
+   * Plans a streaming aggregation with Session Window using the following progression:
+   *  - (Shuffle + Session Window Assignment, see `SessionWindowExec`)
+   *  - Partial Aggregation (now there is at most 1 tuple per group)
+   *  - SessionStateStoreRestore (now there is 1 tuple from this batch + optionally one from
+   *    the previous)
+   *  - SessionWindowMergeExec (merge session window by change window's starttime && endtime)
+   *  - PartialMerge (now there is at most 1 tuple per group)
+   *  - StateStoreSave (saves the tuple for the next batch)
+   *  - Complete (output the current result of the aggregation)
    */
   def planStreamingAggregation(
       groupingExpressions: Seq[NamedExpression],
@@ -270,7 +280,18 @@ object AggUtils {
       stateFormatVersion: Int,
       child: SparkPlan): Seq[SparkPlan] = {
 
+    val sessionWindowAgg = AggUtils.hasSessionWindowExpression(groupingExpressions)
     val groupingAttributes = groupingExpressions.map(_.toAttribute)
+
+    // extract SessionWindowExpression
+    val windowExpressions = groupingAttributes.flatMap(_.collect {
+      case t: Attribute if t.name == "session_window" => t
+    }).toSet
+    assert(!sessionWindowAgg || windowExpressions.size == 1,
+      "Only support a single session window expression for now")
+
+    // filter SessionWindowExpression, use rest group Expression as Distribution Attribute
+    val sessionSpecAttribute = groupingAttributes.filter(_.name != "session_window")
 
     val partialAggregate: SparkPlan = {
       val aggregateExpressions = functionsWithoutDistinct.map(_.copy(mode = Partial))
@@ -284,41 +305,57 @@ object AggUtils {
         child = child)
     }
 
-    val partialMerged1: SparkPlan = {
-      val aggregateExpressions = functionsWithoutDistinct.map(_.copy(mode = PartialMerge))
-      val aggregateAttributes = aggregateExpressions.map(_.resultAttribute)
-      createAggregate(
-        requiredChildDistributionExpressions =
+    val (partialMerged2Distribution, partialMerged2Child) = if (sessionWindowAgg) {
+      (sessionSpecAttribute,
+        SessionWindowMergeExec(
+          windowExpressions.head.asInstanceOf[NamedExpression],
+          sessionSpecAttribute,
+          SessionWindowStateStoreRestoreExec(sessionSpecAttribute, None, partialAggregate)))
+    } else {
+      val partialMerged1: SparkPlan = {
+        val aggregateExpressions = functionsWithoutDistinct.map(_.copy(mode = PartialMerge))
+        val aggregateAttributes = aggregateExpressions.map(_.resultAttribute)
+        createAggregate(
+          requiredChildDistributionExpressions =
             Some(groupingAttributes),
-        groupingExpressions = groupingAttributes,
-        aggregateExpressions = aggregateExpressions,
-        aggregateAttributes = aggregateAttributes,
-        initialInputBufferOffset = groupingAttributes.length,
-        resultExpressions = groupingAttributes ++
+          groupingExpressions = groupingAttributes,
+          aggregateExpressions = aggregateExpressions,
+          aggregateAttributes = aggregateAttributes,
+          initialInputBufferOffset = groupingAttributes.length,
+          resultExpressions = groupingAttributes ++
             aggregateExpressions.flatMap(_.aggregateFunction.inputAggBufferAttributes),
-        child = partialAggregate)
+          child = partialAggregate)
+      }
+      (groupingAttributes,
+        StateStoreRestoreExec(groupingAttributes, None, stateFormatVersion,
+          partialMerged1))
     }
-
-    val restored = StateStoreRestoreExec(groupingAttributes, None, stateFormatVersion,
-      partialMerged1)
 
     val partialMerged2: SparkPlan = {
       val aggregateExpressions = functionsWithoutDistinct.map(_.copy(mode = PartialMerge))
       val aggregateAttributes = aggregateExpressions.map(_.resultAttribute)
       createAggregate(
         requiredChildDistributionExpressions =
-            Some(groupingAttributes),
+            Some(partialMerged2Distribution),
         groupingExpressions = groupingAttributes,
         aggregateExpressions = aggregateExpressions,
         aggregateAttributes = aggregateAttributes,
         initialInputBufferOffset = groupingAttributes.length,
         resultExpressions = groupingAttributes ++
             aggregateExpressions.flatMap(_.aggregateFunction.inputAggBufferAttributes),
-        child = restored)
+        child = partialMerged2Child)
     }
+
     // Note: stateId and returnAllStates are filled in later with preparation rules
     // in IncrementalExecution.
-    val saved =
+    val saved = if (sessionWindowAgg) {
+      SessionWindowStateStoreSaveExec(
+        sessionSpecAttribute,
+        stateInfo = None,
+        outputMode = None,
+        eventTimeWatermark = None,
+        partialMerged2)
+    } else {
       StateStoreSaveExec(
         groupingAttributes,
         stateInfo = None,
@@ -326,6 +363,7 @@ object AggUtils {
         eventTimeWatermark = None,
         stateFormatVersion = stateFormatVersion,
         partialMerged2)
+    }
 
     val finalAndCompleteAggregate: SparkPlan = {
       val finalAggregateExpressions = functionsWithoutDistinct.map(_.copy(mode = Final))
@@ -345,4 +383,7 @@ object AggUtils {
 
     finalAndCompleteAggregate :: Nil
   }
+
+  def hasSessionWindowExpression(groupList: Seq[NamedExpression]): Boolean =
+    groupList.map(_.toAttribute).exists(_.name == "session_window")
 }

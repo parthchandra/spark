@@ -595,6 +595,19 @@ case class Window(
   def windowOutputSet: AttributeSet = AttributeSet(windowExpressions.map(_.toAttribute))
 }
 
+case class SessionWindow(
+    windowExpressions: NamedExpression,
+    timeColumn: Expression,
+    sessionSpec: Seq[Expression],
+    windowGap: Long,
+    child: LogicalPlan) extends UnaryNode {
+
+  override def output: Seq[Attribute] =
+    windowExpressions.toAttribute +: child.output
+
+  override def producedAttributes: AttributeSet = AttributeSet(windowExpressions.toAttribute)
+}
+
 object Expand {
   /**
    * Build bit mask from attributes of selected grouping set. A bit in the bitmask is corresponding

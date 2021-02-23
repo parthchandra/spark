@@ -27,8 +27,8 @@ import org.apache.spark.sql.catalyst.expressions.{CurrentBatchTimestamp, Express
 import org.apache.spark.sql.catalyst.plans.logical._
 import org.apache.spark.sql.catalyst.plans.physical.{AllTuples, ClusteredDistribution, HashPartitioning, SinglePartition}
 import org.apache.spark.sql.catalyst.rules.Rule
-import org.apache.spark.sql.execution.{LeafExecNode, LocalLimitExec, QueryExecution, SparkPlan, SparkPlanner, UnaryExecNode}
-import org.apache.spark.sql.execution.exchange.{ShuffleExchangeExec, ShuffleExchangeLike}
+import org.apache.spark.sql.execution.{LocalLimitExec, QueryExecution, SessionWindowMergeExec, SparkPlan, SparkPlanner, UnaryExecNode}
+import org.apache.spark.sql.execution.exchange.ShuffleExchangeLike
 import org.apache.spark.sql.internal.SQLConf
 import org.apache.spark.sql.streaming.OutputMode
 import org.apache.spark.util.Utils
@@ -148,6 +148,22 @@ class IncrementalExecution(
               Some(aggStateInfo),
               stateFormatVersion,
               child) :: Nil))
+      case SessionWindowStateStoreSaveExec(keys, None, None, None,
+             UnaryExecNode(agg,
+               SessionWindowMergeExec(exp,
+                sessionSpec,
+                  SessionWindowStateStoreRestoreExec(sessionSpec2, None, child)))) =>
+        val aggStateInfo = nextStatefulOperationStateInfo
+        SessionWindowStateStoreSaveExec(
+          keys,
+          Some(aggStateInfo),
+          Some(outputMode),
+          Some(offsetSeqMetadata.batchWatermarkMs),
+          agg.withNewChildren(
+            SessionWindowMergeExec(
+              exp,
+              sessionSpec,
+                SessionWindowStateStoreRestoreExec(sessionSpec2, Some(aggStateInfo), child))::Nil))
 
       case StreamingDeduplicateExec(keys, child, None, None) =>
         StreamingDeduplicateExec(

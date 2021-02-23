@@ -432,7 +432,6 @@ abstract class SparkStrategies extends QueryPlanner[SparkPlan] {
           rewrittenResultExpressions,
           stateVersion,
           planLater(child))
-
       case _ => Nil
     }
   }
@@ -794,6 +793,8 @@ abstract class SparkStrategies extends QueryPlanner[SparkPlan] {
       case ExternalRDD(outputObjAttr, rdd) => ExternalRDDScanExec(outputObjAttr, rdd) :: Nil
       case r: LogicalRDD =>
         RDDScanExec(r.output, r.rdd, "ExistingRDD", r.outputPartitioning, r.outputOrdering) :: Nil
+      case logical.SessionWindow(exprs, timeColumn, sessionSpec, gap, child) =>
+        SessionWindowExec(exprs, timeColumn, sessionSpec, gap, planLater(child)) :: Nil
       case _: UpdateTable =>
         throw new UnsupportedOperationException(s"UPDATE TABLE is not supported temporarily.")
       case _: MergeIntoTable =>
