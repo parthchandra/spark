@@ -24,6 +24,8 @@ SPARK-33384       Delete temporary file when cancelling writing to final path ev
 SPARK-33337       Support subexpression elimination in branches of conditional expressions
 SPARK-34206       Make Guava Cache as ExecutorPodsLifecycleManager private field
 SPARK-33843       Upgrade to Zstd 1.4.8
+SPARK-34193       TorrentBroadcast block manager decommissioning race fix
+
 
 # From Spark 3.0.0
 SPARK-17636       Parquet predicate pushdown in nested fields
@@ -335,7 +337,10 @@ MINOR             Lazily instantiate Hive classes
 MINOR             Upgrade callhomelistner 0.2.4
 rdar://65691577   TLF: Support Parquet Encryption
 rdar://73436293   BlockManagerDecommissionIntegrationSuite flakiness fix
-rdar://74077552   Upgrade Parquet to 1.10.1.4 (PARQUET-1967/PARQUET-1973) 
+rdar://74077552   Upgrade Parquet to 1.10.1.4 (PARQUET-1967/PARQUET-1973)
 rdar://74371017   Update ADT Version to 0.7.3 (#925)
 MINOR             Upgrade callhomelistner 0.2.7 (#920)
 MINOR             trigger build job for pull requests
+rdar://70118075   Backport dynamic allocation to ACI Spark 2.4
+rdar://73506571   Backport Spark K8s extensions to Spark 2.4.7 for SAAS
+MINOR             Bump parquet to 1.10.1.5-apple
