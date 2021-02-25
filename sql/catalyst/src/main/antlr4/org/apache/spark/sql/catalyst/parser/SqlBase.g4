@@ -171,8 +171,7 @@ statement
     | ALTER TABLE multipartIdentifier
         (partitionSpec)? SET locationSpec                              #setTableLocation
     | ALTER TABLE multipartIdentifier RECOVER PARTITIONS               #recoverPartitions
-    | ALTER TABLE multipartIdentifier WRITE
-        ORDERED BY '(' order+=sortItem (',' order+=sortItem)* ')'      #setTableDistributionAndOrdering
+    | ALTER TABLE multipartIdentifier WRITE writeSpec                  #setWriteDistributionAndOrdering
     | DROP TABLE (IF EXISTS)? multipartIdentifier PURGE?               #dropTable
     | DROP VIEW (IF EXISTS)? multipartIdentifier                       #dropView
     | CREATE (OR REPLACE)? (GLOBAL? TEMPORARY)?
@@ -982,6 +981,28 @@ alterColumnAction
     | setOrDrop=(SET | DROP) NOT NULL
     ;
 
+writeSpec
+    : (writeDistributionSpec | writeOrderingSpec)+
+    ;
+
+writeDistributionSpec
+    : DISTRIBUTED BY PARTITION
+    ;
+
+writeOrderingSpec
+    : LOCALLY? ORDERED BY writeOrder
+    | UNORDERED
+    ;
+
+writeOrder
+    : fields+=writeOrderField (',' fields+=writeOrderField)*
+    | '(' fields+=writeOrderField (',' fields+=writeOrderField)* ')'
+    ;
+
+writeOrderField
+    : transform direction=(ASC | DESC)? (NULLS nullOrder=(FIRST | LAST))?
+    ;
+
 // When `SQL_standard_keyword_behavior=true`, there are 2 kinds of keywords in Spark SQL.
 // - Reserved keywords:
 //     Keywords that are reserved and can't be used as identifiers for table, view, column,
@@ -1038,6 +1059,7 @@ ansiNonReserved
     | DIRECTORIES
     | DIRECTORY
     | DISTRIBUTE
+    | DISTRIBUTED
     | DIV
     | DROP
     | ESCAPED
@@ -1078,6 +1100,7 @@ ansiNonReserved
     | LIST
     | LOAD
     | LOCAL
+    | LOCALLY
     | LOCATION
     | LOCK
     | LOCKS
@@ -1169,6 +1192,7 @@ ansiNonReserved
     | UNBOUNDED
     | UNCACHE
     | UNLOCK
+    | UNORDERED
     | UNSET
     | UPDATE
     | USE
@@ -1271,6 +1295,7 @@ nonReserved
     | DIRECTORY
     | DISTINCT
     | DISTRIBUTE
+    | DISTRIBUTED
     | DIV
     | DROP
     | ELSE
@@ -1327,6 +1352,7 @@ nonReserved
     | LIST
     | LOAD
     | LOCAL
+    | LOCALLY
     | LOCATION
     | LOCK
     | LOCKS
@@ -1434,6 +1460,7 @@ nonReserved
     | UNIQUE
     | UNKNOWN
     | UNLOCK
+    | UNORDERED
     | UNSET
     | UPDATE
     | USE
@@ -1520,6 +1547,7 @@ DIRECTORIES: 'DIRECTORIES';
 DIRECTORY: 'DIRECTORY';
 DISTINCT: 'DISTINCT';
 DISTRIBUTE: 'DISTRIBUTE';
+DISTRIBUTED: 'DISTRIBUTED';
 DIV: 'DIV';
 DROP: 'DROP';
 ELSE: 'ELSE';
@@ -1582,6 +1610,7 @@ LINES: 'LINES';
 LIST: 'LIST';
 LOAD: 'LOAD';
 LOCAL: 'LOCAL';
+LOCALLY: 'LOCALLY';
 LOCATION: 'LOCATION';
 LOCK: 'LOCK';
 LOCKS: 'LOCKS';
@@ -1695,6 +1724,7 @@ UNION: 'UNION';
 UNIQUE: 'UNIQUE';
 UNKNOWN: 'UNKNOWN';
 UNLOCK: 'UNLOCK';
+UNORDERED: 'UNORDERED';
 UNSET: 'UNSET';
 UPDATE: 'UPDATE';
 USE: 'USE';

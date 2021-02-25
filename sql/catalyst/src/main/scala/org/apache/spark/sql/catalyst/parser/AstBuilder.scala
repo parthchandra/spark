@@ -42,7 +42,7 @@ import org.apache.spark.sql.catalyst.util.IntervalUtils.IntervalUnit
 import org.apache.spark.sql.connector.catalog.{SupportsNamespaces, TableCatalog}
 import org.apache.spark.sql.connector.catalog.TableChange.ColumnPosition
 import org.apache.spark.sql.connector.distributions.Distributions
-import org.apache.spark.sql.connector.expressions.{ApplyTransform, BucketTransform, DaysTransform, Expression => V2Expression, FieldReference, HoursTransform, IdentityTransform, LiteralValue, LogicalExpressions, MonthsTransform, Transform, YearsTransform}
+import org.apache.spark.sql.connector.expressions.{ApplyTransform, BucketTransform, DaysTransform, Expression => V2Expression, FieldReference, HoursTransform, IdentityTransform, LiteralValue, LogicalExpressions, MonthsTransform, NullOrdering, SortDirection, SortOrder => V2SortOrder, Transform, YearsTransform}
 import org.apache.spark.sql.internal.SQLConf
 import org.apache.spark.sql.types._
 import org.apache.spark.unsafe.types.{CalendarInterval, UTF8String}
@@ -2496,6 +2496,10 @@ class AstBuilder(conf: SQLConf) extends SqlBaseBaseVisitor[AnyRef] with Logging 
    * Parse a list of transforms.
    */
   override def visitTransformList(ctx: TransformListContext): Seq[Transform] = withOrigin(ctx) {
+    ctx.transforms.asScala.map(visitTransform)
+  }
+
+  private def visitTransform(ctx: TransformContext): Transform = withOrigin(ctx) {
     def getFieldReference(
         ctx: ApplyTransformContext,
         arg: V2Expression): FieldReference = {
@@ -2522,7 +2526,7 @@ class AstBuilder(conf: SQLConf) extends SqlBaseBaseVisitor[AnyRef] with Logging 
       }
     }
 
-    ctx.transforms.asScala.map {
+    ctx match {
       case identityCtx: IdentityTransformContext =>
         IdentityTransform(FieldReference(typedVisit[Seq[String]](identityCtx.qualifiedName)))
 
@@ -3173,14 +3177,83 @@ class AstBuilder(conf: SQLConf) extends SqlBaseBaseVisitor[AnyRef] with Logging 
   }
 
   /**
-   * Create an [[AlterTableDistributionAndOrderingStatement]] command.
+   * Create an [[AlterTableSetWriteDistributionAndOrderingStatement]] command.
    */
-  override def visitSetTableDistributionAndOrdering(
-      ctx: SetTableDistributionAndOrderingContext): LogicalPlan = withOrigin(ctx) {
+  override def visitSetWriteDistributionAndOrdering(
+      ctx: SetWriteDistributionAndOrderingContext): LogicalPlan = withOrigin(ctx) {
+
     val tableName = visitMultipartIdentifier(ctx.multipartIdentifier)
-    val order = LogicalExpressions.fromCatalyst(ctx.order.asScala.map(visitSortItem))
-    val distribution = Distributions.ordered(order)
-    AlterTableDistributionAndOrderingStatement(tableName, distribution, order)
+
+    val (distributionSpec, orderingSpec) = toDistributionAndOrderingSpec(ctx.writeSpec)
+
+    if (distributionSpec == null && orderingSpec == null) {
+      throw new AnalysisException(
+        "ALTER TABLE has no changes: missing both distribution and ordering clauses")
+    }
+
+    val distributionMode = toDistributionMode(distributionSpec, orderingSpec)
+    val ordering = toOrdering(orderingSpec)
+
+    AlterTableSetWriteDistributionAndOrderingStatement(tableName, distributionMode, ordering)
+  }
+
+  private def toDistributionMode(
+      distributionSpec: WriteDistributionSpecContext,
+      orderingSpec: WriteOrderingSpecContext): String = {
+
+    if (distributionSpec != null) {
+      "hash"
+    } else if (orderingSpec.UNORDERED != null || orderingSpec.LOCALLY != null) {
+      "none"
+    } else {
+      "range"
+    }
+  }
+
+  private def toOrdering(orderingSpec: WriteOrderingSpecContext): Array[V2SortOrder] = {
+    if (orderingSpec != null && orderingSpec.writeOrder != null) {
+      orderingSpec.writeOrder.fields.asScala.map(visitWriteOrderField).toArray
+    } else {
+      Array.empty[V2SortOrder]
+    }
+  }
+
+  private def toDistributionAndOrderingSpec(
+      writeSpec: WriteSpecContext): (WriteDistributionSpecContext, WriteOrderingSpecContext) = {
+
+    if (writeSpec.writeDistributionSpec.size > 1) {
+      throw new AnalysisException("There are multiple distribution clauses")
+    }
+
+    if (writeSpec.writeOrderingSpec.size > 1) {
+      throw new AnalysisException("There are multiple ordering clauses")
+    }
+
+    val distributionSpec = writeSpec.writeDistributionSpec.asScala.headOption.orNull
+    val orderingSpec = writeSpec.writeOrderingSpec.asScala.headOption.orNull
+
+    (distributionSpec, orderingSpec)
+  }
+
+  /**
+   * Create a [[V2SortOrder]] expression.
+   */
+  override def visitWriteOrderField(ctx: WriteOrderFieldContext): V2SortOrder = withOrigin(ctx) {
+    val direction = if (ctx.DESC != null) {
+      SortDirection.DESCENDING
+    } else {
+      SortDirection.ASCENDING
+    }
+
+    val nullOrdering = if (ctx.FIRST != null) {
+      NullOrdering.NULLS_FIRST
+    } else if (ctx.LAST != null) {
+      NullOrdering.NULLS_LAST
+    } else {
+      direction.defaultNullOrdering
+    }
+
+    LogicalExpressions.sort(visitTransform(ctx.transform), direction, nullOrdering)
   }
 
   /**

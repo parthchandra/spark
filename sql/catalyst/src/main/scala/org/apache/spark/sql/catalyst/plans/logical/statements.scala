@@ -22,7 +22,6 @@ import org.apache.spark.sql.catalyst.catalog.{BucketSpec, FunctionResource}
 import org.apache.spark.sql.catalyst.catalog.CatalogTypes.TablePartitionSpec
 import org.apache.spark.sql.catalyst.expressions.{Attribute, Expression}
 import org.apache.spark.sql.connector.catalog.TableChange.ColumnPosition
-import org.apache.spark.sql.connector.distributions.Distribution
 import org.apache.spark.sql.connector.expressions.{SortOrder, Transform}
 import org.apache.spark.sql.types.{DataType, StructType}
 
@@ -479,14 +478,6 @@ case class CreateFunctionStatement(
     replace: Boolean) extends ParsedStatement
 
 /**
- * ALTER TABLE ... WRITE ... statement, as parsed from SQL.
- */
-case class AlterTableDistributionAndOrderingStatement(
-    tableName: Seq[String],
-    distribution: Distribution,
-    order: Seq[SortOrder]) extends ParsedStatement
-
-/**
  * MIGRATE TABLE ... USING ... TBLPROPERTIES statement, as parsed from SQL
  */
 case class MigrateTableStatement(
@@ -503,3 +494,11 @@ case class SnapshotTableStatement(
     location: Option[String],
     provider: Option[String],
     properties: Map[String, String]) extends ParsedStatement
+
+/**
+ * ALTER TABLE ... WRITE ... statement, as parsed from SQL.
+ */
+case class AlterTableSetWriteDistributionAndOrderingStatement(
+    tableName: Seq[String],
+    distributionMode: String,
+    ordering: Seq[SortOrder]) extends ParsedStatement
