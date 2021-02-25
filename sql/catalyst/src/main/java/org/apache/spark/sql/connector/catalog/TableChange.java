@@ -22,7 +22,6 @@ import java.util.Objects;
 import javax.annotation.Nullable;
 
 import org.apache.spark.annotation.Evolving;
-import org.apache.spark.sql.connector.distributions.Distribution;
 import org.apache.spark.sql.connector.expressions.SortOrder;
 import org.apache.spark.sql.types.DataType;
 
@@ -233,27 +232,33 @@ public interface TableChange {
   }
 
   /**
-   * Create a TableChange for setting the distribution and sort order in a table.
+   * Create a TableChange for setting the write distribution and ordering in a table.
    *
-   * @param distribution a distribution the table
-   * @param sortOrder a sort order for the table
-   * @return a TableChange for setting the distribution and sort order
+   * @param distributionMode a distribution mode to use for writes
+   * @param ordering an ordering to use for writes
+   * @return a TableChange for setting the write distribution and ordering
    */
-  static TableChange setDistributionAndOrder(Distribution distribution, SortOrder[] sortOrder) {
-    return new SetDistributionAndOrder(distribution, sortOrder);
+  static TableChange setWriteDistributionAndOrdering(
+      String distributionMode,
+      SortOrder[] ordering) {
+    return new SetWriteDistributionAndOrdering(distributionMode, ordering);
   }
 
-  final class SetDistributionAndOrder implements TableChange {
-    private final Distribution distribution;
-    private final SortOrder[] sortOrder;
+  final class SetWriteDistributionAndOrdering implements TableChange {
+    private final String distributionMode;
+    private final SortOrder[] ordering;
 
-    private SetDistributionAndOrder(Distribution distribution, SortOrder[] sortOrder) {
-      this.distribution = distribution;
-      this.sortOrder = sortOrder;
+    private SetWriteDistributionAndOrdering(String distributionMode, SortOrder[] ordering) {
+      this.distributionMode = distributionMode;
+      this.ordering = ordering;
     }
 
-    public SortOrder[] sortOrder() {
-      return sortOrder;
+    public String distributionMode() {
+      return distributionMode;
+    }
+
+    public SortOrder[] ordering() {
+      return ordering;
     }
 
     @Override
@@ -261,15 +266,15 @@ public interface TableChange {
       if (this == o) return true;
       if (o == null || getClass() != o.getClass()) return false;
 
-      SetDistributionAndOrder that = (SetDistributionAndOrder) o;
-      return Objects.equals(distribution, that.distribution) &&
-          Arrays.equals(sortOrder, that.sortOrder);
+      SetWriteDistributionAndOrdering that = (SetWriteDistributionAndOrdering) o;
+      return Objects.equals(distributionMode, that.distributionMode) &&
+          Arrays.deepEquals(ordering, that.ordering);
     }
 
     @Override
     public int hashCode() {
-      int result = Objects.hash(distribution);
-      result = 31 * result + Arrays.hashCode(sortOrder);
+      int result = Objects.hash(distributionMode);
+      result = 31 * result + Arrays.hashCode(ordering);
       return result;
     }
   }

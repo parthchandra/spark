@@ -26,7 +26,7 @@ import org.mockito.invocation.InvocationOnMock
 
 import org.apache.spark.sql.{AnalysisException, SaveMode}
 import org.apache.spark.sql.catalyst.{AliasIdentifier, TableIdentifier}
-import org.apache.spark.sql.catalyst.analysis.{AnalysisTest, Analyzer, CTESubstitution, EmptyFunctionRegistry, NoSuchTableException, ResolveCatalogs, ResolvedTable, ResolveInlineTables, ResolveSessionCatalog, UnresolvedAttribute, UnresolvedRelation, UnresolvedStar, UnresolvedSubqueryColumnAliases, UnresolvedV2Relation}
+import org.apache.spark.sql.catalyst.analysis.{AnalysisTest, Analyzer, CTESubstitution, EmptyFunctionRegistry, NoSuchTableException, ResolveCatalogs, ResolvedTable, ResolveInlineTables, ResolveSessionCatalog, UnresolvedAttribute, UnresolvedRelation, UnresolvedSubqueryColumnAliases, UnresolvedV2Relation}
 import org.apache.spark.sql.catalyst.catalog.{BucketSpec, CatalogStorageFormat, CatalogTable, CatalogTableType, InMemoryCatalog, SessionCatalog}
 import org.apache.spark.sql.catalyst.expressions.{AttributeReference, EqualTo, Expression, InSubquery, IntegerLiteral, ListQuery, StringLiteral}
 import org.apache.spark.sql.catalyst.parser.CatalystSqlParser
@@ -34,7 +34,6 @@ import org.apache.spark.sql.catalyst.plans.logical.{AlterTable, Assignment, Crea
 import org.apache.spark.sql.connector.FakeV2Provider
 import org.apache.spark.sql.connector.catalog.{CatalogManager, CatalogNotFoundException, Identifier, Table, TableCapability, TableCatalog, TableChange, V1Table}
 import org.apache.spark.sql.connector.catalog.TableChange.{UpdateColumnComment, UpdateColumnType}
-import org.apache.spark.sql.connector.distributions.Distributions
 import org.apache.spark.sql.connector.expressions.{FieldReference, SortOrder}
 import org.apache.spark.sql.connector.expressions.LogicalExpressions._
 import org.apache.spark.sql.connector.expressions.NullOrdering._
@@ -1559,16 +1558,55 @@ class PlanResolutionSuite extends AnalysisTest {
     checkFailure("testcat.tab", "foo")
   }
 
-  test("alter table: set distribution and ordering for v2 tables") {
+  test("alter table: set range distribution and ordering for v2 tables") {
     Seq("v2Table", "testcat.tab").foreach { t =>
       val sql = s"ALTER TABLE $t WRITE ORDERED BY (i, bucket(8, s))"
 
       val ordering = Array[SortOrder](
-        sort(FieldReference("i"), ASCENDING, NULLS_FIRST),
+        sort(identity(FieldReference("i")), ASCENDING, NULLS_FIRST),
         sort(bucket(8, Array(FieldReference("s"))), ASCENDING, NULLS_FIRST)
       )
-      val distribution = Distributions.ordered(ordering)
-      val expectedChange = TableChange.setDistributionAndOrder(distribution, ordering)
+      val expectedChange = TableChange.setWriteDistributionAndOrdering("range", ordering)
+
+      parseAndResolve(sql) match {
+        case AlterTable(_, _, _: DataSourceV2Relation, changes) =>
+          assert(changes.size == 1, "expected only one change")
+          assert(changes.head == expectedChange, "change must match")
+        case _ =>
+          fail("expected AlterTable")
+      }
+    }
+  }
+
+  test("alter table: set hash distribution and ordering for v2 tables") {
+    Seq("v2Table", "testcat.tab").foreach { t =>
+      val sql = s"ALTER TABLE $t WRITE DISTRIBUTED BY PARTITION ORDERED BY (i, bucket(8, s))"
+
+      val ordering = Array[SortOrder](
+        sort(identity(FieldReference("i")), ASCENDING, NULLS_FIRST),
+        sort(bucket(8, Array(FieldReference("s"))), ASCENDING, NULLS_FIRST)
+      )
+      val expectedChange = TableChange.setWriteDistributionAndOrdering("hash", ordering)
+
+      parseAndResolve(sql) match {
+        case AlterTable(_, _, _: DataSourceV2Relation, changes) =>
+          assert(changes.size == 1, "expected only one change")
+          assert(changes.head == expectedChange, "change must match")
+        case _ =>
+          fail("expected AlterTable")
+      }
+    }
+  }
+
+  test("alter table: set no distribution and local ordering for v2 tables") {
+    Seq("v2Table", "testcat.tab").foreach { t =>
+      val sql = s"ALTER TABLE $t WRITE LOCALLY ORDERED BY (i, bucket(8, s))"
+
+      val ordering = Array[SortOrder](
+        sort(identity(FieldReference("i")), ASCENDING, NULLS_FIRST),
+        sort(bucket(8, Array(FieldReference("s"))), ASCENDING, NULLS_FIRST)
+      )
+      val expectedChange = TableChange.setWriteDistributionAndOrdering("none", ordering)
 
       parseAndResolve(sql) match {
         case AlterTable(_, _, _: DataSourceV2Relation, changes) =>
@@ -1585,7 +1623,7 @@ class PlanResolutionSuite extends AnalysisTest {
     val e = intercept[AnalysisException] {
       parseAndResolve(sql)
     }
-    assert(e.message.contains("Cannot set distribution and ordering in v1 tables"))
+    assert(e.message.contains("Cannot set write distribution and ordering in v1 tables"))
   }
 
   // TODO: add tests for more commands.

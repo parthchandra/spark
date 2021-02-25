@@ -160,13 +160,13 @@ class ResolveSessionCatalog(
         createAlterTable(nameParts, catalog, tbl, changes)
       }
 
-    case AlterTableDistributionAndOrderingStatement(
-         nameParts @ SessionCatalogAndTable(catalog, tbl), distribution, order) =>
+    case AlterTableSetWriteDistributionAndOrderingStatement(
+         nameParts @ SessionCatalogAndTable(catalog, tbl), distributionMode, order) =>
       loadTable(catalog, tbl.asIdentifier).collect {
         case _: V1Table =>
-          throw new AnalysisException("Cannot set distribution and ordering in v1 tables")
+          throw new AnalysisException("Cannot set write distribution and ordering in v1 tables")
       }.getOrElse {
-        val change = TableChange.setDistributionAndOrder(distribution, order.toArray)
+        val change = TableChange.setWriteDistributionAndOrdering(distributionMode, order.toArray)
         createAlterTable(nameParts, catalog, tbl, Seq(change))
       }
 
