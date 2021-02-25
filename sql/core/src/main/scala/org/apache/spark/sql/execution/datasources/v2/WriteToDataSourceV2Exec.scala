@@ -33,9 +33,8 @@ import org.apache.spark.sql.catalyst.expressions.Attribute
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
 import org.apache.spark.sql.connector.catalog.{Identifier, StagedTable, StagingTableCatalog, SupportsMerge, SupportsWrite, Table, TableCatalog}
 import org.apache.spark.sql.connector.expressions.Transform
-import org.apache.spark.sql.connector.write.{BatchWrite, DataWriterFactory, LogicalWriteInfoImpl, PhysicalWriteInfoImpl, SupportsDynamicOverwrite, SupportsOverwrite, SupportsTruncate, V1Write, V1WriteBuilder, WriteBuilder, WriterCommitMessage}
+import org.apache.spark.sql.connector.write.{BatchWrite, DataWriterFactory, LogicalWriteInfoImpl, PhysicalWriteInfoImpl, V1Write, V1WriteBuilder, Write, WriteBuilder, WriterCommitMessage}
 import org.apache.spark.sql.execution.{SparkPlan, UnaryExecNode}
-import org.apache.spark.sql.sources.{AlwaysTrue, Filter}
 import org.apache.spark.sql.util.CaseInsensitiveStringMap
 import org.apache.spark.util.{LongAccumulator, Utils}
 
@@ -264,13 +263,7 @@ case class AppendDataExec(
     writeOptions: CaseInsensitiveStringMap,
     query: SparkPlan,
     refreshCache: () => Unit,
-    override val write: Option[BatchWrite] = None)
-  extends V2ExistingTableWriteExec with BatchWriteHelper {
-
-  override protected def buildAndRun(): Seq[InternalRow] = {
-    writeWithV2(newWriteBuilder().buildForBatch())
-  }
-}
+    write: Write) extends V2ExistingTableWriteExec with BatchWriteHelper
 
 /**
  * Physical plan node for overwrite into a v2 table.
@@ -284,31 +277,10 @@ case class AppendDataExec(
  */
 case class OverwriteByExpressionExec(
     table: SupportsWrite,
-    deleteWhere: Array[Filter],
     writeOptions: CaseInsensitiveStringMap,
     query: SparkPlan,
     refreshCache: () => Unit,
-    override val write: Option[BatchWrite] = None)
-  extends V2ExistingTableWriteExec with BatchWriteHelper {
-
-  private def isTruncate(filters: Array[Filter]): Boolean = {
-    filters.length == 1 && filters(0).isInstanceOf[AlwaysTrue]
-  }
-
-  override protected def buildAndRun(): Seq[InternalRow] = {
-    newWriteBuilder() match {
-      case builder: SupportsTruncate if isTruncate(deleteWhere) =>
-        writeWithV2(builder.truncate().buildForBatch())
-
-      case builder: SupportsOverwrite =>
-        writeWithV2(builder.overwrite(deleteWhere).buildForBatch())
-
-      case _ =>
-        throw new SparkException(s"Table does not support overwrite by expression: $table")
-    }
-  }
-}
-
+    write: Write) extends V2ExistingTableWriteExec with BatchWriteHelper
 
 /**
  * Physical plan node for dynamic partition overwrite into a v2 table.
@@ -324,19 +296,7 @@ case class OverwritePartitionsDynamicExec(
     writeOptions: CaseInsensitiveStringMap,
     query: SparkPlan,
     refreshCache: () => Unit,
-    override val write: Option[BatchWrite] = None)
-  extends V2ExistingTableWriteExec with BatchWriteHelper {
-
-  override protected def buildAndRun(): Seq[InternalRow] = {
-    newWriteBuilder() match {
-      case builder: SupportsDynamicOverwrite =>
-        writeWithV2(builder.overwriteDynamicPartitions().buildForBatch())
-
-      case _ =>
-        throw new SparkException(s"Table does not support dynamic partition overwrite: $table")
-    }
-  }
-}
+    write: Write) extends V2ExistingTableWriteExec with BatchWriteHelper
 
 /**
  * Physical plan node to replace data in existing tables.
@@ -345,19 +305,12 @@ case class ReplaceDataExec(
     table: SupportsMerge,
     query: SparkPlan,
     refreshCache: () => Unit,
-    batchWrite: BatchWrite) extends V2ExistingTableWriteExec {
-
-  override def write: Option[BatchWrite] = Some(batchWrite)
+    write: Write) extends V2ExistingTableWriteExec {
 
   override protected def run(): Seq[InternalRow] = {
-    // calling prepare() ensures we execute DynamicFileFilter if present
+    // calling prepare() ensures we execute dynamic filters if present
     prepare()
     super.run();
-  }
-
-  // we don't have to implement buildAndRun as we always have BatchWrite
-  override protected def buildAndRun(): Seq[InternalRow] = {
-    throw new UnsupportedOperationException("Not implemented: buildAndRun")
   }
 }
 
@@ -391,20 +344,13 @@ trait BatchWriteHelper {
 
 trait V2ExistingTableWriteExec extends V2TableWriteExec {
   def refreshCache: () => Unit
-  def write: Option[BatchWrite] = None
+  def write: Write
 
   override protected def run(): Seq[InternalRow] = {
-    val writtenRows = write match {
-      case Some(batchWrite) =>
-        writeWithV2(batchWrite)
-      case _ =>
-        buildAndRun()
-    }
+    val writtenRows = writeWithV2(write.toBatch)
     refreshCache()
     writtenRows
   }
-
-  protected def buildAndRun(): Seq[InternalRow]
 }
 
 /**

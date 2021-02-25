@@ -18,8 +18,6 @@
 package org.apache.spark.sql.connector.write;
 
 import org.apache.spark.annotation.Evolving;
-import org.apache.spark.sql.connector.catalog.Table;
-import org.apache.spark.sql.connector.catalog.TableCapability;
 import org.apache.spark.sql.connector.write.streaming.StreamingWrite;
 
 /**
@@ -36,6 +34,8 @@ public interface WriteBuilder {
 
   /**
    * Returns a logical {@link Write} shared between batch and streaming.
+   *
+   * @since 3.2.0
    */
   default Write build() {
     return new Write() {
@@ -52,22 +52,22 @@ public interface WriteBuilder {
   }
 
   /**
-   * Returns a {@link BatchWrite} to write data to batch source. By default this method throws
-   * exception, data sources must overwrite this method to provide an implementation, if the
-   * {@link Table} that creates this write returns {@link TableCapability#BATCH_WRITE} support in
-   * its {@link Table#capabilities()}.
+   * Returns a {@link BatchWrite} to write data to batch source.
+   *
+   * @deprecated use {@link #build()} instead.
    */
+  @Deprecated
   default BatchWrite buildForBatch() {
     throw new UnsupportedOperationException(getClass().getName() +
       " does not support batch write");
   }
 
   /**
-   * Returns a {@link StreamingWrite} to write data to streaming source. By default this method
-   * throws exception, data sources must overwrite this method to provide an implementation, if the
-   * {@link Table} that creates this write returns {@link TableCapability#STREAMING_WRITE} support
-   * in its {@link Table#capabilities()}.
+   * Returns a {@link StreamingWrite} to write data to streaming source.
+   *
+   * @deprecated use {@link #build()} instead.
    */
+  @Deprecated
   default StreamingWrite buildForStreaming() {
     throw new UnsupportedOperationException(getClass().getName() +
       " does not support streaming write");

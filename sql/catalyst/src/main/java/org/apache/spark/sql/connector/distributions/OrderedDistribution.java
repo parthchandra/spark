@@ -23,6 +23,8 @@ import org.apache.spark.sql.connector.expressions.SortOrder;
 /**
  * A distribution where tuples have been ordered across partitions according
  * to ordering expressions, but not necessarily within a given partition.
+ *
+ * @since 3.2.0
  */
 @Experimental
 public interface OrderedDistribution extends Distribution {

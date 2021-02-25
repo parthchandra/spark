@@ -17,21 +17,34 @@
 
 package org.apache.spark.sql.execution.datasources.v2
 
-import org.apache.spark.sql.{catalyst, AnalysisException}
+import org.apache.spark.sql.AnalysisException
 import org.apache.spark.sql.catalyst.analysis.Resolver
-import org.apache.spark.sql.catalyst.expressions.{IcebergBucketTransform, IcebergDayTransform, IcebergHourTransform, IcebergMonthTransform, IcebergTruncateTransform, IcebergYearTransform, NamedExpression, SortOrder}
+import org.apache.spark.sql.catalyst.expressions.{Ascending, Descending, Expression, IcebergBucketTransform, IcebergDayTransform, IcebergHourTransform, IcebergMonthTransform, IcebergTruncateTransform, IcebergYearTransform, NamedExpression, NullOrdering, NullsFirst, NullsLast, SortDirection, SortOrder}
 import org.apache.spark.sql.catalyst.plans.logical.{LogicalPlan, RepartitionByExpression, Sort}
-import org.apache.spark.sql.connector.distributions.{ClusteredDistribution, OrderedDistribution, UnspecifiedDistribution}
-import org.apache.spark.sql.connector.expressions.{BucketTransform, DaysTransform, Expression, FieldReference, HoursTransform, IdentityTransform, Lit, LiteralValue, MonthsTransform, NullOrdering, SortDirection, SortValue, TruncateTransform, YearsTransform}
+import org.apache.spark.sql.connector.distributions.{ClusteredDistribution, Distribution => V2Distribution, OrderedDistribution, UnspecifiedDistribution}
+import org.apache.spark.sql.connector.expressions.{BucketTransform, DaysTransform, Expression => V2Expression, FieldReference, HoursTransform, IdentityTransform, MonthsTransform, NullOrdering => V2NullOrdering, SortDirection => V2SortDirection, SortOrder => V2SortOrder, SortValue, TruncateTransform, YearsTransform}
 import org.apache.spark.sql.connector.write.{RequiresDistributionAndOrdering, Write}
 import org.apache.spark.sql.internal.SQLConf
 
 object DistributionAndOrderingUtils {
 
-  def prepareQuery(write: Write, query: LogicalPlan): LogicalPlan = write match {
+  // internal version used by rules that rewrite row-level plans for Iceberg
+  def prepareQuery(
+      distribution: V2Distribution,
+      ordering: Array[V2SortOrder],
+      query: LogicalPlan,
+      conf: SQLConf): LogicalPlan = {
+
+    val write = new RequiresDistributionAndOrdering {
+      override def requiredDistribution: V2Distribution = distribution
+      override def requiredOrdering: Array[V2SortOrder] = ordering
+    }
+    prepareQuery(write, query, conf)
+  }
+
+  def prepareQuery(write: Write, query: LogicalPlan, conf: SQLConf): LogicalPlan = write match {
     case write: RequiresDistributionAndOrdering =>
-      val sqlConf = SQLConf.get
-      val resolver = sqlConf.resolver
+      val resolver = conf.resolver
 
       val distribution = write.requiredDistribution match {
         case d: OrderedDistribution =>
@@ -39,11 +52,11 @@ object DistributionAndOrderingUtils {
         case d: ClusteredDistribution =>
           d.clustering.map(e => toCatalyst(e, query, resolver))
         case _: UnspecifiedDistribution =>
-          Array.empty[catalyst.expressions.Expression]
+          Array.empty[Expression]
       }
 
       val queryWithDistribution = if (distribution.nonEmpty) {
-        val numShufflePartitions = sqlConf.numShufflePartitions
+        val numShufflePartitions = conf.numShufflePartitions
         // the conversion to catalyst expressions above produces SortOrder expressions
         // for OrderedDistribution and generic expressions for ClusteredDistribution
         // this allows RepartitionByExpression to pick either range or hash partitioning
@@ -54,7 +67,7 @@ object DistributionAndOrderingUtils {
 
       val ordering = write.requiredOrdering.toSeq
         .map(e => toCatalyst(e, query, resolver))
-        .asInstanceOf[Seq[catalyst.expressions.SortOrder]]
+        .asInstanceOf[Seq[SortOrder]]
 
       val queryWithDistributionAndOrdering = if (ordering.nonEmpty) {
         Sort(ordering, global = false, queryWithDistribution)
@@ -63,23 +76,25 @@ object DistributionAndOrderingUtils {
       }
 
       queryWithDistributionAndOrdering
+
     case _ =>
       query
   }
 
   private def toCatalyst(
-      expr: Expression,
+      expr: V2Expression,
       query: LogicalPlan,
-      resolver: Resolver): catalyst.expressions.Expression = {
+      resolver: Resolver): Expression = {
+
+    // we cannot perform the resolution in the analyzer since we need to optimize expressions
+    // in nodes like OverwriteByExpression before constructing a logical write
     def resolve(ref: FieldReference): NamedExpression = {
-      // this part is controversial as we perform resolution in the optimizer
-      // we cannot perform this step in the analyzer since we need to optimize expressions
-      // in nodes like OverwriteByExpression before constructing a logical write
       query.resolve(ref.parts, resolver) match {
         case Some(attr) => attr
         case None => throw new AnalysisException(s"Cannot resolve '$ref' using ${query.output}")
       }
     }
+
     expr match {
       case SortValue(child, direction, nullOrdering) =>
         val catalystChild = toCatalyst(child, query, resolver)
@@ -89,7 +104,7 @@ object DistributionAndOrderingUtils {
       case BucketTransform(numBuckets, ref) =>
         IcebergBucketTransform(numBuckets, resolve(ref))
       case TruncateTransform(length, ref) =>
-        IcebergTruncateTransform(length, resolve(ref))
+        IcebergTruncateTransform(resolve(ref), length)
       case YearsTransform(ref) =>
         IcebergYearTransform(resolve(ref))
       case MonthsTransform(ref) =>
@@ -101,21 +116,17 @@ object DistributionAndOrderingUtils {
       case ref: FieldReference =>
         resolve(ref)
       case _ =>
-        throw new RuntimeException(s"$expr is not currently supported")
+        throw new AnalysisException(s"$expr is not currently supported")
     }
   }
 
-  private def toCatalyst(direction: SortDirection): catalyst.expressions.SortDirection = {
-    direction match {
-      case SortDirection.ASCENDING => catalyst.expressions.Ascending
-      case SortDirection.DESCENDING => catalyst.expressions.Descending
-    }
+  private def toCatalyst(direction: V2SortDirection): SortDirection = direction match {
+    case V2SortDirection.ASCENDING => Ascending
+    case V2SortDirection.DESCENDING => Descending
   }
 
-  private def toCatalyst(nullOrdering: NullOrdering): catalyst.expressions.NullOrdering = {
-    nullOrdering match {
-      case NullOrdering.NULLS_FIRST => catalyst.expressions.NullsFirst
-      case NullOrdering.NULLS_LAST => catalyst.expressions.NullsLast
-    }
+  private def toCatalyst(nullOrdering: V2NullOrdering): NullOrdering = nullOrdering match {
+    case V2NullOrdering.NULLS_FIRST => NullsFirst
+    case V2NullOrdering.NULLS_LAST => NullsLast
   }
 }

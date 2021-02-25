@@ -23,6 +23,8 @@ import org.apache.spark.sql.connector.expressions.Expression;
 /**
  * A distribution where tuples that share the same values for clustering expressions are co-located
  * in the same partition.
+ *
+ * @since 3.2.0
  */
 @Experimental
 public interface ClusteredDistribution extends Distribution {

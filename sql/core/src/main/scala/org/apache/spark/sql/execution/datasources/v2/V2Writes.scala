@@ -25,32 +25,33 @@ import org.apache.spark.sql.catalyst.expressions.PredicateHelper
 import org.apache.spark.sql.catalyst.plans.logical.{AppendData, LogicalPlan, OverwriteByExpression, OverwritePartitionsDynamic}
 import org.apache.spark.sql.catalyst.rules.Rule
 import org.apache.spark.sql.connector.catalog.Table
-import org.apache.spark.sql.connector.write.{LogicalWriteInfoImpl, SupportsDynamicOverwrite, SupportsOverwrite, SupportsTruncate, Write, WriteBuilder}
+import org.apache.spark.sql.connector.write.{LogicalWriteInfoImpl, SupportsDynamicOverwrite, SupportsOverwrite, SupportsTruncate, WriteBuilder}
 import org.apache.spark.sql.execution.datasources.DataSourceStrategy
+import org.apache.spark.sql.internal.SQLConf
 import org.apache.spark.sql.sources.{AlwaysTrue, Filter}
 
 /**
- * A rule that constructs [[Write]]s.
- *
- * This rule does resolution in the optimizer because some nodes like [[OverwriteByExpression]]
- * must undergo the expression optimization before we can construct a logical write.
+ * A rule that constructs logical writes.
  */
 object V2Writes extends Rule[LogicalPlan] with PredicateHelper {
 
   import DataSourceV2Implicits._
 
+  private def conf: SQLConf = SQLConf.get
+
   override def apply(plan: LogicalPlan): LogicalPlan = plan transformDown {
     case a @ AppendData(r: DataSourceV2Relation, query, options, _, None) =>
       val writeBuilder = newWriteBuilder(r.table, query, options)
       val write = writeBuilder.build()
-      a.copy(write = Some(write), query = DistributionAndOrderingUtils.prepareQuery(write, query))
+      val newQuery = DistributionAndOrderingUtils.prepareQuery(write, query, conf)
+      a.copy(write = Some(write), query = newQuery)
 
     case o @ OverwriteByExpression(r: DataSourceV2Relation, deleteExpr, query, options, _, None) =>
       // fail if any filter cannot be converted. correctness depends on removing all matching data.
-      val filters = splitConjunctivePredicates(deleteExpr).flatMap { p =>
-        val filter = DataSourceStrategy.translateFilter(p, supportNestedPredicatePushdown = true)
+      val filters = splitConjunctivePredicates(deleteExpr).flatMap { pred =>
+        val filter = DataSourceStrategy.translateFilter(pred, supportNestedPredicatePushdown = true)
         if (filter.isEmpty) {
-          throw new AnalysisException(s"Cannot translate expression to source filter: $p")
+          throw new AnalysisException(s"Cannot translate expression to source filter: $pred")
         }
         filter
       }.toArray
@@ -66,7 +67,8 @@ object V2Writes extends Rule[LogicalPlan] with PredicateHelper {
           throw new SparkException(s"Table does not support overwrite by expression: $table")
       }
 
-      o.copy(write = Some(write), query = DistributionAndOrderingUtils.prepareQuery(write, query))
+      val newQuery = DistributionAndOrderingUtils.prepareQuery(write, query, conf)
+      o.copy(write = Some(write), query = newQuery)
 
     case o @ OverwritePartitionsDynamic(r: DataSourceV2Relation, query, options, _, None) =>
       val table = r.table
@@ -77,7 +79,12 @@ object V2Writes extends Rule[LogicalPlan] with PredicateHelper {
         case _ =>
           throw new SparkException(s"Table does not support dynamic partition overwrite: $table")
       }
-      o.copy(write = Some(write), query = DistributionAndOrderingUtils.prepareQuery(write, query))
+      val newQuery = DistributionAndOrderingUtils.prepareQuery(write, query, conf)
+      o.copy(write = Some(write), query = newQuery)
+  }
+
+  private def isTruncate(filters: Array[Filter]): Boolean = {
+    filters.length == 1 && filters(0).isInstanceOf[AlwaysTrue]
   }
 
   private def newWriteBuilder(
@@ -90,9 +97,5 @@ object V2Writes extends Rule[LogicalPlan] with PredicateHelper {
       query.schema,
       writeOptions.asOptions)
     table.asWritable.newWriteBuilder(info)
-  }
-
-  private def isTruncate(filters: Array[Filter]): Boolean = {
-    filters.length == 1 && filters(0).isInstanceOf[AlwaysTrue]
   }
 }

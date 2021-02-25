@@ -17,6 +17,7 @@
 
 package org.apache.spark.sql.connector.write;
 
+import org.apache.spark.annotation.Evolving;
 import org.apache.spark.sql.connector.catalog.Table;
 import org.apache.spark.sql.connector.catalog.TableCapability;
 import org.apache.spark.sql.connector.write.streaming.StreamingWrite;
@@ -29,9 +30,15 @@ import org.apache.spark.sql.connector.write.streaming.StreamingWrite;
  * to support. For example, {@link #toBatch()} must be implemented if the {@link Table} that
  * creates this {@link Write} returns {@link TableCapability#BATCH_WRITE} support in its
  * {@link Table#capabilities()}.
+ *
+ * @since 3.2.0
  */
+@Evolving
 public interface Write {
 
+  /**
+   * Returns the description associated with this write.
+   */
   default String description() {
     return this.getClass().toString();
   }

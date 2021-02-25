@@ -21,6 +21,8 @@ import org.apache.spark.annotation.Experimental;
 
 /**
  * Represents a sort order in the public expression API.
+ *
+ * @since 3.2.0
  */
 @Experimental
 public interface SortOrder extends Expression {

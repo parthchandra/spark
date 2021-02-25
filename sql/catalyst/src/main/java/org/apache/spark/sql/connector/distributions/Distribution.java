@@ -21,6 +21,8 @@ import org.apache.spark.annotation.Experimental;
 
 /**
  * An interface that defines how data is distributed across partitions.
+ *
+ * @since 3.2.0
  */
 @Experimental
 public interface Distribution {}

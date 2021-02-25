@@ -17,17 +17,20 @@
 
 package org.apache.spark.sql.catalyst.expressions
 
-import java.nio.ByteBuffer
+import java.nio.{ByteBuffer, CharBuffer}
+import java.nio.charset.StandardCharsets
 
 import org.apache.iceberg.spark.SparkSchemaUtil
 import org.apache.iceberg.transforms.{Transform, Transforms}
 import org.apache.iceberg.types.{Type, Types}
+import org.apache.iceberg.util.ByteBuffers
 
 import org.apache.spark.sql.catalyst.InternalRow
 import org.apache.spark.sql.catalyst.expressions.codegen.CodegenFallback
-import org.apache.spark.sql.types.{AbstractDataType, DataType, Decimal, DecimalType, IntegerType, StringType, TimestampType}
+import org.apache.spark.sql.types.{AbstractDataType, BinaryType, DataType, Decimal, DecimalType, IntegerType, StringType, TimestampType}
 import org.apache.spark.unsafe.types.UTF8String
 
+// copied from TransformExpressions.scala in Iceberg Spark extensions
 abstract class IcebergTransformExpression
   extends Expression with CodegenFallback with NullIntolerant {
 
@@ -82,38 +85,6 @@ case class IcebergHourTransform(child: Expression)
   @transient lazy val transform: Transform[Any, Integer] = Transforms.hour[Any](icebergInputType)
 }
 
-case class IcebergTruncateTransform(
-    length: Int,
-    child: Expression) extends IcebergTransformExpression {
-
-  override def children: Seq[Expression] = child :: Nil
-
-  @transient lazy val truncateFunc: Any => Any = child.dataType match {
-    case _: DecimalType =>
-      val t = Transforms.truncate[java.math.BigDecimal](icebergInputType, length)
-      d: Any =>
-        val truncatedValue = t(d.asInstanceOf[Decimal].toJavaBigDecimal)
-        Decimal(truncatedValue)
-    case _: StringType =>
-      val t = Transforms.truncate[String](icebergInputType, length)
-      s: Any =>
-        val truncatedValue = t(s.asInstanceOf[UTF8String].toString)
-        UTF8String.fromString(truncatedValue)
-    case _ =>
-      val t = Transforms.truncate[Any](icebergInputType, length)
-      a: Any => t(a)
-  }
-
-  override def eval(input: InternalRow): Any = child.eval(input) match {
-    case null =>
-      null
-    case value =>
-      truncateFunc(value)
-  }
-
-  override def dataType: DataType = child.dataType
-}
-
 case class IcebergBucketTransform(
     numBuckets: Int,
     child: Expression) extends IcebergTransformExpression {
@@ -142,4 +113,40 @@ case class IcebergBucketTransform(
   }
 
   override def dataType: DataType = IntegerType
+}
+
+case class IcebergTruncateTransform(
+    child: Expression,
+    width: Int) extends IcebergTransformExpression {
+
+  override def children: Seq[Expression] = child :: Nil
+
+  @transient lazy val truncateFunc: Any => Any = child.dataType match {
+    case _: DecimalType =>
+      val t = Transforms.truncate[java.math.BigDecimal](icebergInputType, width)
+      d: Any => Decimal.apply(t(d.asInstanceOf[Decimal].toJavaBigDecimal))
+    case _: StringType =>
+      val t = Transforms.truncate[CharSequence](icebergInputType, width)
+      s: Any => {
+        val bytes = ByteBuffer.wrap(s.asInstanceOf[UTF8String].getBytes)
+        val charSequence = t(StandardCharsets.UTF_8.decode(bytes))
+        val bb = StandardCharsets.UTF_8.encode(CharBuffer.wrap(charSequence));
+        UTF8String.fromBytes(ByteBuffers.toByteArray(bb))
+      }
+    case _: BinaryType =>
+      val t = Transforms.truncate[ByteBuffer](icebergInputType, width)
+      s: Any => ByteBuffers.toByteArray(t(ByteBuffer.wrap(s.asInstanceOf[Array[Byte]])))
+    case _ =>
+      val t = Transforms.truncate[Any](icebergInputType, width)
+      a: Any => t(a)
+  }
+
+  override def eval(input: InternalRow): Any = child.eval(input) match {
+    case null =>
+      null
+    case value =>
+      truncateFunc(value)
+  }
+
+  override def dataType: DataType = child.dataType
 }

@@ -192,6 +192,8 @@ private[sql] object TruncateTransform {
       transform match {
         case NamedTransform("truncate", Seq(Ref(seq: Seq[String]), Lit(value: Int, IntegerType))) =>
           Some((value, FieldReference(seq)))
+        case NamedTransform("truncate", Seq(Lit(value: Int, IntegerType), Ref(seq: Seq[String]))) =>
+          Some((value, FieldReference(seq)))
         case _ =>
           None
       }

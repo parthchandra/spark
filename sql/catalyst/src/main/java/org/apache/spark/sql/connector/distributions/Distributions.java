@@ -23,6 +23,8 @@ import org.apache.spark.sql.connector.expressions.SortOrder;
 
 /**
  * Helper methods to create distributions to pass into Spark.
+ *
+ * @since 3.2.0
  */
 @Experimental
 public class Distributions {
