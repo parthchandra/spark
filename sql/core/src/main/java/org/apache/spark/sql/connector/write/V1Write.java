@@ -25,7 +25,7 @@ import org.apache.spark.sql.sources.InsertableRelation;
  * A logical write that should be executed using V1 InsertableRelation interface.
  * <p>
  * Tables that have {@link TableCapability#V1_BATCH_WRITE} in the list of their capabilities
- * must create {@link V1WriteBuilder} and build {@link V1Write}.
+ * must build {@link V1Write}.
  */
 @Unstable
 public interface V1Write extends Write {

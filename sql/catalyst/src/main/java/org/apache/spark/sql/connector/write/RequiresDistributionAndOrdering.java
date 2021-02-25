@@ -24,14 +24,16 @@ import org.apache.spark.sql.connector.expressions.SortOrder;
 
 /**
  * A write that requires a specific distribution and ordering of data.
+ *
+ * @since 3.2.0
  */
 @Experimental
 public interface RequiresDistributionAndOrdering extends Write {
   /**
    * Returns the distribution required by this write.
    * <p>
-   * Spark will distribute incoming records to satisfy the required distribution before
-   * passing those records to the data source table on write.
+   * Spark will distribute incoming records across partitions to satisfy the required distribution
+   * before passing the records to the data source table on write.
    * <p>
    * Implementations may return {@link UnspecifiedDistribution} if they don't require any specific
    * distribution of data on write.

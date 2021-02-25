@@ -57,7 +57,9 @@ object RewriteDelete extends Rule[LogicalPlan] with PredicateHelper with Logging
       val mergeWrite = mergeBuilder.asWriteBuilder.build()
       val writePlan = buildWritePlan(remainingRowsPlan, r.output)
 
-      ReplaceData(r, DistributionAndOrderingUtils.prepareQuery(mergeWrite, writePlan), mergeWrite)
+      val conf = SQLConf.get
+      val newWritePlan = DistributionAndOrderingUtils.prepareQuery(mergeWrite, writePlan, conf)
+      ReplaceData(r, newWritePlan, mergeWrite)
   }
 
   private def buildScanPlan(

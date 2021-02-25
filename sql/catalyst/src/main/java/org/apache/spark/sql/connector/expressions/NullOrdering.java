@@ -21,6 +21,8 @@ import org.apache.spark.annotation.Experimental;
 
 /**
  * A null order used in sorting expressions.
+ *
+ * @since 3.2.0
  */
 @Experimental
 public enum NullOrdering {

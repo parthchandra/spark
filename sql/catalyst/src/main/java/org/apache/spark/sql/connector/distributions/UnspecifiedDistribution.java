@@ -21,6 +21,8 @@ import org.apache.spark.annotation.Experimental;
 
 /**
  * A distribution where no promises are made about co-location of data.
+ *
+ * @since 3.2.0
  */
 @Experimental
 public interface UnspecifiedDistribution extends Distribution {}
