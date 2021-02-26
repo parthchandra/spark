@@ -172,6 +172,9 @@ statement
         (partitionSpec)? SET locationSpec                              #setTableLocation
     | ALTER TABLE multipartIdentifier RECOVER PARTITIONS               #recoverPartitions
     | ALTER TABLE multipartIdentifier WRITE writeSpec                  #setWriteDistributionAndOrdering
+    | ALTER TABLE multipartIdentifier
+         ADD PARTITION FIELD transform (AS name=identifier)?           #addPartitionField
+    | ALTER TABLE multipartIdentifier DROP PARTITION FIELD transform   #dropPartitionField
     | DROP TABLE (IF EXISTS)? multipartIdentifier PURGE?               #dropTable
     | DROP VIEW (IF EXISTS)? multipartIdentifier                       #dropView
     | CREATE (OR REPLACE)? (GLOBAL? TEMPORARY)?
@@ -1070,6 +1073,7 @@ ansiNonReserved
     | EXTENDED
     | EXTERNAL
     | EXTRACT
+    | FIELD
     | FIELDS
     | FILEFORMAT
     | FIRST
@@ -1312,6 +1316,7 @@ nonReserved
     | FALSE
     | FETCH
     | FILTER
+    | FIELD
     | FIELDS
     | FILEFORMAT
     | FIRST
@@ -1564,6 +1569,7 @@ EXTERNAL: 'EXTERNAL';
 EXTRACT: 'EXTRACT';
 FALSE: 'FALSE';
 FETCH: 'FETCH';
+FIELD: 'FIELD';
 FIELDS: 'FIELDS';
 FILTER: 'FILTER';
 FILEFORMAT: 'FILEFORMAT';
