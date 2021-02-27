@@ -220,6 +220,11 @@ object DateTimeUtils {
     Math.floorDiv(us, MICROS_PER_MILLIS)
   }
 
+  // this method was introduced in Spark 3.1 but we make it available in earlier versions too
+  def microsToMillis(micros: Long): Long = {
+    toMillis(micros)
+  }
+
   /*
    * Converts milliseconds since epoch to SQLTimestamp.
    */
