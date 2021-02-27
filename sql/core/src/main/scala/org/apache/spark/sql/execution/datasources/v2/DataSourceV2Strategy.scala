@@ -26,6 +26,7 @@ import org.apache.spark.sql.catalyst.expressions.{And, Expression, GenericIntern
 import org.apache.spark.sql.catalyst.planning.PhysicalOperation
 import org.apache.spark.sql.catalyst.plans.logical._
 import org.apache.spark.sql.connector.catalog.{CatalogV2Util, Identifier, StagingTableCatalog, SupportsNamespaces, SupportsWrite, TableCapability, TableCatalog, TableChange}
+import org.apache.spark.sql.connector.read.SupportsFileFilter
 import org.apache.spark.sql.connector.read.streaming.{ContinuousStream, MicroBatchStream}
 import org.apache.spark.sql.connector.write.V1Write
 import org.apache.spark.sql.execution.{FilterExec, LeafExecNode, ProjectExec, RowDataSourceScanExec, SparkPlan}
@@ -89,6 +90,13 @@ class DataSourceV2Strategy(session: SparkSession) extends Strategy with Predicat
         v1Relation,
         tableIdentifier = None)
       withProjectAndFilter(project, filters, dsScan, needsUnsafeConversion = false) :: Nil
+
+    case PhysicalOperation(project, filters,
+        DataSourceV2ScanRelation(_, scan: SupportsFileFilter, output)) =>
+      // similar to the case below but is used for operations with dynamic file filtering,
+      // which requires us to disable caching of input splits
+      val batchExec = BatchScanExec(output, scan, cachePartitions = false)
+      withProjectAndFilter(project, filters, batchExec, !batchExec.supportsColumnar) :: Nil
 
     case PhysicalOperation(project, filters, relation: DataSourceV2ScanRelation) =>
       // projection and filters were already pushed down in the optimizer.
@@ -331,16 +339,21 @@ class DataSourceV2Strategy(session: SparkSession) extends Strategy with Predicat
       val input = buildInternalRow(args)
       CallExec(c.output, procedure, input) :: Nil
 
-    case DynamicFileFilter(scanRelation, fileFilterPlan) =>
-      // we don't use planLater here as we need set cachePartitions to false in BatchScanExec
-      val scanExec = BatchScanExec(scanRelation.output, scanRelation.scan, cachePartitions = false)
-      val dynamicFileFilter = DynamicFileFilterExec(scanExec, planLater(fileFilterPlan))
-      if (scanExec.supportsColumnar) {
-        dynamicFileFilter :: Nil
-      } else {
-        // add a projection to ensure we have UnsafeRows required by some operations
-        ProjectExec(scanRelation.output, dynamicFileFilter) :: Nil
-      }
+    case DynamicFileFilter(scanPlan, fileFilterPlan, filterable) =>
+      DynamicFileFilterExec(planLater(scanPlan), planLater(fileFilterPlan), filterable) :: Nil
+
+    case DynamicFileFilterWithCardinalityCheck(scanPlan, fileFilterPlan, filterable, accumulator) =>
+      DynamicFileFilterWithCardinalityCheckExec(
+        planLater(scanPlan),
+        planLater(fileFilterPlan),
+        filterable,
+        accumulator) :: Nil
+
+    case ReplaceData(r: DataSourceV2Relation, query, write) =>
+      ReplaceDataExec(r.table.asMergeable, planLater(query), refreshCache(r), write) :: Nil
+
+    case MergeInto(mergeIntoParams, output, child) =>
+      MergeIntoExec(mergeIntoParams, output, planLater(child)) :: Nil
 
     case _ => Nil
   }

@@ -74,4 +74,9 @@ object BasicStatsPlanVisitor extends LogicalPlanVisitor[Statistics] {
   override def visitWindow(p: Window): Statistics = fallback(p)
 
   override def visitDynamicFileFilter(p: DynamicFileFilter): Statistics = fallback(p)
+
+  override def visitDynamicFileFilterWithCardinalityCheck(
+      p: DynamicFileFilterWithCardinalityCheck): Statistics = {
+    fallback(p)
+  }
 }
