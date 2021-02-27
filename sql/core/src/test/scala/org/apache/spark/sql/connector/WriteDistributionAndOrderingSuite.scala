@@ -439,7 +439,9 @@ class WriteDistributionAndOrderingSuite
       writeTransform: DataFrame => DataFrame = df => df,
       writeOperation: String = "append"): Unit = {
 
-    catalog.createTable(ident, schema, Array.empty, emptyProps, tableDistribution, tableOrdering)
+    catalog.createTableWithDistributionAndOrdering(
+      ident, schema, Array.empty, emptyProps,
+      tableDistribution, tableOrdering)
 
     val df = spark.createDataFrame(Seq((1L, "a"), (2L, "b"), (3L, "c"))).toDF("id", "data")
     val writer = writeTransform(df).writeTo(tableNameAsString)
@@ -528,7 +530,7 @@ class ExtendedInMemoryTableCatalog extends InMemoryTableCatalog {
 
   import org.apache.spark.sql.connector.catalog.CatalogV2Implicits._
 
-  def createTable(
+  def createTableWithDistributionAndOrdering(
       ident: Identifier,
       schema: StructType,
       partitions: Array[Transform],

@@ -137,7 +137,7 @@ class ResolveCatalogs(val catalogManager: CatalogManager)
       throw new AnalysisException("Describing columns is not supported for v2 tables.")
 
     case c @ CreateTableStatement(
-         NonSessionCatalogAndTable(catalog, tbl), _, _, _, _, _, _, _, _, _) =>
+         NonSessionCatalogAndTable(catalog, tbl), _, _, _, _, _, _, _, _, _, _, _) =>
       assertNoCharTypeInSchema(c.tableSchema)
       CreateV2Table(
         catalog.asTableCatalog,
@@ -146,10 +146,12 @@ class ResolveCatalogs(val catalogManager: CatalogManager)
         // convert the bucket spec and add it as a transform
         c.partitioning ++ c.bucketSpec.map(_.asTransform),
         convertTableProperties(c.properties, c.options, c.location, c.comment, c.provider),
-        ignoreIfExists = c.ifNotExists)
+        ignoreIfExists = c.ifNotExists,
+        c.distributionMode,
+        c.ordering)
 
     case c @ CreateTableAsSelectStatement(
-         NonSessionCatalogAndTable(catalog, tbl), _, _, _, _, _, _, _, _, _, _) =>
+         NonSessionCatalogAndTable(catalog, tbl), _, _, _, _, _, _, _, _, _, _, _, _) =>
       CreateTableAsSelect(
         catalog.asTableCatalog,
         tbl.asIdentifier,
@@ -158,7 +160,9 @@ class ResolveCatalogs(val catalogManager: CatalogManager)
         c.asSelect,
         convertTableProperties(c.properties, c.options, c.location, c.comment, c.provider),
         writeOptions = c.writeOptions,
-        ignoreIfExists = c.ifNotExists)
+        ignoreIfExists = c.ifNotExists,
+        c.distributionMode,
+        c.ordering)
 
     case MigrateTableStatement(NonSessionCatalogAndTable(catalog, tbl), provider, properties) =>
       if (!catalog.isInstanceOf[SupportsMigrate]) {
@@ -189,7 +193,7 @@ class ResolveCatalogs(val catalogManager: CatalogManager)
       RefreshTable(catalog.asTableCatalog, tbl.asIdentifier)
 
     case c @ ReplaceTableStatement(
-         NonSessionCatalogAndTable(catalog, tbl), _, _, _, _, _, _, _, _, _) =>
+         NonSessionCatalogAndTable(catalog, tbl), _, _, _, _, _, _, _, _, _, _, _) =>
       assertNoCharTypeInSchema(c.tableSchema)
       ReplaceTable(
         catalog.asTableCatalog,
@@ -198,10 +202,12 @@ class ResolveCatalogs(val catalogManager: CatalogManager)
         // convert the bucket spec and add it as a transform
         c.partitioning ++ c.bucketSpec.map(_.asTransform),
         convertTableProperties(c.properties, c.options, c.location, c.comment, c.provider),
-        orCreate = c.orCreate)
+        orCreate = c.orCreate,
+        distributionMode = c.distributionMode,
+        ordering = c.ordering)
 
     case c @ ReplaceTableAsSelectStatement(
-         NonSessionCatalogAndTable(catalog, tbl), _, _, _, _, _, _, _, _, _, _) =>
+         NonSessionCatalogAndTable(catalog, tbl), _, _, _, _, _, _, _, _, _, _, _, _) =>
       ReplaceTableAsSelect(
         catalog.asTableCatalog,
         tbl.asIdentifier,
@@ -210,7 +216,9 @@ class ResolveCatalogs(val catalogManager: CatalogManager)
         c.asSelect,
         convertTableProperties(c.properties, c.options, c.location, c.comment, c.provider),
         writeOptions = c.writeOptions,
-        orCreate = c.orCreate)
+        orCreate = c.orCreate,
+        distributionMode = c.distributionMode,
+        ordering = c.ordering)
 
     case DropTableStatement(NonSessionCatalogAndTable(catalog, tbl), ifExists, _) =>
       DropTable(catalog.asTableCatalog, tbl.asIdentifier, ifExists)

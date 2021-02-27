@@ -369,6 +369,7 @@ createTableClauses
     :((OPTIONS options=tablePropertyList) |
      (PARTITIONED BY partitioning=transformList) |
      bucketSpec |
+     writeSpec |
      locationSpec |
      commentSpec |
      (TBLPROPERTIES tableProps=tablePropertyList))*
