@@ -289,6 +289,7 @@ SPARK-34212       Parquet vectorized reader can read decimal fields with a large
 SPARK-34327       Strip passwords from inlining into build information while releasing
 SPARK-34318       Dataset.colRegex should work with column names and qualifiers which contain newlines
 SPARK-34407       KubernetesClusterSchedulerBackend.stop should clean up K8s resources
+SPARK-34449       Upgrade Jetty to fix CVE-2020-27218
 
 # Internal Patches
 MINOR             Add an empty APPLE_CHANGES.txt
@@ -344,3 +345,6 @@ MINOR             trigger build job for pull requests
 rdar://70118075   Backport dynamic allocation to ACI Spark 2.4
 rdar://73506571   Backport Spark K8s extensions to Spark 2.4.7 for SAAS
 MINOR             Bump parquet to 1.10.1.5-apple
+N/A               ADT Version updated to 0.7.4 (#941)
+rdar://74770578   Upgrade AWS Java SDK version to use IAM roles for Service Accounts in EKS.
+MINOR             Update dependency manifest file
