@@ -187,8 +187,6 @@ if [[ "$1" == "package" ]]; then
   shasum -a 512 spark-$SPARK_VERSION.tgz > spark-$SPARK_VERSION.tgz.sha512
   rm -rf spark-$SPARK_VERSION
 
-  ZINC_PORT=3035
-
   # Updated for each binary build
   make_binary_release() {
     NAME=$1
@@ -206,17 +204,12 @@ if [[ "$1" == "package" ]]; then
       R_FLAG="--r"
     fi
 
-    # We increment the Zinc port each time to avoid OOM's and other craziness if multiple builds
-    # share the same Zinc server.
-    ZINC_PORT=$((ZINC_PORT + 1))
-
     echo "Building binary dist $NAME"
     cp -r spark spark-$SPARK_VERSION-bin-$NAME
     cd spark-$SPARK_VERSION-bin-$NAME
 
     ./dev/change-scala-version.sh $SCALA_VERSION
 
-    export ZINC_PORT=$ZINC_PORT
     echo "Creating distribution: $NAME ($FLAGS)"
 
     # Write out the VERSION to PySpark version info we rewrite the - into a . and SNAPSHOT
@@ -229,8 +222,7 @@ if [[ "$1" == "package" ]]; then
 
     echo "Creating distribution"
     ./dev/make-distribution.sh --name $NAME --mvn $MVN_HOME/bin/mvn --tgz \
-      $PIP_FLAG $R_FLAG $FLAGS \
-      -DzincPort=$ZINC_PORT 2>&1 >  ../binary-release-$NAME.log
+      $PIP_FLAG $R_FLAG $FLAGS 2>&1 >  ../binary-release-$NAME.log
     cd ..
 
     if [[ -n $R_FLAG ]]; then
@@ -382,10 +374,7 @@ if [[ "$1" == "publish-snapshot" ]]; then
   echo "<password>$ASF_PASSWORD</password>" >> $tmp_settings
   echo "</server></servers></settings>" >> $tmp_settings
 
-  # Generate random point for Zinc
-  export ZINC_PORT=$(python -S -c "import random; print(random.randrange(3030,4030))")
-
-  $MVN -DzincPort=$ZINC_PORT --settings $tmp_settings -DskipTests $SCALA_2_12_PROFILES $PUBLISH_PROFILES deploy
+  $MVN --settings $tmp_settings -DskipTests $SCALA_2_12_PROFILES $PUBLISH_PROFILES deploy
 
   rm $tmp_settings
   cd ..
@@ -414,20 +403,17 @@ if [[ "$1" == "publish-release" ]]; then
 
   tmp_repo=$(mktemp -d spark-repo-XXXXX)
 
-  # Generate random point for Zinc
-  export ZINC_PORT=$(python -S -c "import random; print(random.randrange(3030,4030))")
-
   # TODO: revisit for Scala 2.13 support
 
   if [[ $PUBLISH_SCALA_2_11 = 1 ]]; then
     ./dev/change-scala-version.sh 2.11
-    $MVN -DzincPort=$ZINC_PORT -Dmaven.repo.local=$tmp_repo -DskipTests \
+    $MVN -Dmaven.repo.local=$tmp_repo -DskipTests \
       $SCALA_2_11_PROFILES $PUBLISH_PROFILES clean install
   fi
 
   if [[ $PUBLISH_SCALA_2_12 = 1 ]]; then
     ./dev/change-scala-version.sh 2.12
-    $MVN -DzincPort=$((ZINC_PORT + 2)) -Dmaven.repo.local=$tmp_repo -DskipTests \
+    $MVN -Dmaven.repo.local=$tmp_repo -DskipTests \
       $SCALA_2_12_PROFILES $PUBLISH_PROFILES clean install
   fi
 

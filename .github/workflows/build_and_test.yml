@@ -92,12 +92,11 @@ jobs:
       if: ${{ github.event.inputs.target != '' }}
       run: git merge --progress --ff-only origin/${{ github.event.inputs.target }}
     # Cache local repositories. Note that GitHub Actions cache has a 2G limit.
-    - name: Cache Scala, SBT, Maven and Zinc
+    - name: Cache Scala, SBT and Maven
       uses: actions/cache@v2
       with:
         path: |
           build/apache-maven-*
-          build/zinc-*
           build/scala-*
           build/*.jar
           ~/.sbt
@@ -178,12 +177,11 @@ jobs:
       if: ${{ github.event.inputs.target != '' }}
       run: git merge --progress --ff-only origin/${{ github.event.inputs.target }}
     # Cache local repositories. Note that GitHub Actions cache has a 2G limit.
-    - name: Cache Scala, SBT, Maven and Zinc
+    - name: Cache Scala, SBT and Maven
       uses: actions/cache@v2
       with:
         path: |
           build/apache-maven-*
-          build/zinc-*
           build/scala-*
           build/*.jar
           ~/.sbt
@@ -252,12 +250,11 @@ jobs:
       if: ${{ github.event.inputs.target != '' }}
       run: git merge --progress --ff-only origin/${{ github.event.inputs.target }}
     # Cache local repositories. Note that GitHub Actions cache has a 2G limit.
-    - name: Cache Scala, SBT, Maven and Zinc
+    - name: Cache Scala, SBT and Maven
       uses: actions/cache@v2
       with:
         path: |
           build/apache-maven-*
-          build/zinc-*
           build/scala-*
           build/*.jar
           ~/.sbt
@@ -298,12 +295,11 @@ jobs:
     - name: Checkout Spark repository
       uses: actions/checkout@v2
     # Cache local repositories. Note that GitHub Actions cache has a 2G limit.
-    - name: Cache Scala, SBT, Maven and Zinc
+    - name: Cache Scala, SBT and Maven
       uses: actions/cache@v2
       with:
         path: |
           build/apache-maven-*
-          build/zinc-*
           build/scala-*
           build/*.jar
           ~/.sbt
