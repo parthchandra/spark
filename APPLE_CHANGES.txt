@@ -15,6 +15,9 @@ SPARK-34391     Upgrade commons-io to 2.8.0
 SPARK-34340     Support ZSTD JNI BufferPool
 SPARK-34316     Support spark.kubernetes.executor.disableConfigMap
 SPARK-34323     Upgrade zstd-jni to 1.4.8-3
+SPARK-34467     Upgrade Zstd-jni to 1.4.8-4
+SPARK-34496     Upgrade ZSTD-JNI to 1.4.8-5 for better API compatibility
+SPARK-34559     Upgrade to ZSTD JNI 1.4.8-6
 
 # From Spark 3.1.0
 SPARK-25355      Add proxy user to driver if present on spark-submit
@@ -121,6 +124,15 @@ SPARK-34213      Refresh cached data of v1 table in `LOAD DATA`
 SPARK-33726      Fix for Duplicate field names during Aggregation
 SPARK-34187      Use available offset range obtained during polling when checking offset validation
 SPARK-33843      Upgrade to Zstd 1.4.8
+SPARK-34469      Ignore RegisterExecutor when SparkContext is stopped
+SPARK-34449      Upgrade Jetty to fix CVE-2020-27218
+SPARK-34424      Fix failures of HiveOrcHadoopFsRelationSuite
+SPARK-34421      Resolve temporary functions and views in views with CTEs
+MINOR            Fix the comments in the example at window function
+MINOR            Add table_identifier in sql-migration-guide for SHOW CREATE TABLE
+SPARK-33504      The application log in the Spark history server contains sensitive attributes should be redacted
+SPARK-34232      Redact SparkListenerEnvironmentUpdate event in log
+SPARK-34543      Respect the `spark.sql.caseSensitive` config while resolving partition spec in v1 `SET LOCATION`
 
 # From Spark 3.0.2
 
@@ -190,3 +202,12 @@ rdar://74001493  Add Dataset pipe API
 N/A              Add an option for limiting storage for shuffle blocks
 MINOR            Upgrade callhomelistner 0.2.7 (#921)
 MINOR            trigger build job for pull requests
+MINOR            Add zstd-jni test dependency to avro module
+MINOR            Sync distribution and ordering code with 3.1.1 (#944)
+rdar://74249791  ALTER TABLE ... WRITE command (#946)
+rdar://74251620  Add support for partition evolution (#909) (#947)
+MINOR            Bump Iceberg version (#954)
+rdar://70004937  Rewrite row-level operations for Iceberg (#922) (#955)
+MINOR            Add microsToMillis to DateTimeUtils (#956)
+rdar://72811621  Control distribution and ordering during table creation (#957)
+MINOR            Upgrade Parquet to 1.10.1.7-apple to match zstd-jni
