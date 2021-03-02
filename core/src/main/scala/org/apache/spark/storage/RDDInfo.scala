@@ -20,7 +20,7 @@ package org.apache.spark.storage
 import org.apache.spark.SparkEnv
 import org.apache.spark.annotation.DeveloperApi
 import org.apache.spark.internal.config._
-import org.apache.spark.rdd.{RDD, RDDOperationScope}
+import org.apache.spark.rdd.{DeterministicLevel, RDD, RDDOperationScope}
 import org.apache.spark.util.Utils
 
 @DeveloperApi
@@ -31,7 +31,8 @@ class RDDInfo(
     var storageLevel: StorageLevel,
     val parentIds: Seq[Int],
     val callSite: String = "",
-    val scope: Option[RDDOperationScope] = None)
+    val scope: Option[RDDOperationScope] = None,
+    val outputDeterministicLevel: DeterministicLevel.Value = DeterministicLevel.DETERMINATE)
   extends Ordered[RDDInfo] {
 
   var numCachedPartitions = 0
@@ -68,6 +69,7 @@ private[spark] object RDDInfo {
       rdd.creationSite.shortForm
     }
     new RDDInfo(rdd.id, rddName, rdd.partitions.length,
-      rdd.getStorageLevel, parentIds, callSite, rdd.scope)
+      rdd.getStorageLevel, parentIds, callSite, rdd.scope,
+      rdd.outputDeterministicLevel)
   }
 }
