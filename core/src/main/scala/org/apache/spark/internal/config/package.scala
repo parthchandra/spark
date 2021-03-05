@@ -28,6 +28,8 @@ import org.apache.spark.util.Utils
 package object config {
   private[spark] val SPARK_CALL_HOME_LISTENER_CLASS =
     "com.apple.spark.callhome.listener.SparkCallHomeListenerV2"
+  private[spark] val SPARK_CALL_HOME_QUEUE_NAME =
+    "SparkCallHome"
 
   private[spark] val DRIVER_CLASS_PATH =
     ConfigBuilder(SparkLauncher.DRIVER_EXTRA_CLASSPATH).stringConf.createOptional
