@@ -18,6 +18,8 @@ SPARK-34323     Upgrade zstd-jni to 1.4.8-3
 SPARK-34467     Upgrade Zstd-jni to 1.4.8-4
 SPARK-34496     Upgrade ZSTD-JNI to 1.4.8-5 for better API compatibility
 SPARK-34559     Upgrade to ZSTD JNI 1.4.8-6
+SPARK-34647     Use ZSTD JNI NoFinalizer classes and bump to 1.4.8-7
+SPARK-34650     Exclude zstd-jni transitive dependency from Kafka Client
 
 # From Spark 3.1.0
 SPARK-25355      Add proxy user to driver if present on spark-submit
@@ -134,7 +136,16 @@ SPARK-33504      The application log in the Spark history server contains sensit
 SPARK-34232      Redact SparkListenerEnvironmentUpdate event in log
 SPARK-34543      Respect the `spark.sql.caseSensitive` config while resolving partition spec in v1 `SET LOCATION`
 
-# From Spark 3.0.2
+# From Spark 3.0.3
+SPARK-34392     Support ZoneOffset +h:mm in DateTimeUtils. getZoneId
+SPARK-34607     Add `Utils.isMemberClass` to fix a malformed class name error on jdk8u
+SPARK-34596     Use Utils.getSimpleName to avoid hitting Malformed class name in NewInstance.doGenCode
+SPARK-32924     Make duration column in master UI sorted in the correct order
+SPARK-34610     Fix Python UDF used in GroupedAggPandasUDFTests
+SPARK-34604     Use eventually in TaskContextTestsWithWorkerReuse.test_task_context_correct_with_python_worker_reuse
+MINOR           Fix some wrong default values in SQL tuning guide's AQE section
+SPARK-34534     Fix blockIds order when use FetchShuffleBlocks to fetch blocks
+SPARK-34556     Checking duplicate static partition columns should respect case sensitive conf
 
 # Internal Patch
 rdar://72034392  Wait for the executor JVM to finish before returning decom.sh (fixed upstream but differently).
@@ -211,3 +222,4 @@ rdar://70004937  Rewrite row-level operations for Iceberg (#922) (#955)
 MINOR            Add microsToMillis to DateTimeUtils (#956)
 rdar://72811621  Control distribution and ordering during table creation (#957)
 MINOR            Upgrade Parquet to 1.10.1.7-apple to match zstd-jni
+MINOR            Upgrade Parquet to 1.10.1.8-apple
