@@ -23,7 +23,7 @@ import org.apache.spark.sql.catalyst.InternalRow
 import org.apache.spark.sql.catalyst.analysis.{CannotReplaceMissingTableException, NoSuchTableException}
 import org.apache.spark.sql.catalyst.expressions.Attribute
 import org.apache.spark.sql.connector.catalog.{Identifier, StagedTable, StagingTableCatalog, TableCatalog}
-import org.apache.spark.sql.connector.expressions.{SortOrder, Transform}
+import org.apache.spark.sql.connector.expressions.Transform
 import org.apache.spark.sql.types.StructType
 import org.apache.spark.util.Utils
 
@@ -33,9 +33,7 @@ case class ReplaceTableExec(
     tableSchema: StructType,
     partitioning: Seq[Transform],
     tableProperties: Map[String, String],
-    orCreate: Boolean,
-    distributionMode: String,
-    ordering: Seq[SortOrder]) extends V2CommandExec {
+    orCreate: Boolean) extends V2CommandExec {
 
   override protected def run(): Seq[InternalRow] = {
     if (catalog.tableExists(ident)) {
@@ -43,9 +41,7 @@ case class ReplaceTableExec(
     } else if (!orCreate) {
       throw new CannotReplaceMissingTableException(ident)
     }
-    catalog.createTable(
-      ident, tableSchema, partitioning.toArray, tableProperties.asJava,
-      distributionMode, ordering.toArray)
+    catalog.createTable(ident, tableSchema, partitioning.toArray, tableProperties.asJava)
     Seq.empty
   }
 
@@ -58,20 +54,16 @@ case class AtomicReplaceTableExec(
     tableSchema: StructType,
     partitioning: Seq[Transform],
     tableProperties: Map[String, String],
-    orCreate: Boolean,
-    distributionMode: String,
-    ordering: Seq[SortOrder]) extends V2CommandExec {
+    orCreate: Boolean) extends V2CommandExec {
 
   override protected def run(): Seq[InternalRow] = {
     val staged = if (orCreate) {
       catalog.stageCreateOrReplace(
-        identifier, tableSchema, partitioning.toArray, tableProperties.asJava,
-        distributionMode, ordering.toArray)
+        identifier, tableSchema, partitioning.toArray, tableProperties.asJava)
     } else if (catalog.tableExists(identifier)) {
       try {
         catalog.stageReplace(
-          identifier, tableSchema, partitioning.toArray, tableProperties.asJava,
-          distributionMode, ordering.toArray)
+          identifier, tableSchema, partitioning.toArray, tableProperties.asJava)
       } catch {
         case e: NoSuchTableException =>
           throw new CannotReplaceMissingTableException(identifier, Some(e))
