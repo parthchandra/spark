@@ -290,6 +290,7 @@ SPARK-34327       Strip passwords from inlining into build information while rel
 SPARK-34318       Dataset.colRegex should work with column names and qualifiers which contain newlines
 SPARK-34407       KubernetesClusterSchedulerBackend.stop should clean up K8s resources
 SPARK-34449       Upgrade Jetty to fix CVE-2020-27218
+SPARK-32924       Make duration column in master UI sorted in the correct order
 
 # Internal Patches
 MINOR             Add an empty APPLE_CHANGES.txt
@@ -348,3 +349,4 @@ MINOR             Bump parquet to 1.10.1.5-apple
 N/A               ADT Version updated to 0.7.4 (#941)
 rdar://74770578   Upgrade AWS Java SDK version to use IAM roles for Service Accounts in EKS.
 MINOR             Update dependency manifest file
+rdar://74792143   Fix the call home service thread shutdown issue
