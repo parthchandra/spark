@@ -42,7 +42,6 @@ trait LogicalPlanVisitor[T] {
     case p: Union => visitUnion(p)
     case p: Window => visitWindow(p)
     case p: DynamicFileFilter => visitDynamicFileFilter(p)
-    case p: DynamicFileFilterWithCardinalityCheck => visitDynamicFileFilterWithCardinalityCheck(p)
     case p: LogicalPlan => default(p)
   }
 
@@ -85,6 +84,4 @@ trait LogicalPlanVisitor[T] {
   def visitWindow(p: Window): T
 
   def visitDynamicFileFilter(p: DynamicFileFilter): T
-
-  def visitDynamicFileFilterWithCardinalityCheck(p: DynamicFileFilterWithCardinalityCheck): T
 }

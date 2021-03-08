@@ -18,40 +18,16 @@
 package org.apache.spark.sql.catalyst.plans.logical
 
 import org.apache.spark.sql.catalyst.expressions.{Attribute, AttributeSet}
-import org.apache.spark.sql.catalyst.util.{truncatedString, SetAccumulator}
-import org.apache.spark.sql.connector.read.SupportsFileFilter
+import org.apache.spark.sql.execution.datasources.v2.DataSourceV2ScanRelation
 
 case class DynamicFileFilter(
-    scanPlan: LogicalPlan,
-    fileFilterPlan: LogicalPlan,
-    filterable: SupportsFileFilter) extends BinaryNode {
+    scanRelation: DataSourceV2ScanRelation,
+    fileFilterPlan: LogicalPlan) extends BinaryNode {
 
   @transient
   override lazy val references: AttributeSet = AttributeSet(fileFilterPlan.output)
 
-  override def left: LogicalPlan = scanPlan
+  override def left: LogicalPlan = scanRelation
   override def right: LogicalPlan = fileFilterPlan
-  override def output: Seq[Attribute] = scanPlan.output
-
-  override def simpleString(maxFields: Int): String = {
-    s"DynamicFileFilter${truncatedString(output, "[", ", ", "]", maxFields)}"
-  }
-}
-
-case class DynamicFileFilterWithCardinalityCheck(
-    scanPlan: LogicalPlan,
-    fileFilterPlan: LogicalPlan,
-    filterable: SupportsFileFilter,
-    filesAccumulator: SetAccumulator[String]) extends BinaryNode {
-
-  @transient
-  override lazy val references: AttributeSet = AttributeSet(fileFilterPlan.output)
-
-  override def left: LogicalPlan = scanPlan
-  override def right: LogicalPlan = fileFilterPlan
-  override def output: Seq[Attribute] = scanPlan.output
-
-  override def simpleString(maxFields: Int): String = {
-    s"DynamicFileFilterWithCardinalityCheck${truncatedString(output, "[", ", ", "]", maxFields)}"
-  }
+  override def output: Seq[Attribute] = scanRelation.output
 }

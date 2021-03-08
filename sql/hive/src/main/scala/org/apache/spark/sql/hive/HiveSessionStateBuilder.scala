@@ -19,7 +19,7 @@ package org.apache.spark.sql.hive
 
 import org.apache.spark.annotation.Unstable
 import org.apache.spark.sql._
-import org.apache.spark.sql.catalyst.analysis.{AlignRowLevelOperations, Analyzer, ResolveSessionCatalog, RowLevelOperationsPredicateCheck}
+import org.apache.spark.sql.catalyst.analysis.{Analyzer, ResolveSessionCatalog}
 import org.apache.spark.sql.catalyst.catalog.ExternalCatalogWithListener
 import org.apache.spark.sql.catalyst.optimizer.Optimizer
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
@@ -90,7 +90,6 @@ class HiveSessionStateBuilder(session: SparkSession, parentState: Option[Session
         PreprocessTableInsertion(conf) +:
         DataSourceAnalysis(conf) +:
         HiveAnalysis +:
-        AlignRowLevelOperations(conf) +:
         customPostHocResolutionRules
 
     override val extendedCheckRules: Seq[LogicalPlan => Unit] =
@@ -98,7 +97,6 @@ class HiveSessionStateBuilder(session: SparkSession, parentState: Option[Session
         PreReadCheck +:
         TableCapabilityCheck +:
         CommandCheck(conf) +:
-        RowLevelOperationsPredicateCheck +:
         customCheckRules
   }
 
