@@ -2381,7 +2381,7 @@ class DataSourceV2SQLSuite
 
         def verify(sql: String): Unit = {
           val e = intercept[AnalysisException](spark.sql(sql))
-          assert(e.message.contains(s"Table or view not found"),
+          assert(e.message.contains(s"Table or view not found: $t"),
             s"Error message did not contain expected text while evaluting $sql")
         }
 
@@ -2399,13 +2399,8 @@ class DataSourceV2SQLSuite
 
         def verifyGeneric(sql: String): Unit = {
           val e = intercept[AnalysisException](spark.sql(sql))
-          assert(e.message.contains(s"not found"),
+          assert(e.message.contains(s"not found: $t"),
             s"Error message did not contain expected text while evaluting $sql")
-        }
-
-        // Error is thrown in a different place but it's ok
-        def verifyFailure(sql: String): Unit = {
-          intercept[AnalysisException](spark.sql(sql))
         }
 
         verify(s"select * from $t")
@@ -2413,11 +2408,11 @@ class DataSourceV2SQLSuite
         verify(s"REFRESH TABLE $t")
         verify(s"DESCRIBE $t i")
         verify(s"DROP TABLE $t")
-        verifyFailure(s"DROP VIEW $t")
+        verifyView(s"DROP VIEW $t")
         verifyGeneric(s"ANALYZE TABLE $t COMPUTE STATISTICS")
         verifyGeneric(s"ANALYZE TABLE $t COMPUTE STATISTICS FOR ALL COLUMNS")
-        verifyFailure(s"MSCK REPAIR TABLE $t")
-        verifyGeneric(s"LOAD DATA INPATH 'filepath' INTO TABLE $t")
+        verifyTable(s"MSCK REPAIR TABLE $t")
+        verifyTable(s"LOAD DATA INPATH 'filepath' INTO TABLE $t")
         verifyGeneric(s"SHOW CREATE TABLE $t")
         verifyGeneric(s"SHOW CREATE TABLE $t AS SERDE")
         verifyGeneric(s"CACHE TABLE $t")
