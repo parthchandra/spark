@@ -3,6 +3,7 @@ This contains the changes after v2.4.7-rc3
 # From Spark 3.2.0
 SPARK-34391       Upgrade commons-io to 2.8.0
 SPARK-34340       Support ZSTD JNI BufferPool
+SPARK-34486       Upgrade kubernetes-client to 4.13.2
 
 # From Spark 3.1.0
 MULTIPART         Add Spark K8s Decommissioning & Dynamic Allocation support
@@ -25,6 +26,9 @@ SPARK-33337       Support subexpression elimination in branches of conditional e
 SPARK-34206       Make Guava Cache as ExecutorPodsLifecycleManager private field
 SPARK-33843       Upgrade to Zstd 1.4.8
 SPARK-34193       TorrentBroadcast block manager decommissioning race fix
+SPARK-33012       Upgrade fabric8 to 4.10.3
+SPARK-33324       Upgrade kubernetes-client to 4.11.1
+SPARK-33471       Upgrade kubernetes-client to 4.12.0
 
 
 # From Spark 3.0.0
@@ -176,6 +180,10 @@ SPARK-25394       Add an application status metrics source
 SPARK-25926       Move config entries in core module to internal.config.
 SPARK-30060       Rename metrics enable/disable configs
 SPARK-27324       Document configurations related to executor metrics and modify a configuration
+SPARK-30243       Upgrade K8s client dependency to 4.6.4
+SPARK-30715       Bump fabric8 to 4.7.1
+SPARK-30715       Update k8s client version in IT as well
+SPARK-31786       Upgrade kubernetes-client to 4.9.2
 
 # From Spark 2.4.8
 SPARK-32815       Fix LibSVM data source loading error on file paths with glob metacharacters
