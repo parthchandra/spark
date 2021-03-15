@@ -13,8 +13,8 @@ machine:
     version: 11-applejdk
 
 builds:
-  - name: apple-spark-2.11_2.4.7-snapshot-common
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.11_2.4.8-snapshot-common
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -27,8 +27,8 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
-  - name: apple-spark-2.11_2.4.7-snapshot-common-pr
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.11_2.4.8-snapshot-common-pr
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -41,8 +41,8 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
-  - name: apple-spark-2.12_2.4.7-snapshot-common
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.12_2.4.8-snapshot-common
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
@@ -56,8 +56,8 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
-  - name: apple-spark-2.12_2.4.7-snapshot-common-pr
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.12_2.4.8-snapshot-common-pr
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
@@ -71,8 +71,8 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
-  - name: apple-spark-2.11_2.4.7-snapshot-core
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.11_2.4.8-snapshot-core
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -80,8 +80,8 @@ builds:
       steps:
         - build/sbt -Phadoop-3.2 "core/test"
 
-  - name: apple-spark-2.11_2.4.7-snapshot-core-pr
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.11_2.4.8-snapshot-core-pr
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -89,8 +89,8 @@ builds:
       steps:
         - build/sbt -Phadoop-3.2 "core/test"
 
-  - name: apple-spark-2.12_2.4.7-snapshot-core
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.12_2.4.8-snapshot-core
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
@@ -99,8 +99,8 @@ builds:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 "core/test"
 
-  - name: apple-spark-2.12_2.4.7-snapshot-core-pr
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.12_2.4.8-snapshot-core-pr
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
@@ -109,8 +109,8 @@ builds:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 "core/test"
 
-  - name: apple-spark-2.11_2.4.7-snapshot-streaming
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.11_2.4.8-snapshot-streaming
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -123,8 +123,8 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
-  - name: apple-spark-2.11_2.4.7-snapshot-streaming-pr
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.11_2.4.8-snapshot-streaming-pr
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -137,8 +137,8 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
-  - name: apple-spark-2.12_2.4.7-snapshot-streaming
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.12_2.4.8-snapshot-streaming
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
@@ -152,8 +152,8 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
-  - name: apple-spark-2.12_2.4.7-snapshot-streaming-pr
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.12_2.4.8-snapshot-streaming-pr
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
@@ -167,8 +167,8 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
-  - name: apple-spark-2.11_2.4.7-snapshot-mllib
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.11_2.4.8-snapshot-mllib
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -181,8 +181,8 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
-  - name: apple-spark-2.11_2.4.7-snapshot-mllib-pr
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.11_2.4.8-snapshot-mllib-pr
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -195,8 +195,8 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
-  - name: apple-spark-2.12_2.4.7-snapshot-mllib
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.12_2.4.8-snapshot-mllib
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
@@ -210,8 +210,8 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
-  - name: apple-spark-2.12_2.4.7-snapshot-mllib-pr
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.12_2.4.8-snapshot-mllib-pr
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
@@ -225,8 +225,8 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
-  - name: apple-spark-2.11_2.4.7-snapshot-catalyst
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.11_2.4.8-snapshot-catalyst
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -239,8 +239,8 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
-  - name: apple-spark-2.11_2.4.7-snapshot-catalyst-pr
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.11_2.4.8-snapshot-catalyst-pr
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -253,8 +253,8 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
-  - name: apple-spark-2.12_2.4.7-snapshot-catalyst
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.12_2.4.8-snapshot-catalyst
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
@@ -268,8 +268,8 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
-  - name: apple-spark-2.12_2.4.7-snapshot-catalyst-pr
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.12_2.4.8-snapshot-catalyst-pr
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
@@ -283,8 +283,8 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
-  - name: apple-spark-2.11_2.4.7-snapshot-sql-1
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.11_2.4.8-snapshot-sql-1
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -292,8 +292,8 @@ builds:
       steps:
         - build/sbt -Phadoop-3.2 "sql/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedSQLTest
 
-  - name: apple-spark-2.11_2.4.7-snapshot-sql-1-pr
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.11_2.4.8-snapshot-sql-1-pr
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -301,8 +301,8 @@ builds:
       steps:
         - build/sbt -Phadoop-3.2 "sql/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedSQLTest
 
-  - name: apple-spark-2.12_2.4.7-snapshot-sql-1
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.12_2.4.8-snapshot-sql-1
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
@@ -311,8 +311,8 @@ builds:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 "sql/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedSQLTest
 
-  - name: apple-spark-2.12_2.4.7-snapshot-sql-1-pr
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.12_2.4.8-snapshot-sql-1-pr
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
@@ -321,8 +321,8 @@ builds:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 "sql/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedSQLTest
 
-  - name: apple-spark-2.11_2.4.7-snapshot-sql-2
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.11_2.4.8-snapshot-sql-2
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -335,8 +335,8 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
-  - name: apple-spark-2.11_2.4.7-snapshot-sql-2-pr
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.11_2.4.8-snapshot-sql-2-pr
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -349,8 +349,8 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
-  - name: apple-spark-2.12_2.4.7-snapshot-sql-2
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.12_2.4.8-snapshot-sql-2
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
@@ -364,8 +364,8 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
-  - name: apple-spark-2.12_2.4.7-snapshot-sql-2-pr
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.12_2.4.8-snapshot-sql-2-pr
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
@@ -379,8 +379,8 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
-  - name: apple-spark-2.11_2.4.7-snapshot-hive-1
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.11_2.4.8-snapshot-hive-1
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -388,8 +388,8 @@ builds:
       steps:
         - build/sbt -Phadoop-3.2 -Phive "hive/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedHiveTest
 
-  - name: apple-spark-2.11_2.4.7-snapshot-hive-1-pr
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.11_2.4.8-snapshot-hive-1-pr
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -397,8 +397,8 @@ builds:
       steps:
         - build/sbt -Phadoop-3.2 -Phive "hive/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedHiveTest
 
-  - name: apple-spark-2.12_2.4.7-snapshot-hive-1
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.12_2.4.8-snapshot-hive-1
+    branchName: branch-2.4.8-apple
     machine:
         baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -407,8 +407,8 @@ builds:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 -Phive "hive/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedHiveTest
 
-  - name: apple-spark-2.12_2.4.7-snapshot-hive-1-pr
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.12_2.4.8-snapshot-hive-1-pr
+    branchName: branch-2.4.8-apple
     machine:
         baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -417,8 +417,8 @@ builds:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 -Phive "hive/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedHiveTest
 
-  - name: apple-spark-2.11_2.4.7-snapshot-hive-2
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.11_2.4.8-snapshot-hive-2
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -426,8 +426,8 @@ builds:
       steps:
         - build/sbt -Phadoop-3.2 -Phive "hive/test-only *.HiveSparkSubmitSuite" "hive/test-only *.VersionsSuite" "hive/test-only *.Hive_2_1_DDLSuite" "hive/test-only *.HiveQuerySuite"
 
-  - name: apple-spark-2.11_2.4.7-snapshot-hive-2-pr
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.11_2.4.8-snapshot-hive-2-pr
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -435,8 +435,8 @@ builds:
       steps:
         - build/sbt -Phadoop-3.2 -Phive "hive/test-only *.HiveSparkSubmitSuite" "hive/test-only *.VersionsSuite" "hive/test-only *.Hive_2_1_DDLSuite" "hive/test-only *.HiveQuerySuite"
 
-  - name: apple-spark-2.12_2.4.7-snapshot-hive-2
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.12_2.4.8-snapshot-hive-2
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -445,8 +445,8 @@ builds:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 -Phive "hive/test-only *.HiveSparkSubmitSuite" "hive/test-only *.VersionsSuite" "hive/test-only *.Hive_2_1_DDLSuite" "hive/test-only *.HiveQuerySuite"
 
-  - name: apple-spark-2.12_2.4.7-snapshot-hive-2-pr
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.12_2.4.8-snapshot-hive-2-pr
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -455,8 +455,8 @@ builds:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 -Phive "hive/test-only *.HiveSparkSubmitSuite" "hive/test-only *.VersionsSuite" "hive/test-only *.Hive_2_1_DDLSuite" "hive/test-only *.HiveQuerySuite"
 
-  - name: apple-spark-2.11_2.4.7-snapshot-hive-3
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.11_2.4.8-snapshot-hive-3
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -464,8 +464,8 @@ builds:
       steps:
         - build/sbt -Phadoop-3.2 -Phive "hive/test-only *.HiveCompatibilitySuite" "hive/testOnly *.HiveClientSuites"
 
-  - name: apple-spark-2.11_2.4.7-snapshot-hive-3-pr
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.11_2.4.8-snapshot-hive-3-pr
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -473,8 +473,8 @@ builds:
       steps:
         - build/sbt -Phadoop-3.2 -Phive "hive/test-only *.HiveCompatibilitySuite" "hive/testOnly *.HiveClientSuites"
 
-  - name: apple-spark-2.12_2.4.7-snapshot-hive-3
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.12_2.4.8-snapshot-hive-3
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -483,8 +483,8 @@ builds:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 -Phive "hive/test-only *.HiveCompatibilitySuite"
 
-  - name: apple-spark-2.12_2.4.7-snapshot-hive-3-pr
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.12_2.4.8-snapshot-hive-3-pr
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -493,8 +493,8 @@ builds:
         - dev/change-scala-version.sh 2.12
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 -Phive "hive/test-only *.HiveCompatibilitySuite"
 
-  - name: apple-spark-2.11_2.4.7-snapshot-launcher-repl-tools-hadoop-cloud
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.11_2.4.8-snapshot-launcher-repl-tools-hadoop-cloud
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -507,8 +507,8 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
-  - name: apple-spark-2.11_2.4.7-snapshot-launcher-repl-tools-hadoop-cloud-pr
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.11_2.4.8-snapshot-launcher-repl-tools-hadoop-cloud-pr
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -521,8 +521,8 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
-  - name: apple-spark-2.12_2.4.7-snapshot-launcher-repl-tools-hadoop-cloud
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.12_2.4.8-snapshot-launcher-repl-tools-hadoop-cloud
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
@@ -536,8 +536,8 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
-  - name: apple-spark-2.12_2.4.7-snapshot-launcher-repl-tools-hadoop-cloud-pr
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.12_2.4.8-snapshot-launcher-repl-tools-hadoop-cloud-pr
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
@@ -551,8 +551,8 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
-  - name: apple-spark-2.11_2.4.7-snapshot-kafka
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.11_2.4.8-snapshot-kafka
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -565,8 +565,8 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
-  - name: apple-spark-2.11_2.4.7-snapshot-kafka-pr
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.11_2.4.8-snapshot-kafka-pr
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -579,8 +579,8 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
-  - name: apple-spark-2.12_2.4.7-snapshot-kafka
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.12_2.4.8-snapshot-kafka
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
@@ -594,8 +594,8 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
-  - name: apple-spark-2.12_2.4.7-snapshot-kafka-pr
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.12_2.4.8-snapshot-kafka-pr
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
@@ -609,8 +609,8 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
-  - name: apple-spark-2.11_2.4.7-snapshot-kinesis
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.11_2.4.8-snapshot-kinesis
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -623,8 +623,8 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
-  - name: apple-spark-2.11_2.4.7-snapshot-kinesis-pr
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.11_2.4.8-snapshot-kinesis-pr
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -637,8 +637,8 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
-  - name: apple-spark-2.12_2.4.7-snapshot-kinesis
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.12_2.4.8-snapshot-kinesis
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
@@ -652,8 +652,8 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
-  - name: apple-spark-2.12_2.4.7-snapshot-kinesis-pr
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.12_2.4.8-snapshot-kinesis-pr
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
@@ -667,8 +667,8 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
-  - name: apple-spark-2.11_2.4.7-snapshot-avro
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.11_2.4.8-snapshot-avro
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -681,8 +681,8 @@ builds:
         paths:
           - "external/avro/target/test-reports/*.xml"
 
-  - name: apple-spark-2.11_2.4.7-snapshot-avro-pr
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.11_2.4.8-snapshot-avro-pr
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -695,8 +695,8 @@ builds:
         paths:
           - "external/avro/target/test-reports/*.xml"
 
-  - name: apple-spark-2.12_2.4.7-snapshot-avro
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.12_2.4.8-snapshot-avro
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
@@ -710,8 +710,8 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
-  - name: apple-spark-2.12_2.4.7-snapshot-avro-pr
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.12_2.4.8-snapshot-avro-pr
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
@@ -725,8 +725,8 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
-  - name: apple-spark-2.11_2.4.7-snapshot-yarn-mesos-k8s
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.11_2.4.8-snapshot-yarn-mesos-k8s
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -739,8 +739,8 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
-  - name: apple-spark-2.11_2.4.7-snapshot-yarn-mesos-k8s-pr
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.11_2.4.8-snapshot-yarn-mesos-k8s-pr
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -753,8 +753,8 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
-  - name: apple-spark-2.12_2.4.7-snapshot-yarn-mesos-k8s
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.12_2.4.8-snapshot-yarn-mesos-k8s
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
@@ -768,8 +768,8 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
-  - name: apple-spark-2.12_2.4.7-snapshot-yarn-mesos-k8s-pr
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.12_2.4.8-snapshot-yarn-mesos-k8s-pr
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
@@ -783,8 +783,8 @@ builds:
         paths:
           - "**/target/test-reports/*.xml"
 
-  - name: apple-spark-2.11_2.4.7-snapshot-python27
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.11_2.4.8-snapshot-python27
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -796,8 +796,8 @@ builds:
         - build/sbt -Phadoop-3.2 -Pflume assembly/package streaming-flume-assembly/assembly test:package
         - python/run-tests.py --python-executables python2.7
 
-  - name: apple-spark-2.11_2.4.7-snapshot-python27-pr
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.11_2.4.8-snapshot-python27-pr
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -809,8 +809,8 @@ builds:
         - build/sbt -Phadoop-3.2 -Pflume assembly/package streaming-flume-assembly/assembly test:package
         - python/run-tests.py --python-executables python2.7
 
-  - name: apple-spark-2.12_2.4.7-snapshot-python27
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.12_2.4.8-snapshot-python27
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
@@ -823,8 +823,8 @@ builds:
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 -Pflume assembly/package streaming-flume-assembly/assembly test:package
         - python/run-tests.py --python-executables python2.7
 
-  - name: apple-spark-2.12_2.4.7-snapshot-python27-pr
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.12_2.4.8-snapshot-python27-pr
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
@@ -837,8 +837,8 @@ builds:
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 -Pflume assembly/package streaming-flume-assembly/assembly test:package
         - python/run-tests.py --python-executables python2.7
 
-  - name: apple-spark-2.11_2.4.7-snapshot-python36
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.11_2.4.8-snapshot-python36
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -849,8 +849,8 @@ builds:
         - build/sbt -Phadoop-3.2 -Pflume assembly/package streaming-flume-assembly/assembly test:package
         - python/run-tests.py --python-executables python3.6
 
-  - name: apple-spark-2.11_2.4.7-snapshot-python36-pr
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.11_2.4.8-snapshot-python36-pr
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
     build:
@@ -861,8 +861,8 @@ builds:
         - build/sbt -Phadoop-3.2 -Pflume assembly/package streaming-flume-assembly/assembly test:package
         - python/run-tests.py --python-executables python3.6
 
-  - name: apple-spark-2.12_2.4.7-snapshot-python36
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.12_2.4.8-snapshot-python36
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
@@ -874,8 +874,8 @@ builds:
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 -Pflume assembly/package streaming-flume-assembly/assembly test:package
         - python/run-tests.py --python-executables python3.6
 
-  - name: apple-spark-2.12_2.4.7-snapshot-python36-pr
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.12_2.4.8-snapshot-python36-pr
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-11
     build:
@@ -887,8 +887,8 @@ builds:
         - build/sbt -Dscala.version=2.12.10 -Pscala-2.12 -Phadoop-3.2 -Pflume assembly/package streaming-flume-assembly/assembly test:package
         - python/run-tests.py --python-executables python3.6
 
-  - name: apple-spark-2.11_2.4.7-snapshot
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.11_2.4.8-snapshot
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
       env:
@@ -908,8 +908,8 @@ builds:
       - publish:
         - repo: m2:oss-patched
 
-  - name: apple-spark-2.12_2.4.7-snapshot
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.12_2.4.8-snapshot
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
       env:
@@ -930,8 +930,8 @@ builds:
       - publish:
         - repo: m2:oss-patched
 
-  - name: apple-spark-2.11_2.4.7-binaries-snapshot
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.11_2.4.8-binaries-snapshot
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
       env:
@@ -951,8 +951,8 @@ builds:
       - publish:
         - repo: oss-patched-binaries-local
 
-  - name: apple-spark-2.12_2.4.7-binaries-snapshot
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.12_2.4.8-binaries-snapshot
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
       env:
@@ -973,8 +973,8 @@ builds:
       - publish:
         - repo: oss-patched-binaries-local
 
-  - name: apple-spark-2.11_2.4.7-release
-    branchName: branch-2.4.7-apple-release
+  - name: apple-spark-2.11_2.4.8-release
+    branchName: branch-2.4.8-apple-release
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
       env:
@@ -997,10 +997,10 @@ builds:
     finally:
       tag:
         enabled: true
-        expression: "releases_2.11/2.4.7.25-apple"
+        expression: "releases_2.11/2.4.8.1-apple"
 
-  - name: apple-spark-2.12_2.4.7-release
-    branchName: branch-2.4.7-apple-release
+  - name: apple-spark-2.12_2.4.8-release
+    branchName: branch-2.4.8-apple-release
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
       env:
@@ -1024,10 +1024,10 @@ builds:
     finally:
       tag:
         enabled: true
-        expression: "releases_2.12/2.4.7.25-apple"
+        expression: "releases_2.12/2.4.8.1-apple"
 
-  - name: apple-spark-2.11_2.4.7-binaries-release
-    branchName: branch-2.4.7-apple-release
+  - name: apple-spark-2.11_2.4.8-binaries-release
+    branchName: branch-2.4.8-apple-release
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
       env:
@@ -1048,8 +1048,8 @@ builds:
       - publish:
         - repo: oss-patched-binaries-local
 
-  - name: apple-spark-2.12_2.4.7-binaries-release
-    branchName: branch-2.4.7-apple-release
+  - name: apple-spark-2.12_2.4.8-binaries-release
+    branchName: branch-2.4.8-apple-release
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
       env:
@@ -1071,8 +1071,8 @@ builds:
       - publish:
         - repo: oss-patched-binaries-local
 
-  - name: apple-spark-2.11_2.4.7-no-hadoop-binaries-snapshot
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.11_2.4.8-no-hadoop-binaries-snapshot
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
       env:
@@ -1091,8 +1091,8 @@ builds:
       - publish:
         - repo: oss-patched-binaries-local
 
-  - name: apple-spark-2.12_2.4.7-no-hadoop-binaries-snapshot
-    branchName: branch-2.4.7-apple
+  - name: apple-spark-2.12_2.4.8-no-hadoop-binaries-snapshot
+    branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
       env:
@@ -1112,8 +1112,8 @@ builds:
       - publish:
         - repo: oss-patched-binaries-local
 
-  - name: apple-spark-2.11_2.4.7-no-hadoop-binaries-release
-    branchName: branch-2.4.7-apple-release
+  - name: apple-spark-2.11_2.4.8-no-hadoop-binaries-release
+    branchName: branch-2.4.8-apple-release
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
       env:
@@ -1133,8 +1133,8 @@ builds:
       - publish:
         - repo: oss-patched-binaries-local
 
-  - name: apple-spark-2.12_2.4.7-no-hadoop-binaries-release
-    branchName: branch-2.4.7-apple-release
+  - name: apple-spark-2.12_2.4.8-no-hadoop-binaries-release
+    branchName: branch-2.4.8-apple-release
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
       env:
