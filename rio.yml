@@ -393,7 +393,7 @@ builds:
     finally:
       tag:
         enabled: true
-        expression: "releases_2.12/3.0.2.5-apple"
+        expression: "releases_2.12/3.0.2.6-apple"
 
   - name: apple-spark-2.12_3.0.2-binaries-release
     branchName: branch-3.0.2-apple-release
