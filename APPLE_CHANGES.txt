@@ -20,6 +20,7 @@ SPARK-34496     Upgrade ZSTD-JNI to 1.4.8-5 for better API compatibility
 SPARK-34559     Upgrade to ZSTD JNI 1.4.8-6
 SPARK-34647     Use ZSTD JNI NoFinalizer classes and bump to 1.4.8-7
 SPARK-34650     Exclude zstd-jni transitive dependency from Kafka Client
+SPARK-34592     Mark indeterminate RDD in Web UI
 
 # From Spark 3.1.0
 SPARK-25355      Add proxy user to driver if present on spark-submit
@@ -146,6 +147,17 @@ SPARK-34604     Use eventually in TaskContextTestsWithWorkerReuse.test_task_cont
 MINOR           Fix some wrong default values in SQL tuning guide's AQE section
 SPARK-34534     Fix blockIds order when use FetchShuffleBlocks to fetch blocks
 SPARK-34556     Checking duplicate static partition columns should respect case sensitive conf
+SPARK-34723     Correct parameter type for subexpression elimination under whole-stage
+SPARK-34545     Fix issues with valueCompare feature of pyrolite
+SPARK-34676     TableCapabilityCheckSuite should not inherit all tests from AnalysisSuite
+SPARK-34683     Update the documents to explain the usage of LIST FILE and LIST JAR in case they take multiple file names
+SPARK-34507     Update scala.version in parent POM when changing Scala version for cross-build
+SPARK-34696     Fix CodegenInterpretedPlanTest to generate correct test cases
+SPARK-34697     Allow DESCRIBE FUNCTION and SHOW FUNCTIONS explain about || (string concatenation operator)
+SPARK-34724     Fix Interpreted evaluation by using getMethod instead of getDeclaredMethod
+SPARK-34723     Correct parameter type for subexpression eliminati on under whole-stage
+SPARK-34743     ExpressionEncoderSuite should use deepEquals when we expect `array of array`
+MINOR           Remove unused variable in NewInstance.constructor
 
 # Internal Patch
 rdar://72034392  Wait for the executor JVM to finish before returning decom.sh (fixed upstream but differently).
