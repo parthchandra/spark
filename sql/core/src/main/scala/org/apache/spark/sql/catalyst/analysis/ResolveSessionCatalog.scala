@@ -281,7 +281,7 @@ class ResolveSessionCatalog(
     // For CREATE TABLE [AS SELECT], we should use the v1 command if the catalog is resolved to the
     // session catalog and the table provider is not v2.
     case c @ CreateTableStatement(
-         SessionCatalogAndTable(catalog, tbl), _, _, _, _, _, _, _, _, _) =>
+         SessionCatalogAndTable(catalog, tbl), _, _, _, _, _, _, _, _, _, _, _) =>
       val provider = c.provider.getOrElse(conf.defaultDataSourceName)
       if (!isV2Provider(provider)) {
         if (!DDLUtils.isHiveTable(Some(provider))) {
@@ -301,11 +301,13 @@ class ResolveSessionCatalog(
           // convert the bucket spec and add it as a transform
           c.partitioning ++ c.bucketSpec.map(_.asTransform),
           convertTableProperties(c.properties, c.options, c.location, c.comment, Some(provider)),
-          ignoreIfExists = c.ifNotExists)
+          ignoreIfExists = c.ifNotExists,
+          c.distributionMode,
+          c.ordering)
       }
 
     case c @ CreateTableAsSelectStatement(
-         SessionCatalogAndTable(catalog, tbl), _, _, _, _, _, _, _, _, _, _) =>
+         SessionCatalogAndTable(catalog, tbl), _, _, _, _, _, _, _, _, _, _, _, _) =>
       val provider = c.provider.getOrElse(conf.defaultDataSourceName)
       if (!isV2Provider(provider)) {
         val tableDesc = buildCatalogTable(tbl.asTableIdentifier, new StructType,
@@ -322,7 +324,9 @@ class ResolveSessionCatalog(
           c.asSelect,
           convertTableProperties(c.properties, c.options, c.location, c.comment, Some(provider)),
           writeOptions = c.writeOptions,
-          ignoreIfExists = c.ifNotExists)
+          ignoreIfExists = c.ifNotExists,
+          c.distributionMode,
+          c.ordering)
       }
 
     case MigrateTableStatement(SessionCatalogAndTable(catalog, tbl), provider, properties) =>
@@ -357,7 +361,7 @@ class ResolveSessionCatalog(
     // For REPLACE TABLE [AS SELECT], we should fail if the catalog is resolved to the
     // session catalog and the table provider is not v2.
     case c @ ReplaceTableStatement(
-         SessionCatalogAndTable(catalog, tbl), _, _, _, _, _, _, _, _, _) =>
+         SessionCatalogAndTable(catalog, tbl), _, _, _, _, _, _, _, _, _, _, _) =>
       val provider = c.provider.getOrElse(conf.defaultDataSourceName)
       if (!isV2Provider(provider)) {
         throw new AnalysisException("REPLACE TABLE is only supported with v2 tables.")
@@ -370,11 +374,13 @@ class ResolveSessionCatalog(
           // convert the bucket spec and add it as a transform
           c.partitioning ++ c.bucketSpec.map(_.asTransform),
           convertTableProperties(c.properties, c.options, c.location, c.comment, Some(provider)),
-          orCreate = c.orCreate)
+          orCreate = c.orCreate,
+          distributionMode = c.distributionMode,
+          ordering = c.ordering)
       }
 
     case c @ ReplaceTableAsSelectStatement(
-         SessionCatalogAndTable(catalog, tbl), _, _, _, _, _, _, _, _, _, _) =>
+         SessionCatalogAndTable(catalog, tbl), _, _, _, _, _, _, _, _, _, _, _, _) =>
       val provider = c.provider.getOrElse(conf.defaultDataSourceName)
       if (!isV2Provider(provider)) {
         throw new AnalysisException("REPLACE TABLE AS SELECT is only supported with v2 tables.")
@@ -387,7 +393,9 @@ class ResolveSessionCatalog(
           c.asSelect,
           convertTableProperties(c.properties, c.options, c.location, c.comment, Some(provider)),
           writeOptions = c.writeOptions,
-          orCreate = c.orCreate)
+          orCreate = c.orCreate,
+          distributionMode = c.distributionMode,
+          ordering = c.ordering)
       }
 
     // v1 DROP TABLE supports temp view.

@@ -26,6 +26,7 @@ import org.apache.spark.sql.catalyst.expressions.{And, Expression, GenericIntern
 import org.apache.spark.sql.catalyst.planning.PhysicalOperation
 import org.apache.spark.sql.catalyst.plans.logical._
 import org.apache.spark.sql.connector.catalog.{CatalogV2Util, Identifier, StagingTableCatalog, SupportsNamespaces, SupportsWrite, TableCapability, TableCatalog, TableChange}
+import org.apache.spark.sql.connector.read.SupportsFileFilter
 import org.apache.spark.sql.connector.read.streaming.{ContinuousStream, MicroBatchStream}
 import org.apache.spark.sql.connector.write.V1Write
 import org.apache.spark.sql.execution.{FilterExec, LeafExecNode, ProjectExec, RowDataSourceScanExec, SparkPlan}
@@ -90,6 +91,13 @@ class DataSourceV2Strategy(session: SparkSession) extends Strategy with Predicat
         tableIdentifier = None)
       withProjectAndFilter(project, filters, dsScan, needsUnsafeConversion = false) :: Nil
 
+    case PhysicalOperation(project, filters,
+        DataSourceV2ScanRelation(_, scan: SupportsFileFilter, output)) =>
+      // similar to the case below but is used for operations with dynamic file filtering,
+      // which requires us to disable caching of input splits
+      val batchExec = BatchScanExec(output, scan, cachePartitions = false)
+      withProjectAndFilter(project, filters, batchExec, !batchExec.supportsColumnar) :: Nil
+
     case PhysicalOperation(project, filters, relation: DataSourceV2ScanRelation) =>
       // projection and filters were already pushed down in the optimizer.
       // this uses PhysicalOperation to get the projection and ensure that if the batch scan does
@@ -127,20 +135,23 @@ class DataSourceV2Strategy(session: SparkSession) extends Strategy with Predicat
     case WriteToDataSourceV2(writer, query) =>
       WriteToDataSourceV2Exec(writer, planLater(query)) :: Nil
 
-    case CreateV2Table(catalog, ident, schema, parts, props, ifNotExists) =>
+    case CreateV2Table(catalog, ident, schema, parts, props, ifNotExists,
+        distributionMode, ordering) =>
       val propsWithOwner = CatalogV2Util.withDefaultOwnership(props)
-      CreateTableExec(catalog, ident, schema, parts, propsWithOwner, ifNotExists) :: Nil
+      CreateTableExec(catalog, ident, schema, parts, propsWithOwner, ifNotExists,
+        distributionMode, ordering) :: Nil
 
-    case CreateTableAsSelect(catalog, ident, parts, query, props, options, ifNotExists) =>
+    case CreateTableAsSelect(catalog, ident, parts, query, props, options, ifNotExists,
+        distributionMode, ordering) =>
       val propsWithOwner = CatalogV2Util.withDefaultOwnership(props)
       val writeOptions = new CaseInsensitiveStringMap(options.asJava)
       catalog match {
         case staging: StagingTableCatalog =>
           AtomicCreateTableAsSelectExec(staging, ident, parts, query, planLater(query),
-            propsWithOwner, writeOptions, ifNotExists) :: Nil
+            propsWithOwner, writeOptions, ifNotExists, distributionMode, ordering) :: Nil
         case _ =>
           CreateTableAsSelectExec(catalog, ident, parts, query, planLater(query),
-            propsWithOwner, writeOptions, ifNotExists) :: Nil
+            propsWithOwner, writeOptions, ifNotExists, distributionMode, ordering) :: Nil
       }
 
     case MigrateTable(catalog, ident, props) =>
@@ -152,18 +163,21 @@ class DataSourceV2Strategy(session: SparkSession) extends Strategy with Predicat
     case RefreshTable(catalog, ident) =>
       RefreshTableExec(catalog, ident, invalidateCache(catalog, ident)) :: Nil
 
-    case ReplaceTable(catalog, ident, schema, parts, props, orCreate) =>
+    case ReplaceTable(catalog, ident, schema, parts, props, orCreate, distributionMode, ordering) =>
       val propsWithOwner = CatalogV2Util.withDefaultOwnership(props)
       catalog match {
         case staging: StagingTableCatalog =>
           AtomicReplaceTableExec(
-            staging, ident, schema, parts, propsWithOwner, orCreate = orCreate) :: Nil
+            staging, ident, schema, parts, propsWithOwner, orCreate = orCreate,
+            distributionMode, ordering) :: Nil
         case _ =>
           ReplaceTableExec(
-            catalog, ident, schema, parts, propsWithOwner, orCreate = orCreate) :: Nil
+            catalog, ident, schema, parts, propsWithOwner, orCreate = orCreate,
+            distributionMode, ordering) :: Nil
       }
 
-    case ReplaceTableAsSelect(catalog, ident, parts, query, props, options, orCreate) =>
+    case ReplaceTableAsSelect(catalog, ident, parts, query, props, options, orCreate,
+        distributionMode, ordering) =>
       val propsWithOwner = CatalogV2Util.withDefaultOwnership(props)
       val writeOptions = new CaseInsensitiveStringMap(options.asJava)
       catalog match {
@@ -177,7 +191,9 @@ class DataSourceV2Strategy(session: SparkSession) extends Strategy with Predicat
             planLater(query),
             propsWithOwner,
             writeOptions,
-            orCreate = orCreate) :: Nil
+            orCreate = orCreate,
+            distributionMode,
+            ordering) :: Nil
         case _ =>
           ReplaceTableAsSelectExec(
             session,
@@ -188,7 +204,9 @@ class DataSourceV2Strategy(session: SparkSession) extends Strategy with Predicat
             planLater(query),
             propsWithOwner,
             writeOptions,
-            orCreate = orCreate) :: Nil
+            orCreate = orCreate,
+            distributionMode,
+            ordering) :: Nil
       }
 
     case AppendData(r @ DataSourceV2Relation(v1: SupportsWrite, _, _, _, _), query, writeOptions,
@@ -331,16 +349,21 @@ class DataSourceV2Strategy(session: SparkSession) extends Strategy with Predicat
       val input = buildInternalRow(args)
       CallExec(c.output, procedure, input) :: Nil
 
-    case DynamicFileFilter(scanRelation, fileFilterPlan) =>
-      // we don't use planLater here as we need set cachePartitions to false in BatchScanExec
-      val scanExec = BatchScanExec(scanRelation.output, scanRelation.scan, cachePartitions = false)
-      val dynamicFileFilter = DynamicFileFilterExec(scanExec, planLater(fileFilterPlan))
-      if (scanExec.supportsColumnar) {
-        dynamicFileFilter :: Nil
-      } else {
-        // add a projection to ensure we have UnsafeRows required by some operations
-        ProjectExec(scanRelation.output, dynamicFileFilter) :: Nil
-      }
+    case DynamicFileFilter(scanPlan, fileFilterPlan, filterable) =>
+      DynamicFileFilterExec(planLater(scanPlan), planLater(fileFilterPlan), filterable) :: Nil
+
+    case DynamicFileFilterWithCardinalityCheck(scanPlan, fileFilterPlan, filterable, accumulator) =>
+      DynamicFileFilterWithCardinalityCheckExec(
+        planLater(scanPlan),
+        planLater(fileFilterPlan),
+        filterable,
+        accumulator) :: Nil
+
+    case ReplaceData(r: DataSourceV2Relation, query, write) =>
+      ReplaceDataExec(r.table.asMergeable, planLater(query), refreshCache(r), write) :: Nil
+
+    case MergeInto(mergeIntoParams, output, child) =>
+      MergeIntoExec(mergeIntoParams, output, planLater(child)) :: Nil
 
     case _ => Nil
   }
