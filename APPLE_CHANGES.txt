@@ -468,7 +468,6 @@ MINOR            Upgrade callhomelistner (#873)
 rdar://72891915  Parquet encryption support via switch to parquet-1.10.1.3-apple
 PR-854           Adds Migrate and Snapshot Catalog Support
 MINOR            Generate comments.sql.out for MIGRATE/SNAPSHOT commands
-rdar://74077552  Upgrade Parquet to 1.10.1.4 (PARQUET-1967/PARQUET-1973) 
 rdar://73724010  Exclude filesystems from token renewal
 rdar://74001493  Add Dataset pipe API
 N/A              Add an option for limiting storage for shuffle blocks
