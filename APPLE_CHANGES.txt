@@ -306,6 +306,18 @@ SPARK-34318       Dataset.colRegex should work with column names and qualifiers 
 SPARK-34407       KubernetesClusterSchedulerBackend.stop should clean up K8s resources
 SPARK-34449       Upgrade Jetty to fix CVE-2020-27218
 SPARK-32924       Make duration column in master UI sorted in the correct order
+SPARK-34672       Fix docker file for creating release
+SPARK-34507       Update scala.version in parent POM when changing Scala version for cross-build
+SPARK-34703       Fix pyspark test when using sort_values on Pandas
+SPARK-34696       Fix CodegenInterpretedPlanTest to generate correct test cases
+SPARK-31807       Use python 3 style in release-build.sh
+SPARK-34724       Fix Interpreted evaluation by using getMethod instead of getDeclaredMethod
+SPARK-34743       ExpressionEncoderSuite should use deepEquals when we expect `array of array`
+MINOR             Remove unused variable in NewInstance.constructor
+SPARK-34774       Ensure change-scala-version.sh update scala.version in parent POM correctly
+SPARK-34776       Window class should override producedAttributes
+SPARK-26625       Add oauthToken to spark.redaction.regex
+SPARK-34811       Redact fs.s3a.access.key like secret and token
 
 # Internal Patches
 MINOR             Add an empty APPLE_CHANGES.txt
