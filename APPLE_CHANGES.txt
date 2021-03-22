@@ -147,7 +147,6 @@ SPARK-34604     Use eventually in TaskContextTestsWithWorkerReuse.test_task_cont
 MINOR           Fix some wrong default values in SQL tuning guide's AQE section
 SPARK-34534     Fix blockIds order when use FetchShuffleBlocks to fetch blocks
 SPARK-34556     Checking duplicate static partition columns should respect case sensitive conf
-SPARK-34723     Correct parameter type for subexpression elimination under whole-stage
 SPARK-34545     Fix issues with valueCompare feature of pyrolite
 SPARK-34676     TableCapabilityCheckSuite should not inherit all tests from AnalysisSuite
 SPARK-34683     Update the documents to explain the usage of LIST FILE and LIST JAR in case they take multiple file names
@@ -155,9 +154,19 @@ SPARK-34507     Update scala.version in parent POM when changing Scala version f
 SPARK-34696     Fix CodegenInterpretedPlanTest to generate correct test cases
 SPARK-34697     Allow DESCRIBE FUNCTION and SHOW FUNCTIONS explain about || (string concatenation operator)
 SPARK-34724     Fix Interpreted evaluation by using getMethod instead of getDeclaredMethod
-SPARK-34723     Correct parameter type for subexpression eliminati on under whole-stage
 SPARK-34743     ExpressionEncoderSuite should use deepEquals when we expect `array of array`
 MINOR           Remove unused variable in NewInstance.constructor
+SPARK-34768     Respect the default input buffer size in Univocity
+SPARK-34774     Ensure change-scala-version.sh update scala.version in parent POM correctly
+SPARK-34760     Replace `favorite_color` with `age` in JavaSQLDataSourceExample
+SPARK-34747     Add virtual operators to the built-in function document
+SPARK-34772     RebaseDateTime loadRebaseRecords should use Spark classloader instead of context
+SPARK-34087     Fix memory leak of ExecutionListenerBus
+SPARK-34798     Fix incorrect join condition
+SPARK-34719     Correctly resolve the view query with duplicated column names
+SPARK-34776     Window class should override producedAttributes
+SPARK-34811     Redact fs.s3a.access.key like secret and token
+SPARK-34772     Disable a test case using Hive 1.2.1 in Java9+ environment
 
 # Internal Patch
 rdar://72034392  Wait for the executor JVM to finish before returning decom.sh (fixed upstream but differently).
@@ -235,3 +244,4 @@ MINOR            Add microsToMillis to DateTimeUtils (#956)
 rdar://72811621  Control distribution and ordering during table creation (#957)
 MINOR            Upgrade Parquet to 1.10.1.7-apple to match zstd-jni
 MINOR            Upgrade Parquet to 1.10.1.8-apple
+MINOR            Add iceberg back 3.0
