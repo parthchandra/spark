@@ -350,3 +350,4 @@ N/A               ADT Version updated to 0.7.4 (#941)
 rdar://74770578   Upgrade AWS Java SDK version to use IAM roles for Service Accounts in EKS.
 MINOR             Update dependency manifest file
 rdar://74792143   Fix the call home service thread shutdown issue
+MINOR             Upgrade Parquet to 1.10.1.11-apple
