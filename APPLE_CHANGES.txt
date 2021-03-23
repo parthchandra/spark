@@ -35,6 +35,11 @@ SPARK-34559     Upgrade to ZSTD JNI 1.4.8-6
 SPARK-34486     Upgrade kubernetes-client to 4.13.2
 SPARK-34650     Exclude zstd-jni transitive dependency from Kafka Client
 SPARK-34783     Support remote template files
+SPARK-33212     Upgrade to Hadoop 3.2.2 and move to shaded clients for Hadoop 3.x profile
+SPARK-33212     Bring back duplicate dependency check and add more strict Hadoop version check
+SPARK-33212     Uses provided properties for Hadoop client dependencies in root pom
+SPARK-33212     Fix test "built-in Hadoop version should support shaded client" for hadoop-2.7
+SPARK-33212     Add hadoop-yarn-server-web-proxy for Hadoop 3.x profile
 
 # From Spark 3.1.2
 MINOR           Add table_identifier in sql-migration-guide for SHOW CREATE TABLE
@@ -164,3 +169,4 @@ MINOR           Use zstd as default compression codec
 MINOR           Upgrade ZSTD-JNI to 1.4.8-7
 MINOR           Upgrade Parquet to 1.10.1.8-apple
 MINOR           Add Iceberg back (#985)
+MINOR           Upgrade Hadoop to 3.3.0.2-apple
