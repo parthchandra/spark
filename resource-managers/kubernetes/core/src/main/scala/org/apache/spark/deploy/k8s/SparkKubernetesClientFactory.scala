@@ -67,6 +67,7 @@ private[spark] object SparkKubernetesClientFactory {
       .withApiVersion("v1")
       .withMasterUrl(master)
       .withWebsocketPingInterval(0)
+      .withTrustCerts(sparkConf.get(KUBERNETES_TRUST_CERTIFICATES))
       .withOption(oauthTokenValue) {
         (token, configBuilder) => configBuilder.withOauthToken(token)
       }.withOption(oauthTokenFile) {
