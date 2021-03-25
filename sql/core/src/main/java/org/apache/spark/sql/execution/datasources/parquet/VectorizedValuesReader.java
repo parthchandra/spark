@@ -43,6 +43,7 @@ public interface VectorizedValuesReader {
   void readShorts(int total, WritableColumnVector c, int rowId);
   void readIntegers(int total, WritableColumnVector c, int rowId);
   void readIntegersWithRebase(int total, WritableColumnVector c, int rowId, boolean failIfRebase);
+  void readUnsignedIntegers(int total, WritableColumnVector c, int rowId);
   void readLongs(int total, WritableColumnVector c, int rowId);
   void readLongsWithRebase(int total, WritableColumnVector c, int rowId, boolean failIfRebase);
   void readFloats(int total, WritableColumnVector c, int rowId);
