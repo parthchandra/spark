@@ -318,6 +318,14 @@ SPARK-34774       Ensure change-scala-version.sh update scala.version in parent 
 SPARK-34776       Window class should override producedAttributes
 SPARK-26625       Add oauthToken to spark.redaction.regex
 SPARK-34811       Redact fs.s3a.access.key like secret and token
+SPARK-34719       Correctly resolve the view query with duplicated column names
+SPARK-34726       Fix collectToPython timeouts
+MINOR             Updating the link for Azure Data Lake Gen 2 in docs
+SPARK-34596       Use Utils.getSimpleName to avoid hitting Malformed class name in NewInstance.doGenCode
+SPARK-34607       Add `Utils.isMemberClass` to fix a malformed class name error on jdk8u
+SPARK-34874       Recover test reports for failed GA builds
+SPARK-34855       Avoid local lazy variable in SparkContext.getCallSite
+SPARK-34876       Fill defaultResult of non-nullable aggregates
 
 # Internal Patches
 MINOR             Add an empty APPLE_CHANGES.txt
