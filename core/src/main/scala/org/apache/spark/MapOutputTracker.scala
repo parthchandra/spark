@@ -17,7 +17,7 @@
 
 package org.apache.spark
 
-import java.io.{ByteArrayInputStream, ObjectInputStream, ObjectOutputStream}
+import java.io.{ByteArrayInputStream, IOException, ObjectInputStream, ObjectOutputStream}
 import java.util.concurrent.{ConcurrentHashMap, LinkedBlockingQueue, ThreadPoolExecutor}
 import java.util.concurrent.locks.ReentrantReadWriteLock
 
@@ -810,6 +810,11 @@ private[spark] class MapOutputTrackerWorker(conf: SparkConf) extends MapOutputTr
           fetchedStatuses = MapOutputTracker.deserializeMapStatuses(fetchedBytes)
           logInfo("Got the output locations")
           mapStatuses.put(shuffleId, fetchedStatuses)
+        } catch {
+          case e: IOException =>
+            logError("Exception encountered during fetching map statuses: ", e)
+            throw new MetadataFetchFailedException(
+              shuffleId, -1, "Missing all output locations for shuffle " + shuffleId, e)
         } finally {
           fetching.synchronized {
             fetching -= shuffleId
