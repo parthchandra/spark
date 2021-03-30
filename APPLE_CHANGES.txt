@@ -351,3 +351,4 @@ rdar://74770578   Upgrade AWS Java SDK version to use IAM roles for Service Acco
 MINOR             Update dependency manifest file
 rdar://74792143   Fix the call home service thread shutdown issue
 MINOR             Upgrade Parquet to 1.10.1.11-apple
+rdar://75851236   Spark job on compute runs with 2.4.0 but not 2.4.7
