@@ -390,3 +390,4 @@ MINOR             Upgrade Parquet to 1.10.1.9-apple to match zstd-jni
 MINOR             Remove no-hadoop distribution
 MINOR             Remove python27
 MINOR             Remove dependency override in SBT build
+MINOR             Fix test failure related to Parquet changes
