@@ -188,3 +188,5 @@ MINOR           Upgrade ZSTD-JNI to 1.4.8-7
 MINOR           Upgrade Parquet to 1.10.1.8-apple
 MINOR           Add Iceberg back (#985)
 MINOR           Upgrade Hadoop to 3.3.0.2-apple
+MONOR           Forward port multiple containers and shuffle service from ACS 3.0
+MINOR           Upgrade to Hive 2.3.8.3-apple
