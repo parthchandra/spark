@@ -326,6 +326,10 @@ SPARK-34607       Add `Utils.isMemberClass` to fix a malformed class name error 
 SPARK-34874       Recover test reports for failed GA builds
 SPARK-34855       Avoid local lazy variable in SparkContext.getCallSite
 SPARK-34876       Fill defaultResult of non-nullable aggregates
+SPARK-34909       Fix conversion of negative to unsigned in conv()
+SPARK-24931       Fix the GA failure related to R linter
+Revert            "[SPARK-33935][SQL][2.4] Fix CBO cost function"
+SPARK-34939       Throw fetch failure exception when unable to deserialize broadcasted map statuses
 
 # Internal Patches
 MINOR             Add an empty APPLE_CHANGES.txt
