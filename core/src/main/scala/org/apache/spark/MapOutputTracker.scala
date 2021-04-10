@@ -481,7 +481,13 @@ private[spark] class MapOutputTrackerMaster(
   def updateMapOutput(shuffleId: Int, mapId: Long, bmAddress: BlockManagerId): Unit = {
     shuffleStatuses.get(shuffleId) match {
       case Some(shuffleStatus) =>
-        shuffleStatus.updateMapOutput(mapId, bmAddress)
+        // rdar://75851236: For debugging purpose.
+        val enabled =
+          conf.getBoolean("spark.shuffle.mapOutput.updateMapOutputEnabled", true)
+        logInfo(s"Configured updateMapOutputEnabled is $enabled")
+        if (enabled) {
+          shuffleStatus.updateMapOutput(mapId, bmAddress)
+        }
       case None =>
         logError(s"Asked to update map output for unknown shuffle ${shuffleId}")
     }
