@@ -282,7 +282,6 @@ SPARK-33869       Have a separate metastore directory for each PySpark test job
 MINOR             BUILD Do not publish snapshots from forks
 SPARK-27575       Yarn file-related confs should merge new value with existing value
 SPARK-33277       Use ContextAwareIterator to stop consuming after the task ends
-SPARK-33935       Fix CBO cost function
 SPARK-34012       Keep behavior consistent when conf `spark.sqllegacy.parser.havingWithoutGroupByAsWhere` is true with migration guide
 SPARK-34059       Use for/foreach rather than map to make sure execute it eagerly
 SPARK-34115       Check SPARK_TESTING as lazy val to avoid slowdown
@@ -328,8 +327,13 @@ SPARK-34855       Avoid local lazy variable in SparkContext.getCallSite
 SPARK-34876       Fill defaultResult of non-nullable aggregates
 SPARK-34909       Fix conversion of negative to unsigned in conv()
 SPARK-24931       Fix the GA failure related to R linter
-Revert            "[SPARK-33935][SQL][2.4] Fix CBO cost function"
 SPARK-34939       Throw fetch failure exception when unable to deserialize broadcasted map statuses
+SPARK-32996       Handle empty ExecutorMetrics in ExecutorMetricsJsonSerializer
+SPARK-34988       Upgrade Jetty for CVE-2021-28165
+SPARK-34994       Fix git error when pushing the tag after release script succeeds
+SPARK-34963       Fix nested column pruning for extracting case-insensitive struct field from array of struct
+SPARK-34212       Move the added test to ParquetQuerySuite
+SPARK-34834       Fix a potential Netty memory leak in TransportResponseHandler
 
 # Internal Patches
 MINOR             Add an empty APPLE_CHANGES.txt
