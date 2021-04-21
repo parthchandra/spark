@@ -41,6 +41,8 @@ SPARK-33212     Uses provided properties for Hadoop client dependencies in root 
 SPARK-33212     Fix test "built-in Hadoop version should support shaded client" for hadoop-2.7
 SPARK-33212     Add hadoop-yarn-server-web-proxy for Hadoop 3.x profile
 SPARK-34954     Use zstd codec name in ORC file names
+SPARK-35131     Support early driver service clean-up during app termination
+SPARK-35003     Improve performance for reading smallint in vectorized Parquet reader
 
 # From Spark 3.1.2
 MINOR           Add table_identifier in sql-migration-guide for SHOW CREATE TABLE
@@ -224,3 +226,4 @@ MINOR           Add Iceberg back (#985)
 MINOR           Upgrade Hadoop to 3.3.0.2-apple
 MONOR           Forward port multiple containers and shuffle service from ACS 3.0
 MINOR           Upgrade to Hive 2.3.8.3-apple
+MINOR           Restart policy should be never
