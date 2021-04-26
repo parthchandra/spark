@@ -33,6 +33,7 @@ SPARK-34193       TorrentBroadcast block manager decommissioning race fix
 SPARK-33012       Upgrade fabric8 to 4.10.3
 SPARK-33324       Upgrade kubernetes-client to 4.11.1
 SPARK-33471       Upgrade kubernetes-client to 4.12.0
+SPARK-32103       Support IPv6 host/port in core module
 
 
 # From Spark 3.0.0
@@ -334,6 +335,9 @@ SPARK-34994       Fix git error when pushing the tag after release script succee
 SPARK-34963       Fix nested column pruning for extracting case-insensitive struct field from array of struct
 SPARK-34212       Move the added test to ParquetQuerySuite
 SPARK-34834       Fix a potential Netty memory leak in TransportResponseHandler
+SPARK-35080       Only allow a subset of correlated equality predicates when a subquery is aggregated
+SPARK-31225       Override sql method of OuterReference
+SPARK-35210       Upgrade Jetty to 9.4.40 to fix ERR_CONNECTION_RESET issue
 
 # Internal Patches
 MINOR             Add an empty APPLE_CHANGES.txt
@@ -399,3 +403,5 @@ MINOR             Remove no-hadoop distribution
 MINOR             Remove python27
 MINOR             Remove dependency override in SBT build
 MINOR             Fix test failure related to Parquet changes
+MINOR             Updates ADT to 0.7.5 (#1012)
+MINOR             switch from bintray to scala.jfrog.io for SBT downloading
