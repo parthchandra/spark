@@ -338,6 +338,8 @@ SPARK-34834       Fix a potential Netty memory leak in TransportResponseHandler
 SPARK-35080       Only allow a subset of correlated equality predicates when a subquery is aggregated
 SPARK-31225       Override sql method of OuterReference
 SPARK-35210       Upgrade Jetty to 9.4.40 to fix ERR_CONNECTION_RESET issue
+SPARK-35227       Update the resolver for spark-packages in SparkSubmit
+SPARK-35278       Invoke should find the method with correct number of parameters
 
 # Internal Patches
 MINOR             Add an empty APPLE_CHANGES.txt
