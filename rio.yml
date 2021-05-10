@@ -84,6 +84,8 @@ builds:
     branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-8
+      env:
+        SBT_OPTS: "-Xss4m -Xms2G -Xmx6G"
     build:
       template: freestyle:v4:prb
       steps:
@@ -93,6 +95,8 @@ builds:
     branchName: branch-2.4.8-apple
     machine:
       baseImage: docker.apple.com/cpbuild7/applejdk-11
+      env:
+        SBT_OPTS: "-Xss4m -Xms2G -Xmx6G"
     build:
       template: freestyle:v4:build
       steps:
