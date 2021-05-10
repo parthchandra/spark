@@ -340,6 +340,7 @@ SPARK-31225       Override sql method of OuterReference
 SPARK-35210       Upgrade Jetty to 9.4.40 to fix ERR_CONNECTION_RESET issue
 SPARK-35227       Update the resolver for spark-packages in SparkSubmit
 SPARK-35278       Invoke should find the method with correct number of parameters
+SPARK-35288       StaticInvoke should find the method without exact argument classes match
 
 # Internal Patches
 MINOR             Add an empty APPLE_CHANGES.txt
@@ -407,3 +408,7 @@ MINOR             Remove dependency override in SBT build
 MINOR             Fix test failure related to Parquet changes
 MINOR             Updates ADT to 0.7.5 (#1012)
 MINOR             switch from bintray to scala.jfrog.io for SBT downloading
+MINOR             Bump Hadoop version to 3.2.0.4
+MINOR             Upgrade parquet to 1.10.2.5-apple to bring PARQUET-2022 and PARQUET-2044
+MINOR             Bump heap size for core pipeline
+MINOR             Bump Hive version to 1.2.1.spark2.8-apple
