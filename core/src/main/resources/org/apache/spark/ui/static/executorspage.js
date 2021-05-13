@@ -30,6 +30,20 @@ function setAjaxEnabled(val) {
     ajaxEnabled = val;
 }
 
+function formatLossReason(removeReason, type, row) {
+    if (removeReason) {
+       return removeReason
+    } else {
+       return ""
+    }
+}
+
+function formatStatus(status, type, row) {
+  if (row.isExcluded) {
+    return "Excluded";
+  }
+}
+
 function getAjaxEnabled() {
     return ajaxEnabled;
 }
@@ -128,7 +142,7 @@ function totalDurationColor(totalGCTime, totalDuration) {
 }
 
 var sumOptionalColumns = [3, 4];
-var execOptionalColumns = [5, 6, 9];
+var execOptionalColumns = [5, 6, 9, 10];
 var execDataTable;
 var sumDataTable;
 
@@ -465,6 +479,10 @@ $(document).ready(function () {
                             data: 'id', render: function (data, type) {
                                 return type === 'display' ? ("<a href='threadDump/?executorId=" + data + "'>Thread Dump</a>" ) : data;
                             }
+                        },
+                        {
+                            data: 'removeReason',
+			    render: formatLossReason
                         }
                     ],
                     "order": [[0, "asc"]],
@@ -579,6 +597,7 @@ $(document).ready(function () {
                     "<div id='on_heap_memory' class='on-heap-memory-checkbox-div'><input type='checkbox' class='toggle-vis' data-sum-col-idx='3' data-exec-col-idx='5'>On Heap Memory</div>" +
                     "<div id='off_heap_memory' class='off-heap-memory-checkbox-div'><input type='checkbox' class='toggle-vis' data-sum-col-idx='4' data-exec-col-idx='6'>Off Heap Memory</div>" +
                     "<div id='extra_resources' class='resources-checkbox-div'><input type='checkbox' class='toggle-vis' data-sum-col-idx='' data-exec-col-idx='9'>Resources</div>" +
+                    "<div id='exec_loss_reason' class='exec-loss-reason-checkbox-div'><input type='checkbox' class='toggle-vis' data-sum-col-idx='' data-exec-col-idx='15'> Exec Loss Reason</div>" +
                     "</div>");
 
                 reselectCheckboxesBasedOnTaskTableState();

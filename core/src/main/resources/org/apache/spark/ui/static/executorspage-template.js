@@ -113,6 +113,7 @@ var executorsSummaryTemplate = `
               Shuffle Write</span></th>
           <th>Logs</th>
           <th>Thread Dump</th>
+          <th>Exec Loss Reason</th>
         </tr>
         </thead>
         <tbody>
