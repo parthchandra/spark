@@ -8,6 +8,8 @@ SPARK-34670       Upgrade ZSTD-JNI to 1.4.9-1
 SPARK-34390       Enable Zstandard buffer pool by default
 SPARK-34647       Use ZSTD JNI NoFinalizer classes
 SPARK-34592       Mark indeterminate RDD in Web UI
+SPARK-35383       Improve s3a magic committer support by inferring missing configs
+SPARK-33720       Support submit to k8s only with token
 
 # From Spark 3.1.0
 MULTIPART         Add Spark K8s Decommissioning & Dynamic Allocation support
@@ -412,3 +414,5 @@ MINOR             Bump Hadoop version to 3.2.0.4
 MINOR             Upgrade parquet to 1.10.2.5-apple to bring PARQUET-2022 and PARQUET-2044
 MINOR             Bump heap size for core pipeline
 MINOR             Bump Hive version to 1.2.1.spark2.8-apple
+MINOR             add parquet-kms-apple
+MINOR             bump parquet to 1.10.2.6-apple
