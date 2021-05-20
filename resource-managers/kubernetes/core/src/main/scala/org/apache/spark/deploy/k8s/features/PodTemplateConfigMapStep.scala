@@ -87,6 +87,7 @@ private[spark] class PodTemplateConfigMapStep(conf: KubernetesConf)
           .withNewMetadata()
             .withName(configmapName)
           .endMetadata()
+          .withImmutable(true)
           .addToData(POD_TEMPLATE_KEY, podTemplateString)
         .build())
     } else {
