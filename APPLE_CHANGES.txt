@@ -352,3 +352,8 @@ MINOR             Update dependency manifest file
 rdar://74792143   Fix the call home service thread shutdown issue
 MINOR             Upgrade Parquet to 1.10.1.11-apple
 rdar://75851236   Spark job on compute runs with 2.4.0 but not 2.4.7
+N/A               Bump Hadoop version to 3.2.0.4 (#1033)
+N/A               add parquet-kms-apple
+N/A               bump parquet version to 1.10.1.12-apple
+rdar://78426208   Fix HiveExternalCatalogVersionsSuite
+N/A               Upgrade adt version to 0.7.7 (#1072)
