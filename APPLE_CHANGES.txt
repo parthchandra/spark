@@ -257,3 +257,5 @@ MINOR             Build docker image with openjdk:11-jre-slim instead of openjdk
 MINOR             Bump to 2.4.6.15-apple-SNAPSHOT after 2.4.6.14-apple release
 rdar://74371017   Update ADT Version to 0.7.3 (#924)
 MINOR             Use https://bootstrap.pypa.io/2.7/get-pip.py to setup Pip
+N/A               Upgrade ADT version to 0.7.7 (#1069)
+MINOR             Use https://bootstrap.pypa.io/pip/2.7/get-pip.py to get pip for 2.7.
