@@ -216,12 +216,19 @@ object PROCESS_TABLES extends QueryTest with SQLTestUtils {
   val testingVersions: Seq[String] = {
     import scala.io.Source
     try {
-      Source.fromURL("https://dist.apache.org/repos/dist/release/spark/").mkString
+      val sparkVers = Source.fromURL("https://dist.apache.org/repos/dist/release/spark/").mkString
         .split("\n")
         .filter(_.contains("""<li><a href="spark-"""))
         .filterNot(_.contains("preview"))
         .map("""<a href="spark-(\d.\d.\d)/">""".r.findFirstMatchIn(_).get.group(1))
         .filter(_ < org.apache.spark.SPARK_VERSION)
+
+      if (sparkVers.isEmpty) {
+        // Spark 2.4 latest release is 2.4.8 now. We got an empty version list above with error.
+        Seq("2.3.4", "2.4.5")
+      } else {
+        sparkVers
+      }
     } catch {
       // do not throw exception during object initialization.
       case NonFatal(_) => Seq("2.3.4", "2.4.5") // A temporary fallback to use a specific version
