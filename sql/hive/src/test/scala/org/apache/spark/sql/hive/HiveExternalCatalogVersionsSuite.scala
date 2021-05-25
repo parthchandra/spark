@@ -225,7 +225,7 @@ object PROCESS_TABLES extends QueryTest with SQLTestUtils {
 
       if (sparkVers.isEmpty) {
         // Spark 2.4 latest release is 2.4.8 now. We got an empty version list above with error.
-        Seq("2.3.4", "2.4.5")
+        Seq("2.4.5")
       } else {
         sparkVers
       }
