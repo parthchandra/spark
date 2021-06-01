@@ -1,0 +1,113 @@
+This contains the changes after branching `v3.1.2`
+
+# From Spark 3.2.0
+SPARK-34208     Upgrade ORC to 1.6.7
+SPARK-33750     Use `hadoop-3.2` distribution in HiveExternalCatalogVersionsSuite
+SPARK-33724     Add decom script as a configuration param
+SPARK-33261     Add a developer API for custom feature steps
+SPARK-33722     Handle DELETE in ReplaceNullWithFalseInPredicate
+SPARK-33779     DataSource V2: API to request distribution and ordering on write
+SPARK-33735     Handle UPDATE in ReplaceNullWithFalseInPredicate
+SPARK-33700     Avoid file meta reading when enableFilterPushDown is true and filters is empty for Orc
+SPARK-23862     Support Java enums from Scala Dataset API
+SPARK-33870     Enable spark.storage.replication.proactive by default
+SPARK-33978     Support ZSTD compression in ORC data source
+SPARK-33806     limit partition num to 1 when distributing by foldable expressions
+SPARK-34340     Support ZSTD JNI BufferPool
+SPARK-34387     Add ZStandardBenchmark
+SPARK-34390     Enable Zstandard buffer pool by default
+SPARK-34647     Use ZSTD JNI NoFinalizer classes and bump to 1.4.8-7
+SPARK-34670     Upgrade ZSTD-JNI to 1.4.9-1
+SPARK-34650     Exclude zstd-jni transitive dependency from Kafka Client
+SPARK-34954     Use zstd codec name in ORC file names
+SPARK-34428     Update sbt version to 1.4.7
+SPARK-34391     Upgrade commons-io to 2.8.0
+SPARK-33212     Upgrade to Hadoop 3.2.2 and move to shaded clients for Hadoop 3.x profile
+SPARK-34206     Make Guava Cache as ExecutorPodsLifecycleManager private field
+SPARK-34316     Support spark.kubernetes.executor.disableConfigMap
+SPARK-34486     Upgrade kubernetes-client to 4.13.2
+SPARK-34783     Support remote template files
+SPARK-35131     Support early driver service clean-up during app termination
+SPARK-35280     Promote KubernetesUtils to DeveloperApi
+SPARK-33720     Support submit to k8s only with token
+SPARK-35182     Support driver-owned on-demand PVC
+SPARK-35125     Upgrade K8s client to 5.3.0 to support K8s 1.20
+SPARK-35319     Upgrade K8s client to 5.3.1
+SPARK-35394     Move kubernetes-client.version to root pom file
+SPARK-35416     Support PersistentVolumeClaim Reuse
+SPARK-35443     Mark K8s ConfigMaps and Secrets created by Spark as immutable
+SPARK-35462     Upgrade Kubernetes-client to 5.4.0 to support K8s 1.21 models
+SPARK-35383     Improve s3a magic committer support by inferring missing configs
+SPARK-35240     Use CheckpointFileManager for checkpoint file manipulation
+SPARK-34142     Support Fallback Storage Cleanup during stopping SparkContext
+SPARK-17767     Support user-provided ExternalCatalog and SessionBuilder
+SPARK-34209     Delegate table name validation to the session catalog
+SPARK-34542     Upgrade Parquet to 1.12.0.5-apple
+SPARK-34592     Mark indeterminate RDD in Web UI
+SPARK-35003     Improve performance for reading smallint in vectorized Parquet reader
+SPARK-34549     Upgrade aws kinesis to 1.14.0 and java sdk 1.11.844 (#1005)
+SPARK-35232     Nested column pruning should retain column metadata
+SPARK-33808     DataSource V2: Build logical writes in the optimizer
+SPARK-34049     DataSource V2: Use Write abstraction in StreamExecution
+SPARK-34026     Inject repartition and sort nodes to satisfy required distribution and ordering (#905)
+SPARK-33736     Handle MERGE in ReplaceNullWithFalseInPredicate (#908)
+SPARK-34741     MergeIntoTable should avoid ambiguous reference in UpdateAction
+SPARK-35417     Upgrade SBT to 1.5.2
+SPARK-35489     Upgrade ORC to 1.6.8
+SPARK-34990     Add ParquetEncryptionSuite
+SPARK-33212     Add hadoop-yarn-server-web-proxy for Hadoop 3.x profile
+SPARK-33212     Fix test "built-in Hadoop version should support shaded client" for hadoop-2.7
+
+# From Spark 3.1.2
+SPARK-35287     Allow RemoveRedundantProjects to preserve ProjectExec which generates UnsafeRow for DataSourceV2ScanRelation
+SPARK-35449     Only extract common expressions from CaseWhen values if elseValue is set
+SPARK-35503     Change version the facetFilter of DocSearch from 3.1.1 to 3.1.2
+SPARK-35514     Automatically update version index of DocSearch via release-tag.sh
+SPARK-35454     One LogicalPlan can match multiple dataset ids
+SPARK-35559     Speed up one test in AdaptiveQueryExecSuite
+SPARK-35566     Fix StateStoreRestoreExec output rows
+SPARK-35411     Handle Currying Product while serializing TreeNode to JSON
+SPARK-35573     Make SparkR tests pass with R 4.1+
+SPARK-35576     Redact the sensitive info in the result of Set command
+SPARK-35584     Increase the timeout in FallbackStorageSuite
+
+# Internal Patches
+MINOR           Add zstd-jni test dependency to avro module
+MINOR           Bump Hive version to 2.3.8.5-apple
+MINOR           Upgrade Hadoop version to 3.3.0.3-apple
+MINOR           Add JDK11 options
+MINOR           Adjust test cases for RIO
+MINOR           Support JarvisSparkHadoopUtil
+MINOR           Added bindAddress in Mesos Executor Backend for now set to local host name
+MINOR           Use abstract storage as a replacement for window.localStorage
+MINOR           Use Utils.localHostName() for bindAddress
+MINOR           Integrate ACI spark call home service listener
+rdar://64257964 add back http support so it works without hadoop configuration
+rdar://66576657 Add spark-avro to the tgz build to simplify kernels
+rdar://68926116 Add alternative conf name `spark.FsUrlStreamHandlerFactory.enabled`
+rdar://70562690 Update kubernetes Dockerfile in Apple Spark to AppleJDK
+rdar://71819374 Bridge in LZO codec family
+MINOR           SparkUI patch
+rdar://68238603 Support disable AJAX call on Stage Page
+rdar://71465483 Add S3A I/O metrics to Prometheus
+rdar://72552554 Increase DEFAULT_MAX_CONSECUTIVE_STAGE_ATTEMPTS from 4 to 6
+rdar://72735876 Enable spark.metrics.appStatusSource.enabled by default
+MINOR           Add stored procedure API (#850)
+MINOR           Add connector row-level APIs
+MINOR           Adds Migrate and Snapshot Catalog Support (#870)
+rdar://74249791 ALTER TABLE ... WRITE command
+rdar://70004937 Add dynamic file filtering nodes
+rdar://74251620 Add support for partition evolution (#909)
+rdar://70004937 Add plans for replacing data (#911)
+MINOR           Add Iceberg back (#985)
+MINOR           Forward port multiple containers and shuffle service from ACS 3.0
+MINOR           Use zstd as default compression codec
+rdar://77171452 When job is running, executors tab doesn't show executor info in Spark 3.1.1.
+rdar://77576428 Spark 3.x on compute unable to talk to hive running 1.2.2 (#1042)
+MINOR           Fix MERGE INTO with SinglePartition partitioning (#1060)
+rdar://78158423 Add OPTIMIZE command (#1062)
+MINOR           Implement OrderAwareCoalesce (#1065)
+MINOR           Fix Scala style error in DynamicFileFilterExecBase (#1066)
+MINOR           Updates Iceberg to 0.12.0-preview-8
+MINOR           Add rio.yml and dev scripts
+MINOR           Bump to 3.1.2.1-apple-SNAPSHOT
