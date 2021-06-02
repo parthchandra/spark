@@ -378,7 +378,7 @@ builds:
     finally:
       tag:
         enabled: true
-        expression: "releases_2.12/3.1.1.15-apple-hdfs3.3"
+        expression: "releases_2.12/3.1.1.16-apple-hdfs3.3"
 
   - name: apple-spark-2.12_3.1.1-hdfs-3.3-binaries-release
     branchName: branch-3.1.1-hdfs-3.3-apple-release
