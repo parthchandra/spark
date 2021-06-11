@@ -122,7 +122,7 @@ class VersionsSuite extends SparkFunSuite with Logging {
     Seq("2.0", "2.1", "2.2", "2.3", "3.0", "3.1")
   } else {
     Seq("0.12", "0.13", "0.14", "1.0", "1.1", "1.2", "2.0", "2.1", "2.2", "2.3", "2.3.8.5-apple",
-      "3.0", "3.1")
+      "2.3.9", "3.0", "3.1")
   }
 
   private var client: HiveClient = null
