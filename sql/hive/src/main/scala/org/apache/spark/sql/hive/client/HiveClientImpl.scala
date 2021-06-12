@@ -57,11 +57,11 @@ import org.apache.spark.sql.catalyst.parser.{CatalystSqlParser, ParseException}
 import org.apache.spark.sql.catalyst.util.CharVarcharUtils
 import org.apache.spark.sql.connector.catalog.SupportsNamespaces._
 import org.apache.spark.sql.execution.QueryExecutionException
-import org.apache.spark.sql.hive.HiveExternalCatalog
+import org.apache.spark.sql.hive.{HiveExternalCatalog, HiveUtils}
 import org.apache.spark.sql.hive.HiveExternalCatalog.{DATASOURCE_SCHEMA, DATASOURCE_SCHEMA_NUMPARTS, DATASOURCE_SCHEMA_PART_PREFIX}
 import org.apache.spark.sql.internal.SQLConf
 import org.apache.spark.sql.types._
-import org.apache.spark.util.{CircularBuffer, Utils}
+import org.apache.spark.util.{CircularBuffer, Utils, VersionUtils}
 
 /**
  * A class that wraps the HiveClient and converts its responses to externally visible classes.
@@ -200,9 +200,14 @@ private[hive] class HiveClientImpl(
     hiveConf
   }
 
-  private def getHive(conf: HiveConf): Hive = version match {
-    case hive.v2_3 => Hive.getWithoutRegisterFns(conf)
-    case _ => Hive.get(conf)
+  private def getHive(conf: HiveConf): Hive = {
+    VersionUtils.majorMinorPatchVersion(version.fullVersion).map {
+      case (2, 3, v) if v >= 9 => Hive.getWithoutRegisterFns(conf)
+      case _ => Hive.get(conf)
+    }.getOrElse {
+      throw new UnsupportedOperationException(s"Unsupported Hive Metastore version ($version). " +
+          s"Please set ${HiveUtils.HIVE_METASTORE_VERSION.key} with a valid version.")
+    }
   }
 
   override val userName = UserGroupInformation.getCurrentUser.getShortUserName
@@ -287,6 +292,9 @@ private[hive] class HiveClientImpl(
     // Set the thread local metastore client to the client associated with this HiveClientImpl.
     Hive.set(client)
     // Replace conf in the thread local Hive with current conf
+    // with the side-effect of Hive.get(conf) to avoid using out-of-date HiveConf.
+    // See discussion in https://github.com/apache/spark/pull/16826/files#r104606859
+    // for more details.
     getHive(conf)
     // setCurrentSessionState will use the classLoader associated
     // with the HiveConf in `state` to override the context class loader of the current
