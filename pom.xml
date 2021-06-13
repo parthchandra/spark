@@ -194,6 +194,7 @@
     <selenium.version>3.141.59</selenium.version>
     <htmlunit.version>2.40.0</htmlunit.version>
     <acispark.callhome.version>0.2.8</acispark.callhome.version>
+    <aciparquet.kms.version>1.1.2-apple</aciparquet.kms.version>
     <iceberg.version>0.12.0-apple-preview-8</iceberg.version>
     <bouncycastle.version>1.52</bouncycastle.version>
     <!--
@@ -2471,6 +2472,11 @@
             <artifactId>spark-core_${scala.binary.version}</artifactId>
           </exclusion>
         </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.parquet</groupId>
+        <artifactId>parquet-kms-apple</artifactId>
+        <version>${aciparquet.kms.version}</version>
       </dependency>
       <dependency>
         <groupId>com.univocity</groupId>
