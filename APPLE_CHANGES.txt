@@ -57,6 +57,11 @@ SPARK-35489     Upgrade ORC to 1.6.8
 SPARK-34990     Add ParquetEncryptionSuite
 SPARK-33212     Add hadoop-yarn-server-web-proxy for Hadoop 3.x profile
 SPARK-33212     Fix test "built-in Hadoop version should support shaded client" for hadoop-2.7
+SPARK-34764     Propagate reason for exec loss to Web UI
+SPARK-34512     Upgrade built-in Hive to 2.3.9
+SPARK-35660     Upgrade kubernetes-client to 5.4.1
+SPARK-35654     Allow ShuffleDataIO control DiskBlockManager.deleteFilesOnStop
+SPARK-35593     Support shuffle data recovery on the reused PVCs
 
 # From Spark 3.1.2
 SPARK-35287     Allow RemoveRedundantProjects to preserve ProjectExec which generates UnsafeRow for DataSourceV2ScanRelation
@@ -70,6 +75,24 @@ SPARK-35411     Handle Currying Product while serializing TreeNode to JSON
 SPARK-35573     Make SparkR tests pass with R 4.1+
 SPARK-35576     Redact the sensitive info in the result of Set command
 SPARK-35584     Increase the timeout in FallbackStorageSuite
+SPARK-35610     Fix the memory leak introduced by the Executor's stop shutdown hook
+SPARK-35589     BlockManagerMasterEndpoint should not ignore index-only shuffle file during updating
+SPARK-32975     Add config for driver readiness timeout before executors start
+SPARK-35643     Fix ambiguous reference in functions.py column()
+SPARK-35659     Avoid write null to StateStore
+SPARK-35602     Update state schema to be able to accept long length JSON
+SPARK-35687     PythonUDFSuite move assume into its methods
+SPARK-35679     instantToMicros overflow
+SPARK-35673     Fix user-defined hint and unrecognized hint in subquery
+SPARK-35653     Fix CatalystToExternalMap interpreted path fails for Map with case classes as keys or values
+SPARK-35296     Allow Dataset.observe to work even if CollectMetricsExec in a task handles multiple partitions
+SPARK-32975     Avoid None.get exception
+SPARK-35652     joinWith on two table generated from same one
+SPARK-35695     Collect observed metrics from cached and adaptive execution sub-trees
+SPARK-35689     Add log warn when keyWithIndexToValue returns null value
+SPARK-35746     Fix taskid in the stage page task event timeline
+MINOR           Print the driver pod name instead of Some(name) if absent
+SPARK-35714     Bug fix for deadlock during the executor shutdown
 
 # Internal Patches
 MINOR           Add zstd-jni test dependency to avro module
@@ -111,3 +134,5 @@ MINOR           Fix Scala style error in DynamicFileFilterExecBase (#1066)
 MINOR           Updates Iceberg to 0.12.0-preview-8
 MINOR           Add rio.yml and dev scripts
 MINOR           Bump to 3.1.2.1-apple-SNAPSHOT
+rdar://79067466 Add awsappleconnect to Dockerfile
+MINOR           Add parquet kms (#1092)
