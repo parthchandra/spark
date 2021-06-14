@@ -194,6 +194,8 @@ SPARK-31786       Upgrade kubernetes-client to 4.9.2
 SPARK-24601       Update Jackson to 2.9.6
 SPARK-27051       Bump Jackson version to 2.9.8
 SPARK-29483       Bump Jackson to 2.10.0
+SPARK-26714       Show 0 partition job in WebUI
+SPARK-26768       Remove useless code in BlockManager
 
 # From Spark 2.4.8
 SPARK-32815       Fix LibSVM data source loading error on file paths with glob metacharacters
@@ -417,3 +419,4 @@ MINOR             Bump Hive version to 1.2.1.spark2.8-apple
 MINOR             add parquet-kms-apple
 MINOR             bump parquet to 1.10.2.6-apple
 N/A               Spark-2.4.8: Upgrade ADT to version 0.7.7 (#1063)
+MINOR             Bump kms version
