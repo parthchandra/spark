@@ -421,3 +421,4 @@ MINOR             bump parquet to 1.10.2.6-apple
 N/A               Spark-2.4.8: Upgrade ADT to version 0.7.7 (#1063)
 MINOR             Bump kms version
 MINOR             Bump parquet kms to 1.1.2
+MINOR             Bump parquet-mr to 1.10.2.7-apple
