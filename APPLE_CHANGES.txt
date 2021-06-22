@@ -270,6 +270,12 @@ SPARK-35689     Add log warn when keyWithIndexToValue returns null value
 SPARK-35746     Fix taskid in the stage page task event timeline
 MINOR           Print the driver pod name instead of Some(name) if absent
 SPARK-35714     Bug fix for deadlock during the executor shutdown
+SPARK-35758     Update the document about building Spark with Hadoop for Hadoop 2.x and 3.x
+SPARK-35767     Avoid executing child plan twice in CoalesceExec
+SPARK-35791     Release on-going map properly for NULL-aware ANTI join
+SPARK-35792     View should not capture configs used in `RelationConversions`
+SPARK-35796     Fix SparkSubmitSuite failure on MacOS 10.15+
+SPARK-35391     Fix memory leak in ExecutorAllocationListener
 
 # Internal Patches
 SPARK-17767     Support user-provided ExternalCatalog and SessionBuilder
@@ -340,3 +346,4 @@ MINOR           Revert "bump kms version"
 MINOR           Revert "add parquet-kms-apple"
 MINOR           Add parquet-kms lib
 rdar://79067466 Add awsappleconnect to Dockerfile
+MINOR           Bump parquet-mr to 1.12.0.6-apple
