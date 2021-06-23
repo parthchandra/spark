@@ -12,6 +12,10 @@ machine:
   baseImage: docker.apple.com/cpbuild7/applejdk-11
   env: &base_env
     NOLINT_ON_COMPILE: "1"
+    # Overrride default of -Xss1M and add in -XX:MaxMetaspaceSize=1024M.
+    # I also these _might_ only apply to the JVM that starts these processes (and need to be passed
+    # in via --maven-opts but I can do that in a branch once this is applied.
+    SBT_OPTS: "-Xms512M -Xmx1536M -Xss2M -XX:MaxMetaspaceSize=1024M -XX:+CMSClassUnloadingEnabled"
 
 builds:
   - name: apple-spark-2.12_3.1.2-snapshot-common
@@ -347,6 +351,11 @@ builds:
         <<: *base_env
         SCALA_BINARY_VERSION: "2.12"
         SCALA_VERSION: "2.12.10"
+        # Overrride default of -Xss1M and add in -XX:MaxMetaspaceSize=1024M.
+        # I also these _might_ only apply to the JVM that starts these processes (and need to be passed
+        # in via --maven-opts but I can do that in a branch once this is applied.
+        # in via --maven-opts but I can do that in a branch once this is applied.
+        SBT_OPTS: "-Xms512M -Xmx1536M -Xss2M -XX:MaxMetaspaceSize=1024M -XX:+CMSClassUnloadingEnabled"
         HADOOP_BINARY_VERSION: "3.3"
         HADOOP_VERSION: "3.3.0"
         PUBLISH_JARS: true
