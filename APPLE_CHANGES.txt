@@ -13,6 +13,8 @@ SPARK-33813     Fix the issue that JDBC source can't treat MS SQL Server's spati
 SPARK-34217     Fix Scala 2.12 release profile
 SPARK-34391     Upgrade commons-io to 2.8.0
 SPARK-34316     Support spark.kubernetes.executor.disableConfigMap
+SPARK-34764     Propagate reason for exec loss to Web UI
+SPARK-35565     Add config for ignoring metadata directory of FileStreamSink
 
 # From Spark 3.1.0
 SPARK-25355      Add proxy user to driver if present on spark-submit
@@ -119,6 +121,7 @@ SPARK-34213      Refresh cached data of v1 table in `LOAD DATA`
 SPARK-33726      Fix for Duplicate field names during Aggregation
 SPARK-34187      Use available offset range obtained during polling when checking offset validation
 SPARK-33843      Upgrade to Zstd 1.4.8
+SPARK-34674     Close SparkContext after the Main method has finished
 
 # From Spark 3.0.2
 SPARK-28612      Correct method doc of DataFrameWriterV2.replace()
@@ -473,3 +476,7 @@ rdar://74001493  Add Dataset pipe API
 N/A              Add an option for limiting storage for shuffle blocks
 MINOR            Upgrade callhomelistner 0.2.7 (#921)
 MINOR            trigger build job for pull requests
+N/A              Bump Hadoop version to 3.2.0.4 (#1033)
+N/A              bump parquet version to 1.10.1.12-apple
+N/A              add parquet-kms-apple
+N/A              bump parquet kms to 1.1.2
