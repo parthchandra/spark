@@ -17,9 +17,9 @@
 
 package org.apache.spark.deploy.yarn
 
-import java.io.{File, IOException}
+import java.io.IOException
 import java.lang.reflect.{InvocationTargetException, Modifier}
-import java.net.{URI, URL, URLEncoder}
+import java.net.URI
 import java.security.PrivilegedExceptionAction
 import java.util.concurrent.{TimeoutException, TimeUnit}
 
@@ -36,6 +36,7 @@ import org.apache.hadoop.yarn.api._
 import org.apache.hadoop.yarn.api.records._
 import org.apache.hadoop.yarn.conf.YarnConfiguration
 import org.apache.hadoop.yarn.exceptions.ApplicationAttemptNotFoundException
+import org.apache.hadoop.yarn.server.webproxy.ProxyUriUtils
 import org.apache.hadoop.yarn.util.{ConverterUtils, Records}
 
 import org.apache.spark._
@@ -79,10 +80,7 @@ private[spark] class ApplicationMaster(
   private var metricsSystem: Option[MetricsSystem] = None
 
   private val userClassLoader = {
-    val classpath = Client.getUserClasspath(sparkConf)
-    val urls = classpath.map { entry =>
-      new URL("file:" + new File(entry.getPath()).getAbsolutePath())
-    }
+    val urls = Client.getUserClasspathUrls(sparkConf, isClusterMode)
 
     if (isClusterMode) {
       if (Client.isUserClassPathFirst(sparkConf, isDriver = true)) {
@@ -307,8 +305,7 @@ private[spark] class ApplicationMaster(
       // The client-mode AM doesn't listen for incoming connections, so report an invalid port.
       registerAM(Utils.localHostName, -1, sparkConf,
         sparkConf.getOption("spark.driver.appUIAddress"), appAttemptId)
-      val encodedAppId = URLEncoder.encode(appAttemptId.getApplicationId.toString, "UTF-8")
-      addAmIpFilter(Some(driverRef), s"/proxy/$encodedAppId")
+      addAmIpFilter(Some(driverRef), ProxyUriUtils.getPath(appAttemptId.getApplicationId))
       createAllocator(driverRef, sparkConf, clientRpcEnv, appAttemptId, cachedResourcesConf)
       reporterThread.join()
     } catch {
