@@ -21,6 +21,7 @@ import java.lang.{Boolean => JBoolean, Double => JDouble, Float => JFloat, Long 
 import java.math.{BigDecimal => JBigDecimal}
 import java.sql.{Date, Timestamp}
 import java.time.{Instant, LocalDate}
+import java.util
 import java.util.Locale
 
 import scala.collection.JavaConverters.asScalaBufferConverter
@@ -181,7 +182,7 @@ class ParquetFilters(
     case ParquetBinaryType =>
       (n: Array[String], v: Any) => FilterApi.eq(
         binaryColumn(n),
-        Option(v).map(b => Binary.fromReusedByteArray(v.asInstanceOf[Array[Byte]])).orNull)
+        Option(v).map(b => Binary.fromReusedByteArray(b.asInstanceOf[Array[Byte]])).orNull)
     case ParquetDateType if pushDownDate =>
       (n: Array[String], v: Any) => FilterApi.eq(
         intColumn(n),
@@ -231,7 +232,7 @@ class ParquetFilters(
     case ParquetBinaryType =>
       (n: Array[String], v: Any) => FilterApi.notEq(
         binaryColumn(n),
-        Option(v).map(b => Binary.fromReusedByteArray(v.asInstanceOf[Array[Byte]])).orNull)
+        Option(v).map(b => Binary.fromReusedByteArray(b.asInstanceOf[Array[Byte]])).orNull)
     case ParquetDateType if pushDownDate =>
       (n: Array[String], v: Any) => FilterApi.notEq(
         intColumn(n),
@@ -405,6 +406,117 @@ class ParquetFilters(
     case ParquetSchemaType(DECIMAL, FIXED_LEN_BYTE_ARRAY, length, _) if pushDownDecimal =>
       (n: Array[String], v: Any) =>
         FilterApi.gtEq(binaryColumn(n), decimalToByteArray(v.asInstanceOf[JBigDecimal], length))
+  }
+
+  private val makeIn:
+    PartialFunction[ParquetSchemaType, (Array[String], Any) => FilterPredicate] = {
+    case ParquetBooleanType =>
+      (n: Array[String], v: Any) =>
+        val values = Option(v).map(_.asInstanceOf[Array[Object]]).orNull
+        val set = new util.HashSet[JBoolean]()
+        for (value <- values) {
+          set.add(value.asInstanceOf[JBoolean])
+        }
+        FilterApi.in(booleanColumn(n), set)
+    case ParquetByteType | ParquetShortType | ParquetIntegerType =>
+      (n: Array[String], v: Any) =>
+        val values = Option(v).map(_.asInstanceOf[Array[Object]]).orNull
+        val set = new util.HashSet[Integer]()
+        for (value <- values) {
+          set.add(Option(value).map(_.asInstanceOf[Number].intValue.asInstanceOf[Integer]).orNull)
+        }
+        FilterApi.in(intColumn(n), set)
+    case ParquetLongType =>
+      (n: Array[String], v: Any) =>
+        val values = Option(v).map(_.asInstanceOf[Array[Object]]).orNull
+        val set = new util.HashSet[JLong]()
+        for (value <- values) {
+          set.add(value.asInstanceOf[JLong])
+        }
+        FilterApi.in(longColumn(n), set)
+    case ParquetFloatType =>
+      (n: Array[String], v: Any) =>
+        val values = Option(v).map(_.asInstanceOf[Array[Object]]).orNull
+        val set = new util.HashSet[JFloat]()
+        for (value <- values) {
+          set.add(value.asInstanceOf[JFloat])
+        }
+        FilterApi.in(floatColumn(n), set)
+    case ParquetDoubleType =>
+      (n: Array[String], v: Any) =>
+        val values = Option(v).map(_.asInstanceOf[Array[Object]]).orNull
+        val set = new util.HashSet[JDouble]()
+        for (value <- values) {
+          set.add(value.asInstanceOf[JDouble])
+        }
+        FilterApi.in(doubleColumn(n), set)
+    // Binary.fromString and Binary.fromByteArray don't accept null values
+    case ParquetStringType =>
+      (n: Array[String], v: Any) =>
+        val values = Option(v).map(_.asInstanceOf[Array[Object]]).orNull
+        val set = new util.HashSet[Binary]()
+        for (value <- values) {
+          set.add(Option(value).map(s => Binary.fromString(s.asInstanceOf[String])).orNull)
+        }
+        FilterApi.in(binaryColumn(n), set)
+    case ParquetBinaryType =>
+      (n: Array[String], v: Any) =>
+        val values = Option(v).map(_.asInstanceOf[Array[Object]]).orNull
+        val set = new util.HashSet[Binary]()
+        for (value <- values) {
+          set.add(Option(value)
+            .map(b => Binary.fromReusedByteArray(b.asInstanceOf[Array[Byte]])).orNull)
+        }
+        FilterApi.in(binaryColumn(n), set)
+    case ParquetDateType if pushDownDate =>
+      (n: Array[String], v: Any) =>
+        val values = Option(v).map(_.asInstanceOf[Array[Object]]).orNull
+        val set = new util.HashSet[Integer]()
+        for (value <- values) {
+          set.add(Option(value).map(date => dateToDays(date).asInstanceOf[Integer]).orNull)
+        }
+        FilterApi.in(intColumn(n), set)
+    case ParquetTimestampMicrosType if pushDownTimestamp =>
+      (n: Array[String], v: Any) =>
+        val values = Option(v).map(_.asInstanceOf[Array[Object]]).orNull
+        val set = new util.HashSet[JLong]()
+        for (value <- values) {
+          set.add(Option(value).map(timestampToMicros).orNull)
+        }
+        FilterApi.in(longColumn(n), set)
+    case ParquetTimestampMillisType if pushDownTimestamp =>
+      (n: Array[String], v: Any) =>
+        val values = Option(v).map(_.asInstanceOf[Array[Object]]).orNull
+        val set = new util.HashSet[JLong]()
+        for (value <- values) {
+          set.add(Option(value).map(timestampToMillis).orNull)
+        }
+        FilterApi.in(longColumn(n), set)
+    case ParquetSchemaType(DECIMAL, INT32, _, _) if pushDownDecimal =>
+      (n: Array[String], v: Any) =>
+        val values = Option(v).map(_.asInstanceOf[Array[Object]]).orNull
+        val set = new util.HashSet[Integer]()
+        for (value <- values) {
+          set.add(Option(value).map(d => decimalToInt32(d.asInstanceOf[JBigDecimal])).orNull)
+        }
+        FilterApi.in(intColumn(n), set)
+    case ParquetSchemaType(DECIMAL, INT64, _, _) if pushDownDecimal =>
+      (n: Array[String], v: Any) =>
+        val values = Option(v).map(_.asInstanceOf[Array[Object]]).orNull
+        val set = new util.HashSet[JLong]()
+        for (value <- values) {
+          set.add(Option(value).map(d => decimalToInt64(d.asInstanceOf[JBigDecimal])).orNull)
+        }
+        FilterApi.in(longColumn(n), set)
+    case ParquetSchemaType(DECIMAL, FIXED_LEN_BYTE_ARRAY, length, _) if pushDownDecimal =>
+      (n: Array[String], v: Any) =>
+        val values = Option(v).map(_.asInstanceOf[Array[Object]]).orNull
+        val set = new util.HashSet[Binary]()
+        for (value <- values) {
+          set.add(Option(value)
+            .map(d => decimalToByteArray(d.asInstanceOf[JBigDecimal], length)).orNull)
+        }
+        FilterApi.in(binaryColumn(n), set)
   }
 
   // Returns filters that can be pushed down when reading Parquet files.
@@ -599,10 +711,8 @@ class ParquetFilters(
 
       case sources.In(name, values) if canMakeFilterOn(name, values.head)
         && values.distinct.length <= pushDownInFilterThreshold =>
-        values.distinct.flatMap { v =>
-          makeEq.lift(nameToParquetField(name).fieldType)
-            .map(_(nameToParquetField(name).fieldNames, v))
-        }.reduceLeftOption(FilterApi.or)
+        makeIn.lift(nameToParquetField(name).fieldType)
+          .map(_(nameToParquetField(name).fieldNames, values))
 
       case sources.StringStartsWith(name, prefix)
           if pushDownStartWith && canMakeFilterOn(name, prefix) =>

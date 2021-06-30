@@ -21,13 +21,14 @@ import java.math.{BigDecimal => JBigDecimal}
 import java.nio.charset.StandardCharsets
 import java.sql.{Date, Timestamp}
 import java.time.{LocalDate, LocalDateTime, ZoneId}
+import java.util
 
 import scala.reflect.ClassTag
 import scala.reflect.runtime.universe.TypeTag
 
 import org.apache.parquet.filter2.predicate.{FilterApi, FilterPredicate, Operators}
 import org.apache.parquet.filter2.predicate.FilterApi._
-import org.apache.parquet.filter2.predicate.Operators.{Column => _, _}
+import org.apache.parquet.filter2.predicate.Operators.{Column => _, In => FilterIn, _}
 import org.apache.parquet.schema.MessageType
 
 import org.apache.spark.{SparkConf, SparkException}
@@ -185,6 +186,12 @@ abstract class ParquetFilterSuite extends QueryTest with ParquetTest with Shared
       checkFilterPredicate(!(tsAttr < ts4.ts), classOf[GtEq[_]], resultFun(ts4))
       checkFilterPredicate(tsAttr < ts2.ts || tsAttr > ts3.ts, classOf[Operators.Or],
         Seq(Row(resultFun(ts1)), Row(resultFun(ts4))))
+
+      checkFilterPredicate(
+        In(tsAttr, Array(ts2.ts, ts3.ts, ts4.ts, "2021-05-01 00:01:02".ts, null)
+          .map(Literal.apply)),
+        classOf[FilterIn[_]],
+        Seq(Row(resultFun(ts2)), Row(resultFun(ts3)), Row(resultFun(ts4))))
     }
   }
 
@@ -333,6 +340,11 @@ abstract class ParquetFilterSuite extends QueryTest with ParquetTest with Shared
       checkFilterPredicate(!(intAttr < 4), classOf[GtEq[_]], resultFun(4))
       checkFilterPredicate(intAttr < 2 || intAttr > 3, classOf[Operators.Or],
         Seq(Row(resultFun(1)), Row(resultFun(4))))
+
+      checkFilterPredicate(
+        In(intAttr, Array(2, 3, 4, 5, 6, 7, null).map(Literal.apply)),
+        classOf[FilterIn[_]],
+        Seq(Row(resultFun(2)), Row(resultFun(3)), Row(resultFun(4))))
     }
   }
 
@@ -368,6 +380,11 @@ abstract class ParquetFilterSuite extends QueryTest with ParquetTest with Shared
       checkFilterPredicate(!(longAttr < 4), classOf[GtEq[_]], resultFun(4))
       checkFilterPredicate(longAttr < 2 || longAttr > 3, classOf[Operators.Or],
         Seq(Row(resultFun(1)), Row(resultFun(4))))
+
+      checkFilterPredicate(
+        In(longAttr, Array(2L, 3L, 4L, 5L, 6L, 7L, null).map(Literal.apply)),
+        classOf[FilterIn[_]],
+        Seq(Row(resultFun(2L)), Row(resultFun(3L)), Row(resultFun(4L))))
     }
   }
 
@@ -403,6 +420,11 @@ abstract class ParquetFilterSuite extends QueryTest with ParquetTest with Shared
       checkFilterPredicate(!(floatAttr < 4), classOf[GtEq[_]], resultFun(4))
       checkFilterPredicate(floatAttr < 2 || floatAttr > 3, classOf[Operators.Or],
         Seq(Row(resultFun(1)), Row(resultFun(4))))
+
+      checkFilterPredicate(
+        In(floatAttr, Array(2F, 3F, 4F, 5F, 6F, 7F, null).map(Literal.apply)),
+        classOf[FilterIn[_]],
+        Seq(Row(resultFun(2F)), Row(resultFun(3F)), Row(resultFun(4F))))
     }
   }
 
@@ -438,6 +460,11 @@ abstract class ParquetFilterSuite extends QueryTest with ParquetTest with Shared
       checkFilterPredicate(!(doubleAttr < 4), classOf[GtEq[_]], resultFun(4))
       checkFilterPredicate(doubleAttr < 2 || doubleAttr > 3, classOf[Operators.Or],
         Seq(Row(resultFun(1)), Row(resultFun(4))))
+
+      checkFilterPredicate(
+        In(doubleAttr, Array(2.0D, 3.0D, 4.0D, 5.0D, 6.0D, 7.0D, null).map(Literal.apply)),
+        classOf[FilterIn[_]],
+        Seq(Row(resultFun(2D)), Row(resultFun(3D)), Row(resultFun(4F))))
     }
   }
 
@@ -473,6 +500,11 @@ abstract class ParquetFilterSuite extends QueryTest with ParquetTest with Shared
       checkFilterPredicate(!(stringAttr < "4"), classOf[GtEq[_]], resultFun("4"))
       checkFilterPredicate(stringAttr < "2" || stringAttr > "3", classOf[Operators.Or],
         Seq(Row(resultFun("1")), Row(resultFun("4"))))
+
+      checkFilterPredicate(
+        In(stringAttr, Array("2", "3", "4", "5", "6", "7", null).map(Literal.apply)),
+        classOf[FilterIn[_]],
+        Seq(Row(resultFun("2")), Row(resultFun("3")), Row(resultFun("4"))))
     }
   }
 
@@ -513,6 +545,11 @@ abstract class ParquetFilterSuite extends QueryTest with ParquetTest with Shared
       checkFilterPredicate(!(binaryAttr < 4.b), classOf[GtEq[_]], resultFun(4.b))
       checkFilterPredicate(binaryAttr < 2.b || binaryAttr > 3.b, classOf[Operators.Or],
         Seq(Row(resultFun(1.b)), Row(resultFun(4.b))))
+
+      checkFilterPredicate(
+        In(binaryAttr, Array(2.b, 3.b, 4.b, 5.b, 6.b, 7.b, null).map(Literal.apply)),
+        classOf[FilterIn[_]],
+        Seq(Row(resultFun(2.b)), Row(resultFun(3.b)), Row(resultFun(4.b))))
     }
   }
 
@@ -577,6 +614,13 @@ abstract class ParquetFilterSuite extends QueryTest with ParquetTest with Shared
             dateAttr < "2018-03-19".date || dateAttr > "2018-03-20".date,
             classOf[Operators.Or],
             Seq(Row(resultFun("2018-03-18")), Row(resultFun("2018-03-21"))))
+
+          checkFilterPredicate(
+            In(dateAttr, Array("2018-03-19".date, "2018-03-20".date, "2018-03-21".date,
+              "2018-03-22".date, null).map(Literal.apply)),
+            classOf[FilterIn[_]],
+            Seq(Row(resultFun("2018-03-19")), Row(resultFun("2018-03-20")),
+              Row(resultFun("2018-03-21"))))
         }
       }
     }
@@ -670,6 +714,12 @@ abstract class ParquetFilterSuite extends QueryTest with ParquetTest with Shared
           checkFilterPredicate(!(decimalAttr < 4), classOf[GtEq[_]], resultFun(4))
           checkFilterPredicate(decimalAttr < 2 || decimalAttr > 3, classOf[Operators.Or],
             Seq(Row(resultFun(1)), Row(resultFun(4))))
+
+          checkFilterPredicate(
+            In(decimalAttr, Array(2, 3, 4, 5, null).map(Literal.apply)
+              .map(_.cast(DecimalType(precision, 2)))),
+            classOf[FilterIn[_]],
+            Seq(Row(resultFun(2)), Row(resultFun(3)), Row(resultFun(4))))
         }
       }
     }
@@ -1389,23 +1439,26 @@ abstract class ParquetFilterSuite extends QueryTest with ParquetTest with Shared
 
     val parquetSchema = new SparkToParquetSchemaConverter(conf).convert(schema)
     val parquetFilters = createParquetFilters(parquetSchema)
-    assertResult(Some(FilterApi.eq(intColumn("a"), null: Integer))) {
+    var set = new util.HashSet[Integer]()
+    set.add(null)
+    assertResult(Some(FilterApi.in(intColumn("a"), set))) {
       parquetFilters.createFilter(sources.In("a", Array(null)))
     }
 
-    assertResult(Some(FilterApi.eq(intColumn("a"), 10: Integer))) {
+    set = new util.HashSet[Integer]()
+    set.add(10)
+    assertResult(Some(FilterApi.in(intColumn("a"), set))) {
       parquetFilters.createFilter(sources.In("a", Array(10)))
     }
 
     // Remove duplicates
-    assertResult(Some(FilterApi.eq(intColumn("a"), 10: Integer))) {
+    assertResult(Some(FilterApi.in(intColumn("a"), set))) {
       parquetFilters.createFilter(sources.In("a", Array(10, 10)))
     }
 
-    assertResult(Some(or(or(
-      FilterApi.eq(intColumn("a"), 10: Integer),
-      FilterApi.eq(intColumn("a"), 20: Integer)),
-      FilterApi.eq(intColumn("a"), 30: Integer)))
+    set.add(20)
+    set.add(30)
+    assertResult(Some(FilterApi.in(intColumn("a"), set))
     ) {
       parquetFilters.createFilter(sources.In("a", Array(10, 20, 30)))
     }
@@ -1429,7 +1482,7 @@ abstract class ParquetFilterSuite extends QueryTest with ParquetTest with Shared
             val filter = s"a in(${Range(0, count).mkString(",")})"
             assert(df.where(filter).count() === count)
             val actual = stripSparkFilter(df.where(filter)).collect().length
-            if (pushEnabled && count <= conf.parquetFilterPushDownInFilterThreshold) {
+            if (pushEnabled) {
               assert(actual > 1 && actual < data.length)
             } else {
               assert(actual === data.length)
@@ -1504,11 +1557,12 @@ abstract class ParquetFilterSuite extends QueryTest with ParquetTest with Shared
       FilterApi.gtEq(intColumn("cint"), 1000: Integer),
       sources.GreaterThanOrEqual("CINT", 1000))
 
+    val set = new util.HashSet[Integer]()
+    set.add(10)
+    set.add(20)
     testCaseInsensitiveResolution(
       schema,
-      FilterApi.or(
-        FilterApi.eq(intColumn("cint"), 10: Integer),
-        FilterApi.eq(intColumn("cint"), 20: Integer)),
+      FilterApi.in(intColumn("cint"), set),
       sources.In("CINT", Array(10, 20)))
 
     val dupFieldSchema = StructType(
