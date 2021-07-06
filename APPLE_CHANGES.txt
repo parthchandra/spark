@@ -72,6 +72,17 @@ SPARK-35832     Add LocalRootDirsTest trait
 SPARK-35830     Upgrade sbt-mima-plugin to 0.9.2
 SPARK-35824     Convert LevelDBSuite.IntKeyType from a nested class to a normal class
 SPARK-35593     Run KubernetesLocalDiskShuffleDataIOSuite on a dedicated JVM
+SPARK-34167     Reading parquet with IntDecimal written as a LongDecimal blows up
+SPARK-34817     Read parquet unsigned types that stored as int32 physical type in parquet
+SPARK-34786     Read Parquet unsigned int64 logical type that stored as signed int64 physical type to decimal(20, 0)
+SPARK-34786     Explicitly declare DecimalType(20, 0) for Parquet UINT_64
+SPARK-34973     Cleanup unused fields and methods in vectorized Parquet reader
+SPARK-34661     Clean up `OriginalType` and `DecimalMetadata ` usage in Parquet related code
+SPARK-35640     Refactor Parquet vectorized reader to remove duplicated code paths
+SPARK-35846     Introduce ParquetReadState to track various states while reading a Parquet column chunk
+SPARK-34859     Handle column index when using vectorized Parquet reader
+SPARK-34289     Parquet vectorized reader support column index
+SPARK-33673     Avoid push down partition filters to ParquetScan for DataSourceV2
 
 # From Spark 3.1.2
 SPARK-35287     Allow RemoveRedundantProjects to preserve ProjectExec which generates UnsafeRow for DataSourceV2ScanRelation
@@ -124,6 +135,11 @@ SPARK-35879     Fix performance regression caused by collectFetchRequests
 SPARK-35903     Parameterize 'master' in TPCDSQueryBenchmark
 SPARK-35909     Fix broken Python Links in docs/sql-getting-started.md
 SPARK-35886     PromotePrecision should not overwrite genCodePromotePrecision should not overwrite genCode
+SPARK-35672     Pass user classpath entries to executors using config instead of command line
+SPARK-35898     Fix arrays and maps in RowToColumnConverter
+SPARK-35935     Prevent failure of MSCK REPAIR TABLE on table refreshing
+SPARK-35714     Use a shared stopping flag for WorkerWatcher to avoid the duplicate System.exit
+SPARK-35986     Fix type hint for RDD.histogram's buckets
 
 # Internal Patches
 MINOR           Add zstd-jni test dependency to avro module
@@ -170,3 +186,9 @@ MINOR           Add parquet kms (#1092)
 MINOR           Bump parquet-mr to 1.12.0.6-apple
 N/A             bump parquet version to 1.12.0.9 (#1119)
 N/A             Add in SBT_OPTS
+N/A             use parquet FilterAPI.in predicate 3.1.2
+rdar://80026960 Increase spark.scheduler.listenerbus.eventqueue.capacity to 1000000
+N/A             [SPARK-33955 (https://issues.apache.org/jira/browse/SPARK-33955)][SS] Add latest offsets to source progress
+rdar://80103675 Update Iceberg to 0.12.0-apple-preview-9 (#1126 (https://github.pie.apple.com/IPR/apache-spark/pull/1126))
+rdar://79891939 JSON Parse error: Unterminated string in Executor tab of running job's Spark UI
+rdar://80089035 Missing "Active Task" column in individual executorinfo (executor page) in running Spark 3.1.1.x jobs
