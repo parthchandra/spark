@@ -621,7 +621,7 @@ $(document).ready(function () {
         function printStageData(executorSummaryDataJSON, taskMetricsJSON, stageDataJSON, activeTasksJSON) {
             // rendering the UI page
 
-            tasksSummary.append(Mustache.render($(template).filter("#stages-summary-template").html()));
+            tasksSummary.append(Mustache.render($(stagesSummaryTemplate).filter("#stages-summary-template").html()));
 
             $("#additionalMetrics").click(function(){
                 $("#arrowtoggle1").toggleClass("arrow-open arrow-closed");
@@ -945,14 +945,14 @@ $(document).ready(function () {
                         "data": function (data) {
                             var columnIndexToSort = 0;
                             var columnNameToSort = "Index";
-                            if (data.order[0].column && data.order[0].column != "") {
-                                columnIndexToSort = parseInt(data.order[0].column);
-                                columnNameToSort = data.columns[columnIndexToSort].name;
-                            }
+
                             delete data.columns;
                             data.numTasks = totalTasksToShow;
                             data.columnIndexToSort = columnIndexToSort;
                             data.columnNameToSort = columnNameToSort;
+                            data.length = totalTasksToShow;
+                            data["order[0][dir]"] = "asc";
+                            data.start = 0;
                         },
                         "dataSrc": function (jsons) {
                             var jsonStr = JSON.stringify(jsons);
@@ -1056,9 +1056,7 @@ $(document).ready(function () {
                         $("#toggle-aggregatedMetrics").toggleClass("d-none");
                     }
                 }
-            });
-        });
-    });
+            }
 
     $("#showAdditionalMetrics").append(
         "<div><a id='additionalMetrics' class='collapse-table'>" +
@@ -1114,27 +1112,28 @@ $(document).ready(function () {
     var tasksSummary = $("#parent-container");
     stageAttemptId = getStageAttemptId();
     if (getAjaxEnabled()) {
-        appId = getStandAloneAppId();
-        var executorSummaryDataJSON;
-        var taskMetricsJSON;
-        var activeTasksJSON;
-        var stageDataJSON;
-        endPoint = stageEndPoint(appId);
-        $.getJSON(createRESTEndPointForExecutorsPage(appId), function(executorSummaryResponse, status, jqXHR) {
-            executorSummaryDataJSON = executorSummaryResponse;
+        getStandAloneAppId(function (appId) {
+            var executorSummaryDataJSON;
+            var taskMetricsJSON;
+            var activeTasksJSON;
+            var stageDataJSON;
+            endPoint = stageEndPoint(appId);
+            $.getJSON(createRESTEndPointForExecutorsPage(appId), function (executorSummaryResponse, status, jqXHR) {
+                executorSummaryDataJSON = executorSummaryResponse;
+
+                var quantiles = "0,0.25,0.5,0.75,1.0";
+                $.getJSON(endPoint + "/" + stageAttemptId + "/taskSummary?quantiles=" + quantiles,
+                    function (taskMetricsResponse, status, jqXHR) {
+                        taskMetricsJSON = taskMetricsResponse;
+
+                        $.getJSON(endPoint + "/" + stageAttemptId, function (response, status, jqXHR) {
+                            stageDataJSON = response;
+
+                            printStageData(executorSummaryDataJSON, taskMetricsJSON, stageDataJSON, activeTasksJSON);
+                        });
+                });
+            });
         });
-        var quantiles = "0,0.25,0.5,0.75,1.0";
-        $.getJSON(endPoint + "/" + stageAttemptId + "/taskSummary?quantiles=" + quantiles,
-                          function(taskMetricsResponse, status, jqXHR) {
-            taskMetricsJSON = taskMetricsResponse;
-        });
-        $.getJSON(endPoint + "/" + stageAttemptId + "/taskTable", function(activeTasksResponse, status, jqXHR) {
-           activeTasksJSON = activeTasksResponse;
-        });
-        $.getJSON(endPoint + "/" + stageAttemptId, function(response, status, jqXHR) {
-           stageDataJSON = response;
-        });
-        printStageData(executorSummaryDataJSON, taskMetricsJSON, stageDataJSON, activeTasksJSON)
     } else {
         appId = preLoadedAppId;
         var executorSummaryDataJSON = $.parseJSON(preLoadedExecutorSummaryDataJSON);
