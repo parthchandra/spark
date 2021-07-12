@@ -83,6 +83,8 @@ SPARK-35846     Introduce ParquetReadState to track various states while reading
 SPARK-34859     Handle column index when using vectorized Parquet reader
 SPARK-34289     Parquet vectorized reader support column index
 SPARK-33673     Avoid push down partition filters to ParquetScan for DataSourceV2
+SPARK-36020     Check logical link in remove redundant projects
+SPARK-36089     Update the SQL migration guide about encoding auto-detection of CSV files
 
 # From Spark 3.1.2
 SPARK-35287     Allow RemoveRedundantProjects to preserve ProjectExec which generates UnsafeRow for DataSourceV2ScanRelation
@@ -192,3 +194,4 @@ N/A             [SPARK-33955 (https://issues.apache.org/jira/browse/SPARK-33955)
 rdar://80103675 Update Iceberg to 0.12.0-apple-preview-9 (#1126 (https://github.pie.apple.com/IPR/apache-spark/pull/1126))
 rdar://79891939 JSON Parse error: Unterminated string in Executor tab of running job's Spark UI
 rdar://80089035 Missing "Active Task" column in individual executorinfo (executor page) in running Spark 3.1.1.x jobs
+rdar://80347753 Spark UI stage view broken
