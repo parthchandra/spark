@@ -56,6 +56,9 @@ SPARK-34764     Propagate reason for exec loss to Web UI
 SPARK-35654     Allow ShuffleDataIO control DiskBlockManager.deleteFilesOnStop
 SPARK-35593     Support shuffle data recovery on the reused PVCs
 SPARK-35565     Add config for ignoring metadata directory of FileStreamSink
+SPARK-34609     Unify resolveExpressionBottomUp and resolveExpressionTopDown
+SPARK-34962     Explicit representation of * in UpdateAction and InsertAction in MergeIntoTable
+SPARK-33955     Add latest offsets to source progress
 
 # From Spark 3.1.2
 MINOR           Add table_identifier in sql-migration-guide for SHOW CREATE TABLE
@@ -372,3 +375,5 @@ rdar://80103675 Update Iceberg to 0.12.0-apple-preview-9 (#1125)
 rdar://79891939 JSON Parse error: Unterminated string in Executor tab of running job's Spark 
 rdar://80089035 Missing "Active Task" column in individual executor info (executor page) in running Spark 3.1.1.x jobsUI
 rdar://80347753 Spark UI stage view broken
+rdar://80541032 Disable spark.shuffle.readHostLocalDisk by default
+MINOR           Remove duplicated pipelines
