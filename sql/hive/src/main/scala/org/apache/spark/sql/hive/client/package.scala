@@ -99,19 +99,14 @@ package object client {
         "org.apache.curator:*",
         "org.pentaho:pentaho-aggdesigner-algorithm"))
 
-    // Since HIVE-14496, Hive materialized view need calcite-core.
+    // Since HIVE-23980, calcite-core included in Hive package jar.
     // For spark, only VersionsSuite currently creates a hive materialized view for testing.
-    case object v2_3 extends HiveVersion("2.3.7",
-      exclusions = Seq("org.apache.calcite:calcite-druid",
-        "org.apache.curator:*",
-        "org.pentaho:pentaho-aggdesigner-algorithm"))
-
-    // Hive 2.3.8 shades guava and includes calcite:* and avatica:avatica.
-    case object v2_3_8 extends HiveVersion("2.3.8.5-apple",
-      extraDeps = Seq("com.fasterxml.jackson.core:jackson-annotations:2.7.9"),
-      exclusions = Seq("org.apache.curator:*",
+    case object v2_3 extends HiveVersion("2.3.9",
+      exclusions = Seq("org.apache.calcite:calcite-core",
+        "org.apache.calcite:calcite-druid",
+        "org.apache.calcite.avatica:avatica",
         "com.fasterxml.jackson.core:*",
-        "com.google.guava:guava",
+        "org.apache.curator:*",
         "org.pentaho:pentaho-aggdesigner-algorithm"))
 
     // Since Hive 3.0, HookUtils uses org.apache.logging.log4j.util.Strings
@@ -133,7 +128,7 @@ package object client {
         "org.pentaho:pentaho-aggdesigner-algorithm"))
 
     val allSupportedHiveVersions =
-      Set(v12, v13, v14, v1_0, v1_1, v1_2, v2_0, v2_1, v2_2, v2_3, v2_3_8, v3_0, v3_1)
+      Set(v12, v13, v14, v1_0, v1_1, v1_2, v2_0, v2_1, v2_2, v2_3, v3_0, v3_1)
   }
   // scalastyle:on
 
