@@ -60,6 +60,7 @@ SPARK-34609     Unify resolveExpressionBottomUp and resolveExpressionTopDown
 SPARK-34962     Explicit representation of * in UpdateAction and InsertAction in MergeIntoTable
 SPARK-33955     Add latest offsets to source progress
 SPARK-34720     MERGE ... UPDATE/INSERT * should do by-name resolution
+SPARK-36093     Apply spark.sql.hive.metastorePartitionPruning for non-Hive tables that uses Hive metastore for partition management
 
 # From Spark 3.1.2
 MINOR           Add table_identifier in sql-migration-guide for SHOW CREATE TABLE
