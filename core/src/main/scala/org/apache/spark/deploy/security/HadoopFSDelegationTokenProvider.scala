@@ -21,7 +21,7 @@ import scala.collection.JavaConverters._
 import scala.util.Try
 
 import org.apache.hadoop.conf.Configuration
-import org.apache.hadoop.fs.FileSystem
+import org.apache.hadoop.fs.{FileSystem, Path}
 import org.apache.hadoop.mapred.Master
 import org.apache.hadoop.security.{Credentials, UserGroupInformation}
 import org.apache.hadoop.security.token.delegation.AbstractDelegationTokenIdentifier
@@ -46,7 +46,12 @@ private[deploy] class HadoopFSDelegationTokenProvider(fileSystems: Configuration
       creds: Credentials): Option[Long] = {
 
     val fsToGetTokens = fileSystems(hadoopConf)
-    val fetchCreds = fetchDelegationTokens(getTokenRenewer(hadoopConf), fsToGetTokens, creds)
+    // The hosts on which the file systems to be excluded from token renewal
+    val fsToExclude = sparkConf.get(YARN_KERBEROS_FILESYSTEM_RENEWAL_EXCLUDE)
+      .map(new Path(_).getFileSystem(hadoopConf).getUri.getHost)
+      .toSet
+    val fetchCreds = fetchDelegationTokens(getTokenRenewer(hadoopConf), fsToGetTokens, creds,
+      fsToExclude)
 
     // Get the token renewal interval if it is not set. It will only be called once.
     if (tokenRenewalInterval == null) {
@@ -91,11 +96,18 @@ private[deploy] class HadoopFSDelegationTokenProvider(fileSystems: Configuration
   private def fetchDelegationTokens(
       renewer: String,
       filesystems: Set[FileSystem],
-      creds: Credentials): Credentials = {
+      creds: Credentials,
+      fsToExclude: Set[String]): Credentials = {
 
     filesystems.foreach { fs =>
-      logInfo("getting token for: " + fs)
-      fs.addDelegationTokens(renewer, creds)
+      if (fsToExclude.contains(fs.getUri.getHost)) {
+        // YARN RM skips renewing token with empty renewer
+        logInfo(s"getting token for: $fs with empty renewer to skip renewal")
+        fs.addDelegationTokens("", creds)
+      } else {
+        logInfo("getting token for: " + fs)
+        fs.addDelegationTokens(renewer, creds)
+      }
     }
 
     creds
@@ -110,7 +122,7 @@ private[deploy] class HadoopFSDelegationTokenProvider(fileSystems: Configuration
     // user as renewer.
     sparkConf.get(PRINCIPAL).flatMap { renewer =>
       val creds = new Credentials()
-      fetchDelegationTokens(renewer, filesystems, creds)
+      fetchDelegationTokens(renewer, filesystems, creds, Set.empty)
 
       val renewIntervals = creds.getAllTokens.asScala.filter {
         _.decodeIdentifier().isInstanceOf[AbstractDelegationTokenIdentifier]
