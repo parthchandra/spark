@@ -423,3 +423,4 @@ MINOR             Bump kms version
 MINOR             Bump parquet kms to 1.1.2
 MINOR             Bump parquet-mr to 1.10.2.7-apple
 rdar://80483071   Bump Hive version to 1.2.1.spark2.9-apple
+rdar://81003697   Backport SPARK-34295 into Spark 2.4.8 branch
