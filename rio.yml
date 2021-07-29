@@ -1,5 +1,5 @@
 schemaVersion: 2.0
-timeout: 90
+timeout: 120
 
 notify:
   email:
