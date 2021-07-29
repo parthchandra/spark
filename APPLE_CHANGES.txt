@@ -1,6 +1,12 @@
 This contains the changes after branching `v3.1.2`
 
-# From Spark 3.2.0/3.3.0
+# From Spark 3.3.0
+SPARK-36110     Upgrade SBT to 1.5.5
+SPARK-36026     Upgrade kubernetes-client to 5.5.0
+SPARK-35334     Make Spark more resilient to intermittent K8s flakiness
+SPARK-36334     Add a new conf to allow K8s API server-side caching for pod listing
+
+# From Spark 3.2.0
 SPARK-34208     Upgrade ORC to 1.6.7
 SPARK-33750     Use `hadoop-3.2` distribution in HiveExternalCatalogVersionsSuite
 SPARK-33724     Add decom script as a configuration param
@@ -86,9 +92,6 @@ SPARK-33673     Avoid push down partition filters to ParquetScan for DataSourceV
 SPARK-36020     Check logical link in remove redundant projects
 SPARK-36089     Update the SQL migration guide about encoding auto-detection of CSV files
 SPARK-34962     Explicit representation of * in UpdateAction and InsertAction in MergeIntoTable
-SPARK-36110     Upgrade SBT to 1.5.5
-SPARK-36026     Upgrade kubernetes-client to 5.5.0
-SPARK-35334     Make Spark more resilient to intermittent K8s flakiness
 SPARK-36131     Refactor ParquetColumnIndexSuite
 SPARK-36056     Combine readBatch and readIntegers in VectorizedRleValuesReader
 SPARK-36123     Parquet vectorized reader doesn't skip null values correctly
