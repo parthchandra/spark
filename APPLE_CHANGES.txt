@@ -184,6 +184,10 @@ SPARK-36209     Fix link to pyspark Dataframe documentation
 SPARK-36226     Improve python docstring links to other classes
 SPARK-36270     Change memory settings for enabling GA
 SPARK-36225     Use DataFrame in python docstrings
+SPARK-36269     Fix only set data columns to Hive column names config
+SPARK-36211     Correct typing of udf return value
+SPARK-36242     Ensure spill file closed before set success
+SPARK-36272     Change shuffled hash join metrics test to check relative value of build size
 
 # Internal Patches
 MINOR           Add zstd-jni test dependency to avro module
@@ -241,3 +245,4 @@ rdar://80541032 Disable spark.shuffle.readHostLocalDisk by default
 rdar://80115651 Make ExecutorPodsAllocator extendable
 MINOR           Remove internal changes for Hive 2.3.8.5 and 2.3.9 and sync with OSS Spark
 rdar://80483071 Bump Hive version to 2.3.9.0-apple
+MINOR           Bump Rio timeout from 90 to 120
