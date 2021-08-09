@@ -5,6 +5,7 @@ SPARK-36110     Upgrade SBT to 1.5.5
 SPARK-36026     Upgrade kubernetes-client to 5.5.0
 SPARK-35334     Make Spark more resilient to intermittent K8s flakiness
 SPARK-36334     Add a new conf to allow K8s API server-side caching for pod listing
+SPARK-36137     HiveShim should fallback to getAllPartitionsOf even if directSQL is enabled in remote HMS
 
 # From Spark 3.2.0
 SPARK-34208     Upgrade ORC to 1.6.7
@@ -100,6 +101,8 @@ SPARK-34539     Remove stand-alone version Zinc server
 SPARK-34271     Use majorMinorPatchVersion for Hive version parsing
 SPARK-35321     Don't register Hive permanent functions when creating Hive client
 SPARK-36128     Apply spark.sql.hive.metastorePartitionPruning for non-Hive tables that uses Hive metastore for partition management
+SPARK-35277     Upgrade snappy to 1.1.8.4
+SPARK-36068     No tests in hadoop-cloud run unless hadoop-3.2 profile is activated explicitly
 
 # From Spark 3.1.2
 SPARK-35287     Allow RemoveRedundantProjects to preserve ProjectExec which generates UnsafeRow for DataSourceV2ScanRelation
@@ -188,6 +191,11 @@ SPARK-36269     Fix only set data columns to Hive column names config
 SPARK-36211     Correct typing of udf return value
 SPARK-36242     Ensure spill file closed before set success
 SPARK-36272     Change shuffled hash join metrics test to check relative value of build size
+SPARK-36354     EventLogFileReader should skip rolling event log directories with no logs
+SPARK-36441     Fix GA failure related to downloading lintr dependencies
+SPARK-36393     Try to raise memory for GHA
+SPARK-36086     CollapseProject project replace alias should use origin column name
+SPARK-36339     References to grouping that not part of aggregation should be replaced
 
 # Internal Patches
 MINOR           Add zstd-jni test dependency to avro module
