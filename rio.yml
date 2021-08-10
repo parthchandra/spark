@@ -342,7 +342,7 @@ builds:
       - publish:
         - repo: oss-patched-binaries-local
 
-  - name: apple-spark-2.12_3.1.2-release
+  - name: apple-spark-2.12_3.1.2-release2
     branchName: branch-3.1.2-apple-release
     timeout: 90
     machine:
@@ -375,7 +375,7 @@ builds:
         enabled: true
         expression: "releases_2.12/3.1.2.13-apple"
 
-  - name: apple-spark-2.12_3.1.2-binaries-release
+  - name: apple-spark-2.12_3.1.2-binaries-release2
     branchName: branch-3.1.2-apple-release
     timeout: 90
     machine:
