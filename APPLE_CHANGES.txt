@@ -341,6 +341,11 @@ SPARK-36441     Fix GA failure related to downloading lintr dependencies
 SPARK-36393     Try to raise memory for GHA
 SPARK-36086     CollapseProject project replace alias should use origin column name
 SPARK-36339     References to grouping that not part of aggregation should be replaced
+SPARK-36464     Fix Underlying Size Variable Initialization in ChunkedByteBufferOutputStream for Writing Over 2GB Data
+SPARK-36489     Aggregate functions over no grouping keys, on tables with a single bucket, return multiple rows
+SPARK-36353     RemoveNoopOperators should keep output schema
+SPARK-36500     Fix temp_shuffle file leaking when a task is interrupted
+SPARK-36052     Introducing a limit for pending PODs
 
 # Internal Patches
 SPARK-17767     Support user-provided ExternalCatalog and SessionBuilder
@@ -421,3 +426,5 @@ rdar://80541032 Disable spark.shuffle.readHostLocalDisk by default
 MINOR           Remove duplicated pipelines
 rdar://80115651 Make ExecutorPodsAllocator extendable
 rdar://80483071 Bump Hive version to 2.3.8.6-apple
+rdar://81285966 Replace iceberg with adt-bundle in spark-sql
+MINOR           Fix Rio packaging
