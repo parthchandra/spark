@@ -178,7 +178,7 @@
     <antlr4.version>4.7</antlr4.version>
     <jpam.version>1.1</jpam.version>
     <selenium.version>2.52.0</selenium.version>
-    <acispark.callhome.version>0.2.8</acispark.callhome.version>
+    <acispark.callhome.version>0.2.9</acispark.callhome.version>
     <aciparquet.kms.version>1.1.2-apple</aciparquet.kms.version>
     <adt.version>0.7.7</adt.version>
     <!--
