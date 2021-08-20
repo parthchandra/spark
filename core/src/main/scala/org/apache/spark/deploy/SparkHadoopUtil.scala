@@ -497,6 +497,9 @@ private[spark] object SparkHadoopUtil extends Logging {
     if (conf.getOption("spark.hadoop.mapreduce.fileoutputcommitter.algorithm.version").isEmpty) {
       hadoopConf.set("mapreduce.fileoutputcommitter.algorithm.version", "1")
     }
+    if (conf.getOption("spark.hadoop.fs.s3c.impl").isEmpty) {
+      hadoopConf.set("fs.s3c.impl", "org.apache.hadoop.fs.s3c.CachedS3AFileSystem")
+    }
   }
 
   private def appendSparkHiveConfigs(conf: SparkConf, hadoopConf: Configuration): Unit = {
