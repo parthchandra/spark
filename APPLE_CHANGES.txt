@@ -52,7 +52,6 @@ SPARK-34209     Delegate table name validation to the session catalog
 SPARK-34542     Upgrade Parquet to 1.12.0.5-apple
 SPARK-34592     Mark indeterminate RDD in Web UI
 SPARK-35003     Improve performance for reading smallint in vectorized Parquet reader
-SPARK-34549     Upgrade aws kinesis to 1.14.0 and java sdk 1.11.844 (#1005)
 SPARK-35232     Nested column pruning should retain column metadata
 SPARK-33808     DataSource V2: Build logical writes in the optimizer
 SPARK-34049     DataSource V2: Use Write abstraction in StreamExecution
@@ -272,3 +271,4 @@ rdar://82183532 Support CachedS3AFileSystem for S3
 rdar://82181629 Bump to Parquet 1.12.0.10-apple
 MINOR: Update StatisticsSuite to match Parquet version up
 rdar://82095645 (Update the Callhome Version at Apple Spark Build) add jwt token on client side and send more fields to server for analytic and ML purpose
+SPARK-34549     Upgrade aws kinesis to 1.14.0 and java sdk 1.11.844 (#1005)
