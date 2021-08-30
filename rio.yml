@@ -947,7 +947,7 @@ builds:
     finally:
       tag:
         enabled: true
-        expression: "releases_2.11/2.4.8.20-apple"
+        expression: "releases_2.11/2.4.8.21-apple"
 
   - name: apple-spark-2.12_2.4.8-release
     branchName: branch-2.4.8-apple-release
