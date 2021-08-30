@@ -281,5 +281,6 @@ MINOR: Update StatisticsSuite to match Parquet version up
 rdar://82095645 (Update the Callhome Version at Apple Spark Build) add jwt token on client side and send more fields to server for analytic and ML purpose
 SPARK-34549     Upgrade aws kinesis to 1.14.0 and java sdk 1.11.844 (#1005)
 MINOR           Upgrade ADT to 1.0.0-preview-4
+rdar://82265181 Executors detail page js error for running job (Spark 3.1.1.26)
 rdar://82423473 Support `spark.sql.files.s3c.enabled` conf (#1174 (https://github.pie.apple.com/IPR/apache-spark/pull/1174))
 rdar://82462712 Increase fs.s3a.connection.maximum and fs.s3a.committer.threads
