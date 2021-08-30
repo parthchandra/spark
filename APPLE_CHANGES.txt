@@ -353,6 +353,13 @@ SPARK-36532     Fix deadlock in CoarseGrainedExecutorBackend.onDisconnected to a
 MINOR           Update doc for streaming deduplication
 N/A             Update Spark key negotiation protocol
 N/A             Updates AuthEngine to pass the correct SecretKeySpec format
+SPARK-35876     ArraysZip should retain field names to avoid being re-written by analyzer/optimizer
+SPARK-36564     Fix NullPointerException in LiveRDDDistribution.toApi
+SPARK-36352     Spark should check result plan's output schema name
+SPARK-36398     Redact sensitive information in Spark Thrift Server log
+SPARK-36509     Fix the issue that executors are never re-scheduled
+SPARK-36603     Use WeakReference not SoftReference in LevelDB
+SPARK-36614     Correct executor loss reason caused by decommission in UI
 
 # Internal Patches
 SPARK-17767     Support user-provided ExternalCatalog and SessionBuilder
@@ -439,3 +446,5 @@ rdar://82181629 Bump to Parquet 1.12.0.10-apple
 rdar://82183532 Support CachedS3AFileSystem for S3
 MINOR           Update StatisticsSuite to match Parquet version up
 N/A             check in call home service v2
+MINOR           Upgrade ADT to 1.0.0-preview-4
+rdar://82265181 Executors detail page js error for running job (Spark 3.1.1.26)
