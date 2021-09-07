@@ -215,6 +215,8 @@ SPARK-36398     Redact sensitive information in Spark Thrift Server log
 SPARK-36509     Fix the issue that executors are never re-scheduled
 SPARK-36603     Use WeakReference not SoftReference in LevelDB
 SPARK-36614     Correct executor loss reason caused by decommission in UI
+SPARK-36639     Fix an issue that sequence builtin function causes ArrayIndexOutOfBoundsException if the arguments are under the condition of start == stop && step < 0
+SPARK-36617     Fix type hints for `approxQuantile` to support multi-column version
 
 # Internal Patches
 MINOR           Add zstd-jni test dependency to avro module
@@ -284,3 +286,5 @@ MINOR           Upgrade ADT to 1.0.0-preview-4
 rdar://82265181 Executors detail page js error for running job (Spark 3.1.1.26)
 rdar://82423473 Support `spark.sql.files.s3c.enabled` conf (#1174 (https://github.pie.apple.com/IPR/apache-spark/pull/1174))
 rdar://82462712 Increase fs.s3a.connection.maximum and fs.s3a.committer.threads
+rdar://82655241 Upgrade to Parquet 1.12.0.11
+rdar://82034008 Support CachedS3AFileSystem for Parquet Footer
