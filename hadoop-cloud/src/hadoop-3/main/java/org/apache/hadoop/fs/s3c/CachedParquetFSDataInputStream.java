@@ -39,7 +39,7 @@ public class CachedParquetFSDataInputStream extends FSDataInputStream {
         } else {
             int value = super.read();
             if (value >= 0) {
-                map.put(key, new byte[]{(byte) value});
+                map.computeIfAbsent(key, k -> new byte[]{(byte) value});
             }
             return value;
         }
@@ -53,8 +53,7 @@ public class CachedParquetFSDataInputStream extends FSDataInputStream {
             super.seek(position + length);
         } else {
             super.readFully(position, buffer, offset, length);
-            byte[] cached = Arrays.copyOf(buffer, length);
-            map.putIfAbsent(key, cached);
+            map.computeIfAbsent(key, k -> Arrays.copyOf(buffer, length));
         }
     }
 }

@@ -18,8 +18,9 @@
 
 package org.apache.hadoop.fs.s3c;
 
-import com.google.common.cache.Cache;
+import com.google.common.cache.LoadingCache;
 import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.Path;
@@ -28,6 +29,7 @@ import org.apache.hadoop.fs.s3a.S3AFileSystem;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -43,12 +45,12 @@ public class CachedS3AFileSystem extends S3AFileSystem {
     if (f.getName().toLowerCase(Locale.ROOT).endsWith(".orc")) {
       return new CachedORCFSDataInputStream(super.open(f, bufferSize));
     } else if (f.getName().toLowerCase(Locale.ROOT).endsWith(".parquet")) {
-      ConcurrentHashMap<ImmutablePair<Long, Integer>, byte[]> c = cache.getIfPresent(f);
-      if (c == null) {
-        c = new ConcurrentHashMap<>();
-        cache.put(f, c);
+      try {
+        return new CachedParquetFSDataInputStream(super.open(f, bufferSize), cache.get(f));
+      } catch (ExecutionException e) {
+        // Fallback to the non-cached reader
+        return super.open(f, bufferSize);
       }
-      return new CachedParquetFSDataInputStream(super.open(f, bufferSize), c);
     } else {
       return super.open(f, bufferSize);
     }
@@ -57,6 +59,12 @@ public class CachedS3AFileSystem extends S3AFileSystem {
   /**
    * This is used for Parquet only and timeout is 1 minute for safety.
    */
-  private final Cache<Path, ConcurrentHashMap<ImmutablePair<Long, Integer>, byte[]>> cache =
-      CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.MINUTES).build();
+  private final LoadingCache<Path, ConcurrentHashMap<ImmutablePair<Long, Integer>, byte[]>> cache =
+    CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.MINUTES).build(
+      new CacheLoader<Path, ConcurrentHashMap<ImmutablePair<Long, Integer>, byte[]>>() {
+        @Override
+        public ConcurrentHashMap<ImmutablePair<Long, Integer>, byte[]> load(Path key) {
+          return new ConcurrentHashMap<>();
+        }
+      });
 }
