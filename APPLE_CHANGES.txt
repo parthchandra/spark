@@ -429,3 +429,4 @@ rdar://82197087   Upgrade to Hadoop 3.2.0.6-apple for built-in gzip compressor.
 rdar://82095645   (Update the Callhome Version at Apple Spark Build) add jwt token on client side and send more fields to server for analytic and ML purpose (#1165)
 N/A               Revert "rdar://82197087: Upgrade to Hadoop 3.2.0.6-apple for built-in gzip compressor"
 rdar://82454870   Add an option to Apple Hadoop to ignore trailer check in BuiltInDecompressor
+MINOR             bump parquet to 1.10.2.8-apple
