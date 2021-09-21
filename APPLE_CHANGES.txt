@@ -105,6 +105,17 @@ SPARK-35277     Upgrade snappy to 1.1.8.4
 SPARK-36068     No tests in hadoop-cloud run unless hadoop-3.2 profile is activated explicitly
 SPARK-36670     Add FileSourceCodecSuite
 SPARK-36682     Add Hadoop sequence file test for different Hadoop codecs
+SPARK-34888     Introduce UpdatingSessionIterator adjusting session window on elements
+SPARK-35861     Introduce "prefix match scan" feature on state store
+SPARK-34891     Introduce state store manager for session window in streaming query
+SPARK-34892     Introduce MergingSortWithSessionWindowStateIterator sorting input rows and rows in state efficiently
+SPARK-34893     Support session window natively
+SPARK-36172     Document session window into Structured Streaming guide doc
+SPARK-36480     SessionWindowStateStoreSaveExec should not filter input rows against watermark
+SPARK-36463     Prohibit update mode in streaming aggregation with session window
+SPARK-36465     Dynamic gap duration in session window
+SPARK-35880     Track the duplicates dropped count in dedupe operator
+SPARK-36729     Upgrade Netty from 4.1.63 to 4.1.68
 
 # From Spark 3.1.2
 SPARK-35287     Allow RemoveRedundantProjects to preserve ProjectExec which generates UnsafeRow for DataSourceV2ScanRelation
@@ -219,6 +230,18 @@ SPARK-36603     Use WeakReference not SoftReference in LevelDB
 SPARK-36614     Correct executor loss reason caused by decommission in UI
 SPARK-36639     Fix an issue that sequence builtin function causes ArrayIndexOutOfBoundsException if the arguments are under the condition of start == stop && step < 0
 SPARK-36617     Fix type hints for `approxQuantile` to support multi-column version
+SPARK-36704     Expand exception handling to more Java 9 cases where reflection is limited at runtime, when reflecting to manage DirectByteBuffer settings
+SPARK-36685     Fix wrong assert messages
+SPARK-36636     LocalSparkCluster change to use tmp workdir in test to avoid directory name collision
+SPARK-36738     Fixed the wrong documentation on Cot API
+SPARK-36715     InferFiltersFromGenerate should not infer filter for udf
+SPARK-36702     ArrayUnion handle duplicated Double.NaN and Float.Nan
+SPARK-36755     ArraysOverlap should handle duplicated Double.NaN and Float.NaN
+SPARK-36783     ScanOperation should not push Filter through nondeterministic Project
+SPARK-36789     Use the correct constant type as the null value holder in array functions
+SPARK-36741     ArrayDistinct handle duplicated Double.NaN and Float.Nan
+SPARK-35985     push partitionFilters for empty readDataSchema
+SPARK-36754     ArrayIntersect handle duplicated Double.NaN and Float.NaN
 
 # Internal Patches
 MINOR           Add zstd-jni test dependency to avro module
@@ -290,3 +313,5 @@ rdar://82423473 Support `spark.sql.files.s3c.enabled` conf (#1174 (https://githu
 rdar://82462712 Increase fs.s3a.connection.maximum and fs.s3a.committer.threads
 rdar://82655241 Upgrade to Parquet 1.12.0.11
 rdar://82034008 Support CachedS3AFileSystem for Parquet Footer
+rdar://81168472 Backport SPARK-10816 EventTime based sessionization
+MINOR           bump parquet to 1.12.0.12-apple
