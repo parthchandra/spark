@@ -7,6 +7,8 @@ SPARK-35334     Make Spark more resilient to intermittent K8s flakiness
 SPARK-36334     Add a new conf to allow K8s API server-side caching for pod listing
 SPARK-36334     Allow equal resource version to update snapshot
 SPARK-36137     HiveShim should fallback to getAllPartitionsOf even if directSQL is enabled in remote HMS
+SPARK-36814     Make class ColumnarBatch extendable
+SPARK-35174     Avoid opening watch when waitAppCompletion is false
 
 # From Spark 3.2.0
 SPARK-34208     Upgrade ORC to 1.6.7
@@ -242,7 +244,6 @@ SPARK-36789     Use the correct constant type as the null value holder in array 
 SPARK-36741     ArrayDistinct handle duplicated Double.NaN and Float.Nan
 SPARK-35985     push partitionFilters for empty readDataSchema
 SPARK-36754     ArrayIntersect handle duplicated Double.NaN and Float.NaN
-SPARK-36706     OverwriteByExpression conversion in DataSourceV2Strategy use wrong param in translateFilter
 SPARK-36803     Fix ArrayType conversion when reading Parquet files written in legacy mode
 SPARK-36753     ArrayExcept handle duplicated Double.NaN and FloatNaN
 SPARK-36791     Fix spelling mistakes in running-on-yarn.md file where JHS_POST should be JHS_HOST
