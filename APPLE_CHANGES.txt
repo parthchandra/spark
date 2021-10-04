@@ -9,6 +9,7 @@ SPARK-36334     Allow equal resource version to update snapshot
 SPARK-36137     HiveShim should fallback to getAllPartitionsOf even if directSQL is enabled in remote HMS
 SPARK-36814     Make class ColumnarBatch extendable
 SPARK-35174     Avoid opening watch when waitAppCompletion is false
+SPARK-36821     Make class ColumnarBatch extendable - addendum
 
 # From Spark 3.2.0
 SPARK-34208     Upgrade ORC to 1.6.7
@@ -325,3 +326,4 @@ rdar://82655241 Upgrade to Parquet 1.12.0.11
 rdar://82034008 Support CachedS3AFileSystem for Parquet Footer
 rdar://81168472 Backport SPARK-10816 EventTime based sessionization
 MINOR           bump parquet to 1.12.0.12-apple
+rdar://83691880 Update ADT bundle version to 1.0.1
