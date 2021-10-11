@@ -253,6 +253,10 @@ SPARK-36782     Avoid blocking dispatcher-BlockManagerMaster during UpdateBlockI
 SPARK-36782     Only handle shuffle block in separate thread pool
 Revert          "[SPARK-35672][CORE][YARN][3.1] Pass user classpath entries to executors using config instead of command line"
 SPARK-36792     InSet should handle NaN
+SPARK-36919     Make BadRecordException fields transient
+SPARK-36874     ResolveReference.dedupRight should copy dataset_id tag to avoid ambiguous self join
+SPARK-34634     ResolveReference.dedupRight should copy dataset_id tag to avoid ambiguous self join
+SPARK-36717     Incorrect order of variable initialization may lead incorrect behavior
 
 # Internal Patches
 MINOR           Add zstd-jni test dependency to avro module
@@ -328,7 +332,4 @@ rdar://81168472 Backport SPARK-10816 EventTime based sessionization
 MINOR           bump parquet to 1.12.0.12-apple
 rdar://83691880 Update ADT bundle version to 1.0.1
 MINOR           Bump Hive version to 2.3.9.1-apple
-SPARK-36919     Make BadRecordException fields transient
-SPARK-36874     ResolveReference.dedupRight should copy dataset_id tag to avoid ambiguous self join
-SPARK-34634     ResolveReference.dedupRight should copy dataset_id tag to avoid ambiguous self join
-SPARK-36717     Incorrect order of variable initialization may lead incorrect behavior
+MINOR           Update HiveThriftServer2Suites with 2.3.9.1-apple
