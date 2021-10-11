@@ -327,3 +327,8 @@ rdar://82034008 Support CachedS3AFileSystem for Parquet Footer
 rdar://81168472 Backport SPARK-10816 EventTime based sessionization
 MINOR           bump parquet to 1.12.0.12-apple
 rdar://83691880 Update ADT bundle version to 1.0.1
+MINOR           Bump Hive version to 2.3.9.1-apple
+SPARK-36919     Make BadRecordException fields transient
+SPARK-36874     ResolveReference.dedupRight should copy dataset_id tag to avoid ambiguous self join
+SPARK-34634     ResolveReference.dedupRight should copy dataset_id tag to avoid ambiguous self join
+SPARK-36717     Incorrect order of variable initialization may lead incorrect behavior
