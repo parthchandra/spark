@@ -370,6 +370,8 @@ SPARK-36603     Use WeakReference not SoftReference in LevelDB
 SPARK-36614     Correct executor loss reason caused by decommission in UI
 SPARK-36617     Fix type hints for `approxQuantile` to support multi-column version
 SPARK-36639     Fix an issue that sequence builtin function causes ArrayIndexOutOfBoundsException if the arguments are under the condition of start == stop && step < 0
+SPARK-36993     Fix json_tuple throw NPE if fields exist no foldable null value
+SPARK-23626     Eagerly compute RDD.partitions on entire DAG when submitting job to DAGScheduler
 
 # Internal Patches
 SPARK-17767     Support user-provided ExternalCatalog and SessionBuilder
@@ -465,3 +467,6 @@ N/A             Revert "rdar://82197087: Upgrade to Hadoop 3.2.0.6-apple for bui
 rdar://82454870 Add an option to Apple Hadoop to ignore trailer check in BuiltInDecompressor
 MINOR           Bump Parquet version to 1.10.2.8-apple
 rdar://83691880 Update ADT bundle version to 1.0.1
+rdar://83403804 Backport HIVE-25500: Switch back to alter_partition(s) in HMS client for Hive 2.3.x
+rdar://82776616 (Sub-TLF: Security design review aka Arcadia review)
+rdar://84260008 Generate token with runtime to avoid JVM dump to leak token
