@@ -257,6 +257,8 @@ SPARK-36919     Make BadRecordException fields transient
 SPARK-36874     ResolveReference.dedupRight should copy dataset_id tag to avoid ambiguous self join
 SPARK-34634     ResolveReference.dedupRight should copy dataset_id tag to avoid ambiguous self join
 SPARK-36717     Incorrect order of variable initialization may lead incorrect behavior
+SPARK-36993     Fix json_tuple throw NPE if fields exist no foldable null value
+SPARK-23626     Eagerly compute RDD.partitions on entire DAG when submitting job to DAGScheduler
 
 # Internal Patches
 MINOR           Add zstd-jni test dependency to avro module
@@ -333,3 +335,5 @@ MINOR           bump parquet to 1.12.0.12-apple
 rdar://83691880 Update ADT bundle version to 1.0.1
 MINOR           Bump Hive version to 2.3.9.1-apple
 MINOR           Update HiveThriftServer2Suites with 2.3.9.1-apple
+rdar://82776616 (Sub-TLF: Security design review aka Arcadia review)
+rdar://84260008 Generate token with runtime to avoid JVM dump to leak token
