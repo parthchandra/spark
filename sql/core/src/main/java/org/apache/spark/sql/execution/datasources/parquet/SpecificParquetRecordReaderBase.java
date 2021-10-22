@@ -31,6 +31,9 @@ import java.util.Map;
 import java.util.Set;
 
 import com.google.common.annotations.VisibleForTesting;
+import org.apache.parquet.VersionParser;
+import org.apache.parquet.VersionParser.ParsedVersion;
+import org.apache.parquet.VersionParser.VersionParseException;
 import org.apache.parquet.column.page.PageReadStore;
 import scala.Option;
 
@@ -71,6 +74,7 @@ public abstract class SpecificParquetRecordReaderBase<T> extends RecordReader<Vo
   protected MessageType fileSchema;
   protected MessageType requestedSchema;
   protected StructType sparkSchema;
+  protected ParsedVersion writerVersion;
 
   /**
    * The total number of rows this RecordReader will eventually read. The sum of the
@@ -95,6 +99,12 @@ public abstract class SpecificParquetRecordReaderBase<T> extends RecordReader<Vo
         HadoopInputFile.fromPath(file, configuration), options);
     this.reader = new ParquetRowGroupReaderImpl(fileReader);
     this.fileSchema = fileReader.getFileMetaData().getSchema();
+    try {
+      this.writerVersion = VersionParser.parse(fileReader.getFileMetaData().getCreatedBy());
+    } catch (VersionParseException e) {
+      // Swallow this exception, if we cannot parse the version we have little expectation
+      // of being able to read the file successfully
+    }
     Map<String, String> fileMetadata = fileReader.getFileMetaData().getKeyValueMetaData();
     ReadSupport<T> readSupport = getReadSupportInstance(getReadSupportClass(configuration));
     ReadSupport.ReadContext readContext = readSupport.init(new InitContext(
