@@ -259,6 +259,8 @@ SPARK-34634     ResolveReference.dedupRight should copy dataset_id tag to avoid 
 SPARK-36717     Incorrect order of variable initialization may lead incorrect behavior
 SPARK-36993     Fix json_tuple throw NPE if fields exist no foldable null value
 SPARK-23626     Eagerly compute RDD.partitions on entire DAG when submitting job to DAGScheduler
+SPARK-37079     Fix DataFrameWriterV2.partitionedBy to send the arguments to JVM properly
+SPARK-37049     executorIdleTimeout should check `creationTimestamp` instead of `startTime`
 
 # Internal Patches
 MINOR           Add zstd-jni test dependency to avro module
@@ -337,3 +339,4 @@ MINOR           Bump Hive version to 2.3.9.1-apple
 MINOR           Update HiveThriftServer2Suites with 2.3.9.1-apple
 rdar://82776616 (Sub-TLF: Security design review aka Arcadia review)
 rdar://84260008 Generate token with runtime to avoid JVM dump to leak token
+rdar://84239500 Bump parquet-kms-apple to 1.1.3
