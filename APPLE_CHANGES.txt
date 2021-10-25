@@ -364,6 +364,8 @@ SPARK-36603     Use WeakReference not SoftReference in LevelDB
 SPARK-36614     Correct executor loss reason caused by decommission in UI
 SPARK-36617     Fix type hints for `approxQuantile` to support multi-column version
 SPARK-36639     Fix an issue that sequence builtin function causes ArrayIndexOutOfBoundsException if the arguments are under the condition of start == stop && step < 0
+SPARK-37079     Fix DataFrameWriterV2.partitionedBy to send the arguments to JVM properly
+SPARK-37049     executorIdleTimeout should check `creationTimestamp` instead of `startTime`
 
 # Internal Patches
 SPARK-17767     Support user-provided ExternalCatalog and SessionBuilder
