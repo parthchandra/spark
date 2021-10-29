@@ -288,19 +288,31 @@ public class VectorizedColumnReader {
       ((RequiresPreviousReader) dataColumn).setPreviousReader(previousReader);
     }
   }
-    
-    private ValuesReader getValuesReader(Encoding encoding) {
-        switch (encoding) {
-            case PLAIN:
-                return new VectorizedPlainValuesReader();
-            case DELTA_BYTE_ARRAY:
-                return new VectorizedDeltaByteArrayReader();
-            case DELTA_BINARY_PACKED:
-                return new VectorizedDeltaBinaryPackedReader();
-            default:
-                throw new UnsupportedOperationException("Unsupported encoding: " + encoding);
+
+  private ValuesReader getValuesReader(Encoding encoding) {
+    switch (encoding) {
+      case PLAIN:
+        return new VectorizedPlainValuesReader();
+      case DELTA_BYTE_ARRAY:
+        return new VectorizedDeltaByteArrayReader();
+      case DELTA_BINARY_PACKED:
+        return new VectorizedDeltaBinaryPackedReader();
+      case BYTE_STREAM_SPLIT:
+        PrimitiveType.PrimitiveTypeName typeName =
+            descriptor.getPrimitiveType().getPrimitiveTypeName();
+        switch (typeName) {
+          case FLOAT:
+            return new VectorizedByteStreamSplitReaderFloat();
+          case DOUBLE:
+            return new VectorizedByteStreamSplitReaderDouble();
+          default:
+            throw new UnsupportedOperationException("Unsupported encoding: " + encoding
+                + "for type: " + typeName);
         }
+      default:
+        throw new UnsupportedOperationException("Unsupported encoding: " + encoding);
     }
+  }
 
 
   private int readPageV1(DataPageV1 page) throws IOException {
