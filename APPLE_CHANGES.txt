@@ -433,3 +433,4 @@ MINOR             bump parquet to 1.10.2.8-apple
 rdar://82776616   (Sub-TLF: Security design review aka Arcadia review)
 rdar://84260008   Generate token with runtime to avoid JVM dump to leak token
 rdar://84239500   Bump parquet-kms-apple to 1.1.3
+rdar://85089496   Fix the Env at Call home Client side
