@@ -17,6 +17,8 @@
 
 package org.apache.spark.sql.execution.datasources.parquet;
 
+import java.nio.ByteBuffer;
+import org.apache.parquet.bytes.BytesUtils;
 import org.apache.spark.sql.execution.vectorized.WritableColumnVector;
 
 import org.apache.parquet.io.api.Binary;
@@ -84,6 +86,20 @@ public interface VectorizedValuesReader {
      * @param val value to write
      */
     void write(WritableColumnVector outputColumnVector, int rowId, long val);
+  }
+
+  @FunctionalInterface
+  interface SplitByteStreamOutputWriter {
+
+    void write(WritableColumnVector c, int rowId, byte[] val);
+
+    static void writeBytesToFloat(WritableColumnVector c, int rowId, byte[] val) {
+      c.putFloat(rowId, Float.intBitsToFloat(BytesUtils.bytesToInt(val)));
+    }
+
+    static void writeBytesToDouble(WritableColumnVector c, int rowId, byte[] val) {
+      c.putDouble(rowId, Double.longBitsToDouble(BytesUtils.bytesToLong(val)));
+    }
   }
 
 }

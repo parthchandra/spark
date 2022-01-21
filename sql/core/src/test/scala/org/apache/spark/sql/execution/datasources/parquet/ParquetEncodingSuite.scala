@@ -22,9 +22,17 @@ import java.time.{Duration, Period}
 
 import scala.collection.JavaConverters._
 
+import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.fs.Path
-import org.apache.parquet.column.{Encoding, ParquetProperties}
-import org.apache.parquet.hadoop.ParquetOutputFormat
+import org.apache.parquet.column.Encoding
+import org.apache.parquet.column.ParquetProperties
+import org.apache.parquet.column.ParquetProperties.WriterVersion.PARQUET_2_0
+import org.apache.parquet.example.data.simple.SimpleGroup
+import org.apache.parquet.hadoop.{ParquetFileReader, ParquetOutputFormat}
+import org.apache.parquet.hadoop.example.ExampleParquetWriter
+import org.apache.parquet.hadoop.metadata.CompressionCodecName.GZIP
+import org.apache.parquet.hadoop.util.HadoopInputFile
+import org.apache.parquet.schema.MessageTypeParser.parseMessageType
 
 import org.apache.spark.TestUtils
 import org.apache.spark.sql.Row
@@ -184,39 +192,106 @@ class ParquetEncodingSuite extends ParquetCompatibilityTest with SharedSparkSess
     }
   }
 
-  test("parquet v2 pages - rle encoding for boolean value columns") {
-    val extraOptions = Map[String, String](
-      ParquetOutputFormat.WRITER_VERSION -> ParquetProperties.WriterVersion.PARQUET_2_0.toString
-    )
+test("parquet v2 pages - rle encoding for boolean value columns") {
+val extraOptions = Map[String, String](
+ParquetOutputFormat.WRITER_VERSION -> ParquetProperties.WriterVersion.PARQUET_2_0.toString
+)
 
-    val hadoopConf = spark.sessionState.newHadoopConfWithOptions(extraOptions)
-    withSQLConf(
-      SQLConf.PARQUET_VECTORIZED_READER_ENABLED.key -> "true",
-      ParquetOutputFormat.JOB_SUMMARY_LEVEL -> "ALL") {
-      withTempPath { dir =>
-        val path = s"${dir.getCanonicalPath}/test.parquet"
-        val size = 10000
-        val data = (1 to size).map { i => (true, false, i % 2 == 1) }
+val hadoopConf = spark.sessionState.newHadoopConfWithOptions(extraOptions)
+withSQLConf(
+SQLConf.PARQUET_VECTORIZED_READER_ENABLED.key -> "true",
+ParquetOutputFormat.JOB_SUMMARY_LEVEL -> "ALL") {
+withTempPath { dir =>
+val path = s"${dir.getCanonicalPath}/test.parquet"
+val size = 10000
+val data = (1 to size).map { i => (true, false, i % 2 == 1) }
 
-        spark.createDataFrame(data)
-          .write.options(extraOptions).mode("overwrite").parquet(path)
+spark.createDataFrame(data)
+.write.options(extraOptions).mode("overwrite").parquet(path)
 
-        val blockMetadata = readFooter(new Path(path), hadoopConf).getBlocks.asScala.head
+val blockMetadata = readFooter(new Path(path), hadoopConf).getBlocks.asScala.head
+val columnChunkMetadataList = blockMetadata.getColumns.asScala
+
+// Verify that indeed rle encoding is used for each column
+assert(columnChunkMetadataList.length === 3)
+assert(columnChunkMetadataList.head.getEncodings.contains(Encoding.RLE))
+assert(columnChunkMetadataList(1).getEncodings.contains(Encoding.RLE))
+assert(columnChunkMetadataList(2).getEncodings.contains(Encoding.RLE))
+
+val actual = spark.read.parquet(path).collect()
+assert(actual.length == size)
+assert(actual.map(_.getBoolean(0)).forall(_ == true))
+assert(actual.map(_.getBoolean(1)).forall(_ == false))
+val excepted = (1 to size).map { i => i % 2 == 1 }
+assert(actual.map(_.getBoolean(2)).sameElements(excepted))
+}
+}
+}
+
+
+  test("parquet v2 pages - byte stream split encoding") {
+    val hadoopConf = spark.sessionState.newHadoopConf()
+    withTempPath { dir =>
+      val path = new Path(dir.toURI.toString, "testByteStreamSplit.parquet")
+      val rand = scala.util.Random
+      val seedData = (0 until 1000).map { _ =>
+        rand.nextInt();
+      }
+      writeByteStreamSplitData(hadoopConf, path, seedData)
+
+      val parquetReader = ParquetFileReader.open(HadoopInputFile.fromPath(path, hadoopConf))
+      try {
+        val blockMetadata = parquetReader.getFooter.getBlocks.asScala.head
         val columnChunkMetadataList = blockMetadata.getColumns.asScala
-
-        // Verify that indeed rle encoding is used for each column
+        // Verify that indeed byte stream split encoding is used for each column
         assert(columnChunkMetadataList.length === 3)
-        assert(columnChunkMetadataList.head.getEncodings.contains(Encoding.RLE))
-        assert(columnChunkMetadataList(1).getEncodings.contains(Encoding.RLE))
-        assert(columnChunkMetadataList(2).getEncodings.contains(Encoding.RLE))
-
-        val actual = spark.read.parquet(path).collect()
-        assert(actual.length == size)
-        assert(actual.map(_.getBoolean(0)).forall(_ == true))
-        assert(actual.map(_.getBoolean(1)).forall(_ == false))
-        val excepted = (1 to size).map { i => i % 2 == 1 }
-        assert(actual.map(_.getBoolean(2)).sameElements(excepted))
+        assert(columnChunkMetadataList(0).getEncodings.contains(Encoding.DELTA_BINARY_PACKED))
+        assert(columnChunkMetadataList(1).getEncodings.contains(Encoding.BYTE_STREAM_SPLIT))
+        assert(columnChunkMetadataList(2).getEncodings.contains(Encoding.BYTE_STREAM_SPLIT))
+      } finally {
+        parquetReader.close()
+      }
+      readParquetFile(path.toString) { df =>
+        checkAnswer(
+          df,
+          seedData.map { i =>
+            Row(i, i.toFloat, i.toDouble)
+          })
       }
     }
   }
+
+  def writeByteStreamSplitData(hadoopConf: Configuration, path: Path, values: Seq[Int]): Unit = {
+    val schemaStr =
+      s""" message test {
+           |  required int32 int32_field;
+           |  required float float_field;
+           |  required double double_field;
+           |}
+         """.stripMargin
+    val schema = parseMessageType(schemaStr)
+
+    val writer = ExampleParquetWriter
+      .builder(path)
+      .withDictionaryEncoding(true)
+      .withType(schema)
+      .withWriterVersion(PARQUET_2_0)
+      .withCompressionCodec(GZIP)
+      .withRowGroupSize(1024 * 1024L)
+      .withPageSize(1024)
+      .withDictionaryPageSize(1024)
+      .withByteStreamSplitEncoding(true)
+      .withConf(hadoopConf)
+      .build()
+
+    values.foreach { i =>
+      val record = new SimpleGroup(schema)
+      record.add(0, i)
+      record.add(1, i.toFloat)
+      record.add(2, i.toDouble)
+      writer.write(record)
+    }
+    writer.close()
+  }
+
 }
