@@ -21,9 +21,11 @@ import java.io.{FileNotFoundException, IOException}
 import org.apache.spark.internal.Logging
 import org.apache.spark.rdd.InputFileBlockHolder
 import org.apache.spark.sql.catalyst.FileSourceOptions
+import org.apache.spark.sql.connector.metric.{CustomFileTaskMetric, CustomTaskMetric}
 import org.apache.spark.sql.connector.read.PartitionReader
 import org.apache.spark.sql.errors.QueryExecutionErrors
 import org.apache.spark.sql.execution.datasources.PartitionedFile
+import org.apache.spark.sql.execution.metric.CustomMetrics
 
 class FilePartitionReader[T](
     files: Iterator[PartitionedFile],
@@ -34,7 +36,9 @@ class FilePartitionReader[T](
 
   private def ignoreMissingFiles = options.ignoreMissingFiles
   private def ignoreCorruptFiles = options.ignoreCorruptFiles
-
+  // The cumulative metrics of all readers. Before the current reader is
+  // closed, the metrics of the current reader are read and merged into this.
+  private var allMetrics: Array[CustomFileTaskMetric] = Array.empty
   override def next(): Boolean = {
     if (currentReader == null) {
       if (files.hasNext) {
@@ -87,8 +91,15 @@ class FilePartitionReader[T](
 
   override def close(): Unit = {
     if (currentReader != null) {
+      val currentFileMetrics = currentReader.reader.currentMetricsValues()
+      allMetrics = CustomMetrics.mergeMetricValues(
+        currentFileMetrics.asInstanceOf[Array[CustomFileTaskMetric]], allMetrics)
       currentReader.close()
     }
     InputFileBlockHolder.unset()
+  }
+
+  override def currentMetricsValues(): Array[CustomTaskMetric] = {
+    allMetrics.asInstanceOf[Array[CustomTaskMetric]]
   }
 }

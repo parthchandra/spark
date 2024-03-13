@@ -630,7 +630,8 @@ class ParquetVectorizedSuite extends QueryTest with ParquetTest with SharedSpark
       "CORRECTED",
       "UTC",
       true,
-      batchSize)
+      batchSize,
+      null)
     recordReader.initialize(fileSchema, fileSchema,
       TestParquetRowGroupReader(Seq(readStore)), totalRowCount)
 

@@ -18,6 +18,8 @@ package org.apache.spark.sql.execution.datasources.v2.parquet
 
 import java.time.ZoneId
 
+import scala.jdk.CollectionConverters._
+
 import org.apache.hadoop.mapred.FileSplit
 import org.apache.hadoop.mapreduce._
 import org.apache.hadoop.mapreduce.task.TaskAttemptContextImpl
@@ -33,11 +35,13 @@ import org.apache.spark.sql.catalyst.InternalRow
 import org.apache.spark.sql.catalyst.util.DateTimeUtils
 import org.apache.spark.sql.catalyst.util.RebaseDateTime.RebaseSpec
 import org.apache.spark.sql.connector.expressions.aggregate.Aggregation
+import org.apache.spark.sql.connector.metric.CustomTaskMetric
 import org.apache.spark.sql.connector.read.{InputPartition, PartitionReader}
 import org.apache.spark.sql.execution.WholeStageCodegenExec
 import org.apache.spark.sql.execution.datasources.{AggregatePushDownUtils, DataSourceUtils, PartitionedFile, RecordReaderIterator}
 import org.apache.spark.sql.execution.datasources.parquet._
 import org.apache.spark.sql.execution.datasources.v2._
+import org.apache.spark.sql.execution.metric.SQLMetric
 import org.apache.spark.sql.internal.SQLConf
 import org.apache.spark.sql.sources.Filter
 import org.apache.spark.sql.types.StructType
@@ -83,6 +87,8 @@ case class ParquetPartitionReaderFactory(
   private val pushDownInFilterThreshold = sqlConf.parquetFilterPushDownInFilterThreshold
   private val datetimeRebaseModeInRead = options.datetimeRebaseModeInRead
   private val int96RebaseModeInRead = options.int96RebaseModeInRead
+
+  var scanMetrics: Map[String, SQLMetric] = Map.empty
 
   private def getFooter(file: PartitionedFile): ParquetMetadata = {
     val conf = broadcastedConf.value.value
@@ -168,6 +174,15 @@ case class ParquetPartitionReaderFactory(
           vectorizedReader.getCurrentValue.asInstanceOf[ColumnarBatch]
 
         override def close(): Unit = vectorizedReader.close()
+
+        override def currentMetricsValues(): Array[CustomTaskMetric] = {
+          val metricsCallback = vectorizedReader.getParquetMetricsCallback
+          if ( metricsCallback != null) {
+            metricsCallback.currentMetricsValues()
+          } else {
+            super.currentMetricsValues()
+          }
+        }
       }
     } else {
       new PartitionReader[ColumnarBatch] {
@@ -329,7 +344,9 @@ case class ParquetPartitionReaderFactory(
       int96RebaseSpec.mode.toString,
       int96RebaseSpec.timeZone,
       enableOffHeapColumnVector && taskContext.isDefined,
-      capacity)
+      capacity,
+      scanMetrics.asJava
+    )
     val iter = new RecordReaderIterator(vectorizedReader)
     // SPARK-23457 Register a task completion listener before `initialization`.
     taskContext.foreach(_.addTaskCompletionListener[Unit](_ => iter.close()))

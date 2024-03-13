@@ -51,6 +51,7 @@ import org.apache.spark.util.{SerializableConfiguration, ThreadUtils}
 class ParquetFileFormat
   extends FileFormat
   with DataSourceRegister
+  with ParquetMetrics
   with Logging
   with Serializable {
 
@@ -188,8 +189,8 @@ class ParquetFileFormat
     // Check conf before checking option, to allow working around an issue by changing conf.
     val returningBatch = sparkSession.sessionState.conf.parquetVectorizedReaderEnabled &&
       options.getOrElse(FileFormat.OPTION_RETURNING_BATCH,
-        throw new IllegalArgumentException(
-          "OPTION_RETURNING_BATCH should always be set for ParquetFileFormat. " +
+          throw new IllegalArgumentException(
+            "OPTION_RETURNING_BATCH should always be set for ParquetFileFormat. " +
             "To workaround this issue, set spark.sql.parquet.enableVectorizedReader=false."))
         .equals("true")
     if (returningBatch) {
@@ -205,6 +206,8 @@ class ParquetFileFormat
       val split = new FileSplit(filePath, file.start, file.length, Array.empty[String])
 
       val sharedConf = broadcastedHadoopConf.value.value
+
+      val parquetMetrics = initOrGetMetrics(sparkSession.sparkContext)
 
       val fileFooter = if (enableVectorizedReader) {
         // When there are vectorized reads, we can avoid reading the footer twice by reading
@@ -278,7 +281,9 @@ class ParquetFileFormat
           int96RebaseSpec.mode.toString,
           int96RebaseSpec.timeZone,
           enableOffHeapColumnVector && taskContext.isDefined,
-          capacity)
+          capacity,
+          parquetMetrics.asJava
+        )
         // SPARK-37089: We cannot register a task completion listener to close this iterator here
         // because downstream exec nodes have already registered their listeners. Since listeners
         // are executed in reverse order of registration, a listener registered here would close the

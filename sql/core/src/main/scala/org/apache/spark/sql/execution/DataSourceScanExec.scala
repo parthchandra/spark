@@ -22,6 +22,7 @@ import java.util.concurrent.TimeUnit._
 import org.apache.commons.lang3.StringUtils
 import org.apache.hadoop.fs.Path
 
+import org.apache.spark.internal.Logging
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.catalyst.{FileSourceOptions, InternalRow, TableIdentifier}
 import org.apache.spark.sql.catalyst.catalog.BucketSpec
@@ -210,7 +211,7 @@ case class RowDataSourceScanExec(
 /**
  * A base trait for file scans containing file listing and metrics code.
  */
-trait FileSourceScanLike extends DataSourceScanExec {
+trait FileSourceScanLike extends DataSourceScanExec with Logging {
 
   // Filters on non-partition columns.
   def dataFilters: Seq[Expression]
@@ -248,7 +249,7 @@ trait FileSourceScanLike extends DataSourceScanExec {
           fileConstantMetadataColumns.map { _ => classOf[ConstantColumnVector].getName }
       }
 
-  lazy val driverMetrics = Map(
+  val driverMetrics = Map(
     "numFiles" -> SQLMetrics.createMetric(sparkContext, "number of files read"),
     "metadataTime" -> SQLMetrics.createTimingMetric(sparkContext, "metadata time"),
     "filesSize" -> SQLMetrics.createSizeMetric(sparkContext, "size of files read")
@@ -513,6 +514,15 @@ trait FileSourceScanLike extends DataSourceScanExec {
     }
   }
 
+  private lazy val fileReaderMetrics: Map[String, SQLMetric] = {
+    relation.fileFormat match {
+      case format: ParquetSource =>
+        format.initOrGetMetrics(sparkContext)
+      case _ =>
+        Map.empty[String, SQLMetric]
+    }
+  }
+
   private lazy val scanMetrics = Map(
     "numOutputRows" -> SQLMetrics.createMetric(sparkContext, "number of output rows")
   ) ++ {
@@ -523,7 +533,7 @@ trait FileSourceScanLike extends DataSourceScanExec {
     } else {
       None
     }
-  } ++ driverMetrics
+  } ++ fileReaderMetrics ++ driverMetrics
 
   /**
    * A file listing that represents a file list as an array of [[PartitionDirectory]]. This extends
@@ -637,7 +647,8 @@ case class FileSourceScanExec(
         requiredSchema = requiredSchema,
         filters = pushedDownFilters,
         options = options,
-        hadoopConf = relation.sparkSession.sessionState.newHadoopConfWithOptions(relation.options))
+        hadoopConf = relation.sparkSession.sessionState.newHadoopConfWithOptions(relation.options)
+      )
 
     val readRDD = if (bucketedScan) {
       createBucketedReadRDD(relation.bucketSpec.get, readFile, dynamicallySelectedPartitions)
@@ -654,6 +665,11 @@ case class FileSourceScanExec(
 
   protected override def doExecute(): RDD[InternalRow] = {
     val numOutputRows = longMetric("numOutputRows")
+    inputRDD match {
+      case d: FileScanRDD =>
+        d.setMetrics(metrics)
+      case _ =>
+    }
     if (needsUnsafeRowConversion) {
       inputRDD.mapPartitionsWithIndexInternal { (index, iter) =>
         val toUnsafe = UnsafeProjection.create(schema)
@@ -676,6 +692,11 @@ case class FileSourceScanExec(
   protected override def doExecuteColumnar(): RDD[ColumnarBatch] = {
     val numOutputRows = longMetric("numOutputRows")
     val scanTime = longMetric("scanTime")
+    inputRDD match {
+      case d: FileScanRDD =>
+        d.setMetrics(metrics)
+      case _ =>
+    }
     inputRDD.asInstanceOf[RDD[ColumnarBatch]].mapPartitionsInternal { batches =>
       new Iterator[ColumnarBatch] {
 
@@ -716,10 +737,10 @@ case class FileSourceScanExec(
     logInfo(s"Planning with ${bucketSpec.numBuckets} buckets")
     val partitionArray = selectedPartitions.toPartitionArray
     val filesGroupedToBuckets = partitionArray.groupBy { f =>
-      BucketingUtils
-        .getBucketId(f.toPath.getName)
-        .getOrElse(throw QueryExecutionErrors.invalidBucketFile(f.urlEncodedPath))
-    }
+        BucketingUtils
+          .getBucketId(f.toPath.getName)
+          .getOrElse(throw QueryExecutionErrors.invalidBucketFile(f.urlEncodedPath))
+      }
 
     val prunedFilesGroupedToBuckets = if (optionalBucketSet.isDefined) {
       val bucketSet = optionalBucketSet.get

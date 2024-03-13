@@ -39,6 +39,7 @@ import org.apache.parquet.schema.LogicalTypeAnnotation.TimeUnit;
 import org.apache.parquet.schema.PrimitiveType;
 
 import org.apache.spark.SparkUnsupportedOperationException;
+import org.apache.spark.sql.execution.metric.SQLMetric;
 import org.apache.spark.sql.execution.vectorized.WritableColumnVector;
 import org.apache.spark.sql.types.DataType;
 import org.apache.spark.sql.types.Decimal;
@@ -48,10 +49,14 @@ import static org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName.BOOLEAN;
 import static org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName.INT64;
 import static org.apache.spark.sql.types.DataTypes.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Decoder to return values from a single column.
  */
 public class VectorizedColumnReader {
+  private static final Logger LOG = LoggerFactory.getLogger(VectorizedColumnReader.class);
   /**
    * The dictionary, if this column has dictionary encoding.
    */
@@ -98,6 +103,10 @@ public class VectorizedColumnReader {
   private final LogicalTypeAnnotation logicalTypeAnnotation;
   private final String datetimeRebaseMode;
   private final ParsedVersion writerVersion;
+  private final Map<String, SQLMetric> metrics;
+  SQLMetric decompressTimeMetric;
+  SQLMetric decompressSizeMetric;
+  SQLMetric decompressThroughputMetric;
 
   public VectorizedColumnReader(
       ColumnDescriptor descriptor,
@@ -108,7 +117,8 @@ public class VectorizedColumnReader {
       String datetimeRebaseTz,
       String int96RebaseMode,
       String int96RebaseTz,
-      ParsedVersion writerVersion) throws IOException {
+      ParsedVersion writerVersion,
+      Map<String, SQLMetric> metrics) throws IOException {
     this.descriptor = descriptor;
     this.pageReader = pageReadStore.getPageReader(descriptor);
     this.readState = new ParquetReadState(descriptor, isRequired,
@@ -143,6 +153,10 @@ public class VectorizedColumnReader {
     assert "LEGACY".equals(int96RebaseMode) || "EXCEPTION".equals(int96RebaseMode) ||
       "CORRECTED".equals(int96RebaseMode);
     this.writerVersion = writerVersion;
+    this.metrics = metrics;
+    this.decompressTimeMetric = metrics.get("DecompressTime");
+    this.decompressSizeMetric = metrics.get("DecompressSize");
+    this.decompressThroughputMetric = metrics.get("DecompressThroughput");
   }
 
   private boolean isLazyDecodingSupported(
@@ -430,4 +444,24 @@ public class VectorizedColumnReader {
       throw new IOException("could not read page " + page + " in col " + descriptor, e);
     }
   }
+
+  private void setDecompressMetrics(BytesInput bytes, long start) {
+    long time = System.nanoTime() - start;
+    long len = bytes.size();
+    double throughput = ((double)len/time) * ((double)1000_000_000L)/(1024 * 1024);
+    LOG.debug(
+        "Decompress stream: Length: {} MB, Time: {} msecs, throughput: {} MB/s",
+        len/(1024 * 1024), time / 1000_000L, throughput);
+    if (decompressTimeMetric != null) {
+      decompressTimeMetric.set(time);
+    }
+    if(decompressSizeMetric != null) {
+      decompressSizeMetric.set(len);
+    }
+    if (decompressThroughputMetric != null) {
+      decompressThroughputMetric.set((float) throughput);
+    }
+  }
+
+
 }

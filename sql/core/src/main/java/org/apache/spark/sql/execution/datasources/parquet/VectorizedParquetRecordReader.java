@@ -22,10 +22,13 @@ import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.spark.SparkUnsupportedOperationException;
 import org.apache.spark.sql.catalyst.util.ResolveDefaultColumns;
+import org.apache.spark.sql.execution.metric.SQLMetric;
+
 import scala.Option;
 import scala.jdk.javaapi.CollectionConverters;
 
@@ -154,7 +157,8 @@ public class VectorizedParquetRecordReader extends SpecificParquetRecordReaderBa
       String int96RebaseMode,
       String int96RebaseTz,
       boolean useOffHeap,
-      int capacity) {
+      int capacity,
+      Map<String, SQLMetric> metrics) {
     this.convertTz = convertTz;
     this.datetimeRebaseMode = datetimeRebaseMode;
     this.datetimeRebaseTz = datetimeRebaseTz;
@@ -162,18 +166,20 @@ public class VectorizedParquetRecordReader extends SpecificParquetRecordReaderBa
     this.int96RebaseTz = int96RebaseTz;
     MEMORY_MODE = useOffHeap ? MemoryMode.OFF_HEAP : MemoryMode.ON_HEAP;
     this.capacity = capacity;
+    this.metrics = metrics; // sets the metrics object in the base class
   }
 
   // For test only.
   public VectorizedParquetRecordReader(boolean useOffHeap, int capacity) {
     this(
-      null,
-      "CORRECTED",
-      "UTC",
-      "LEGACY",
-      ZoneId.systemDefault().getId(),
-      useOffHeap,
-      capacity);
+        null,
+        "CORRECTED",
+        "UTC",
+        "LEGACY",
+        ZoneId.systemDefault().getId(),
+        useOffHeap,
+        capacity,
+        null);
   }
 
   /**
@@ -334,13 +340,20 @@ public class VectorizedParquetRecordReader extends SpecificParquetRecordReaderBa
     checkEndOfRowGroup();
 
     int num = (int) Math.min(capacity, totalCountLoadedSoFar - rowsReturned);
+    long totalDecodeTime = 0;
     for (ParquetColumnVector cv : columnVectors) {
       for (ParquetColumnVector leafCv : cv.getLeaves()) {
         VectorizedColumnReader columnReader = leafCv.getColumnReader();
         if (columnReader != null) {
+          long startNs = System.nanoTime();
           columnReader.readBatch(num, leafCv.getValueVector(),
-            leafCv.getRepetitionLevelVector(), leafCv.getDefinitionLevelVector());
+              leafCv.getRepetitionLevelVector(), leafCv.getDefinitionLevelVector());
+          totalDecodeTime += System.nanoTime() - startNs;
         }
+      }
+      SQLMetric decodeMetric = metrics.get("ParquetDecodeTime");
+      if (decodeMetric != null) {
+        decodeMetric.add(totalDecodeTime);
       }
       cv.assemble();
     }
@@ -412,11 +425,27 @@ public class VectorizedParquetRecordReader extends SpecificParquetRecordReaderBa
   }
 
   private void checkEndOfRowGroup() throws IOException {
-    if (rowsReturned != totalCountLoadedSoFar) return;
+    if (rowsReturned != totalCountLoadedSoFar) {
+      return;
+    }
+    long startNs = System.nanoTime();
     PageReadStore pages = reader.readNextRowGroup();
     if (pages == null) {
       throw new IOException("expecting more rows but reached last block. Read "
           + rowsReturned + " out of " + totalRowCount);
+    }
+    if (parquetMetricsCallback != null) {
+      parquetMetricsCallback.setValueLong("ParquetLoadRowGroupTime", System.nanoTime() - startNs);
+      parquetMetricsCallback.setValueLong("ParquetRowGroups", 1);
+    } else {
+      SQLMetric rowGroupTimeMetric = metrics.get("ParquetLoadRowGroupTime");
+      SQLMetric numRowGroupsMetric = metrics.get("ParquetRowGroups");
+      if (rowGroupTimeMetric != null) {
+        rowGroupTimeMetric.add(System.nanoTime() - startNs);
+      }
+      if (numRowGroupsMetric != null) {
+        numRowGroupsMetric.add(1);
+      }
     }
     if (rowIndexGenerator != null) {
       rowIndexGenerator.initFromPageReadStore(pages);
@@ -432,8 +461,8 @@ public class VectorizedParquetRecordReader extends SpecificParquetRecordReaderBa
       if (cv.getColumn().isPrimitive()) {
         ParquetColumn column = cv.getColumn();
         VectorizedColumnReader reader = new VectorizedColumnReader(
-          column.descriptor().get(), column.required(), pages, convertTz, datetimeRebaseMode,
-          datetimeRebaseTz, int96RebaseMode, int96RebaseTz, writerVersion);
+            column.descriptor().get(), column.required(), pages, convertTz, datetimeRebaseMode,
+            datetimeRebaseTz, int96RebaseMode, int96RebaseTz, writerVersion, metrics);
         cv.setColumnReader(reader);
       } else {
         // Not in missing columns and is a complex type: this must be a struct

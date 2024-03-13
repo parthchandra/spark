@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.spark.sql.execution.metric.SQLMetric;
 import scala.Option;
 
 import com.google.common.annotations.VisibleForTesting;
@@ -77,6 +78,7 @@ public abstract class SpecificParquetRecordReaderBase<T> extends RecordReader<Vo
   // corrupt delta byte arrays, and the version check is needed to detect that.
   protected ParsedVersion writerVersion;
   protected ParquetColumn parquetColumn;
+  protected Map<String, SQLMetric> metrics = null;
 
   /**
    * The total number of rows this RecordReader will eventually read. The sum of the
@@ -85,6 +87,8 @@ public abstract class SpecificParquetRecordReaderBase<T> extends RecordReader<Vo
   protected long totalRowCount;
 
   protected ParquetRowGroupReader reader;
+
+  protected ParquetMetricsCallbackImpl parquetMetricsCallback;
 
   @Override
   public void initialize(InputSplit inputSplit, TaskAttemptContext taskAttemptContext)
@@ -100,15 +104,19 @@ public abstract class SpecificParquetRecordReaderBase<T> extends RecordReader<Vo
     FileSplit split = (FileSplit) inputSplit;
     this.file = split.getPath();
     ParquetFileReader fileReader;
+    if (metrics != null) {
+      parquetMetricsCallback = new ParquetMetricsCallbackImpl(metrics);
+    }
+    ParquetReadOptions options = HadoopReadOptions
+            .builder(configuration, file)
+            .withRange(split.getStart(), split.getStart() + split.getLength())
+            .withMetricsCallback(parquetMetricsCallback)
+            .build();
     if (fileFooter.isDefined()) {
-      fileReader = new ParquetFileReader(configuration, file, fileFooter.get());
+      fileReader = new ParquetFileReader(configuration, file, fileFooter.get(), options);
     } else {
-      ParquetReadOptions options = HadoopReadOptions
-          .builder(configuration, file)
-          .withRange(split.getStart(), split.getStart() + split.getLength())
-          .build();
       fileReader = new ParquetFileReader(
-          HadoopInputFile.fromPath(file, configuration), options);
+        HadoopInputFile.fromPath(file, configuration), options);
     }
     this.reader = new ParquetRowGroupReaderImpl(fileReader);
     this.fileSchema = fileReader.getFileMetaData().getSchema();
@@ -219,6 +227,10 @@ public abstract class SpecificParquetRecordReaderBase<T> extends RecordReader<Vo
       .convertParquetColumn(requestedSchema, Option.empty());
     this.sparkSchema = (StructType) parquetColumn.sparkType();
     this.totalRowCount = totalRowCount;
+  }
+
+  public ParquetMetricsCallbackImpl getParquetMetricsCallback() {
+    return parquetMetricsCallback;
   }
 
   @Override

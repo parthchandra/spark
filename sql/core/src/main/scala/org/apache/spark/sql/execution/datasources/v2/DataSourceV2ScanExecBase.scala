@@ -17,6 +17,8 @@
 
 package org.apache.spark.sql.execution.datasources.v2
 
+import scala.concurrent.duration.NANOSECONDS
+
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.catalyst.InternalRow
 import org.apache.spark.sql.catalyst.expressions.{Expression, RowOrdering, SortOrder}
@@ -25,6 +27,7 @@ import org.apache.spark.sql.catalyst.plans.physical.KeyGroupedPartitioning
 import org.apache.spark.sql.catalyst.util.{truncatedString, InternalRowComparableWrapper}
 import org.apache.spark.sql.connector.read.{HasPartitionKey, InputPartition, PartitionReaderFactory, Scan}
 import org.apache.spark.sql.execution.{ExplainUtils, LeafExecNode, SQLExecution}
+import org.apache.spark.sql.execution.datasources.FileScanRDD
 import org.apache.spark.sql.execution.metric.SQLMetrics
 import org.apache.spark.sql.internal.SQLConf
 import org.apache.spark.sql.internal.connector.SupportsMetadata
@@ -34,13 +37,21 @@ import org.apache.spark.util.Utils
 
 trait DataSourceV2ScanExecBase extends LeafExecNode {
 
-  lazy val customMetrics = scan.supportedCustomMetrics().map { customMetric =>
-    customMetric.name() -> SQLMetrics.createV2CustomMetric(sparkContext, customMetric)
-  }.toMap
+  lazy val customMetrics = {
+    scan.supportedCustomMetrics().map { customMetric =>
+      customMetric.name() -> SQLMetrics.createV2CustomMetric(sparkContext, customMetric)
+    }.toMap
+  }
 
   override lazy val metrics = {
     Map("numOutputRows" -> SQLMetrics.createMetric(sparkContext, "number of output rows")) ++
-      customMetrics
+    {
+      if (supportsColumnar) {
+        Some("scanTime" -> SQLMetrics.createTimingMetric(sparkContext, "scan time"))
+      } else {
+        None
+      }
+    } ++ customMetrics
   }
 
   def scan: Scan
@@ -204,9 +215,29 @@ trait DataSourceV2ScanExecBase extends LeafExecNode {
 
   override def doExecuteColumnar(): RDD[ColumnarBatch] = {
     val numOutputRows = longMetric("numOutputRows")
-    inputRDD.asInstanceOf[RDD[ColumnarBatch]].map { b =>
-      numOutputRows += b.numRows()
-      b
+    val scanTime = longMetric("scanTime")
+    inputRDD match {
+      case d: FileScanRDD =>
+        d.setMetrics(metrics)
+      case _ =>
+    }
+    inputRDD.asInstanceOf[RDD[ColumnarBatch]].mapPartitionsInternal { batches =>
+      new Iterator[ColumnarBatch] {
+
+        override def hasNext: Boolean = {
+          // The `FileScanRDD` returns an iterator which scans the file during the `hasNext` call.
+          val startNs = System.nanoTime()
+          val res = batches.hasNext
+          scanTime += NANOSECONDS.toMillis(System.nanoTime() - startNs)
+          res
+        }
+
+        override def next(): ColumnarBatch = {
+          val batch = batches.next()
+          numOutputRows += batch.numRows()
+          batch
+        }
+      }
     }
   }
 }
