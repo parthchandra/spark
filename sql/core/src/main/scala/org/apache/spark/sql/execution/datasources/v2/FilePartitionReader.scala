@@ -18,14 +18,15 @@ package org.apache.spark.sql.execution.datasources.v2
 
 import java.io.{FileNotFoundException, IOException}
 
+import scala.collection.mutable
+
 import org.apache.spark.internal.Logging
 import org.apache.spark.rdd.InputFileBlockHolder
 import org.apache.spark.sql.catalyst.FileSourceOptions
-import org.apache.spark.sql.connector.metric.{CustomFileTaskMetric, CustomTaskMetric}
+import org.apache.spark.sql.connector.metric.CustomTaskMetric
 import org.apache.spark.sql.connector.read.PartitionReader
 import org.apache.spark.sql.errors.QueryExecutionErrors
 import org.apache.spark.sql.execution.datasources.PartitionedFile
-import org.apache.spark.sql.execution.metric.CustomMetrics
 
 class FilePartitionReader[T](
     files: Iterator[PartitionedFile],
@@ -38,7 +39,7 @@ class FilePartitionReader[T](
   private def ignoreCorruptFiles = options.ignoreCorruptFiles
   // The cumulative metrics of all readers. Before the current reader is
   // closed, the metrics of the current reader are read and merged into this.
-  private var allMetrics: Array[CustomFileTaskMetric] = Array.empty
+  private val allMetricsValues: mutable.Map[String, Long] = mutable.Map.empty[String, Long]
   override def next(): Boolean = {
     if (currentReader == null) {
       if (files.hasNext) {
@@ -92,14 +93,29 @@ class FilePartitionReader[T](
   override def close(): Unit = {
     if (currentReader != null) {
       val currentFileMetrics = currentReader.reader.currentMetricsValues()
-      allMetrics = CustomMetrics.mergeMetricValues(
-        currentFileMetrics.asInstanceOf[Array[CustomFileTaskMetric]], allMetrics)
+      updateMetrics(currentFileMetrics)
       currentReader.close()
     }
     InputFileBlockHolder.unset()
   }
 
   override def currentMetricsValues(): Array[CustomTaskMetric] = {
-    allMetrics.asInstanceOf[Array[CustomTaskMetric]]
+    allMetricsValues.map {
+      case (k, v) => new CustomTaskMetric {
+        override def name(): String = k
+        override def value(): Long = v
+      }
+    }.toArray
+  }
+
+  def updateMetrics(currentFileMetrics: Array[CustomTaskMetric]) : Unit = {
+    currentFileMetrics.foreach(m => {
+      allMetricsValues.get(m.name()) match {
+        case Some(v) =>
+          allMetricsValues(m.name) += v
+        case None =>
+          allMetricsValues(m.name) = m.value()
+      }
+    })
   }
 }

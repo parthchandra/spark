@@ -23,7 +23,7 @@ import java.util.Locale
 
 import scala.concurrent.duration.DurationLong
 
-import org.apache.spark.sql.connector.metric.{CustomAvgMetric, CustomFileTaskMetric, CustomMetric, CustomSumMetric}
+import org.apache.spark.sql.connector.metric.{CustomAvgMetric, CustomMetric, CustomSumMetric, CustomTaskMetric}
 import org.apache.spark.util.Utils
 
 
@@ -91,12 +91,9 @@ abstract class ParquetNSTimingMetric extends ParquetSizeMetric {
      duration => Utils.msDurationToString(duration.nanos.toMillis)
 }
 
-abstract class ParquetTaskMetricV2(initialValue: Long) extends CustomFileTaskMetric {
+abstract class ParquetTaskMetricV2(initialValue: Long) extends CustomTaskMetric {
   protected var metricValue: Long = initialValue
-
   override def value(): Long = metricValue
-
-  override def update(addValue: Long): Unit = metricValue = metricValue + addValue
 }
 
 class ParquetRowGroupsMetric extends CustomSumMetric {
