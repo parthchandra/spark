@@ -172,14 +172,14 @@ public class VectorizedParquetRecordReader extends SpecificParquetRecordReaderBa
   // For test only.
   public VectorizedParquetRecordReader(boolean useOffHeap, int capacity) {
     this(
-        null,
-        "CORRECTED",
-        "UTC",
-        "LEGACY",
-        ZoneId.systemDefault().getId(),
-        useOffHeap,
-        capacity,
-        null);
+      null,
+      "CORRECTED",
+      "UTC",
+      "LEGACY",
+      ZoneId.systemDefault().getId(),
+      useOffHeap,
+      capacity,
+      null);
   }
 
   /**
@@ -347,7 +347,7 @@ public class VectorizedParquetRecordReader extends SpecificParquetRecordReaderBa
         if (columnReader != null) {
           long startNs = System.nanoTime();
           columnReader.readBatch(num, leafCv.getValueVector(),
-              leafCv.getRepetitionLevelVector(), leafCv.getDefinitionLevelVector());
+            leafCv.getRepetitionLevelVector(), leafCv.getDefinitionLevelVector());
           totalDecodeTime += System.nanoTime() - startNs;
         }
       }
@@ -461,8 +461,8 @@ public class VectorizedParquetRecordReader extends SpecificParquetRecordReaderBa
       if (cv.getColumn().isPrimitive()) {
         ParquetColumn column = cv.getColumn();
         VectorizedColumnReader reader = new VectorizedColumnReader(
-            column.descriptor().get(), column.required(), pages, convertTz, datetimeRebaseMode,
-            datetimeRebaseTz, int96RebaseMode, int96RebaseTz, writerVersion, metrics);
+          column.descriptor().get(), column.required(), pages, convertTz, datetimeRebaseMode,
+          datetimeRebaseTz, int96RebaseMode, int96RebaseTz, writerVersion, metrics);
         cv.setColumnReader(reader);
       } else {
         // Not in missing columns and is a complex type: this must be a struct

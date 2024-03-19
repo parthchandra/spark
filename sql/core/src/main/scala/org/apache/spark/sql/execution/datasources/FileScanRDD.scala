@@ -96,7 +96,6 @@ class FileScanRDD(
   }
 
   override def compute(split: RDDPartition, context: TaskContext): Iterator[InternalRow] = {
-    val start_compute = System.nanoTime();
     val iterator = new Iterator[Object] with AutoCloseable {
       private val inputMetrics = context.taskMetrics().inputMetrics
       private val existingBytesRead = inputMetrics.bytesRead
@@ -167,12 +166,11 @@ class FileScanRDD(
        * a partitioned file. Only need to update their values in the metadata row when `currentFile`
        * is changed.
        */
-      private def updateMetadataRow(): Unit = {
+      private def updateMetadataRow(): Unit =
         if (metadataColumns.nonEmpty && currentFile != null) {
           updateMetadataInternalRow(
             metadataRow, metadataColumns.map(_.name), currentFile, metadataExtractors)
         }
-      }
 
       /**
        * Create an array of constant column vectors containing all required metadata columns
@@ -191,7 +189,7 @@ class FileScanRDD(
 
           val columnVector = new ConstantColumnVector(c.numRows(), attr.dataType)
           ColumnVectorUtils.populate(columnVector, tmpRow, 0)
-            columnVector
+          columnVector
         }.toArray
       }
 
@@ -321,9 +319,7 @@ class FileScanRDD(
     iterator.asInstanceOf[Iterator[InternalRow]] // This is an erasure hack.
   }
 
-  override protected def getPartitions: Array[RDDPartition] = {
-    filePartitions.toArray.asInstanceOf[Array[RDDPartition]]
-  }
+  override protected def getPartitions: Array[RDDPartition] = filePartitions.toArray
 
   override protected def getPreferredLocations(split: RDDPartition): Seq[String] = {
     split.asInstanceOf[FilePartition].preferredLocations().toImmutableArraySeq

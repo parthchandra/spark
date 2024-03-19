@@ -22,7 +22,6 @@ import java.util.concurrent.TimeUnit._
 import org.apache.commons.lang3.StringUtils
 import org.apache.hadoop.fs.Path
 
-import org.apache.spark.internal.Logging
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.catalyst.{FileSourceOptions, InternalRow, TableIdentifier}
 import org.apache.spark.sql.catalyst.catalog.BucketSpec
@@ -211,7 +210,7 @@ case class RowDataSourceScanExec(
 /**
  * A base trait for file scans containing file listing and metrics code.
  */
-trait FileSourceScanLike extends DataSourceScanExec with Logging {
+trait FileSourceScanLike extends DataSourceScanExec {
 
   // Filters on non-partition columns.
   def dataFilters: Seq[Expression]
@@ -647,8 +646,7 @@ case class FileSourceScanExec(
         requiredSchema = requiredSchema,
         filters = pushedDownFilters,
         options = options,
-        hadoopConf = relation.sparkSession.sessionState.newHadoopConfWithOptions(relation.options)
-      )
+        hadoopConf = relation.sparkSession.sessionState.newHadoopConfWithOptions(relation.options))
 
     val readRDD = if (bucketedScan) {
       createBucketedReadRDD(relation.bucketSpec.get, readFile, dynamicallySelectedPartitions)
@@ -737,10 +735,10 @@ case class FileSourceScanExec(
     logInfo(s"Planning with ${bucketSpec.numBuckets} buckets")
     val partitionArray = selectedPartitions.toPartitionArray
     val filesGroupedToBuckets = partitionArray.groupBy { f =>
-        BucketingUtils
-          .getBucketId(f.toPath.getName)
-          .getOrElse(throw QueryExecutionErrors.invalidBucketFile(f.urlEncodedPath))
-      }
+      BucketingUtils
+        .getBucketId(f.toPath.getName)
+        .getOrElse(throw QueryExecutionErrors.invalidBucketFile(f.urlEncodedPath))
+    }
 
     val prunedFilesGroupedToBuckets = if (optionalBucketSet.isDefined) {
       val bucketSet = optionalBucketSet.get
